@@ -160,6 +160,763 @@
     
     
     <article
+  id="post-Elasticsearch进阶之故障转移、水平扩容，倒排索引，分析器等"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Elasticsearch%E8%BF%9B%E9%98%B6%E4%B9%8B%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E3%80%81%E6%B0%B4%E5%B9%B3%E6%89%A9%E5%AE%B9%EF%BC%8C%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%EF%BC%8C%E5%88%86%E6%9E%90%E5%99%A8%E7%AD%89/"
+    >Elasticsearch进阶之故障转移、水平扩容，倒排索引，分析器等</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticsearch%E8%BF%9B%E9%98%B6%E4%B9%8B%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E3%80%81%E6%B0%B4%E5%B9%B3%E6%89%A9%E5%AE%B9%EF%BC%8C%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%EF%BC%8C%E5%88%86%E6%9E%90%E5%99%A8%E7%AD%89/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.432Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticsearch进阶之故障转移、水平扩容，倒排索引，分析器等<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、单节点集群</p>
+<blockquote>
+<p> 我们在包含一个空节点的集群内创建名为 users 的索引，为了演示目的，我们将分配 3个主分片和一份副本（每个主分片拥有一个副本分片）。<br> <pre><code class="language-java">#PUT <a target="_blank" rel="noopener" href="http://127.0.0.1:1001/users">http://127.0.0.1:1001/users</a><br>&#123;<br>    "settings" : &#123;<br>        "number_of_shards" : 3,<br>        "number_of_replicas" : 1<br>    &#125;<br>&#125;<br></code></pre><br> 集群现在是拥有一个索引的单节点集群。所有 3 个主分片都被分配在 node-1 。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/54ee6753be248cc7d345b38a0eae7d96.png"><br> 通过 elasticsearch-head 插件（一个Chrome插件）查看集群情况 。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e8b15d0b243d486e91f478a220da63bf.png"> </p>
+</blockquote>
+<ul>
+<li>集群健康值:yellow( 3 of 6 )：表示当前集群的全部主分片都正常运行，但是副本分片没有全部处在正常状态。3 个主分片正常<img alt="" src="https://img-blog.csdnimg.cn/img_convert/489b6de480112879a00067b793bde685.png">- 3 个副本分片都是 Unassigned，它们都没有被分配到任何节点。 在同 一个节点上既保存原始数据又保存副本是没有意义的，因为一旦失去了那个节点，我们也将丢失该节点 上的所有副本数据。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/3ce9a78d26ee762f0a7a8abf7817a58e.png">- 当前集群是正常运行的，但存在丢失数据的风险。</li>
+</ul>
+<h3 id="2、故障转移"><a href="#2、故障转移" class="headerlink" title="2、故障转移"></a>2、故障转移</h3><blockquote>
+<p> 当集群中只有一个节点在运行时，意味着会有一个单点故障问题——没有冗余。 幸运的是，我们只需再启动一个节点即可防止数据丢失。当你在同一台机器上启动了第二个节点时，只要它和第一个节点有同样的 cluster.name 配置，它就会自动发现集群并加入到其中。但是在不同机器上启动节点的时候，为了加入到同一集群，你需要配置一个可连接到的单播主机列表。之所以配置为使用单播发现，以防止节点无意中加入集群。只有在同一台机器上 运行的节点才会自动组成集群。<br> 如果启动了第二个节点，集群将会拥有两个节点 : 所有主分片和副本分片都已被分配 。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/bf76cb1bfbdf07555918d9055817ab44.png"><br> 通过 elasticsearch-head 插件查看集群情况<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/18db400822b83e727d6206f486b7b2ea.png"> </p>
+</blockquote>
+<ul>
+<li>集群健康值:green( 3 of 6 )：表示所有 6 个分片（包括 3 个主分片和 3 个副本分片）都在正常运行。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/e485d8263a4aa3a94af0be951bd5a241.png">- 3 个主分片正常。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/e485d8263a4aa3a94af0be951bd5a241.png">- 第二个节点加入到集群后， 3 个副本分片将会分配到这个节点上——每 个主分片对应一个副本分片。这意味着当集群内任何一个节点出现问题时，我们的数据都完好无损。所 有新近被索引的文档都将会保存在主分片上，然后被并行的复制到对应的副本分片上。这就保证了我们 既可以从主分片又可以从副本分片上获得文档。</li>
+</ul>
+<h3 id="3、水平扩容"><a href="#3、水平扩容" class="headerlink" title="3、水平扩容"></a>3、水平扩容</h3><blockquote>
+<p> 怎样为我们的正在增长中的应用程序按需扩容呢？当启动了第三个节点，我们的集群将会拥有三个节点的集群 : 为了分散负载而对分片进行重新分配 。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d527e26aa2bccdf54b11410024eadc92.png"><br> 通过 elasticsearch-head 插件查看集群情况。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/6985fe14454c1269204478320d089bd7.png"> </p>
+</blockquote>
+<ul>
+<li>集群健康值:green( 3 of 6 )：表示所有 6 个分片（包括 3 个主分片和 3 个副本分片）都在正常运行。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/9494419153adb44bedb395ac5d7bc488.png">- Node 1 和 Node 2 上各有一个分片被迁移到了新的 Node 3 节点，现在每个节点上都拥有 2 个分片， 而不是之前的 3 个。 这表示每个节点的硬件资源（CPU, RAM, I/O）将被更少的分片所共享，每个分片 的性能将会得到提升。<br>分片是一个功能完整的搜索引擎，它拥有使用一个节点上的所有资源的能力。 我们这个拥有 6 个分 片（3 个主分片和 3 个副本分片）的索引可以最大扩容到 6 个节点，每个节点上存在一个分片，并且每个 分片拥有所在节点的全部资源。 </li>
+</ul>
+<p> <strong>但是如果我们想要扩容超过 6 个节点怎么办呢？</strong><br> 主分片的数目在索引创建时就已经确定了下来。实际上，这个数目定义了这个索引能够 存储 的最大数据量。（实际大小取决于你的数据、硬件和使用场景。） 但是，读操作—— 搜索和返回数据——可以同时被主分片 或 副本分片所处理，所以当你拥有越多的副本分片 时，也将拥有越高的吞吐量。<br> 在运行中的集群上是可以动态调整副本分片数目的，我们可以按需伸缩集群。让我们把 副本数从默认的 1 增加到 2。<br> <pre><code class="language-java">#PUT <a target="_blank" rel="noopener" href="http://127.0.0.1:1001/users/_settings">http://127.0.0.1:1001/users/_settings</a></p>
+<p>&#123;<br>    “number_of_replicas” : 2<br>&#125;<br></code></pre><br> users 索引现在拥有 9 个分片： 3 个主分片和 6 个副本分片。 这意味着我们可以将集群 扩容到 9 个节点，每个节点上一个分片。相比原来 3 个节点时，集群搜索性能可以提升 3 倍。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/97fd01e34e5d8df23d226c4fef157801.png"><br> 通过 elasticsearch-head 插件查看集群情况：<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/8bf9dbf0cec5b7875bf8aa9d17a9a67c.png"><br> 当然，如果只是在相同节点数目的集群上增加更多的副本分片并不能提高性能，因为每 个分片从节点上获得的资源会变少。 你需要增加更多的硬件资源来提升吞吐量。<br> 但是更多的副本分片数提高了数据冗余量：按照上面的节点配置，我们可以在失去 2 个节点 的情况下不丢失任何数据。 </p>
+<h3 id="4、应对故障"><a href="#4、应对故障" class="headerlink" title="4、应对故障"></a>4、应对故障</h3><blockquote>
+<p> 我们关闭第一个节点，这时集群的状态为:关闭了一个节点后的集群。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/44e841004be934e6bce08187ca3852bb.png"><br> 我们关闭的节点是一个主节点。而集群必须拥有一个主节点来保证正常工作，所以发生 的第一件事情就是选举一个新的主节点： Node 2 。在我们关闭 Node 1 的同时也失去了主 分片 1 和 2 ，并且在缺失主分片的时候索引也不能正常工作。 如果此时来检查集群的状况，我们看到的状态将会为 red ：不是所有主分片都在正常工作。<br> 幸运的是，在其它节点上存在着这两个主分片的完整副本， 所以新的主节点立即将这些分片在 Node 2 和 Node 3 上对应的副本分片提升为主分片， 此时集群的状态将会为yellow。这个提升主分片的过程是瞬间发生的，如同按下一个开关一般。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e956bda7e0d005699e27760d4193d101.png"><br> <strong>为什么我们集群状态是 yellow 而不是 green 呢？</strong><br> 虽然我们拥有所有的三个主分片，但是同时设置了每个主分片需要对应 2 份副本分片，而此 时只存在一份副本分片。 所以集群不能为 green 的状态，不过我们不必过于担心：如果我 们同样关闭了 Node 2 ，我们的程序 依然 可以保持在不丢任何数据的情况下运行，因为 Node 3 为每一个分片都保留着一份副本。<br> 如果想回复原来的样子，要确保Node-1的配置文件有如下配置：<br> <pre><code class="language-bash">discovery.seed_hosts: ["localhost:9302", "localhost:9303"]<br></code></pre><br> 集群可以将缺失的副本分片再次进行分配，那么集群的状态也将恢复成之前的状态。 如果 Node 1 依然拥有着之前的分片，它将尝试去重用它们，同时仅从主分片复制发生了修改的数据文件。和之前的集群相比，只是 Master 节点切换了。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/37eea6a8dae7ba908312f2ebf0eced11.png"> </p>
+</blockquote>
+<h3 id="5、路由计算-amp-分片控制"><a href="#5、路由计算-amp-分片控制" class="headerlink" title="5、路由计算 &amp; 分片控制"></a>5、路由计算 &amp; 分片控制</h3><blockquote>
+ <h3>路由计算：</h3> 
+ 当索引一个文档的时候，文档会被存储到一个主分片中。 Elasticsearch 如何知道一个 文档应该存放到哪个分片中呢？当我们创建文档时，它如何决定这个文档应当被存储在分片 1 还是分片 2 中呢？首先这肯定不会是随机的，否则将来要获取文档的时候我们就不知道从何处寻找了。实际上，这个过程是根据下面这个公式决定的： 
+ <pre><code class="language-java">shard = hash(routing) % number_of_primary_shards
+</code></pre> 
+ routing 是一个可变值，默认是文档的 _id ，也可以设置成一个自定义的值。 routing 通过hash 函数生成一个数字，然后这个数字再除以 number_of_primary_shards （主分片的数量）后得到余数 。这个分布在 0 到 number_of_primary_shards-1 之间的余数，就是我们所寻求的文档所在分片的位置。 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9c34e8603887c2bed475416e3b67cd9a.png"> 
+ 这就解释了为什么我们要在创建索引的时候就确定好主分片的数量并且永远不会改变这个数量:因为如果数量变化了，那么所有之前路由的值都会无效，文档也再也找不到了。 
+ 所有的文档API ( get . index . delete 、 bulk , update以及 mget ）都接受一个叫做routing 的路由参数，通过这个参数我们可以自定义文档到分片的映射。一个自定义的路由参数可以用来确保所有相关的文档—一例如所有属于同一个用户的文档——都被存储到同一个分片中。 
+ <h3>分片控制</h3> 
+ 我们可以发送请求到集群中的任一节点。每个节点都有能力处理任意请求。每个节点都知道集群中任一文档位置，所以可以直接将请求转发到需要的节点上。在下面的例子中，如果将所有的请求发送到Node 1001，我们将其称为协调节点**coordinating node**。 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/3940d6cdb197259368542b86384911a4.png"> 
+ 当发送请求的时候， 为了扩展负载，更好的做法是轮询集群中所有的节点。 
+</blockquote>
+<h3 id="分片控制"><a href="#分片控制" class="headerlink" title="分片控制"></a>分片控制</h3><h3 id="6、数据写流程"><a href="#6、数据写流程" class="headerlink" title="6、数据写流程"></a>6、数据写流程</h3><blockquote>
+<p> 新建、索引和删除请求都是写操作， 必须在主分片上面完成之后才能被复制到相关的副本分片。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/418356a32516c222a8d366df021276c2.png"><br> 在客户端收到成功响应时，文档变更已经在主分片和所有副本分片执行完成，变更是安全的。有一些可选的<strong>请求参数</strong>允许您影响这个过程，可能以数据安全为代价提升性能。这些选项很少使用，因为 Elasticsearch 已经很快，但是为了完整起见， 请参考下文：<br> <strong>1、consistency：</strong> </p>
+</blockquote>
+<ul>
+<li>      即一致性。在默认设置下，即使仅仅是在试图执行一个写操作之前，主分片都会要求必须要有规定数量quorum（或者换种说法，也即必须要有大多数）的分片副本处于活跃可用状态，才会去执行写操作（其中分片副本 可以是主分片或者副本分片）。这是为了避免在发生网络分区故障（network partition）的时候进行写操作，进而导致数据不一致。 规定数量即： int((primary + number_of_replicas) / 2 ) + 1- consistency 参数的值可以设为：   one ：只要主分片状态 ok 就允许执行写操作。   all：必须要主分片和所有副本分片的状态没问题才允许执行写操作。   quorum：默认值为quorum , 即大多数的分片副本状态没问题就允许执行写操作。- 注意，规定数量的计算公式中number_of_replicas指的是在索引设置中的设定副本分片数，而不是指当前处理活动状态的副本分片数。如果你的索引设置中指定了当前索引拥有3个副本分片，那规定数量的计算结果即：int((1 primary + 3 replicas) / 2) + 1 = 3，如果此时你只启动两个节点，那么处于活跃状态的分片副本数量就达不到规定数量，也因此您将无法索引和删除任何文档。</li>
+</ul>
+<p> <strong>2、timeout</strong> </p>
+<ul>
+<li>如果没有足够的副本分片会发生什么？Elasticsearch 会等待，希望更多的分片出现。默认情况下，它最多等待 1 分钟。 如果你需要，你可以使用timeout参数使它更早终止：100是100 毫秒，30s是30秒。<br>新索引默认有1个副本分片，这意味着为满足规定数量应该需要两个活动的分片副本。 但是，这些默认的设置会阻止我们在单一节点上做任何事情。为了避免这个问题，要求只有当number_of_replicas 大于1的时候，规定数量才会执行。 </li>
+</ul>
+<h3 id="7、数据读流程"><a href="#7、数据读流程" class="headerlink" title="7、数据读流程"></a>7、数据读流程</h3><blockquote>
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/7139df83ee6f7a59c5d3252d34cc8762.png"> 
+ 在处理读取请求时，协调结点在每次请求的时候都会通过轮询所有的副本分片来达到负载均衡。在文档被检索时，已经被索引的文档可能已经存在于主分片上但是还没有复制到副本分片。 在这种情况下，副本分片可能会报告文档不存在，但是主分片可能成功返回文档。 一旦索引请求成功返回给用户，文档在主分片和副本分片都是可用的。 
+</blockquote>
+<h3 id="8、更新流程-amp-批量操作流程"><a href="#8、更新流程-amp-批量操作流程" class="headerlink" title="8、更新流程 &amp; 批量操作流程"></a>8、更新流程 &amp; 批量操作流程</h3><blockquote>
+ <h3>更新流程：</h3> 
+ 部分更新一个文档结合了先前说明的读取和写入流程： 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/ca41993144aee98311671278725437cd.png"> 
+ 部分更新一个文档的步骤如下： 
+</blockquote>
+<ul>
+<li>客户端向Node 1发送更新请求。- 它将请求转发到主分片所在的Node 3 。- Node 3从主分片检索文档，修改_source字段中的JSON，并且尝试重新索引主分片的文档。如果文档已经被另一个进程修改,它会重试步骤3 ,超过retry_on_conflict次后放弃。- 如果 Node 3成功地更新文档，它将新版本的文档并行转发到Node 1和 Node 2上的副本分片，重新建立索引。一旦所有副本分片都返回成功，Node 3向协调节点也返回成功，协调节点向客户端返回成功。<br>当主分片把更改转发到副本分片时， 它不会转发更新请求。 相反，它转发完整文档的新版本。请记住，这些更改将会异步转发到副本分片，并且不能保证它们以发送它们相同的顺序到达。 如果 Elasticsearch 仅转发更改请求，则可能以错误的顺序应用更改，导致得到损坏的文档。 <h3>批量操作流程：</h3> </li>
+</ul>
+<p> <strong>mget和 bulk API的模式类似于单文档模式。</strong>区别在于协调节点知道每个文档存在于哪个分片中。它将整个多文档请求分解成每个分片的多文档请求，并且将这些请求并行转发到每个参与节点。<br> 协调节点一旦收到来自每个节点的应答，就将每个节点的响应收集整理成单个响应，返回给客户端。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b90ea9c79138d8361ca339cff205fdb0.png"><br> <strong>用单个 mget 请求取回多个文档所需的步骤顺序:</strong> </p>
+<ul>
+<li>客户端向 Node 1 发送 mget 请求。- Node 1为每个分片构建多文档获取请求，然后并行转发这些请求到托管在每个所需的主分片或者副本分片的节点上。一旦收到所有答复，Node 1 构建响应并将其返回给客户端。<br>可以对docs数组中每个文档设置routing参数。<br>bulk API， 允许在单个批量请求中执行多个创建、索引、删除和更新请求。 <img alt="" src="https://img-blog.csdnimg.cn/img_convert/83499315a7b8ab81471a88f3e142f0a8.png"> </li>
+</ul>
+<p> <strong>bulk API 按如下步骤顺序执行：</strong> </p>
+<ul>
+<li>客户端向Node 1 发送 bulk请求。- Node 1为每个节点创建一个批量请求，并将这些请求并行转发到每个包含主分片的节点主机。- 主分片一个接一个按顺序执行每个操作。当每个操作成功时,主分片并行转发新文档（或删除）到副本分片，然后执行下一个操作。一旦所有的副本分片报告所有操作成功，该节点将向协调节点报告成功，协调节点将这些响应收集整理并返回给客户端。</li>
+</ul>
+<h3 id="批量操作流程："><a href="#批量操作流程：" class="headerlink" title="批量操作流程："></a>批量操作流程：</h3><h3 id="9、倒排索引"><a href="#9、倒排索引" class="headerlink" title="9、倒排索引"></a>9、倒排索引</h3><blockquote>
+<p> 分片是Elasticsearch最小的工作单元。但是究竟什么是一个分片，它是如何工作的？<br> 传统的数据库每个字段存储单个值，但这对全文检索并不够。文本字段中的每个单词需要被搜索，对数据库意味着需要单个字段有索引多值的能力。最好的支持是一个字段多个值需求的数据结构是<strong>倒排索引</strong>。<br> <h3>倒排索引原理</h3><br> Elasticsearch使用一种称为倒排索引的结构，它适用于快速的全文搜索。<br> 见其名，知其意，有倒排索引，肯定会对应有正向索引。正向索引（forward index），反向索引（inverted index）更熟悉的名字是<strong>倒排索引</strong>。<br> 所谓的<strong>正向索引</strong>，就是搜索引擎会将待搜索的文件都对应一个文件ID，搜索时将这个ID和搜索关键字进行对应，形成K-V对，然后对关键字进行统计计数。（统计？？下文有解释）<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/cba02cc6d7c5f054dfe5d58fafac9a6a.png"><br> 但是互联网上收录在搜索引擎中的文档的数目是个天文数字，这样的索引结构根本无法满足实时返回排名结果的要求。所以，搜索引擎会将正向索引重新构建为倒排索引，即把文件ID对应到关键词的映射转换为关键词到文件ID的映射，每个关键词都对应着一系列的文件，这些文件中都出现这个关键词。<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a1f52e96e0ac218b5024d708202afba4.png"><br> <h3>倒排索引的例子</h3><br> 一个倒排索引由文档中所有不重复词的列表构成，对于其中每个词，有一个包含它的文档列表。例如，假设我们有两个文档，每个文档的content域包含如下内容： </p>
+</blockquote>
+<ul>
+<li>The quick brown fox jumped over the lazy dog- Quick brown foxes leap over lazy dogs in summer<br>为了创建倒排索引，我们首先将每个文档的content域拆分成单独的词（我们称它为词条或tokens )，创建一个包含所有不重复词条的排序列表，然后列出每个词条出现在哪个文档。结果如下所示： <img alt="" src="https://img-blog.csdnimg.cn/img_convert/3cc642e9bae776c3e617f9d117d41e21.png"> 
+现在，如果我们想搜索 `quick` `brown` ，我们只需要查找包含每个词条的文档： 
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/f26aaa01e011edfa68736956b2f1ddea.png"> 
+两个文档都匹配，但是第一个文档比第二个匹配度更高。如果我们使用仅计算匹配词条数量的简单相似性算法，那么我们可以说，对于我们查询的相关性来讲，第一个文档比第二个文档更佳。 
+但是，我们目前的倒排索引有一些问题： </li>
+<li><code>Quick</code>和<code>quick</code>以独立的词条出现，然而用户可能认为它们是相同的词。 -  <code>fox</code>和<code>foxes</code>非常相似，就像<code>dog</code>和<code>dogs</code>；他们有相同的词根。 -  <code>jumped</code>和<code>leap</code>，尽管没有相同的词根，但他们的意思很相近。他们是同义词。<br>使用前面的索引搜索+Quick +fox不会得到任何匹配文档。(记住，＋前缀表明这个词必须存在）。<br>只有同时出现Quick和fox 的文档才满足这个查询条件，但是第一个文档包含quick fox ，第二个文档包含Quick foxes 。<br>我们的用户可以合理的期望两个文档与查询匹配。我们可以做的更好。<br>如果我们将词条规范为标准模式，那么我们可以找到与用户搜索的词条不完全一致，但具有足够相关性的文档。例如： </li>
+<li><code>Quick</code>可以小写化为<code>quick</code>。- <code>foxes</code>可以词干提取变为词根的格式为<code>fox</code>。类似的，<code>dogs</code>可以为提取为<code>dog</code>。- <code>jumped</code>和<code>leap</code>是同义词，可以索引为相同的单词<code>jump</code> 。<br>现在索引看上去像这样： <img alt="" src="https://img-blog.csdnimg.cn/img_convert/19813d1918c89461303377444cf85c8c.png"> 
+这还远远不够。我们搜索+Quick +fox 仍然会失败，因为在我们的索引中，已经没有Quick了。但是，如果我们对搜索的字符串使用与content域相同的标准化规则，会变成查询+quick +fox，这样两个文档都会匹配！分词和标准化的过程称为分析，这非常重要。你只能搜索在索引中出现的词条，所以索引文本和查询字符串必须标准化为相同的格式。 </li>
+</ul>
+<h3 id="倒排索引的例子"><a href="#倒排索引的例子" class="headerlink" title="倒排索引的例子"></a>倒排索引的例子</h3><h3 id="10、文档搜索"><a href="#10、文档搜索" class="headerlink" title="10、文档搜索"></a>10、文档搜索</h3><blockquote>
+ <h3>不可改变的倒排索引</h3> 
+ 早期的全文检索会为整个文档集合建立一个很大的倒排索引并将其写入到磁盘。 一旦新的索引就绪，旧的就会被其替换，这样最近的变化便可以被检索到。 
+ 倒排索引被写入磁盘后是不可改变的：它永远不会修改。 
+</blockquote>
+<ul>
+<li>不需要锁。如果你从来不更新索引，你就不需要担心多进程同时修改数据的问题。- 一旦索引被读入内核的文件系统缓存，便会留在哪里，由于其不变性。只要文件系统缓存中还有足够的空间，那么大部分读请求会直接请求内存，而不会命中磁盘。这提供了很大的性能提升。- 其它缓存(像filter缓存)，在索引的生命周期内始终有效。它们不需要在每次数据改变时被重建，因为数据不会变化。- 写入单个大的倒排索引允许数据被压缩，减少磁盘IO和需要被缓存到内存的索引的使用量<br>当然，一个不变的索引也有不好的地方。主要事实是它是不可变的! 你不能修改它。如果你需要让一个新的文档可被搜索，你需要重建整个索引。这要么对一个索引所能包含的数据量造成了很大的限制，要么对索引可被更新的频率造成了很大的限制。 <h3>动态更新索引</h3> 
+如何在保留不变性的前提下实现倒排索引的更新？ 
+答案是：用更多的索引。通过增加新的补充索引来反映新近的修改，而不是直接重写整个倒排索引。每一个倒排索引都会被轮流查询到,从最早的开始查询完后再对结果进行合并。 
+Elasticsearch基于Lucene，这个java库引入了按段搜索的概念。每一段本身都是一个倒排索引，但索引在 Lucene 中除表示所有段的集合外，还增加了提交点的概念—一个列出了所有已知段的文件。 
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/9ee1adbb2d55e710257e01b812a6d8cf.png"> 
+按段搜索会以如下流程执行： 
+一、新文档被收集到内存索引缓存。 
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/9d499fde966ee9825fa5a424d8357489.png"> 
+二、不时地, 缓存被提交。 </li>
+<li>一个新的段，一个追加的倒排索引，被写入磁盘。- 一个新的包含新段名字的提交点被写入磁盘。- 磁盘进行同步，所有在文件系统缓存中等待的写入都刷新到磁盘，以确保它们被写入物理文件<br>三、新的段被开启，让它包含的文档可见以被搜索。<br>四、内存缓存被清空，等待接收新的文档。 <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f74828ff58cc4635a97e88706a221e50.png"> 
+当一个查询被触发，所有已知的段按顺序被查询。词项统计会对所有段的结果进行聚合，以保证每个词和每个文档的关联都被准确计算。这种方式可以用相对较低的成本将新文档添加到索引。 
+段是不可改变的，所以既不能从把文档从旧的段中移除，也不能修改旧的段来进行反映文档的更新。取而代之的是，每个提交点会包含一个.del 文件，文件中会列出这些被删除文档的段信息。 
+当一个**文档被“删除”**时，它实际上只是在 .del 文件中被标记删除。一个被标记删除的文档仍然可以被查询匹配到，但它会在最终结果被返回前从结果集中移除。 
+文档更新也是类似的操作方式:当一个文档被更新时，旧版本文档被标记删除，文档的新版本被索引到一个新的段中。可能两个版本的文档都会被一个查询匹配到，但被删除的那个旧版本文档在结果集返回前就已经被移除。 </li>
+</ul>
+<h3 id="动态更新索引"><a href="#动态更新索引" class="headerlink" title="动态更新索引"></a>动态更新索引</h3><h3 id="11、文档刷新-amp-文档刷写-amp-文档合并"><a href="#11、文档刷新-amp-文档刷写-amp-文档合并" class="headerlink" title="11、文档刷新 &amp; 文档刷写 &amp; 文档合并"></a>11、文档刷新 &amp; 文档刷写 &amp; 文档合并</h3><blockquote>
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b3b31c1e592d5aa794e7c9fcb259c924.png"> 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/521c25f0f16247240234d1b8eb3c5f25.png"> 
+ <h3>近实时搜索</h3> 
+ 随着按段（per-segment）搜索的发展，一个新的文档从索引到可被搜索的延迟显著降低了。新文档在几分钟之内即可被检索，但这样还是不够快。磁盘在这里成为了瓶颈。提交（Commiting）一个新的段到磁盘需要一个fsync来确保段被物理性地写入磁盘，这样在断电的时候就不会丢失数据。但是fsync操作代价很大；如果每次索引一个文档都去执行一次的话会造成很大的性能问题。 
+ 我们需要的是一个更轻量的方式来使一个文档可被搜索，这意味着fsync要从整个过程中被移除。在Elasticsearch和磁盘之间是文件系统缓存。像之前描述的一样，在内存索引缓冲区中的文档会被写入到一个新的段中。但是这里新段会被先写入到文件系统缓存—这一步代价会比较低，稍后再被刷新到磁盘—这一步代价比较高。不过只要文件已经在缓存中，就可以像其它文件一样被打开和读取了。 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a679d4f5f4bfa6913a53316251beef2a.png"> 
+ Lucene允许新段被写入和打开，使其包含的文档在未进行一次完整提交时便对搜索可见。这种方式比进行一次提交代价要小得多，并且在不影响性能的前提下可以被频繁地执行。 
+ <img alt="" src="https://img-blog.csdnimg.cn/img_convert/673d3a77e254fa3a5a6f5293ffb125ab.png"> 
+ 在 Elasticsearch 中，写入和打开一个新段的轻量的过程叫做refresh。默认情况下每个分片会每秒自动刷新一次。这就是为什么我们说 Elasticsearch是近实时搜索：文档的变化并不是立即对搜索可见，但会在一秒之内变为可见。 
+ 这些行为可能会对新用户造成困惑：他们索引了一个文档然后尝试搜索它，但却没有搜到。这个问题的解决办法是用refresh API执行一次手动刷新：/usersl_refresh 
+ 尽管刷新是比提交轻量很多的操作，它还是会有性能开销。当写测试的时候，手动刷新很有用，但是不要在生产环境下每次索引一个文档都去手动刷新。相反，你的应用需要意识到Elasticsearch 的近实时的性质，并接受它的不足。 
+ 并不是所有的情况都需要每秒刷新。可能你正在使用Elasticsearch索引大量的日志文件，你可能想优化索引速度而不是近实时搜索，可以通过设置refresh_interval ，降低每个索引的刷新频率 
+ <pre><code class="language-java">&#123;
+    "settings": &#123;
+        "refresh_interval": "30s"
+    &#125;
+&#125;
+</code></pre> 
+ refresh_interval可以在既存索引上进行动态更新。在生产环境中，当你正在建立一个大的新索引时，可以先关闭自动刷新，待开始使用该索引时，再把它们调回来。 
+ <pre><code class="language-java"># 关闭自动刷新
+PUT /users/_settings
+&#123; "refresh_interval": -1 &#125;
+</blockquote>
+<h1 id="每一秒刷新"><a href="#每一秒刷新" class="headerlink" title="每一秒刷新"></a>每一秒刷新</h1><p>PUT /users/_settings<br>&#123; “refresh_interval”: “1s” &#125;<br></code></pre><br> <h3>持久化变更</h3><br> 如果没有用fsync把数据从文件系统缓存刷（flush）到硬盘，我们不能保证数据在断电甚至是程序正常退出之后依然存在。为了保证Elasticsearch 的可靠性，需要确保数据变化被持久化到磁盘。在动态更新索引，我们说一次完整的提交会将段刷到磁盘，并写入一个包含所有段列表的提交点。Elasticsearch 在启动或重新打开一个索引的过程中使用这个提交点来判断哪些段隶属于当前分片。<br> 即使通过每秒刷新(refresh）实现了近实时搜索，我们仍然需要经常进行完整提交来确保能从失败中恢复。但在两次提交之间发生变化的文档怎么办?我们也不希望丢失掉这些数据。Elasticsearch 增加了一个translog ，或者叫事务日志，在每一次对Elasticsearch进行操作时均进行了日志记录。<br> 整个流程如下:<br> 一、一个文档被索引之后，就会被添加到内存缓冲区，并且追加到了 translog<br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/baeab48c8d6b87660ac4fb954e9c9731.png"><br> 二、刷新（refresh）使分片每秒被刷新（refresh）一次： </p>
+<ul>
+<li>这些在内存缓冲区的文档被写入到一个新的段中，且没有进行fsync操作。- 这个段被打开，使其可被搜索。- 内存缓冲区被清空。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/17be4247e6b23f31b1e589c70d61e817.png"> 
+三、这个进程继续工作，更多的文档被添加到内存缓冲区和追加到事务日志。 
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/4b5c4a3a3ffb4c84625bb283f6a67018.png"> 
+四、每隔一段时间—例如translog变得越来越大，索引被刷新（flush）；一个新的translog被创建，并且一个全量提交被执行。 </li>
+<li>所有在内存缓冲区的文档都被写入一个新的段。 -  缓冲区被清空。 -  一个提交点被写入硬盘。 -  文件系统缓存通过fsync被刷新（flush） 。 -  老的translog被删除。<br>translog 提供所有还没有被刷到磁盘的操作的一个持久化纪录。当Elasticsearch启动的时候，它会从磁盘中使用最后一个提交点去恢复己知的段，并且会重放translog 中所有在最后一次提交后发生的变更操作。<br>translog 也被用来提供实时CRUD。当你试着通过ID查询、更新、删除一个文档，它会在尝试从相应的段中检索之前，首先检查 translog任何最近的变更。这意味着它总是能够实时地获取到文档的最新版本。 <img alt="" src="https://img-blog.csdnimg.cn/img_convert/11c7d2cc05244e669eb8402dd8049de9.png"> 
+执行一个提交并且截断translog 的行为在 Elasticsearch被称作一次flush。分片每30分钟被自动刷新（flush)，或者在 translog 太大的时候也会刷新。 
+你很少需要自己手动执行flush操作，通常情况下，自动刷新就足够了。这就是说，在重启节点或关闭索引之前执行 flush有益于你的索引。当Elasticsearch尝试恢复或重新打开一个索引，它需要重放translog中所有的操作，所以如果日志越短，恢复越快。 
+translog 的目的是保证操作不会丢失，在文件被fsync到磁盘前，被写入的文件在重启之后就会丢失。默认translog是每5秒被fsync刷新到硬盘，或者在每次写请求完成之后执行（e.g. index, delete, update, bulk）。这个过程在主分片和复制分片都会发生。最终，基本上，这意味着在整个请求被fsync到主分片和复制分片的translog之前，你的客户端不会得到一个200 OK响应。 
+在每次请求后都执行一个fsync会带来一些性能损失，尽管实践表明这种损失相对较小（特别是 bulk 导入，它在一次请求中平摊了大量文档的开销）。 
+但是对于一些大容量的偶尔丢失几秒数据问题也并不严重的集群，使用异步的 fsync还是比较有益的。比如，写入的数据被缓存到内存中，再每5秒执行一次 fsync 。如果你决定使用异步translog 的话，你需要保证在发生 crash 时，丢失掉 sync_interval时间段的数据也无所谓。请在决定前知晓这个特性。如果你不确定这个行为的后果，最好是使用默认的参数{“index.translog.durability”: “request”}来避免数据丢失。 
+<h3>段合并</h3> 
+由于自动刷新流程每秒会创建一个新的段，这样会导致短时间内的段数量暴增。而段数目太多会带来较大的麻烦。每一个段都会消耗文件句柄、内存和 cpu运行周期。更重要的是，每个搜索请求都必须轮流检查每个段；所以段越多，搜索也就越慢。 
+Elasticsearch通过在后台进行段合并来解决这个问题。小的段被合并到大的段，然后这些大的段再被合并到更大的段。 
+段合并的时候会将那些旧的已删除文档从文件系统中清除。被删除的文档（或被更新文档的旧版本）不会被拷贝到新的大段中。 
+启动段合并不需要你做任何事。进行索引和搜索时会自动进行。 
+一、当索引的时候，刷新（refresh）操作会创建新的段并将段打开以供搜索使用。 
+二、合并进程选择一小部分大小相似的段，并且在后台将它们合并到更大的段中。这并不会中断索引和搜索。 
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/c907ca35bd7c0393d46aec2c7038af19.png"> 
+三、一旦合并结束，老的段被删除 </li>
+<li>新的段被刷新(flush)到了磁盘。- 写入一个包含新段且排除旧的和较小的段的新提交点。- 新的段被打开用来搜索。老的段被删除。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/a00cc1c19652c47fcfb663aaf337a41b.png"> 
+合并大的段需要消耗大量的 I/O 和 CPU 资源，如果任其发展会影响搜索性能。 Elasticsearch在默认情况下会对合并流程进行资源限制，所以搜索仍然有足够的资源很好地执行。 </li>
+</ul>
+<h3 id="持久化变更"><a href="#持久化变更" class="headerlink" title="持久化变更"></a>持久化变更</h3><h3 id="12、文档分析"><a href="#12、文档分析" class="headerlink" title="12、文档分析"></a>12、文档分析</h3><blockquote>
+<p> 分析包含下面的过程： </p>
+</blockquote>
+<ul>
+<li>将一块文本分成适合于倒排索引的独立的词条。- 将这些词条统一化为标准格式以提高它们的“可搜索性”，或者recall。<br>分析器执行上面的工作。分析器实际上是将三个功能封装到了一个包里： </li>
+<li>字符过滤器：首先，字符串按顺序通过每个 字符过滤器 。他们的任务是在分词前整理字符串。一个字符过滤器可以用来去掉 HTML，或者将 &amp; 转化成 and。- 分词器：其次，字符串被分词器分为单个的词条。一个简单的分词器遇到空格和标点的时候，可能会将文本拆分成词条。- Token 过滤器：最后，词条按顺序通过每个 token 过滤器 。这个过程可能会改变词条（例如，小写化Quick ），删除词条（例如， 像 a， and， the 等无用词），或者增加词条（例如，像jump和leap这种同义词）</li>
+</ul>
+<h3 id="13、内置分析器"><a href="#13、内置分析器" class="headerlink" title="13、内置分析器"></a>13、内置分析器</h3><blockquote>
+<p> Elasticsearch还附带了可以直接使用的预包装的分析器。接下来我们会列出最重要的分析器。为了证明它们的差异，我们看看每个分析器会从下面的字符串得到哪些词条：<br> <pre><code class="language-java">"Set the shape to semi-transparent by calling set_trans(5)"<br></code></pre><br> <ul><li>标准分析器 标准分析器是Elasticsearch 默认使用的分析器。它是分析各种语言文本最常用的选择。它根据Unicode 联盟定义的单词边界划分文本。删除绝大部分标点。最后，将词条小写。它会产生： <pre><code class="language-java">set, the, shape, to, semi, transparent, by, calling, set_trans, 5<br></code></pre> </li><li>简单分析器 简单分析器在任何不是字母的地方分隔文本，将词条小写。它会产生： <pre><code class="language-java">set, the, shape, to, semi, transparent, by, calling, set, trans<br></code></pre> </li><li>空格分析器 空格分析器在空格的地方划分文本。它会产生: <pre><code class="language-java">Set, the, shape, to, semi-transparent, by, calling, set_trans(5)<br></code></pre> </li><li>语言分析器 特定语言分析器可用于很多语言。它们可以考虑指定语言的特点。例如，英语分析器附带了一组英语无用词（常用单词，例如and或者the ,它们对相关性没有多少影响），它们会被删除。由于理解英语语法的规则，这个分词器可以提取英语单词的词干。 英语分词器会产生下面的词条： <pre><code class="language-java">set, shape, semi, transpar, call, set_tran, 5<br></code></pre> 注意看transparent、calling和 set_trans已经变为词根格式。 </li></ul></p>
+</blockquote>
+<h3 id="14、分析器使用场景"><a href="#14、分析器使用场景" class="headerlink" title="14、分析器使用场景"></a>14、分析器使用场景</h3><blockquote>
+<p> 当我们索引一个文档，它的全文域被分析成词条以用来创建倒排索引。但是，当我们在全文域搜索的时候，我们需要将查询字符串通过相同的分析过程，以保证我们搜索的词条格式与索引中的词条格式一致。<br> 全文查询，理解每个域是如何定义的，因此它们可以做正确的事： </p>
+</blockquote>
+<ul>
+<li> 当你查询一个全文域时，会对查询字符串应用相同的分析器，以产生正确的搜索词条列表。 -  当你查询一个精确值域时，不会分析查询字符串，而是搜索你指定的精确值。 </li>
+</ul>
+<h3 id="15、测试分析器"><a href="#15、测试分析器" class="headerlink" title="15、测试分析器"></a>15、测试分析器</h3><blockquote>
+<p> 有些时候很难理解分词的过程和实际被存储到索引中的词条，特别是你刚接触Elasticsearch。为了理解发生了什么，你可以使用analyze API来看文本是如何被分析的。在消息体里，指定分析器和要分析的文本。<br> <pre><code class="language-java">#GET <a target="_blank" rel="noopener" href="http://localhost:9200/_analyze">http://localhost:9200/_analyze</a><br>&#123;<br>    "analyzer": "standard",<br>    "text": "Text to analyze"<br>&#125;<br></code></pre><br> 结果中每个元素代表一个单独的词条：<br> <pre><code class="language-java">&#123;<br>    "tokens": [<br>        &#123;<br>            "token": "text",<br>            "start_offset": 0,<br>            "end_offset": 4,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 1<br>        &#125;,<br>        &#123;<br>            "token": "to",<br>            "start_offset": 5,<br>            "end_offset": 7,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 2<br>        &#125;,<br>        &#123;<br>            "token": "analyze",<br>            "start_offset": 8,<br>            "end_offset": 15,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 3<br>        &#125;<br>    ]<br>&#125;<br></code></pre> </p>
+</blockquote>
+<ul>
+<li>token是实际存储到索引中的词条。- start_ offset 和end_ offset指明字符在原始字符串中的位置。- position指明词条在原始文本中出现的位置。</li>
+</ul>
+<h3 id="16、指定分析器"><a href="#16、指定分析器" class="headerlink" title="16、指定分析器"></a>16、指定分析器</h3><blockquote>
+<p> 当Elasticsearch在你的文档中检测到一个新的字符串域，它会自动设置其为一个全文字符串域，使用 标准 分析器对它进行分析。你不希望总是这样。可能你想使用一个不同的分析器，适用于你的数据使用的语言。有时候你想要一个字符串域就是一个字符串域，不使用分析，直接索引你传入的精确值，例如用户 ID 或者一个内部的状态域或标签。要做到这一点，我们必须手动指定这些域的映射。<br> （细粒度指定分析器）<br> <h3>IK分词器</h3><br> 首先通过 Postman 发送 GET 请求查询分词效果<br> <pre><code class="language-java"># GET <a target="_blank" rel="noopener" href="http://localhost:9200/_analyze">http://localhost:9200/_analyze</a><br>&#123;<br>    "text":"测试单词"<br>&#125;<br></code></pre><br> ES 的默认分词器无法识别中文中测试、 单词这样的词汇，而是简单的将每个字拆完分为一个词。<br> <pre><code class="language-java">&#123;<br>    "tokens": [<br>        &#123;<br>            "token": "测",<br>            "start_offset": 0,<br>            "end_offset": 1,<br>            "type": "&lt;IDEOGRAPHIC&gt;",<br>            "position": 0<br>        &#125;,<br>        &#123;<br>            "token": "试",<br>            "start_offset": 1,<br>            "end_offset": 2,<br>            "type": "&lt;IDEOGRAPHIC&gt;",<br>            "position": 1<br>        &#125;,<br>        &#123;<br>            "token": "单",<br>            "start_offset": 2,<br>            "end_offset": 3,<br>            "type": "&lt;IDEOGRAPHIC&gt;",<br>            "position": 2<br>        &#125;,<br>        &#123;<br>            "token": "词",<br>            "start_offset": 3,<br>            "end_offset": 4,<br>            "type": "&lt;IDEOGRAPHIC&gt;",<br>            "position": 3<br>        &#125;<br>    ]<br>&#125;<br></code></pre><br> 这样的结果显然不符合我们的使用要求，所以我们需要下载 ES 对应版本的中文分词器。<br> 将解压后的后的文件夹放入 ES 根目录下的 plugins 目录下，重启 ES 即可使用。<br> 我们这次加入新的查询参数”analyzer”:“ik_max_word”。<br> <pre><code class="language-java"># GET <a target="_blank" rel="noopener" href="http://localhost:9200/_analyze">http://localhost:9200/_analyze</a><br>&#123;<br>    "text":"测试单词",<br>    "analyzer":"ik_max_word"<br>&#125;<br></code></pre> </p>
+</blockquote>
+<ul>
+<li>ik_max_word：会将文本做最细粒度的拆分。- ik_smart：会将文本做最粗粒度的拆分。<br>使用中文分词后的结果为： <pre><code class="language-java">&#123;
+ "tokens": [
+     &#123;
+         "token": "测试", 
+         "start_offset": 0, 
+         "end_offset": 2, 
+         "type": "CN_WORD", 
+         "position": 0
+     &#125;, 
+     &#123;
+         "token": "单词", 
+         "start_offset": 2, 
+         "end_offset": 4, 
+         "type": "CN_WORD", 
+         "position": 1
+     &#125;
+ ]
+&#125;
+</code></pre> 
+ES 中也可以进行扩展词汇，首先查询 <pre><code class="language-java">#GET http://localhost:9200/_analyze</li>
+</ul>
+<p>&#123;<br>    “text”:”弗雷尔卓德”,<br>    “analyzer”:”ik_max_word”<br>&#125;<br></code></pre><br> 仅仅可以得到每个字的分词结果，我们需要做的就是使分词器识别到弗雷尔卓德也是一个词语。<br> <pre><code class="language-java">&#123;<br>    "tokens": [<br>        &#123;<br>            "token": "弗",<br>            "start_offset": 0,<br>            "end_offset": 1,<br>            "type": "CN_CHAR",<br>            "position": 0<br>        &#125;,<br>        &#123;<br>            "token": "雷",<br>            "start_offset": 1,<br>            "end_offset": 2,<br>            "type": "CN_CHAR",<br>            "position": 1<br>        &#125;,<br>        &#123;<br>            "token": "尔",<br>            "start_offset": 2,<br>            "end_offset": 3,<br>            "type": "CN_CHAR",<br>            "position": 2<br>        &#125;,<br>        &#123;<br>            "token": "卓",<br>            "start_offset": 3,<br>            "end_offset": 4,<br>            "type": "CN_CHAR",<br>            "position": 3<br>        &#125;,<br>        &#123;<br>            "token": "德",<br>            "start_offset": 4,<br>            "end_offset": 5,<br>            "type": "CN_CHAR",<br>            "position": 4<br>        &#125;<br>    ]<br>&#125;<br></code></pre> </p>
+<ul>
+<li>首先进入 ES 根目录中的 plugins 文件夹下的 ik 文件夹，进入 config 目录，创建 custom.dic文件，写入“弗雷尔卓德”。- 同时打开 IKAnalyzer.cfg.xml 文件，将新建的 custom.dic 配置其中。- 重启 ES 服务器 。<pre><code class="language-XML">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;
+&lt;properties&gt;
+ &lt;comment&gt;IK Analyzer 扩展配置&lt;/comment&gt;
+ &lt;!--用户可以在这里配置自己的扩展字典 --&gt;
+ &lt;entry key="ext_dict"&gt;custom.dic&lt;/entry&gt;
+  &lt;!--用户可以在这里配置自己的扩展停止词字典--&gt;
+ &lt;entry key="ext_stopwords"&gt;&lt;/entry&gt;
+ &lt;!--用户可以在这里配置远程扩展字典 --&gt;
+ &lt;!-- &lt;entry key="remote_ext_dict"&gt;words_location&lt;/entry&gt; --&gt;
+ &lt;!--用户可以在这里配置远程扩展停止词字典--&gt;
+ &lt;!-- &lt;entry key="remote_ext_stopwords"&gt;words_location&lt;/entry&gt; --&gt;
+&lt;/properties&gt;
+</code></pre> 
+扩展后再次查询 <pre><code class="language-java">#GET http://localhost:9200/_analyze</li>
+</ul>
+<p>&#123;<br>    “text”:”弗雷尔卓德”,<br>    “analyzer”:”ik_max_word”<br>&#125;<br></code></pre><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "tokens": [<br>        &#123;<br>            "token": "弗雷尔卓德",<br>            "start_offset": 0,<br>            "end_offset": 5,<br>            "type": "CN_WORD",<br>            "position": 0<br>        &#125;<br>    ]<br>&#125;<br></code></pre><br> <h3>自定义分析器</h3><br> 虽然Elasticsearch带有一些现成的分析器，然而在分析器上Elasticsearch真正的强大之处在于，你可以通过在一个适合你的特定数据的设置之中组合字符过滤器、分词器、词汇单元过滤器来创建自定义的分析器。在分析与分析器我们说过，一个分析器就是在一个包里面组合了三种函数的一个包装器，三种函数按照顺序被执行：<br> 1、字符过滤器<br> 字符过滤器用来整理一个尚未被分词的字符串。例如，如果我们的文本是HTML格式的，它会包含像<br> 或者</p>
+<p>  这样的HTML标签，这些标签是我们不想索引的。我们可以使用html清除字符过滤器来移除掉所有的HTML标签，并且像把Á转换为相对应的Unicode字符Á 这样，转换HTML实体。一个分析器可能有0个或者多个字符过滤器。<br>  2、分词器<br>  一个分析器必须有一个唯一的分词器。分词器把字符串分解成单个词条或者词汇单元。标准分析器里使用的标准分词器把一个字符串根据单词边界分解成单个词条，并且移除掉大部分的标点符号，然而还有其他不同行为的分词器存在。<br>  例如，关键词分词器完整地输出接收到的同样的字符串，并不做任何分词。空格分词器只根据空格分割文本。正则分词器根据匹配正则表达式来分割文本。<br>  3、词单元过滤器<br>  经过分词，作为结果的词单元流会按照指定的顺序通过指定的词单元过滤器。词单元过滤器可以修改、添加或者移除词单元。我们已经提到过lowercase和stop词过滤器，但是在Elasticsearch 里面还有很多可供选择的词单元过滤器。词干过滤器把单词遏制为词干。ascii_folding过滤器移除变音符，把一个像”très”这样的词转换为“tres”。<br>  ngram和 edge_ngram词单元过滤器可以产生适合用于部分匹配或者自动补全的词单元。<br>  <strong>自定义分析器例子</strong><br>  接下来，我们看看如何创建自定义的分析器：<br>  <pre><code class="language-java">#PUT <a target="_blank" rel="noopener" href="http://localhost:9200/my_index">http://localhost:9200/my_index</a></p>
+<p>&#123;<br>    “settings”: &#123;<br>        “analysis”: &#123;<br>            “char_filter”: &#123;<br>                “&amp;_to_and”: &#123;<br>                    “type”: “mapping”,<br>                    “mappings”: [<br>                        “&amp;=&gt; and “<br>                    ]<br>                &#125;<br>            &#125;,<br>            “filter”: &#123;<br>                “my_stopwords”: &#123;<br>                    “type”: “stop”,<br>                    “stopwords”: [<br>                        “the”,<br>                        “a”<br>                    ]<br>                &#125;<br>            &#125;,<br>            “analyzer”: &#123;<br>                “my_analyzer”: &#123;<br>                    “type”: “custom”,<br>                    “char_filter”: [<br>                        “html_strip”,<br>                        “&amp;_to_and”<br>                    ],<br>                    “tokenizer”: “standard”,<br>                    “filter”: [<br>                        “lowercase”,<br>                        “my_stopwords”<br>                    ]<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre><br>  索引被创建以后，使用 analyze API 来 测试这个新的分析器：<br>  <pre><code class="language-java"># GET <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/my_index/_analyze">http://127.0.0.1:9200/my_index/_analyze</a><br>&#123;<br>    "text":"The quick &amp; brown fox",<br>    "analyzer": "my_analyzer"<br>&#125;<br></code></pre><br>  返回结果为：<br>  <pre><code class="language-java">&#123;<br>    "tokens": [<br>        &#123;<br>            "token": "quick",<br>            "start_offset": 4,<br>            "end_offset": 9,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 1<br>        &#125;,<br>        &#123;<br>            "token": "and",<br>            "start_offset": 10,<br>            "end_offset": 11,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 2<br>        &#125;,<br>        &#123;<br>            "token": "brown",<br>            "start_offset": 12,<br>            "end_offset": 17,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 3<br>        &#125;,<br>        &#123;<br>            "token": "fox",<br>            "start_offset": 18,<br>            "end_offset": 21,<br>            "type": "&lt;ALPHANUM&gt;",<br>            "position": 4<br>        &#125;<br>    ]<br>&#125;<br></code></pre> </p>
+<h3 id="自定义分析器"><a href="#自定义分析器" class="headerlink" title="自定义分析器"></a>自定义分析器</h3> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Elasticsearch简介以及增删改查入门(学习笔记)"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Elasticsearch%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E5%85%A5%E9%97%A8(%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0)/"
+    >Elasticsearch简介以及增删改查入门(学习笔记)</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticsearch%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%E5%85%A5%E9%97%A8(%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0)/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.429Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticsearch简介以及增删改查入门(学习笔记)<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、Elasticsearch 是什么？</p>
+<blockquote>
+<p>      The Elastic Stack, 包括 Elasticsearch、 Kibana、 Beats 和 Logstash（也称为 ELK Stack）。能够安全可靠地获取任何来源、任何格式的数据，然后实时地对数据进行搜索、分析和可视化。<br>     Elaticsearch，简称为 ES， ES 是一个<strong>开源的高扩展的分布式全文搜索引擎</strong>， 是整个 ElasticStack 技术栈的核心。<br>     它可以近乎实时的存储、检索数据；本身扩展性很好，可以扩展到上百台服务器，处理 PB 级别的数据。 </p>
+</blockquote>
+<h3 id="2、全文搜索引擎"><a href="#2、全文搜索引擎" class="headerlink" title="2、全文搜索引擎"></a>2、全文搜索引擎</h3><blockquote>
+<p>      Google，百度类的网站搜索，它们都是根据网页中的关键字生成索引，我们在搜索的时候输入关键字，它们会将该关键字即索引匹配到的所有网页返回；还有常见的项目中应用日志的搜索等等。对于这些非结构化的数据文本，关系型数据库搜索不是能很好的支持。<br>      一般传统数据库，全文检索都实现的很鸡肋，因为一般也没人用数据库存文本字段。进行全文检索需要扫描整个表，如果数据量大的话即使对 SQL 的语法优化，也收效甚微。建立了索引，但是维护起来也很麻烦，对于 insert 和 update 操作都会重新构建索引。<br>   基于以上原因可以分析得出，在一些生产环境中，使用常规的搜索方式，性能是非常差的： </p>
+</blockquote>
+<ul>
+<li>搜索的数据对象是大量的非结构化的文本数据。- 文件记录量达到数十万或数百万个甚至更多。- 支持大量基于交互式文本的查询。- 需求非常灵活的全文搜索查询。- 对高度相关的搜索结果的有特殊需求，但是没有可用的关系数据库可以满足。- 对不同记录类型、非文本数据操作或安全事务处理的需求相对较少的情况。为了解决结构化数据搜索和非结构化数据搜索性能问题，我们就需要专业，健壮，强大的全文搜索引擎 。<br>这里说到的全文搜索引擎指的是目前广泛应用的主流搜索引擎。它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这个过程类似于通过字典中的检索字表查字的过程。 </li>
+</ul>
+<h3 id="3、倒排索引简介"><a href="#3、倒排索引简介" class="headerlink" title="3、倒排索引简介"></a>3、倒排索引简介</h3><blockquote>
+<p> 1）案例1<br> <strong>正排索引（传统）</strong><br> <table><thead>|id|content</p>
+</blockquote>
+</thead><tbody>|1001|my name is zhang san
+|1002|my name is li si
+</tbody></table>
+ **倒排索引** 
+ <table><thead>|keyword|id
+</thead><tbody>|name|1001, 1002
+|zhang|1001
+</tbody></table>
+  Elasticsearch 是
+ **面向文档型数据库**，一条数据在这里就是一个文档。 为了方便大家理解，我们将 Elasticsearch 里存储文档数据和关系型数据库 MySQL 存储数据的概念进行一个类比
+ 
+ <img alt="" height="283" src="https://img-blog.csdnimg.cn/20210619123833679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1020">
+  ES 里的 Index 可以看做一个库，而 Types 相当于表， Documents 则相当于表的行。这里 Types 的概念已经被逐渐弱化， Elasticsearch 6.X 中，一个 index 下已经只能包含一个type， Elasticsearch 7.X 中, Type 的概念已经被删除了。
+ 
+<p>  2）案例2<br>   <br> <img alt="" height="675" src="https://img-blog.csdnimg.cn/20210629215204613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1150"></p>
+ <img alt="" height="333" src="https://img-blog.csdnimg.cn/20210629215230277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1111">
+ 
+ <img alt="" height="745" src="https://img-blog.csdnimg.cn/20210629215255654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="914">
+ 
+ <img alt="" height="118" src="https://img-blog.csdnimg.cn/20210629215311587.png" width="1018">
+
+
+<h3 id="4、索引-创建"><a href="#4、索引-创建" class="headerlink" title="4、索引-创建"></a>4、索引-创建</h3><blockquote>
+<p> 对比关系型数据库，创建索引就等同于创建数据库。<br> 在 Postman 中，向 ES 服务器发 PUT 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping">http://127.0.0.1:9200/shopping</a><br> 请求后，服务器返回响应：<br> <pre><code class="language-java">&#123;<br>    "acknowledged": true,//响应结果<br>    "shards_acknowledged": true,//分片结果<br>    "index": "shopping"//索引名称<br>&#125;<br></code></pre><br> 如果重复发 PUT 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping">http://127.0.0.1:9200/shopping</a> 添加索引，会返回错误信息 :<br> <pre><code class="language-java">&#123;<br>    "error": &#123;<br>        "root_cause": [<br>            &#123;<br>                "type": "resource_already_exists_exception",<br>                "reason": "index [shopping/J0WlEhh4R7aDrfIc3AkwWQ] already exists",<br>                "index_uuid": "J0WlEhh4R7aDrfIc3AkwWQ",<br>                "index": "shopping"<br>            &#125;<br>        ],<br>        "type": "resource_already_exists_exception",<br>        "reason": "index [shopping/J0WlEhh4R7aDrfIc3AkwWQ] already exists",<br>        "index_uuid": "J0WlEhh4R7aDrfIc3AkwWQ",<br>        "index": "shopping"<br>    &#125;,<br>    "status": 400<br>&#125;<br></code></pre> </p>
+</blockquote>
+<h3 id="5、查看所有索引"><a href="#5、查看所有索引" class="headerlink" title="5、查看所有索引"></a>5、查看所有索引</h3><blockquote>
+<p> 在 Postman 中，向 ES 服务器发 GET 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/_cat/indices?v">http://127.0.0.1:9200/_cat/indices?v</a><br> 这里请求路径中的_cat 表示查看的意思， indices 表示索引，所以整体含义就是查看当前 ES服务器中的所有索引，就好像 MySQL 中的 show tables 的感觉，服务器响应结果如下 :<br> <pre><code class="language-java">health status index    uuid                   pri rep docs.count docs.deleted store.size pri.store.size<br>yellow open   shopping J0WlEhh4R7aDrfIc3AkwWQ   1   1          0            0       208b           208b<br></code></pre><br> <img alt="" height="534" src="https://img-blog.csdnimg.cn/20210619165148317.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="6、查看单个索引"><a href="#6、查看单个索引" class="headerlink" title="6、查看单个索引"></a>6、查看单个索引</h3><blockquote>
+<p> 在 Postman 中，向 ES 服务器发 GET 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping">http://127.0.0.1:9200/shopping</a><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "shopping": &#123;//索引名<br>        "aliases": &#123;&#125;,//别名<br>        "mappings": &#123;&#125;,//映射<br>        "settings": &#123;//设置<br>            "index": &#123;//设置 - 索引<br>                "creation_date": "1617861426847",//设置 - 索引 - 创建时间<br>                "number_of_shards": "1",//设置 - 索引 - 主分片数量<br>                "number_of_replicas": "1",//设置 - 索引 - 主分片数量<br>                "uuid": "J0WlEhh4R7aDrfIc3AkwWQ",//设置 - 索引 - 主分片数量<br>                "version": &#123;//设置 - 索引 - 主分片数量<br>                    "created": "7080099"<br>                &#125;,<br>                "provided_name": "shopping"//设置 - 索引 - 主分片数量<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre> </p>
+</blockquote>
+<h3 id="7、删除索引"><a href="#7、删除索引" class="headerlink" title="7、删除索引"></a>7、删除索引</h3><blockquote>
+<p> 在 Postman 中，向 ES 服务器发 DELETE 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping">http://127.0.0.1:9200/shopping</a><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "acknowledged": true<br>&#125;<br></code></pre><br> 再次查看所有索引，GET <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/_cat/indices?v%EF%BC%8C%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A">http://127.0.0.1:9200/_cat/indices?v，返回结果如下：</a><br> <pre><code class="language-java">health status index uuid pri rep docs.count docs.deleted store.size pri.store.size<br></code></pre><br> 成功删除。 </p>
+</blockquote>
+<h3 id="8、文档-创建（Put-amp-Post）"><a href="#8、文档-创建（Put-amp-Post）" class="headerlink" title="8、文档-创建（Put &amp; Post）"></a>8、文档-创建（Put &amp; Post）</h3><blockquote>
+<p> 假设索引已经创建好了，接下来我们来创建文档，并添加数据。这里的文档可以类比为关系型数据库中的表数据，添加的数据格式为 JSON 格式。<br> 在 Postman 中，向 ES 服务器发 POST 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping/_doc%EF%BC%8C%E8%AF%B7%E6%B1%82%E4%BD%93JSON%E5%86%85%E5%AE%B9%E4%B8%BA%EF%BC%9A">http://127.0.0.1:9200/shopping/_doc，请求体JSON内容为：</a><br> <pre><code class="language-java">&#123;<br>    "title":"小米手机",<br>    "category":"小米",<br>    "images":"<a target="_blank" rel="noopener" href="http://www.gulixueyuan.com/xm.jpg&quot;">http://www.gulixueyuan.com/xm.jpg&quot;</a>,<br>    "price":3999.00<br>&#125;<br></code></pre><br> <img alt="" src="https://img-blog.csdnimg.cn/img_convert/20d54cba223bd9d70ea356d3e40a8161.png"><br> 注意，此处发送请求的方式必须为 POST，不能是 PUT，否则会发生错误 。<br> 返回结果：<br> <pre><code class="language-java">&#123;<br>    "_index": "shopping",//索引<br>    "_type": "_doc",//类型-文档<br>    "_id": "ANQqsHgBaKNfVnMbhZYU",//唯一标识，可以类比为 MySQL 中的主键，随机生成<br>    "_version": 1,//版本<br>    "result": "created",//结果，这里的 create 表示创建成功<br>    "_shards": &#123;//<br>        "total": 2,//分片 - 总数<br>        "successful": 1,//分片 - 总数<br>        "failed": 0//分片 - 总数<br>    &#125;,<br>    "_seq_no": 0,<br>    "_primary_term": 1<br>&#125;<br></code></pre><br> 上面的数据创建后，由于没有指定数据唯一性标识（ID），默认情况下， ES 服务器会随机生成一个。<br> 如果想要自定义唯一性标识，需要在创建时指定： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping/_doc/1%EF%BC%8C%E8%AF%B7%E6%B1%82%E4%BD%93JSON%E5%86%85%E5%AE%B9%E4%B8%BA%EF%BC%9A">http://127.0.0.1:9200/shopping/_doc/1，请求体JSON内容为：</a><br> <pre><code class="language-java">&#123;<br>    "title":"小米手机",<br>    "category":"小米",<br>    "images":"<a target="_blank" rel="noopener" href="http://www.gulixueyuan.com/xm.jpg&quot;">http://www.gulixueyuan.com/xm.jpg&quot;</a>,<br>    "price":3999.00<br>&#125;<br></code></pre><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "_index": "shopping",<br>    "_type": "_doc",<br>    "_id": "1",//&lt;------------------自定义唯一性标识<br>    "_version": 1,<br>    "result": "created",<br>    "_shards": &#123;<br>        "total": 2,<br>        "successful": 1,<br>        "failed": 0<br>    &#125;,<br>    "_seq_no": 1,<br>    "_primary_term": 1<br>&#125;<br></code></pre><br> <strong>此处需要注意：如果增加数据时明确数据主键，那么请求方式也可以为 PUT。</strong> </p>
+</blockquote>
+<h3 id="9、主键查询-amp-全查询"><a href="#9、主键查询-amp-全查询" class="headerlink" title="9、主键查询 &amp; 全查询"></a>9、主键查询 &amp; 全查询</h3><blockquote>
+<p> 查看文档时，需要指明文档的唯一性标识，类似于 MySQL 中数据的主键查询<br> 在 Postman 中，向 ES 服务器发 GET 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping/_doc/1">http://127.0.0.1:9200/shopping/_doc/1</a> 。<br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "_index": "shopping",<br>    "_type": "_doc",<br>    "_id": "1",<br>    "_version": 1,<br>    "_seq_no": 1,<br>    "_primary_term": 1,<br>    "found": true,<br>    "_source": &#123;<br>        "title": "小米手机",<br>        "category": "小米",<br>        "images": "<a target="_blank" rel="noopener" href="http://www.gulixueyuan.com/xm.jpg&quot;">http://www.gulixueyuan.com/xm.jpg&quot;</a>,<br>        "price": 3999<br>    &#125;<br>&#125;<br></code></pre><br> 查找不存在的内容，向 ES 服务器发 GET 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping/_doc/1001%E3%80%82">http://127.0.0.1:9200/shopping/_doc/1001。</a><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "_index": "shopping",<br>    "_type": "_doc",<br>    "_id": "1001",<br>    "found": false<br>&#125;<br></code></pre><br> 查看索引下所有数据，向 ES 服务器发 GET 请求 ： <a target="_blank" rel="noopener" href="http://127.0.0.1:9200/shopping/_search%E3%80%82">http://127.0.0.1:9200/shopping/_search。</a><br> 返回结果如下：<br> <pre><code class="language-java">&#123;<br>    "took": 133,<br>    "timed_out": false,<br>    "_shards": &#123;<br>        "total": 1,<br>        "successful": 1,<br>        "skipped": 0,<br>        "failed": 0<br>    &#125;,<br>    "hits": &#123;<br>        "total": &#123;<br>            "value": 2,<br>            "relation": "eq"<br>        &#125;,<br>        "max_score": 1,<br>        "hits": [<br>            &#123;<br>                "_index": "shopping",<br>                "_type": "_doc",<br>                "_id": "ANQqsHgBaKNfVnMbhZYU",<br>                "_score": 1,<br>                "_source": &#123;<br>                    "title": "小米手机",<br>                    "category": "小米",<br>                    "images": "<a target="_blank" rel="noopener" href="http://www.gulixueyuan.com/xm.jpg&quot;">http://www.gulixueyuan.com/xm.jpg&quot;</a>,<br>                    "price": 3999<br>                &#125;<br>            &#125;,<br>            &#123;<br>                "_index": "shopping",<br>                "_type": "_doc",<br>                "_id": "1",<br>                "_score": 1,<br>                "_source": &#123;<br>                    "title": "小米手机",<br>                    "category": "小米",<br>                    "images": "<a target="_blank" rel="noopener" href="http://www.gulixueyuan.com/xm.jpg&quot;">http://www.gulixueyuan.com/xm.jpg&quot;</a>,<br>                    "price": 3999<br>                &#125;<br>            &#125;<br>        ]<br>    &#125;<br>&#125;<br></code></pre> </p>
+</blockquote>
+<h3 id="10、全量修改-amp-局部修改-amp-删除"><a href="#10、全量修改-amp-局部修改-amp-删除" class="headerlink" title="10、全量修改 &amp; 局部修改 &amp; 删除"></a>10、全量修改 &amp; 局部修改 &amp; 删除</h3><blockquote>
+ <ol><li> 全量修改 和新增文档一样，输入相同的 URL 地址请求，如果请求体变化，会将原有的数据内容覆盖，在 Postman 中，向 ES 服务器发 POST 请求 http://127.0.0.1:9200/shopping/_doc/1，请求体JSON内容为: <pre><code class="language-java">&#123;
+    "title":"华为手机",
+    "category":"华为",
+    "images":"http://www.gulixueyuan.com/hw.jpg",
+    "price":1999.00
+&#125;
+</code></pre> 修改成功后，服务器响应结果： <pre><code class="language-java">&#123;
+    "_index": "shopping",
+    "_type": "_doc",
+    "_id": "1",
+    "_version": 2,
+    "result": "updated",//&lt;-----------updated 表示数据被更新
+    "_shards": &#123;
+        "total": 2,
+        "successful": 1,
+        "failed": 0
+    &#125;,
+    "_seq_no": 2,
+    "_primary_term": 1
+&#125;
+</code></pre> </li><li> 局部修改 修改数据时，也可以只修改某一给条数据的局部信息，在 Postman 中，向 ES 服务器发 POST 请求 ： http://127.0.0.1:9200/shopping/_update/1。请求体JSON内容为: <pre><code class="language-java">&#123;
+    "doc": &#123;
+        "title":"小米手机",
+        "category":"小米"
+    &#125;
+&#125;
+</code></pre> 返回结果如下： <pre><code class="language-java">&#123;
+    "_index": "shopping",
+    "_type": "_doc",
+    "_id": "1",
+    "_version": 3,
+    "result": "updated",//&lt;-----------updated 表示数据被更新
+    "_shards": &#123;
+        "total": 2,
+        "successful": 1,
+        "failed": 0
+    &#125;,
+    "_seq_no": 3,
+    "_primary_term": 1
+&#125;
+</code></pre> 在 Postman 中，向 ES 服务器发 GET请求 ： http://127.0.0.1:9200/shopping/_doc/1，查看修改内容： <pre><code class="language-java">&#123;
+    "_index": "shopping",
+    "_type": "_doc",
+    "_id": "1",
+    "_version": 3,
+    "_seq_no": 3,
+    "_primary_term": 1,
+    "found": true,
+    "_source": &#123;
+        "title": "小米手机",
+        "category": "小米",
+        "images": "http://www.gulixueyuan.com/hw.jpg",
+        "price": 1999
+    &#125;
+&#125;
+</code></pre>  </li></ol>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-ElasticSearch简介以及单机安装"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/ElasticSearch%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85/"
+    >ElasticSearch简介以及单机安装</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/ElasticSearch%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.427Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: ElasticSearch简介以及单机安装<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—title: ElasticSearch简介以及单机安装<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—1. 简介       Elasticsearch是一个基于的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的、功能最全的搜索引擎库。1. 特点：       a：分布式的实时文件存储，每个字段都被索引并可被搜索       b：分布式的实时分析搜索引擎–做不规则查询       c：可以扩展到上百台服务器，处理PB级结构化或非结构化数据  Elasticsearch也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单1. 环境：    a：centos7    b：jdk1.81. 将安装包上传到/usr/local/module/目录下，并解压  <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20200102205146168.png" width="641">  <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20200102205531112.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="580">1. 启动，在/usr/local/module/elasticsearch-6.3.1/目录下   <img alt="" class="has" height="288" src="https://img-blog.csdnimg.cn/20200102210012570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="650">   可以发现elasticsearch不能够以root用户启动1. 下面我们创建一个elk用户启动elasticsearch   <img alt="" class="has" height="119" src="https://img-blog.csdnimg.cn/20200102211743279.png" width="519">   <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20200102211807259.png" width="591">1. 再次启动  <img alt="" class="has" height="323" src="https://img-blog.csdnimg.cn/20200102212334646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="682">1. 测试是否成功启动，重新打开一个窗口  <img alt="" class="has" height="399" src="https://img-blog.csdnimg.cn/20200102212553874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="602">  出现上面的效果就代表启动成功。1. 下面我们需要外部机器访问es，那么我们需要修改配置文件/usr/local/module/elasticsearch-6.3.1/config/elasticsearch.yml  <img alt="" class="has" height="160" src="https://img-blog.csdnimg.cn/20200102213627273.png" width="441">1. 再次启动  <img alt="" class="has" height="255" src="https://img-blog.csdnimg.cn/20200102213812564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="770">  可以发现出错了。1. 解决  a：vim /etc/security/limits.conf         <img alt="" class="has" height="224" src="https://img-blog.csdnimg.cn/20200102214043147.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">                  nofile - 打开文件的最大数目        noproc - 进程的最大数目        soft 指的是当前系统生效的设置值        hard 表明系统中所能设定的最大值   b： vim /etc/sysctl.conf          <img alt="" class="has" height="100" src="https://img-blog.csdnimg.cn/20200102214607863.png" width="421"> c：使用sysctl -p使其生效      <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20200102214715585.png" width="477">1. 再次启动  <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/20200102215022459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="756">1. 效果：  <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20200102215055276.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Elasticseach之Linux集群部署"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Elasticseach%E4%B9%8BLinux%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"
+    >Elasticseach之Linux集群部署</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticseach%E4%B9%8BLinux%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.425Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticseach之Linux集群部署<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、环境准备</p>
+<blockquote>
+<p> 安装Elasticsearch 7.8.0<br> 服务器：<br>     192.168.56.20 -es001（Master）<br>     192.168.56.21 -es002<br>     192.168.56.22 -es003 </p>
+</blockquote>
+<h3 id="2、将es的安装包上传到Linux服务器"><a href="#2、将es的安装包上传到Linux服务器" class="headerlink" title="2、将es的安装包上传到Linux服务器"></a>2、将es的安装包上传到Linux服务器</h3><blockquote>
+ <img alt="" src="https://img-blog.csdnimg.cn/20210624175745621.png"> 
+ 将软件分发到其他节点： es002, es003 
+</blockquote>
+<h3 id="3、解压软件"><a href="#3、解压软件" class="headerlink" title="3、解压软件"></a>3、解压软件</h3><blockquote>
+<p> 解压命令： tar -zxvf elasticsearch-7.8.0-linux-x86_64.tar.gz<br> <img alt="" height="690" src="https://img-blog.csdnimg.cn/20210624185309332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 将软件改名：<br> mv elasticsearch-7.8.0 es-cluster<br> <img alt="" height="682" src="https://img-blog.csdnimg.cn/20210624185621133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="4、创建用户"><a href="#4、创建用户" class="headerlink" title="4、创建用户"></a>4、创建用户</h3><blockquote>
+<p> 因为安全问题， Elasticsearch 不允许 root 用户直接运行，所以要创建新用户，在 root 用户中创建新用户。<br> useradd es #新增 es 用户 passwd es #为 es 用户设置密码 userdel -r es #如果错了，可以删除再加 chown -R es:es /opt/es-cluster #文件夹所有者 </p>
+</blockquote>
+<h3 id="5、修改配置文件"><a href="#5、修改配置文件" class="headerlink" title="5、修改配置文件"></a>5、修改配置文件</h3><blockquote>
+<p> 修改es001节点的/opt/es-cluster/config/elasticsearch.yml 文件<br> <pre><code class="language-html"># 加入如下配置<br>#集群名称<br>cluster.name: cluster-es<br>#节点名称， 每个节点的名称不能重复<br>node.name: node-1<br>#ip 地址， 每个节点的地址不能重复<br>network.host: 192.168.56.20<br>#是不是有资格主节点<br>node.master: true<br>node.data: true<br>http.port: 9200</p>
+</blockquote>
+<h1 id="head-插件需要这打开这两个配置"><a href="#head-插件需要这打开这两个配置" class="headerlink" title="head 插件需要这打开这两个配置"></a>head 插件需要这打开这两个配置</h1><p>http.cors.allow-origin: “*”<br>http.cors.enabled: true<br>http.max_content_length: 200mb<br>#es7.x 之后新增的配置，初始化一个新的集群时需要此配置来选举 master<br>cluster.initial_master_nodes: [“node-1”]<br>#es7.x 之后新增的配置，节点发现<br>discovery.seed_hosts: [“192.168.56.20:9300”, “192.168.56.21:9300”, “192.168.56.22:300”]<br>gateway.recover_after_nodes: 2<br>network.tcp.keep_alive: true<br>network.tcp.no_delay: true<br>transport.tcp.compress: true<br>#集群内同时启动的数据任务个数，默认是 2 个<br>cluster.routing.allocation.cluster_concurrent_rebalance: 16<br>#添加或删除节点及负载均衡时并发恢复的线程个数，默认 4 个<br>cluster.routing.allocation.node_concurrent_recoveries: 16<br>#初始化数据恢复时，并发恢复线程的个数，默认 4 个<br>cluster.routing.allocation.node_initial_primaries_recoveries: 16<br></code></pre><br> 修改es002节点的/opt/es-cluster/config/elasticsearch.yml 文件<br> <pre><code class="language-html"># 加入如下配置<br>#集群名称<br>cluster.name: cluster-es<br>#节点名称， 每个节点的名称不能重复<br>node.name: node-2<br>#ip 地址， 每个节点的地址不能重复<br>network.host: 192.168.56.21<br>#是不是有资格主节点<br>node.master: true<br>node.data: true<br>http.port: 9200</p>
+<h1 id="head-插件需要这打开这两个配置-1"><a href="#head-插件需要这打开这两个配置-1" class="headerlink" title="head 插件需要这打开这两个配置"></a>head 插件需要这打开这两个配置</h1><p>http.cors.allow-origin: “*”<br>http.cors.enabled: true<br>http.max_content_length: 200mb<br>#es7.x 之后新增的配置，初始化一个新的集群时需要此配置来选举 master<br>cluster.initial_master_nodes: [“node-1”]<br>#es7.x 之后新增的配置，节点发现<br>discovery.seed_hosts: [“192.168.56.20:9300”, “192.168.56.21:9300”, “192.168.56.22:300”]<br>gateway.recover_after_nodes: 2<br>network.tcp.keep_alive: true<br>network.tcp.no_delay: true<br>transport.tcp.compress: true<br>#集群内同时启动的数据任务个数，默认是 2 个<br>cluster.routing.allocation.cluster_concurrent_rebalance: 16<br>#添加或删除节点及负载均衡时并发恢复的线程个数，默认 4 个<br>cluster.routing.allocation.node_concurrent_recoveries: 16<br>#初始化数据恢复时，并发恢复线程的个数，默认 4 个<br>cluster.routing.allocation.node_initial_primaries_recoveries: 16<br></code></pre><br>  修改es003节点的/opt/es-cluster/config/elasticsearch.yml 文件<br> <pre><code class="language-html"># 加入如下配置<br>#集群名称<br>cluster.name: cluster-es<br>#节点名称， 每个节点的名称不能重复<br>node.name: node-3<br>#ip 地址， 每个节点的地址不能重复<br>network.host: 192.168.56.22<br>#是不是有资格主节点<br>node.master: true<br>node.data: true<br>http.port: 9200</p>
+<h1 id="head-插件需要这打开这两个配置-2"><a href="#head-插件需要这打开这两个配置-2" class="headerlink" title="head 插件需要这打开这两个配置"></a>head 插件需要这打开这两个配置</h1><p>http.cors.allow-origin: “*”<br>http.cors.enabled: true<br>http.max_content_length: 200mb<br>#es7.x 之后新增的配置，初始化一个新的集群时需要此配置来选举 master<br>cluster.initial_master_nodes: [“node-1”]<br>#es7.x 之后新增的配置，节点发现<br>discovery.seed_hosts: [“192.168.56.20:9300”, “192.168.56.21:9300”, “192.168.56.22:300”]<br>gateway.recover_after_nodes: 2<br>network.tcp.keep_alive: true<br>network.tcp.no_delay: true<br>transport.tcp.compress: true<br>#集群内同时启动的数据任务个数，默认是 2 个<br>cluster.routing.allocation.cluster_concurrent_rebalance: 16<br>#添加或删除节点及负载均衡时并发恢复的线程个数，默认 4 个<br>cluster.routing.allocation.node_concurrent_recoveries: 16<br>#初始化数据恢复时，并发恢复线程的个数，默认 4 个<br>cluster.routing.allocation.node_initial_primaries_recoveries: 16<br></code></pre> </p>
+<h3 id="6、修改-etc-security-limits-conf-，分发文件"><a href="#6、修改-etc-security-limits-conf-，分发文件" class="headerlink" title="6、修改/etc/security/limits.conf ，分发文件"></a>6、修改/etc/security/limits.conf ，分发文件</h3><blockquote>
+ <pre><code class="language-bash"># 在文件末尾中增加下面内容
+es soft nofile 65536
+es hard nofile 65536
+</code></pre> 
+</blockquote>
+<h3 id="7、修改-etc-security-limits-d-20-nproc-conf，分发文件"><a href="#7、修改-etc-security-limits-d-20-nproc-conf，分发文件" class="headerlink" title="7、修改/etc/security/limits.d/20-nproc.conf，分发文件"></a>7、修改/etc/security/limits.d/20-nproc.conf，分发文件</h3><blockquote>
+</blockquote>
+<h1 id="在文件末尾中增加下面内容-es-soft-nofile-65536-es-hard-nofile-65536-hard-nproc-4096-注：-带表-Linux-所有用户名称"><a href="#在文件末尾中增加下面内容-es-soft-nofile-65536-es-hard-nofile-65536-hard-nproc-4096-注：-带表-Linux-所有用户名称" class="headerlink" title="在文件末尾中增加下面内容 es soft nofile 65536 es hard nofile 65536 * hard nproc 4096 # 注： * 带表 Linux 所有用户名称"></a>在文件末尾中增加下面内容 es soft nofile 65536 es hard nofile 65536 * hard nproc 4096 # 注： * 带表 Linux 所有用户名称</h1><h3 id="8、修改-etc-sysctl-conf"><a href="#8、修改-etc-sysctl-conf" class="headerlink" title="8、修改/etc/sysctl.conf"></a>8、修改/etc/sysctl.conf</h3><blockquote>
+</blockquote>
+<h1 id="在文件中增加下面内容-vm-max-map-count-655360"><a href="#在文件中增加下面内容-vm-max-map-count-655360" class="headerlink" title="在文件中增加下面内容 vm.max_map_count=655360"></a>在文件中增加下面内容 vm.max_map_count=655360</h1><h3 id="9、重新加载"><a href="#9、重新加载" class="headerlink" title="9、重新加载"></a>9、重新加载</h3><blockquote>
+<p> sysctl -p </p>
+</blockquote>
+<h3 id="10、启动软件"><a href="#10、启动软件" class="headerlink" title="10、启动软件"></a>10、启动软件</h3><blockquote>
+<p> 分别在不同节点上启动 ES 软件<br> cd /opt/es-cluster #启动 bin/elasticsearch #后台启动 bin/elasticsearch -d </p>
+</blockquote>
+<h3 id="11、测试集群"><a href="#11、测试集群" class="headerlink" title="11、测试集群"></a>11、测试集群</h3><blockquote>
+ <img alt="" height="177" src="https://img-blog.csdnimg.cn/20210624215121174.png" width="636"> 
+ <img alt="" height="562" src="https://img-blog.csdnimg.cn/2021062421520751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="896"> 
+ <img alt="" height="579" src="https://img-blog.csdnimg.cn/2021062421522272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="721"> 
+ <img alt="" height="538" src="https://img-blog.csdnimg.cn/20210624215235887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="740"> 
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Elasticseach之Linux单节点部署"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Elasticseach%E4%B9%8BLinux%E5%8D%95%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2/"
+    >Elasticseach之Linux单节点部署</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticseach%E4%B9%8BLinux%E5%8D%95%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.423Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticseach之Linux单节点部署<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、将es的安装包上传到Linux服务器</p>
+<blockquote>
+ <img alt="" height="150" src="https://img-blog.csdnimg.cn/20210624175745621.png" width="886"> 
+</blockquote>
+<h3 id="2、解压软件"><a href="#2、解压软件" class="headerlink" title="2、解压软件"></a>2、解压软件</h3><blockquote>
+<p> 2.1、解压命令<br>         tar -zxvf elasticsearch-7.8.0-linux-x86_64.tar.gz<br> <img alt="" height="140" src="https://img-blog.csdnimg.cn/20210624175940110.png" width="897"> </p>
+</blockquote>
+<h3 id="3、创建用户"><a href="#3、创建用户" class="headerlink" title="3、创建用户"></a>3、创建用户</h3><blockquote>
+<p> 因为安全问题， Elasticsearch 不允许 root 用户直接运行，所以要创建新用户，在 root 用户中创建新用户。<br> useradd es #新增 es 用户 passwd es #为 es 用户设置密码 userdel -r es #如果错了，可以删除再加 chown -R es:es /opt/elasticsearch-7.8.0 #文件夹所有者 </p>
+</blockquote>
+<h3 id="4、修改配置文件"><a href="#4、修改配置文件" class="headerlink" title="4、修改配置文件"></a>4、修改配置文件</h3><blockquote>
+<p> 修改/opt/elasticsearch-7.8.0/config/elasticsearch.yml文件。<br> <pre><code class="language-html"># 加入如下配置<br>cluster.name: elasticsearch<br>node.name: node-1<br>network.host: 0.0.0.0<br>http.port: 9200<br>cluster.initial_master_nodes: ["node-1"]<br></code></pre><br> 修改/etc/security/limits.conf<br> <pre><code class="language-bash"># 在文件末尾中增加下面内容</p>
+</blockquote>
+<h1 id="每个进程可以打开的文件数的限制"><a href="#每个进程可以打开的文件数的限制" class="headerlink" title="每个进程可以打开的文件数的限制"></a>每个进程可以打开的文件数的限制</h1><p>es soft nofile 65536<br>es hard nofile 65536<br></code></pre><br> 修改/etc/security/limits.d/20-nproc.conf<br> <pre><code class="language-bash"># 在文件末尾中增加下面内容</p>
+<h1 id="每个进程可以打开的文件数的限制-1"><a href="#每个进程可以打开的文件数的限制-1" class="headerlink" title="每个进程可以打开的文件数的限制"></a>每个进程可以打开的文件数的限制</h1><p>es soft nofile 65536<br>es hard nofile 65536</p>
+<h1 id="操作系统级别对每个用户创建的进程数的限制"><a href="#操作系统级别对每个用户创建的进程数的限制" class="headerlink" title="操作系统级别对每个用户创建的进程数的限制"></a>操作系统级别对每个用户创建的进程数的限制</h1><ul>
+<li>hard nproc 4096<h1 id="注：-带表-Linux-所有用户名称"><a href="#注：-带表-Linux-所有用户名称" class="headerlink" title="注： * 带表 Linux 所有用户名称"></a>注： * 带表 Linux 所有用户名称</h1></code></pre><br>修改/etc/sysctl.conf <pre><code class="language-bash"># 在文件中增加下面内容
+# 一个进程可以拥有的 VMA(虚拟内存区域)的数量,默认值为 65536
+vm.max_map_count=655360
+</code></pre> 
+重新加载 <pre><code class="language-bash">sysctl -p
+</code></pre> </li>
+</ul>
+<h3 id="5、启动软件"><a href="#5、启动软件" class="headerlink" title="5、启动软件"></a>5、启动软件</h3><blockquote>
+<p> 使用 ES 用户启动<br> <pre><code>cd /opt/elasticsearch-7.8.0/<br>#启动<br>bin/elasticsearch<br>#后台启动<br>bin/elasticsearch -d<br></code></pre> </p>
+</blockquote>
+<h3 id="6、关闭防火墙"><a href="#6、关闭防火墙" class="headerlink" title="6、关闭防火墙"></a>6、关闭防火墙</h3><blockquote>
+<p> #暂时关闭防火墙 systemctl stop firewalld #永久关闭防火墙 systemctl enable firewalld.service #打开防火墙永久性生效，重启后不会复原 systemctl disable firewalld.service #关闭防火墙，永久性生效，重启后不会复原   </p>
+</blockquote>
+<h3 id="7、测试软件"><a href="#7、测试软件" class="headerlink" title="7、测试软件"></a>7、测试软件</h3><blockquote>
+<p> 浏览器中输入地址：<br> <img alt="" height="559" src="https://img-blog.csdnimg.cn/20210624181957612.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="894"> </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker知识点相关笔记一"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%80/"
+    >docker知识点相关笔记一</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%80/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.606Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker知识点相关笔记一<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>— </p>
+<ol>
+<li>  docker images  查询docker下面所有的镜像信息   <img alt="" class="has" height="215" src="https://img-blog.csdn.net/20181021174740132?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="509">        1. docker rmi &lt;image id&gt;     删除镜像信息   <img alt="" class="has" height="272" src="https://img-blog.csdn.net/20181021174953119?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="473">   <img alt="" class="has" height="189" src="https://img-blog.csdn.net/20181021175118660?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="469">1. 当非root用户要运行docker时，需要执行 **sudo usermod -aG docker +用户 **命令  <img alt="" class="has" height="48" src="https://img-blog.csdn.net/20181021181639116?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="496">  其实就是修改用户的组，将这个用户添加到docker的组里面，只要这个用户在docker  组里面，那么我们就不需要root用户，就可以直接运行docker命令。  <img alt="" class="has" height="152" src="https://img-blog.csdn.net/20181021182007275?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="594">1. 如何启动docker，启动的时候出现这个问题：  <img alt="" class="has" height="180" src="https://img-blog.csdn.net/20181021230958758?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="647">  <img alt="" class="has" height="339" src="https://img-blog.csdn.net/20181021232007724?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="651">  解决办法：       查看文件系统 /etc/docker/daemon.json 删除里面内容用空的花括号代替。       {}   保存退出。输入  service docker restart         <img alt="" class="has" height="278" src="https://img-blog.csdn.net/20181021235544697?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="415">1. 搜索相关镜像的版本信息，docker search +镜像名称<img alt="" class="has" height="309" src="https://img-blog.csdn.net/20181022103342178?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567">  1. ubuntu 下重启网络    命令：sudo service network-manager restart1. 运行nginx，命令：docker run -p 8080:80 -d nginx  -p：是做端口映射的，将docker中nginx本身的80端口映射成本地HOST的8080端口 -d：表示程序时后台运行的 nginx：表示的是启动的程序nginx的名称<img alt="" class="has" height="192" src="https://img-blog.csdn.net/20181023222032634?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="512"> <img alt="" class="has" height="190" src="https://img-blog.csdn.net/20181023222126737?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="581"> 使用我们自定义的index.html，将nginx的index.html页面替换掉命令:docker cp index.html +nginx容器名称://usr/share/nginx/html<img alt="" class="has" height="201" src="https://img-blog.csdn.net/20181023224218558?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="496"> index.html内容如下<img alt="" class="has" height="86" src="https://img-blog.csdn.net/20181023224302281?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="355"> 效果：    <img alt="" class="has" height="132" src="https://img-blog.csdn.net/20181023224402243?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="435"> 但是，我们发现如果我们将nginx重启之后页面的效果又恢复原样了，这是为什么呢？<img alt="" class="has" height="190" src="https://img-blog.csdn.net/20181023222126737?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="581"> 这是因为docker在容器内部所做的改动都是暂时的，如果要永久保存就需要做commit操作。命令：docker commit -m ‘备注信息’ +容器ID或者容器名称<img alt="" class="has" height="85" src="https://img-blog.csdn.net/20181023225814446?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567"> 查看images发现多了一个，但是没有名字<img alt="" class="has" height="183" src="https://img-blog.csdn.net/20181023230307230?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="549"> 那么我们就将它添加上：docker commit -m ‘备注信息’ +容器ID或者容器名称 +名称:版本<img alt="" class="has" height="245" src="https://img-blog.csdn.net/20181023230508754?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="579">1. 停止容器的命令  命令：docker stop 容器ID或者容器名称  <img alt="" class="has" height="192" src="https://img-blog.csdn.net/20181023225028334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="544">1. 进入容器内部的命令：  docker exec -it +容器名称/容器ID bash<img alt="" class="has" height="97" src="https://img-blog.csdn.net/20181023230012707?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="530">1. 查询所有的容器信息，不管是当前正在运行的，还是之前运行过并且已经停止了的命令：docker ps -a<img alt="" class="has" height="305" src="https://img-blog.csdn.net/20181023230935475?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="566"><img alt="" class="has" height="246" src="https://img-blog.csdn.net/20181023230956609?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="457"> 如果想要删掉这些信息，使用下面命令：docker rm +容器ID或者容器名称<img alt="" class="has" height="63" src="https://img-blog.csdn.net/20181023231304273?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="510">1. docker的相关网站 docker官网：<a href="http://www.docker.com，注意：这个网站特别慢，因为是国外的网站，有防火墙">http://www.docker.com，注意：这个网站特别慢，因为是国外的网站，有防火墙</a> docker中文网站：<a target="_blank" rel="noopener" href="https://www.docker-cn.com1/">https://www.docker-cn.com1</a>. CentOS下Docker的安装  Docker支持以下CentOS版本  <img alt="" class="has" height="178" src="https://img-blog.csdn.net/20181024215249289?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="606"> 案例：Centos7下安装Docker      ⑴查看linux版本          <img alt="" class="has" height="90" src="https://img-blog.csdnimg.cn/20181025211536601.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="416">      ⑵安装gcc，命令：yum -y install gcc           <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20181025212247887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="479">      ⑶安装gcc- c++，命令：yum -y install gcc- c++         <img alt="" class="has" height="183" src="https://img-blog.csdnimg.cn/20181025212414462.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="348">      ⑷效果：                 <img alt="" class="has" height="252" src="https://img-blog.csdnimg.cn/20181025212521571.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="488">     ⑸如果虚机上存在旧的Docker版本，那么需要先卸载旧版本         <img alt="" class="has" height="315" src="https://img-blog.csdnimg.cn/2018102521374278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="706">     ⑹安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的          命令：sudo yum install -y yum-utils device-mapper-persistent-data lvm2                     <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20181025224623607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="490">         ⑺设置yum源,设置stable镜像仓库               命令：sudo yum-config-manager –add-repo <a target="_blank" rel="noopener" href="https://download.docker.com/linux/centos/docker-ce.repo">https://download.docker.com/linux/centos/docker-ce.repo</a>               注意：如果我们执行上面的命令可能会出现下面的错误，不是命令的问题，是因为这个命令是需要从官网                          上下载东西，而我们清楚的是官网是国外的，特别慢，所以会时好时坏，出错。                          <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20181025225211858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="503">              所以我们一般使用下面阿里云的地址：                     命令：sudo yum-config-manager –add-repo <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a>                          <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20181025225603461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="571">             ⑻更新yum软件包索引                    命令：sudo yum makecache fast                        <img alt="" class="has" height="232" src="https://img-blog.csdnimg.cn/20181025230001583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="532">            ⑼安装Docker CE                 命令：yum -y install docker-ce                     <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/2018102523062872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="550">                     <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/2018102523070298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="565">            ⑽启动docker                 命令：systemctl start docker                     <img alt="" class="has" height="363" src="https://img-blog.csdnimg.cn/20181025230844666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="414">           ⑾测试                   命令：下载hello-world镜像                     <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20181025231309981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="562">                运行helllo-world镜像                     命令：docker run hello-world                    <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20181025231400915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="531">           ⑿配置镜像加速                 ①在etc下面建立docker目录                        <img alt="" class="has" height="64" src="https://img-blog.csdnimg.cn/2018102523153685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="306">                ②创建daemon.json文件                      命令：vi /etc/docker/daemon.json                       文件里面可以配置阿里云或者是网易云的链接地址                       <img alt="" class="has" height="227" src="https://img-blog.csdnimg.cn/20181025231842330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="517">                     下面就是阿里云的，自己注册一个即可：                     <img alt="" class="has" height="498" src="https://img-blog.csdn.net/20181021135224261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="540">                    这里面我们使用网易云的。                        <img alt="" class="has" height="103" src="https://img-blog.csdnimg.cn/20181025232233333.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="394">                  ③重新加载daemon                       命令:systemctl daemon-reload                       <img alt="" class="has" height="65" src="https://img-blog.csdnimg.cn/20181025232410234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="306">               ④重新启动一下docker                      命令:systemctl restart docker                          <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20181025232557329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="377">           ⒀卸载docker命令：                 a：systemctl stop docker                 b：yum -y remove docker-ce                 c：rm -rf /var/lib/docker 1. docker仓库，镜像，容器等相关概念<img alt="" class="has" height="170" src="https://img-blog.csdn.net/20181024224356787?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="735"><img alt="" class="has" height="267" src="https://img-blog.csdn.net/20181024224650568?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="735"></li>
+</ol>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>       </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-docker知识点相关笔记五"
   class="article article-type-post"
   itemscope
@@ -408,459 +1165,6 @@
 <p> </p>
 <p> </p>
 <p> </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker之自定义网络"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/"
-    >docker之自定义网络</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.595Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker之自定义网络<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker之自定义网络<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 简介 建议使用用户定义的网桥来控制哪些容器可以相互通信，以及启用容器名称到IP地址的自动DNS解析。1. 查看所有的Docker网络 命令：docker network ls<img alt="" height="179" src="https://img-blog.csdnimg.cn/20201227130109653.png" width="492">1. 网络模式解释 1)bridge ：桥接 docker（默认）,一般我们创建网络也使用桥接模式 2)host ：和宿主机共享网络 3)none ：不配置网络 4)container：容器网络连通（用的少！局限很大!） 1. 启动容器命令解释 1)我们直接启动命令，有默认的参数，只是省略掉了 –net bridge,而这个就是我们的docker0       docker run -d -P –name tomcat01 tomcat        上面的命令等同于下面的启动容器命令       docker run -d -P –name tomcat01 –net bridge tomcat1. 自定义创建一个网络 1)命令：        docker network create –driver bridge –subnet 192.168.0.0/16 –gateway 192.168.0.1 mynet        解释：            –driver bridge 表示使用桥接模式            –subnet 192.168.0.0/16 表示子网ip 可以分配 192.168.0.2 到 192.168.255.255            –gateway 192.168.0.1 表示网关,就是路由器            mynet- 网络名         注意：                 192.168.0.0/16：表示网络码占16位，也就是说该网络上只可以有65534个主机(2^16-2)IP范围：192.168.0.1~192.168.255.254 192.168.255.255是广播地址，          不能被主机使用。设置IP地址的时候：192.168.x.y 子网掩码：255.255.0.0 2)执行上面的命令       <img alt="" height="201" src="https://img-blog.csdnimg.cn/20201227140833230.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="927"> 3)查看我们刚刚自定义的网络       命令：docker network inspect mynet        <img alt="" height="486" src="https://img-blog.csdnimg.cn/20201227141022782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647"> 4)下面我们启动容器并且指定使用我们刚刚创建的网络        <img alt="" height="347" src="https://img-blog.csdnimg.cn/20201227141259664.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 5)我们再次查看网络信息       命令：docker network inspect mynet        <img alt="" height="389" src="https://img-blog.csdnimg.cn/2020122714151580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="767"> 6)下面我们直接使用两个容器进行ping一下，测试是否能够连接       <img alt="" height="271" src="https://img-blog.csdnimg.cn/20201227141907294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1029">        我们再次使用mytomcat01去连接mytomcat02         <img alt="" height="230" src="https://img-blog.csdnimg.cn/20201227142012483.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1000">        可以发现我们使用自定义的网络，容器直接网络都是可以互通的(可以使用容器名称，也可以使用ip地址)，它修复了docker0所不完善的地方，我们不需要再使用–link了。 7)小节：       a：不同集群可以使用不同网络，保证集群的健康和安全，比如我们搭建一个mysql集群和一个redis集群，那么我们就自定义两个网络即可       b:  自定义网络已经维护好了对应的关系，方便使用服务名通讯1. 网络连通  1)简介         上面我们创建了两个容器mytomcat01和mytomcat02，它们指定的都是我们自定义的网络mynet，那么我们如何让它们和不同网络的容器链接呢？      比如我们先又创建两个容器mytomcat03和mytomcat04，我们指定这两个容器属于默认的docker0网络，那么我们如何让mytomcat03可以ping通mytomcat01呢？   2）首先创建mytomcat03和mytomcat04容器         <img alt="" height="190" src="https://img-blog.csdnimg.cn/20201227143732368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="932">        <img alt="" height="202" src="https://img-blog.csdnimg.cn/20201227144024547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="828">        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227144042615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="905">       可以发现它们的网段都不一样：          mytomcat01和mytomcat03属于：192.168.0.x           mytomcat01和mytomcat03属于：172.17.0.x  3)下面我们测试使用mytomcat01去ping通mytomcat03        <img alt="" height="175" src="https://img-blog.csdnimg.cn/20201227143933144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="976">  4)解决的办法(我们要做的其实是将容器和网络(比如我们自定义的mynet)链接，不是docker0和网络链接)：         命令：docker network connect 网络名词 容器id         例如打通mytomcat03和mynet的网络          <img alt="" height="211" src="https://img-blog.csdnimg.cn/20201227144743908.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1087">            我们在通过docker network inspect mynet查看一下网络情况：          <img alt="" height="330" src="https://img-blog.csdnimg.cn/20201227144902325.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738">         我们发现mytomcat03在mynet网络中也出现了一个新的ip地址，说明mytomcat03在docker0中有一个ip，在mynet中也有一个ip地址，         这就是一个容器两个ip地址。类似于我们的阿里云服务器有一个公网ip和一个私网ip   5)那么我们再使用mytomcat01去链接一下mytomcat03试一下        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227145345110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="848"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker之容器互联link"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/"
-    >docker之容器互联link</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.593Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker之容器互联link<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker之容器互联link<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 简介     –link 用于容器直接的互通。1. 我们准备好自己创建的镜像<img alt="" height="145" src="https://img-blog.csdnimg.cn/20201227102350258.png" width="726">1. 使用mytomcat镜像创建两个容器<img alt="" height="299" src="https://img-blog.csdnimg.cn/20201227102622151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1141">1. 下面我们使用myt1容器去链接myt2容器<img alt="" height="82" src="https://img-blog.csdnimg.cn/20201227103400216.png" width="614">1. 如何解决呢？ 1)我们创建一个myt3容器，使用–link命令          命令：docker run -d -p 9092:8080 –name myt3 –link myt2  mytomcat:v1.0     <img alt="" height="70" src="https://img-blog.csdnimg.cn/20201227104205919.png" width="767"> 2)下面我们使用myt3容器链接myt2     <img alt="" height="237" src="https://img-blog.csdnimg.cn/20201227104445980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695"> 3)下面我们再使用myt2容器ping一下myt3试试       <img alt="" height="137" src="https://img-blog.csdnimg.cn/20201227105912403.png" width="617">     发现反向是无法ping通的 4)为什么myt3能够ping通myt2呢？我们查看一下myt3中的/etc/hosts文件       <img alt="" height="264" src="https://img-blog.csdnimg.cn/20201227110827542.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="943">       从以上就可以得出：      –link 就是在我们myt3容器的hosts中增加一个172.17.0.3 myt2 cd1f8468844e       那么我们再查看一下myt2容器的hosts文件        <img alt="" height="186" src="https://img-blog.csdnimg.cn/20201227111118207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">1. 注意：    现在docker中不建议使用–link，一般使用自定义网络，因为docker0是一个官方的网桥，它的很多功能是有局限性的。比如它不支持容器名连接访问</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Docker之阿里云镜像加速器配置"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/"
-    >Docker之阿里云镜像加速器配置</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.590Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Docker之阿里云镜像加速器配置<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—# 一：简介</p>
-<p>         1：为什么使用阿里云镜像加速器?</p>
-<p>               一般而言，我们使用Docker，是需要从Docker官网去拉取镜像的，但是官网是在国外的，                所以下载非常慢，或者都下载不了，总是报timeout连接失败错误，因此需要配置镜像的下载，               这个是docker操作首先要做的事情，通常使用以下两种方式。</p>
-<h1 id="二：直接使用镜像仓库地址进行下载："><a href="#二：直接使用镜像仓库地址进行下载：" class="headerlink" title="二：直接使用镜像仓库地址进行下载："></a>二：直接使用镜像仓库地址进行下载：</h1><p>           比如：前往网易云蜂巢镜像中心：<img alt="" class="has" height="233" src="https://img-blog.csdn.net/2018102014523129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="482">                        <img alt="" class="has" height="73" src="https://img-blog.csdn.net/20181020212635912?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="478">                       可以直接使用具体的镜像地址进行下载，docker pull hub.c.163.com/public/tomcat:latest                       不过这种方式就是每次都需要去指定具体的镜像地址，这个比较纠结，很多时候没记得具体的地址。</p>
-<h1 id="三：使用加速器下载"><a href="#三：使用加速器下载" class="headerlink" title="三：使用加速器下载"></a>三：使用加速器下载</h1><p>         1：简介                第二种方式稍微就简单一些，不需要去记具体的镜像下载地址，                可以使用镜像加速器来实现，常用的加速有很多，比如阿里云、DaoCloud、、                以使用阿里云的为例：进入官网 <img alt="" class="has" height="294" src="https://img-blog.csdn.net/20181021134351291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="615">:</p>
-<p>        3：注册之后可以看到加速器地址               <img alt="" class="has" height="504" src="https://img-blog.csdn.net/20181021135224261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">               根据上面的操作文档，选择对应的操作系统，进行相应的操作即可。               如下：                      <img alt="" class="has" height="132" src="https://img-blog.csdn.net/20181022095528915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="528">                     后面执行下面两个命令：                            sudo systemctl daemon-reload，udo systemctl restart docker                最后使用docker info查看详细信息：                        <img alt="" class="has" height="178" src="https://img-blog.csdnimg.cn/20181028103116750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="350">         4：网上看到的相关问题               <img alt="" class="has" height="410" src="https://img-blog.csdn.net/20181021140024471?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="639">    </p>
-<p>               </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p> </p>
-<p>  </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker之mongo数据库忘记用户名密码"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/"
-    >docker之mongo数据库忘记用户名密码</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.586Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker之mongo数据库忘记用户名密码<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker之mongo数据库忘记用户名密码<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 首先通过docker命令停止容器 docker stop 容器id1. 修改主机上与容器同步的mongod.conf文件,将认证注释掉<img alt="" height="288" src="https://img-blog.csdnimg.cn/20201231150258250.png" width="290">1. 重新启动容器 docker start 容器id1. 进入容器内部 命令：docker exec -it 容器id mongo admin<img alt="" height="359" src="https://img-blog.csdnimg.cn/20201231152709320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="803">1. 通过命令查询用户信息 命令：show users<img alt="" height="309" src="https://img-blog.csdnimg.cn/20201231152834540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">1. 修改指定用户的密码 命令：db.changeUserPassword(‘用户名’,’新密码’)<img alt="" height="304" src="https://img-blog.csdnimg.cn/20201231153328484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="560">1. 最后退出容器，并且重新将mongod.conf文件中的认证打开，并且重新启动容器<img alt="" height="234" src="https://img-blog.csdnimg.cn/20201231153816737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="792"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Docker网络详解之Overlay"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/"
-    >Docker网络详解之Overlay</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.584Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Docker网络详解之Overlay<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—我们在上篇文章说了Docker在单个Docker daemon(即是单主机)模式下面的时候网络默认为Bridge，既然提到了单个Docker daemon，那么多主机即是集群的模式的情况下呢？在这种模式下Docker默认使用Overlay网络来进行容器间的通信。</p>
-<p>接下来我们看看我们在加入一个集群或者初始化一个集群的时候会发生什么事情，下面这段话来自官方文档：</p>
-<ol>
-<li>首先一个名<code>ingress</code>的overlay网络被创建，这样在你没有指定网络的情况下你的集群中的services（你可以理解为一个container，实际上它为多个重复的container，是集群中的一个概念）会自动连接到这个网络。这样集群中的services通过这个网络进行通信。1. 然后一个名叫<code>docker_gwbridge</code>的网桥被建立，这个网桥用来连接在这个网络中的Docker daemon<br>所以由以上可知，逻辑上我们都处于一个叫ingress的overlay网络上，实际上Docker daemon之间的通信还是通过一个叫docker_gwbridge的网桥进行的。每个services或者container同时能够加入很多个网络，但是它们只能和连接在同一个网络上的其他service或者container进行通信。</li>
-</ol>
-<h2 id="建立一个Overlay网络"><a href="#建立一个Overlay网络" class="headerlink" title="建立一个Overlay网络"></a>建立一个Overlay网络</h2><p>当我们要建立一个overlay网络的时候有几个前提：</p>
-<ol>
-<li>必须要打开必要的端口让网络能进行通信，比如必须打开2377端口的TCP、7946端口的TCP和UDP以及4789端口UDP，这都是进行通信必要的1. 在你创建你自己的overlay网络之前，你必须加入一个集群或者是初始化一个集群<br>准备工作做好后，我们用<code>$ docker network create -d overlay your-overlaynetwork-name</code>来创建你的overlay网络，如果你想自己配置关于网络的IP地址范围、子网、网关或者其他选项，你能通过添加<code>--attachable</code>来进行配置</li>
-</ol>
-<h2 id="Overlay网络的安全性"><a href="#Overlay网络的安全性" class="headerlink" title="Overlay网络的安全性"></a>Overlay网络的安全性</h2><p>在默认的情况，overlay网络中的services进行通信是通过<code>AES加密算法</code>过的，并且集群中的管理节点会<code>每12小时</code>对这个加密秘钥进行更改。当你想在你自己的overlay网络中应用加密算法，你能通过<code>--opt encrypted</code>命令来开启加密，但是注意，<code>windows上的Docker daemon不支持加密</code></p>
-<p><code>转载自：</code></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker网络简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/"
-    >docker网络简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.582Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker网络简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker网络简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—|Host|容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。<br>|Bridge|此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。<br>|None|该模式关闭了容器的网络功能。<br>|Container|创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。<br>|自定义网络|略</p>
-<h2 id="一、默认网络"><a href="#一、默认网络" class="headerlink" title="一、默认网络"></a>一、默认网络</h2><p><strong>当你安装Docker时，它会自动创建三个网络。你可以使用以下docker network ls命令列出这些网络：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">0147b8d16c64        bridge              bridge              local</span><br><span class="line">2da931af3f0b        host                host                local</span><br><span class="line">63d31338bcd9        none                null                local</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223222117.png"></p>
-<p><strong>Docker内置这三个网络，运行容器时，你可以使用该–network标志来指定容器应连接到哪些网络。</strong></p>
-<p><strong>该bridge网络代表docker0所有Docker安装中存在的网络。除非你使用该docker run –network=选项指定，否则Docker守护程序默认将容器连接到此网络。</strong></p>
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223920623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
-
-<p><strong>我们在使用docker run创建Docker容器时，可以用 –net 选项指定容器的网络模式，Docker可以有以下4种网络模式：</strong></p>
-<ul>
-<li>host模式：使用 –net=host 指定。- none模式：使用 –net=none 指定。- bridge模式：使用 –net=bridge 指定，默认设置。- container模式：使用 –net=container:NAME_or_ID 指定。</li>
-</ul>
-<p><strong>下面分别介绍一下Docker的各个网络模式。</strong></p>
-<p><strong>1.1 Host模式</strong></p>
-<p><strong>相当于Vmware中的桥接模式，与宿主机在同一个网络中，但没有独立IP地址。</strong></p>
-<p><strong>众所周知，Docker使用了Linux的Namespaces技术来进行资源隔离，如PID Namespace隔离进程，Mount Namespace隔离文件系统，Network Namespace隔离网络等。</strong></p>
-<p><strong>一个Network Namespace提供了一份独立的网络环境，包括网卡、路由、Iptable规则等都与其他的Network Namespace隔离。一个Docker容器一般会分配一个独立的Network Namespace。但如果启动容器的时候使用host模式，那么这个容器将不会获得一个独立的Network Namespace，而是和宿主机共用一个Network Namespace。容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。</strong></p>
-<p><strong>例如，我们在172.25.6.1/24的机器上用host模式启动一个ubuntu容器</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker run -it --network=host ubuntu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>可以看到，容器的网络使用的时宿主机的网络，但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</strong></p>
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702225446117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
-
-<p><strong>1.2 Container模式</strong></p>
-<p><strong>在理解了host模式后，这个模式也就好理解了。这个模式指定新创建的容器和已经存在的一个容器共享一个Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过lo网卡设备通信。</strong></p>
-<p><strong>1.3 None模式</strong></p>
-<p><strong>该模式将容器放置在它自己的网络栈中，但是并不进行任何配置。实际上，该模式关闭了容器的网络功能，在以下两种情况下是有用的：容器并不需要网络（例如只需要写磁盘卷的批处理任务）。</strong></p>
-<p>overlay</p>
-<p><strong>在docker1.7代码进行了重构，单独把网络部分独立出来编写，所以在docker1.8新加入的一个overlay网络模式。Docker对于网络访问的控制也是在逐渐完善的。</strong></p>
-<p><strong>1.4 Bridge模式</strong></p>
-<p><strong>相当于Vmware中的Nat模式，容器使用独立network Namespace，并连接到docker0虚拟网卡（默认模式）。通过docker0网桥以及Iptables nat表配置与宿主机通信；bridge模式是Docker默认的网络设置，此模式会为每一个容器分配Network Namespace、设置IP等，并将一个主机上的Docker容器连接到一个虚拟网桥上。下面着重介绍一下此模式。</strong></p>
-<h2 id="二、Bridge模式"><a href="#二、Bridge模式" class="headerlink" title="二、Bridge模式"></a>二、Bridge模式</h2><p><strong>2.1 Bridge模式的拓扑</strong></p>
-<p><strong>当Docker server启动时，会在主机上创建一个名为docker0的虚拟网桥，此主机上启动的Docker容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配IP了，Docker会从RFC1918所定义的私有IP网段中，选择一个和宿主机不同的IP地址和子网分配给docker0，连接到docker0的容器就从这个子网中选择一个未占用的IP使用。如一般Docker会使用172.17.0.0/16这个网段，并将172.17.0.1/16分配给docker0网桥（在主机上使用ifconfig命令是可以看到docker0的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）。单机环境下的网络拓扑如下，主机地址为10.10.0.186/24。</strong></p>
-<p><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702230627173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">  </p>
-<p><strong>2.2 Docker：网络模式详解</strong></p>
-<p><strong>Docker完成以上网络配置的过程大致是这样的：</strong></p>
-<p><strong>（1）在主机上创建一对虚拟网卡veth pair设备。veth设备总是成对出现的，它们组成了一个数据的通道，数据从一个设备进入，就会从另一个设备出来。因此，veth设备常用来连接两个网络设备。</strong></p>
-<p><strong>（2）Docker将veth pair设备的一端放在新创建的容器中，并命名为eth0。另一端放在主机中，以veth65f9这样类似的名字命名，并将这个网络设备加入到docker0网桥中，可以通过brctl show命令查看。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brctl show</span><br><span class="line">bridge name     bridge id               STP enabled     interfaces</span><br><span class="line">docker0         8000.02425f21c208       no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>（3）从docker0子网中分配一个IP给容器使用，并设置docker0的IP地址为容器的默认网关。</strong></p>
-<p><strong>运行容器：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx        </span><br><span class="line">9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>查看容器：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">CONTAINER ID        IMAGE          COMMAND                  CREATED             STATUS              PORTS                NAMES</span><br><span class="line">9582dbec7981        nginx          &quot;nginx -g &#x27;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:80-&amp;gt;80/tcp   nginx_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># 查看容器网络;</span><br><span class="line">docker inspect 9582dbec7981</span><br><span class="line">&quot;Networks&quot;: &#123;</span><br><span class="line">    &quot;bridge&quot;: &#123;</span><br><span class="line">        &quot;IPAMConfig&quot;: null,</span><br><span class="line">        &quot;Links&quot;: null,</span><br><span class="line">        &quot;Aliases&quot;: null,</span><br><span class="line">        &quot;NetworkID&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">        &quot;Gateway&quot;: &quot;172.17.0.1&quot;,</span><br><span class="line">        &quot;IPAddress&quot;: &quot;172.17.0.2&quot;,</span><br><span class="line">        &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">        &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">        &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">docker network inspect bridge</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Name&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;Id&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2019-06-09T23:20:28.061678042-04:00&quot;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;EnableIPv6&quot;: false,</span><br><span class="line">        &quot;IPAM&quot;: &#123;</span><br><span class="line">            &quot;Driver&quot;: &quot;default&quot;,</span><br><span class="line">            &quot;Options&quot;: null,</span><br><span class="line">            &quot;Config&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;Subnet&quot;: &quot;172.17.0.0/16&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Internal&quot;: false,</span><br><span class="line">        &quot;Attachable&quot;: false,</span><br><span class="line">        &quot;Ingress&quot;: false,</span><br><span class="line">        &quot;Containers&quot;: &#123;</span><br><span class="line">            &quot;9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a&quot;: &#123;</span><br><span class="line">                &quot;Name&quot;: &quot;nginx_bridge&quot;,</span><br><span class="line">                &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">                &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;,</span><br><span class="line">                &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;,</span><br><span class="line">                &quot;IPv6Address&quot;: &quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Options&quot;: &#123;</span><br><span class="line">            &quot;com.docker.network.bridge.default_bridge&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_icc&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_ip_masquerade&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.host_binding_ipv4&quot;: &quot;0.0.0.0&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.name&quot;: &quot;docker0&quot;,</span><br><span class="line">            &quot;com.docker.network.driver.mtu&quot;: &quot;1500&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>网络拓扑介绍完后，接着介绍一下bridge模式下容器是如何通信的。</p>
-<p><strong>2.3 bridge模式下容器的通信</strong></p>
-<p><strong>在bridge模式下，连在同一网桥上的容器可以相互通信（若出于安全考虑，也可以禁止它们之间通信，方法是在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信）。</strong></p>
-<p><strong>Docker可以开启容器间通信（意味着默认配置–icc=true），也就是说，宿主机上的所有容器可以不受任何限制地相互通信，这可能导致拒绝服务攻击。进一步地，Docker可以通过–ip_forward和–iptables两个选项控制容器间、容器和外部世界的通信。</strong></p>
-<p><strong>容器也可以与外部通信，我们看一下主机上的Iptable规则，可以看到这么一条</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>这条规则会将源地址为172.17.0.0/16的包（也就是从Docker容器产生的包），并且不是从docker0网卡发出的，进行源地址转换，转换成主机网卡的地址。这么说可能不太好理解，举一个例子说明一下。假设主机有一块网卡为eth0，IP地址为10.10.101.105/24，网关为10.10.101.254。从主机上一个IP为172.17.0.1/16的容器中ping百度（180.76.3.151）。IP包首先从容器发往自己的默认网关docker0，包到达docker0后，也就到达了主机上。然后会查询主机的路由表，发现包应该从主机的eth0发往主机的网关10.10.105.254/24。接着包会转发给eth0，并从eth0发出去（主机的ip_forward转发应该已经打开）。这时候，上面的Iptable规则就会起作用，对包做SNAT转换，将源地址换为eth0的地址。这样，在外界看来，这个包就是从10.10.101.105上发出来的，Docker容器对外是不可见的。</strong></p>
-<p><strong>那么，外面的机器是如何访问Docker容器的服务呢？我们首先用下面命令创建一个含有web应用的容器，将容器的80端口映射到主机的80端口。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>然后查看Iptable规则的变化，发现多了这样一条规则：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 80 -j DNAT --to-destination 172.17.0.2:80</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>此条规则就是对主机eth0收到的目的端口为80的tcp流量进行DNAT转换，将流量发往172.17.0.2:80，也就是我们上面创建的Docker容器。所以，外界只需访问10.10.101.105:80就可以访问到容器中的服务。</strong></p>
-<p><strong>除此之外，我们还可以自定义Docker使用的IP地址、DNS等信息，甚至使用自己定义的网桥，但是其工作方式还是一样的。</strong></p>
-<h2 id="三、自定义网络"><a href="#三、自定义网络" class="headerlink" title="三、自定义网络"></a>三、自定义网络</h2><p><strong>建议使用自定义的网桥来控制哪些容器可以相互通信，还可以自动DNS解析容器名称到IP地址。Docker提供了创建这些网络的默认网络驱动程序，你可以创建一个新的Bridge网络，Overlay或Macvlan网络。你还可以创建一个网络插件或远程网络进行完整的自定义和控制。</strong></p>
-<p><strong>你可以根据需要创建任意数量的网络，并且可以在任何给定时间将容器连接到这些网络中的零个或多个网络。此外，您可以连接并断开网络中的运行容器，而无需重新启动容器。当容器连接到多个网络时，其外部连接通过第一个非内部网络以词法顺序提供。</strong></p>
-<p><strong>接下来介绍Docker的内置网络驱动程序。</strong></p>
-<p><strong>3.1 bridge</strong></p>
-<p><strong>一个bridge网络是Docker中最常用的网络类型。桥接网络类似于默认bridge网络，但添加一些新功能并删除一些旧的能力。以下示例创建一些桥接网络，并对这些网络上的容器执行一些实验。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker network create --driver bridge new_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>创建网络后，可以看到新增加了一个网桥（172.18.0.1）。</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">br-f677ada3003c: flags=4099&amp;lt;UP,BROADCAST,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.18.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        ether 02:42:2f:c1:db:5a  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 4001976  bytes 526995216 (502.5 MiB)</span><br><span class="line">        RX errors 0  dropped 35  overruns 0  frame 0</span><br><span class="line">        TX packets 1424063  bytes 186928741 (178.2 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">docker0: flags=4163&amp;lt;UP,BROADCAST,RUNNING,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        inet6 fe80::42:5fff:fe21:c208  prefixlen 64  scopeid 0x20&amp;lt;link&amp;gt;</span><br><span class="line">        ether 02:42:5f:21:c2:08  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 12  bytes 2132 (2.0 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 24  bytes 2633 (2.5 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>3.2 Macvlan</strong></p>
-<p><strong>Macvlan是一个新的尝试，是真正的网络虚拟化技术的转折点。Linux实现非常轻量级，因为与传统的Linux Bridge隔离相比，它们只是简单地与一个Linux以太网接口或子接口相关联，以实现网络之间的分离和与物理网络的连接。</strong></p>
-<p><strong>Macvlan提供了许多独特的功能，并有充足的空间进一步创新与各种模式。这些方法的两个高级优点是绕过Linux网桥的正面性能以及移动部件少的简单性。删除传统上驻留在Docker主机NIC和容器接口之间的网桥留下了一个非常简单的设置，包括容器接口，直接连接到Docker主机接口。由于在这些情况下没有端口映射，因此可以轻松访问外部服务。</strong></p>
  
       <!-- reward -->
       

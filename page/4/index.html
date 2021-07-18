@@ -160,6 +160,459 @@
     
     
     <article
+  id="post-docker之自定义网络"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/"
+    >docker之自定义网络</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.595Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker之自定义网络<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—title: docker之自定义网络<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 简介 建议使用用户定义的网桥来控制哪些容器可以相互通信，以及启用容器名称到IP地址的自动DNS解析。1. 查看所有的Docker网络 命令：docker network ls<img alt="" height="179" src="https://img-blog.csdnimg.cn/20201227130109653.png" width="492">1. 网络模式解释 1)bridge ：桥接 docker（默认）,一般我们创建网络也使用桥接模式 2)host ：和宿主机共享网络 3)none ：不配置网络 4)container：容器网络连通（用的少！局限很大!） 1. 启动容器命令解释 1)我们直接启动命令，有默认的参数，只是省略掉了 –net bridge,而这个就是我们的docker0       docker run -d -P –name tomcat01 tomcat        上面的命令等同于下面的启动容器命令       docker run -d -P –name tomcat01 –net bridge tomcat1. 自定义创建一个网络 1)命令：        docker network create –driver bridge –subnet 192.168.0.0/16 –gateway 192.168.0.1 mynet        解释：            –driver bridge 表示使用桥接模式            –subnet 192.168.0.0/16 表示子网ip 可以分配 192.168.0.2 到 192.168.255.255            –gateway 192.168.0.1 表示网关,就是路由器            mynet- 网络名         注意：                 192.168.0.0/16：表示网络码占16位，也就是说该网络上只可以有65534个主机(2^16-2)IP范围：192.168.0.1~192.168.255.254 192.168.255.255是广播地址，          不能被主机使用。设置IP地址的时候：192.168.x.y 子网掩码：255.255.0.0 2)执行上面的命令       <img alt="" height="201" src="https://img-blog.csdnimg.cn/20201227140833230.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="927"> 3)查看我们刚刚自定义的网络       命令：docker network inspect mynet        <img alt="" height="486" src="https://img-blog.csdnimg.cn/20201227141022782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647"> 4)下面我们启动容器并且指定使用我们刚刚创建的网络        <img alt="" height="347" src="https://img-blog.csdnimg.cn/20201227141259664.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 5)我们再次查看网络信息       命令：docker network inspect mynet        <img alt="" height="389" src="https://img-blog.csdnimg.cn/2020122714151580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="767"> 6)下面我们直接使用两个容器进行ping一下，测试是否能够连接       <img alt="" height="271" src="https://img-blog.csdnimg.cn/20201227141907294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1029">        我们再次使用mytomcat01去连接mytomcat02         <img alt="" height="230" src="https://img-blog.csdnimg.cn/20201227142012483.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1000">        可以发现我们使用自定义的网络，容器直接网络都是可以互通的(可以使用容器名称，也可以使用ip地址)，它修复了docker0所不完善的地方，我们不需要再使用–link了。 7)小节：       a：不同集群可以使用不同网络，保证集群的健康和安全，比如我们搭建一个mysql集群和一个redis集群，那么我们就自定义两个网络即可       b:  自定义网络已经维护好了对应的关系，方便使用服务名通讯1. 网络连通  1)简介         上面我们创建了两个容器mytomcat01和mytomcat02，它们指定的都是我们自定义的网络mynet，那么我们如何让它们和不同网络的容器链接呢？      比如我们先又创建两个容器mytomcat03和mytomcat04，我们指定这两个容器属于默认的docker0网络，那么我们如何让mytomcat03可以ping通mytomcat01呢？   2）首先创建mytomcat03和mytomcat04容器         <img alt="" height="190" src="https://img-blog.csdnimg.cn/20201227143732368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="932">        <img alt="" height="202" src="https://img-blog.csdnimg.cn/20201227144024547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="828">        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227144042615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="905">       可以发现它们的网段都不一样：          mytomcat01和mytomcat03属于：192.168.0.x           mytomcat01和mytomcat03属于：172.17.0.x  3)下面我们测试使用mytomcat01去ping通mytomcat03        <img alt="" height="175" src="https://img-blog.csdnimg.cn/20201227143933144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="976">  4)解决的办法(我们要做的其实是将容器和网络(比如我们自定义的mynet)链接，不是docker0和网络链接)：         命令：docker network connect 网络名词 容器id         例如打通mytomcat03和mynet的网络          <img alt="" height="211" src="https://img-blog.csdnimg.cn/20201227144743908.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1087">            我们在通过docker network inspect mynet查看一下网络情况：          <img alt="" height="330" src="https://img-blog.csdnimg.cn/20201227144902325.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738">         我们发现mytomcat03在mynet网络中也出现了一个新的ip地址，说明mytomcat03在docker0中有一个ip，在mynet中也有一个ip地址，         这就是一个容器两个ip地址。类似于我们的阿里云服务器有一个公网ip和一个私网ip   5)那么我们再使用mytomcat01去链接一下mytomcat03试一下        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227145345110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="848"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker之容器互联link"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/"
+    >docker之容器互联link</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.593Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker之容器互联link<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—title: docker之容器互联link<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 简介     –link 用于容器直接的互通。1. 我们准备好自己创建的镜像<img alt="" height="145" src="https://img-blog.csdnimg.cn/20201227102350258.png" width="726">1. 使用mytomcat镜像创建两个容器<img alt="" height="299" src="https://img-blog.csdnimg.cn/20201227102622151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1141">1. 下面我们使用myt1容器去链接myt2容器<img alt="" height="82" src="https://img-blog.csdnimg.cn/20201227103400216.png" width="614">1. 如何解决呢？ 1)我们创建一个myt3容器，使用–link命令          命令：docker run -d -p 9092:8080 –name myt3 –link myt2  mytomcat:v1.0     <img alt="" height="70" src="https://img-blog.csdnimg.cn/20201227104205919.png" width="767"> 2)下面我们使用myt3容器链接myt2     <img alt="" height="237" src="https://img-blog.csdnimg.cn/20201227104445980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695"> 3)下面我们再使用myt2容器ping一下myt3试试       <img alt="" height="137" src="https://img-blog.csdnimg.cn/20201227105912403.png" width="617">     发现反向是无法ping通的 4)为什么myt3能够ping通myt2呢？我们查看一下myt3中的/etc/hosts文件       <img alt="" height="264" src="https://img-blog.csdnimg.cn/20201227110827542.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="943">       从以上就可以得出：      –link 就是在我们myt3容器的hosts中增加一个172.17.0.3 myt2 cd1f8468844e       那么我们再查看一下myt2容器的hosts文件        <img alt="" height="186" src="https://img-blog.csdnimg.cn/20201227111118207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">1. 注意：    现在docker中不建议使用–link，一般使用自定义网络，因为docker0是一个官方的网桥，它的很多功能是有局限性的。比如它不支持容器名连接访问</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Docker之阿里云镜像加速器配置"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/"
+    >Docker之阿里云镜像加速器配置</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.590Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker之阿里云镜像加速器配置<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—# 一：简介</p>
+<p>         1：为什么使用阿里云镜像加速器?</p>
+<p>               一般而言，我们使用Docker，是需要从Docker官网去拉取镜像的，但是官网是在国外的，                所以下载非常慢，或者都下载不了，总是报timeout连接失败错误，因此需要配置镜像的下载，               这个是docker操作首先要做的事情，通常使用以下两种方式。</p>
+<h1 id="二：直接使用镜像仓库地址进行下载："><a href="#二：直接使用镜像仓库地址进行下载：" class="headerlink" title="二：直接使用镜像仓库地址进行下载："></a>二：直接使用镜像仓库地址进行下载：</h1><p>           比如：前往网易云蜂巢镜像中心：<img alt="" class="has" height="233" src="https://img-blog.csdn.net/2018102014523129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="482">                        <img alt="" class="has" height="73" src="https://img-blog.csdn.net/20181020212635912?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="478">                       可以直接使用具体的镜像地址进行下载，docker pull hub.c.163.com/public/tomcat:latest                       不过这种方式就是每次都需要去指定具体的镜像地址，这个比较纠结，很多时候没记得具体的地址。</p>
+<h1 id="三：使用加速器下载"><a href="#三：使用加速器下载" class="headerlink" title="三：使用加速器下载"></a>三：使用加速器下载</h1><p>         1：简介                第二种方式稍微就简单一些，不需要去记具体的镜像下载地址，                可以使用镜像加速器来实现，常用的加速有很多，比如阿里云、DaoCloud、、                以使用阿里云的为例：进入官网 <img alt="" class="has" height="294" src="https://img-blog.csdn.net/20181021134351291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="615">:</p>
+<p>        3：注册之后可以看到加速器地址               <img alt="" class="has" height="504" src="https://img-blog.csdn.net/20181021135224261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">               根据上面的操作文档，选择对应的操作系统，进行相应的操作即可。               如下：                      <img alt="" class="has" height="132" src="https://img-blog.csdn.net/20181022095528915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="528">                     后面执行下面两个命令：                            sudo systemctl daemon-reload，udo systemctl restart docker                最后使用docker info查看详细信息：                        <img alt="" class="has" height="178" src="https://img-blog.csdnimg.cn/20181028103116750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="350">         4：网上看到的相关问题               <img alt="" class="has" height="410" src="https://img-blog.csdn.net/20181021140024471?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="639">    </p>
+<p>               </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>  </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker之mongo数据库忘记用户名密码"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/"
+    >docker之mongo数据库忘记用户名密码</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.586Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker之mongo数据库忘记用户名密码<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—title: docker之mongo数据库忘记用户名密码<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 首先通过docker命令停止容器 docker stop 容器id1. 修改主机上与容器同步的mongod.conf文件,将认证注释掉<img alt="" height="288" src="https://img-blog.csdnimg.cn/20201231150258250.png" width="290">1. 重新启动容器 docker start 容器id1. 进入容器内部 命令：docker exec -it 容器id mongo admin<img alt="" height="359" src="https://img-blog.csdnimg.cn/20201231152709320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="803">1. 通过命令查询用户信息 命令：show users<img alt="" height="309" src="https://img-blog.csdnimg.cn/20201231152834540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">1. 修改指定用户的密码 命令：db.changeUserPassword(‘用户名’,’新密码’)<img alt="" height="304" src="https://img-blog.csdnimg.cn/20201231153328484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="560">1. 最后退出容器，并且重新将mongod.conf文件中的认证打开，并且重新启动容器<img alt="" height="234" src="https://img-blog.csdnimg.cn/20201231153816737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="792"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Docker网络详解之Overlay"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/"
+    >Docker网络详解之Overlay</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.584Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker网络详解之Overlay<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—我们在上篇文章说了Docker在单个Docker daemon(即是单主机)模式下面的时候网络默认为Bridge，既然提到了单个Docker daemon，那么多主机即是集群的模式的情况下呢？在这种模式下Docker默认使用Overlay网络来进行容器间的通信。</p>
+<p>接下来我们看看我们在加入一个集群或者初始化一个集群的时候会发生什么事情，下面这段话来自官方文档：</p>
+<ol>
+<li>首先一个名<code>ingress</code>的overlay网络被创建，这样在你没有指定网络的情况下你的集群中的services（你可以理解为一个container，实际上它为多个重复的container，是集群中的一个概念）会自动连接到这个网络。这样集群中的services通过这个网络进行通信。1. 然后一个名叫<code>docker_gwbridge</code>的网桥被建立，这个网桥用来连接在这个网络中的Docker daemon<br>所以由以上可知，逻辑上我们都处于一个叫ingress的overlay网络上，实际上Docker daemon之间的通信还是通过一个叫docker_gwbridge的网桥进行的。每个services或者container同时能够加入很多个网络，但是它们只能和连接在同一个网络上的其他service或者container进行通信。</li>
+</ol>
+<h2 id="建立一个Overlay网络"><a href="#建立一个Overlay网络" class="headerlink" title="建立一个Overlay网络"></a>建立一个Overlay网络</h2><p>当我们要建立一个overlay网络的时候有几个前提：</p>
+<ol>
+<li>必须要打开必要的端口让网络能进行通信，比如必须打开2377端口的TCP、7946端口的TCP和UDP以及4789端口UDP，这都是进行通信必要的1. 在你创建你自己的overlay网络之前，你必须加入一个集群或者是初始化一个集群<br>准备工作做好后，我们用<code>$ docker network create -d overlay your-overlaynetwork-name</code>来创建你的overlay网络，如果你想自己配置关于网络的IP地址范围、子网、网关或者其他选项，你能通过添加<code>--attachable</code>来进行配置</li>
+</ol>
+<h2 id="Overlay网络的安全性"><a href="#Overlay网络的安全性" class="headerlink" title="Overlay网络的安全性"></a>Overlay网络的安全性</h2><p>在默认的情况，overlay网络中的services进行通信是通过<code>AES加密算法</code>过的，并且集群中的管理节点会<code>每12小时</code>对这个加密秘钥进行更改。当你想在你自己的overlay网络中应用加密算法，你能通过<code>--opt encrypted</code>命令来开启加密，但是注意，<code>windows上的Docker daemon不支持加密</code></p>
+<p><code>转载自：</code></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker网络简介"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/"
+    >docker网络简介</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.582Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker网络简介<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—title: docker网络简介<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—|Host|容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。<br>|Bridge|此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。<br>|None|该模式关闭了容器的网络功能。<br>|Container|创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。<br>|自定义网络|略</p>
+<h2 id="一、默认网络"><a href="#一、默认网络" class="headerlink" title="一、默认网络"></a>一、默认网络</h2><p><strong>当你安装Docker时，它会自动创建三个网络。你可以使用以下docker network ls命令列出这些网络：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">0147b8d16c64        bridge              bridge              local</span><br><span class="line">2da931af3f0b        host                host                local</span><br><span class="line">63d31338bcd9        none                null                local</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223222117.png"></p>
+<p><strong>Docker内置这三个网络，运行容器时，你可以使用该–network标志来指定容器应连接到哪些网络。</strong></p>
+<p><strong>该bridge网络代表docker0所有Docker安装中存在的网络。除非你使用该docker run –network=选项指定，否则Docker守护程序默认将容器连接到此网络。</strong></p>
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223920623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
+
+<p><strong>我们在使用docker run创建Docker容器时，可以用 –net 选项指定容器的网络模式，Docker可以有以下4种网络模式：</strong></p>
+<ul>
+<li>host模式：使用 –net=host 指定。- none模式：使用 –net=none 指定。- bridge模式：使用 –net=bridge 指定，默认设置。- container模式：使用 –net=container:NAME_or_ID 指定。</li>
+</ul>
+<p><strong>下面分别介绍一下Docker的各个网络模式。</strong></p>
+<p><strong>1.1 Host模式</strong></p>
+<p><strong>相当于Vmware中的桥接模式，与宿主机在同一个网络中，但没有独立IP地址。</strong></p>
+<p><strong>众所周知，Docker使用了Linux的Namespaces技术来进行资源隔离，如PID Namespace隔离进程，Mount Namespace隔离文件系统，Network Namespace隔离网络等。</strong></p>
+<p><strong>一个Network Namespace提供了一份独立的网络环境，包括网卡、路由、Iptable规则等都与其他的Network Namespace隔离。一个Docker容器一般会分配一个独立的Network Namespace。但如果启动容器的时候使用host模式，那么这个容器将不会获得一个独立的Network Namespace，而是和宿主机共用一个Network Namespace。容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。</strong></p>
+<p><strong>例如，我们在172.25.6.1/24的机器上用host模式启动一个ubuntu容器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker run -it --network=host ubuntu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>可以看到，容器的网络使用的时宿主机的网络，但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</strong></p>
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702225446117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
+
+<p><strong>1.2 Container模式</strong></p>
+<p><strong>在理解了host模式后，这个模式也就好理解了。这个模式指定新创建的容器和已经存在的一个容器共享一个Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过lo网卡设备通信。</strong></p>
+<p><strong>1.3 None模式</strong></p>
+<p><strong>该模式将容器放置在它自己的网络栈中，但是并不进行任何配置。实际上，该模式关闭了容器的网络功能，在以下两种情况下是有用的：容器并不需要网络（例如只需要写磁盘卷的批处理任务）。</strong></p>
+<p>overlay</p>
+<p><strong>在docker1.7代码进行了重构，单独把网络部分独立出来编写，所以在docker1.8新加入的一个overlay网络模式。Docker对于网络访问的控制也是在逐渐完善的。</strong></p>
+<p><strong>1.4 Bridge模式</strong></p>
+<p><strong>相当于Vmware中的Nat模式，容器使用独立network Namespace，并连接到docker0虚拟网卡（默认模式）。通过docker0网桥以及Iptables nat表配置与宿主机通信；bridge模式是Docker默认的网络设置，此模式会为每一个容器分配Network Namespace、设置IP等，并将一个主机上的Docker容器连接到一个虚拟网桥上。下面着重介绍一下此模式。</strong></p>
+<h2 id="二、Bridge模式"><a href="#二、Bridge模式" class="headerlink" title="二、Bridge模式"></a>二、Bridge模式</h2><p><strong>2.1 Bridge模式的拓扑</strong></p>
+<p><strong>当Docker server启动时，会在主机上创建一个名为docker0的虚拟网桥，此主机上启动的Docker容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配IP了，Docker会从RFC1918所定义的私有IP网段中，选择一个和宿主机不同的IP地址和子网分配给docker0，连接到docker0的容器就从这个子网中选择一个未占用的IP使用。如一般Docker会使用172.17.0.0/16这个网段，并将172.17.0.1/16分配给docker0网桥（在主机上使用ifconfig命令是可以看到docker0的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）。单机环境下的网络拓扑如下，主机地址为10.10.0.186/24。</strong></p>
+<p><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702230627173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">  </p>
+<p><strong>2.2 Docker：网络模式详解</strong></p>
+<p><strong>Docker完成以上网络配置的过程大致是这样的：</strong></p>
+<p><strong>（1）在主机上创建一对虚拟网卡veth pair设备。veth设备总是成对出现的，它们组成了一个数据的通道，数据从一个设备进入，就会从另一个设备出来。因此，veth设备常用来连接两个网络设备。</strong></p>
+<p><strong>（2）Docker将veth pair设备的一端放在新创建的容器中，并命名为eth0。另一端放在主机中，以veth65f9这样类似的名字命名，并将这个网络设备加入到docker0网桥中，可以通过brctl show命令查看。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brctl show</span><br><span class="line">bridge name     bridge id               STP enabled     interfaces</span><br><span class="line">docker0         8000.02425f21c208       no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>（3）从docker0子网中分配一个IP给容器使用，并设置docker0的IP地址为容器的默认网关。</strong></p>
+<p><strong>运行容器：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx        </span><br><span class="line">9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>查看容器：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">CONTAINER ID        IMAGE          COMMAND                  CREATED             STATUS              PORTS                NAMES</span><br><span class="line">9582dbec7981        nginx          &quot;nginx -g &#x27;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:80-&amp;gt;80/tcp   nginx_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># 查看容器网络;</span><br><span class="line">docker inspect 9582dbec7981</span><br><span class="line">&quot;Networks&quot;: &#123;</span><br><span class="line">    &quot;bridge&quot;: &#123;</span><br><span class="line">        &quot;IPAMConfig&quot;: null,</span><br><span class="line">        &quot;Links&quot;: null,</span><br><span class="line">        &quot;Aliases&quot;: null,</span><br><span class="line">        &quot;NetworkID&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">        &quot;Gateway&quot;: &quot;172.17.0.1&quot;,</span><br><span class="line">        &quot;IPAddress&quot;: &quot;172.17.0.2&quot;,</span><br><span class="line">        &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">        &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">        &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">docker network inspect bridge</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Name&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;Id&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2019-06-09T23:20:28.061678042-04:00&quot;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;EnableIPv6&quot;: false,</span><br><span class="line">        &quot;IPAM&quot;: &#123;</span><br><span class="line">            &quot;Driver&quot;: &quot;default&quot;,</span><br><span class="line">            &quot;Options&quot;: null,</span><br><span class="line">            &quot;Config&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;Subnet&quot;: &quot;172.17.0.0/16&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Internal&quot;: false,</span><br><span class="line">        &quot;Attachable&quot;: false,</span><br><span class="line">        &quot;Ingress&quot;: false,</span><br><span class="line">        &quot;Containers&quot;: &#123;</span><br><span class="line">            &quot;9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a&quot;: &#123;</span><br><span class="line">                &quot;Name&quot;: &quot;nginx_bridge&quot;,</span><br><span class="line">                &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">                &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;,</span><br><span class="line">                &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;,</span><br><span class="line">                &quot;IPv6Address&quot;: &quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Options&quot;: &#123;</span><br><span class="line">            &quot;com.docker.network.bridge.default_bridge&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_icc&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_ip_masquerade&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.host_binding_ipv4&quot;: &quot;0.0.0.0&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.name&quot;: &quot;docker0&quot;,</span><br><span class="line">            &quot;com.docker.network.driver.mtu&quot;: &quot;1500&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>网络拓扑介绍完后，接着介绍一下bridge模式下容器是如何通信的。</p>
+<p><strong>2.3 bridge模式下容器的通信</strong></p>
+<p><strong>在bridge模式下，连在同一网桥上的容器可以相互通信（若出于安全考虑，也可以禁止它们之间通信，方法是在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信）。</strong></p>
+<p><strong>Docker可以开启容器间通信（意味着默认配置–icc=true），也就是说，宿主机上的所有容器可以不受任何限制地相互通信，这可能导致拒绝服务攻击。进一步地，Docker可以通过–ip_forward和–iptables两个选项控制容器间、容器和外部世界的通信。</strong></p>
+<p><strong>容器也可以与外部通信，我们看一下主机上的Iptable规则，可以看到这么一条</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>这条规则会将源地址为172.17.0.0/16的包（也就是从Docker容器产生的包），并且不是从docker0网卡发出的，进行源地址转换，转换成主机网卡的地址。这么说可能不太好理解，举一个例子说明一下。假设主机有一块网卡为eth0，IP地址为10.10.101.105/24，网关为10.10.101.254。从主机上一个IP为172.17.0.1/16的容器中ping百度（180.76.3.151）。IP包首先从容器发往自己的默认网关docker0，包到达docker0后，也就到达了主机上。然后会查询主机的路由表，发现包应该从主机的eth0发往主机的网关10.10.105.254/24。接着包会转发给eth0，并从eth0发出去（主机的ip_forward转发应该已经打开）。这时候，上面的Iptable规则就会起作用，对包做SNAT转换，将源地址换为eth0的地址。这样，在外界看来，这个包就是从10.10.101.105上发出来的，Docker容器对外是不可见的。</strong></p>
+<p><strong>那么，外面的机器是如何访问Docker容器的服务呢？我们首先用下面命令创建一个含有web应用的容器，将容器的80端口映射到主机的80端口。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>然后查看Iptable规则的变化，发现多了这样一条规则：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 80 -j DNAT --to-destination 172.17.0.2:80</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>此条规则就是对主机eth0收到的目的端口为80的tcp流量进行DNAT转换，将流量发往172.17.0.2:80，也就是我们上面创建的Docker容器。所以，外界只需访问10.10.101.105:80就可以访问到容器中的服务。</strong></p>
+<p><strong>除此之外，我们还可以自定义Docker使用的IP地址、DNS等信息，甚至使用自己定义的网桥，但是其工作方式还是一样的。</strong></p>
+<h2 id="三、自定义网络"><a href="#三、自定义网络" class="headerlink" title="三、自定义网络"></a>三、自定义网络</h2><p><strong>建议使用自定义的网桥来控制哪些容器可以相互通信，还可以自动DNS解析容器名称到IP地址。Docker提供了创建这些网络的默认网络驱动程序，你可以创建一个新的Bridge网络，Overlay或Macvlan网络。你还可以创建一个网络插件或远程网络进行完整的自定义和控制。</strong></p>
+<p><strong>你可以根据需要创建任意数量的网络，并且可以在任何给定时间将容器连接到这些网络中的零个或多个网络。此外，您可以连接并断开网络中的运行容器，而无需重新启动容器。当容器连接到多个网络时，其外部连接通过第一个非内部网络以词法顺序提供。</strong></p>
+<p><strong>接下来介绍Docker的内置网络驱动程序。</strong></p>
+<p><strong>3.1 bridge</strong></p>
+<p><strong>一个bridge网络是Docker中最常用的网络类型。桥接网络类似于默认bridge网络，但添加一些新功能并删除一些旧的能力。以下示例创建一些桥接网络，并对这些网络上的容器执行一些实验。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker network create --driver bridge new_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>创建网络后，可以看到新增加了一个网桥（172.18.0.1）。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">br-f677ada3003c: flags=4099&amp;lt;UP,BROADCAST,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.18.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        ether 02:42:2f:c1:db:5a  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 4001976  bytes 526995216 (502.5 MiB)</span><br><span class="line">        RX errors 0  dropped 35  overruns 0  frame 0</span><br><span class="line">        TX packets 1424063  bytes 186928741 (178.2 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">docker0: flags=4163&amp;lt;UP,BROADCAST,RUNNING,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        inet6 fe80::42:5fff:fe21:c208  prefixlen 64  scopeid 0x20&amp;lt;link&amp;gt;</span><br><span class="line">        ether 02:42:5f:21:c2:08  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 12  bytes 2132 (2.0 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 24  bytes 2633 (2.5 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>3.2 Macvlan</strong></p>
+<p><strong>Macvlan是一个新的尝试，是真正的网络虚拟化技术的转折点。Linux实现非常轻量级，因为与传统的Linux Bridge隔离相比，它们只是简单地与一个Linux以太网接口或子接口相关联，以实现网络之间的分离和与物理网络的连接。</strong></p>
+<p><strong>Macvlan提供了许多独特的功能，并有充足的空间进一步创新与各种模式。这些方法的两个高级优点是绕过Linux网桥的正面性能以及移动部件少的简单性。删除传统上驻留在Docker主机NIC和容器接口之间的网桥留下了一个非常简单的设置，包括容器接口，直接连接到Docker主机接口。由于在这些情况下没有端口映射，因此可以轻松访问外部服务。</strong></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-Docker数据卷之具名挂载和匿名挂载"
   class="article article-type-post"
   itemscope
@@ -429,402 +882,6 @@
 <li>docker</li>
 </ul>
 <p>—1. 什么是docker?  Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中,然后发布到任何流行的机器上,也可以实现虚拟化,  容器是完全使用沙箱机制,相互之间不会有任何接口。  <img alt="" src="https://img-blog.csdn.net/20181016204647520?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">1. docker的基本组成<img alt="" height="423" src="https://img-blog.csdnimg.cn/20201215220208243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="792"> 镜像(Images)：          docker镜像可以理解为一个模板，我们可以来创建容器服务，我们可以通过一个模板创建多个容器。          并且我们的项目服务最终都是运行在容器中的，例如我们springboot项目,mysql,redis等. 容器(Containers)：          <img alt="" src="https://img-blog.csdn.net/20181016230900110?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"> 仓库(Registry)：          <img alt="" src="https://img-blog.csdn.net/20181016231010989?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker的容器数据卷入门简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E7%9A%84%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%85%A5%E9%97%A8%E7%AE%80%E4%BB%8B/"
-    >docker的容器数据卷入门简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E7%9A%84%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%85%A5%E9%97%A8%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.571Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker的容器数据卷入门简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker的容器数据卷入门简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 什么是容器数据卷? 命名的容器挂载数据卷，其它容器通过挂载这个（父容器）实现数据共享，挂载数据卷的容器，  称之为数据卷容器 。1. 案例1：用命令来挂载，让主机目录与容器目录数据共享 命令：docker run -it -v 主机目录:容器目录 镜像名称 /bin/bash 1)通过命令运行容器       <img alt="" height="28" src="https://img-blog.csdnimg.cn/20201225204926648.png" width="758"> 2)查看主机的/opt/ceshi目录,该目录下暂时没有东西<img alt="" height="141" src="https://img-blog.csdnimg.cn/20201225205012185.png" width="399"> 3)我们向该目录下新增一个文件      <img alt="" height="224" src="https://img-blog.csdnimg.cn/20201225205148936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="452"> 4)进入容器的/home目录下看看,可以发现已经同步完成      <img alt="" height="182" src="https://img-blog.csdnimg.cn/20201225205805152.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="713"> 5)我们在容器内创建一个文件       <img alt="" height="295" src="https://img-blog.csdnimg.cn/20201225205942505.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="751"> 6)退出容器,查看主机的/opt/ceshi目录下,发现已经同步       <img alt="" height="234" src="https://img-blog.csdnimg.cn/20201225210251579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585"> 7)使用inspect命令查看容器属性       命令：docker inspect 容器id    <img alt="" height="208" src="https://img-blog.csdnimg.cn/2020122521040938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="748">      <img alt="" height="212" src="https://img-blog.csdnimg.cn/20201225210516892.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520"><li>案例2：使用Dockerfile创建我们自己的镜像并且完成数据卷挂载 1)首先在/opt目录下创建一个Dockerfile文件      <img alt="" height="233" src="https://img-blog.csdnimg.cn/20201225220922406.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="467">        注意：大小写一定要注意         <pre><code>#表示依赖centos的基础镜像<br>FROM centos</p>
-<p>#表示通过匿名的方式创建两个数据挂载卷volume01和volume02<br>VOLUME [“volume01”,”volume02”]</p>
-<p>CMD echo “======end===============”</code></pre>  2)使用命令运行Dockerfile去生成自己的镜像      命令：docker build -f /opt/Dockerfile -t kgf/centos:v1.0      -f :指定要使用的Dockerfile路径；      -t :指为新的镜像取名为kgf/centos,版本为v1.0      注意最后有个点，默认使用 “上下文目录（Context）下的名为Dockerfile 的文件作为 Dockerfile”      <img alt="" height="361" src="https://img-blog.csdnimg.cn/20201225220957437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="809">         <img alt="" height="149" src="https://img-blog.csdnimg.cn/20201225221117351.png" width="620">      3)运行我们的镜像去创建容器          <img alt="" height="371" src="https://img-blog.csdnimg.cn/20201225221456456.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="809">           可以发现容器内部存在两个容器卷,我们在里面添加一个文件：           <img alt="" height="135" src="https://img-blog.csdnimg.cn/20201225221714241.png" width="559">       4) 我们到主机查看容器对应的挂载主机目录路径           命令：docker inspect 容器id          <img alt="" height="219" src="https://img-blog.csdnimg.cn/20201225222023966.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="875">            <img alt="" height="396" src="https://img-blog.csdnimg.cn/20201225222053380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1021">            <img alt="" height="216" src="https://img-blog.csdnimg.cn/20201225222152579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1053">            可以发现主机的这个挂载目录也同步了容器中的数据文件</li></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker常用的命令"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4/"
-    >docker常用的命令</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.569Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker常用的命令<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker常用的命令<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 查看docker版本信息  docker version1. 查看docker的详细信息,包括镜像和配置的阿里云加速器以及容器的数量等  docker info1. 镜像相关的命令 1)查看本地主机所有的镜像         docker images 2)查询镜像并且只显示镜像id         docker images -q 3)命令搜索可以下载的镜像        docker search 镜像名称      例如：docker search mysql      <img alt="" height="224" src="https://img-blog.csdnimg.cn/20201217205701441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1178"> 4)搜索指定条件的镜像(例如：搜索starts在3000以上的)       命令：docker search mysql –filter=STARS=3000      <img alt="" height="117" src="https://img-blog.csdnimg.cn/20201217210110391.png" width="922"> 5)docker下载镜像命令      命令：docker pull 镜像命令 6) 下载指定的镜像版本       命令：docker pull 镜像名称:版本       <img alt="" height="325" src="https://img-blog.csdnimg.cn/20201217211017359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="684">        注意：mysql的版本必须是docker仓库中存在的，我可以在docker hub中查看：        <img alt="" height="408" src="https://img-blog.csdnimg.cn/20201217211131303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"> 7)删除镜像命令      命令：docker rmi  -f 镜像id       -f : 代表强制删除  8)删除所有的镜像      命令：docker rmi -f $( docker images -aq)      -a : 代表全部      -q : 代表只查镜像id1. 容器相关的命令 docker run [可选参数] image 可选参数如下：        –name=”name”: 为容器指定一个名称        -d: 后台运行容器，并返回容器ID        -i: 以交互模式运行容器，通常与 -t 同时使用       -t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用       -P: 为容器指定一个运行的端口，-P 主机端口:容器端口       -p:  为容器随机指定一个运行的端口 1)启动并进入容器命令: docker run -it 镜像  /bin/bash         <img alt="" height="203" src="https://img-blog.csdnimg.cn/20201217220426954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="676"> 2)查看当前正在运行的容器         docker ps 3)查看正在运行+曾经运行过的容器         docker ps -a 4)只查看容器的编号         docker ps -q 5)退出容器命令         exit : 表示退出并且停止容器         ctrl+p+q : 只退出容器并不停止容器 6)删除容器        docker rm -f 容器id 7)删除所有容器        docker rm -f $( docker ps -aq) 8)启动容器命令        docker start 容器id 9)重启容器        docker restart 容器id  10)停止容器命令        docker stop 容器id 11)杀掉容器命令         docker kill 容器id<li>docker查看日志命令 1)命令格式        <pre><code class="language-bash">$ docker logs [OPTIONS] CONTAINER<br>  Options:<br>        --details        显示更多的信息<br>    -f, --follow         跟踪实时日志<br>        --since string   显示自某个timestamp之后的日志，或相对时间，如42m（即42分钟）<br>        --tail string    从日志末尾显示多少行日志， 默认是all<br>    -t, --timestamps     显示时间戳<br>        --until string   显示自某个timestamp之前的日志，或相对时间，如42m（即42分钟）</code></pre>  2)查看指定时间后的日志，只显示最后100行         <pre><code>$ docker logs -f -t --since=&quot;2018-02-08&quot; --tail=100 CONTAINER_ID</code></pre>  3)查看最近30分钟的日志:      <pre><code>$ docker logs --since 30m CONTAINER_ID</code></pre>  4)查看某时间之后的日志：      <pre><code>$ docker logs -t --since=&quot;2018-02-08T13:23:37&quot; CONTAINER_ID</code></pre>  5) 查看某时间段日志：     <pre><code>$ docker logs -t --since=&quot;2018-02-08T13:23:37&quot; --until &quot;2018-02-09T12:23:37&quot; CONTAINER_ID</code></pre> </li>1. 查看容器中运行的进程信息 语法：    docker top CONTAINER [ps OPTIONS]1. 查看容器内部的细节 命令：docker inspect 容器ID                1. 进入当前正在运行的容器 命令：docker exec -it 容器ID bash  重新进入命令：docker attach 容器ID  区别：          a：attach是直接进入容器启动命令的终端，不会启动新的进程          b：exec是在容器中打开新的终端，并且可以启动新的进程 在容器外面查看容器内的内容：<img alt="" src="https://img-blog.csdnimg.cn/20181028205830489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70">  1. 从容器内拷贝文件到主机上 命令：docker cp 容器ID:容器内路径 目的主机路径 例如：现在我们在centos容器的/tem目录下存在一个test1文件，现在我们需要将            其拷贝到主机的/opt目录下<img alt="" src="https://img-blog.csdnimg.cn/20181028211352419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70"><img alt="" src="https://img-blog.csdnimg.cn/20181028211536307.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70"><br>10、删除状态为exited的容器</p>
-<p>      命令：docker rm $(docker ps -q -f status=exited)</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker案例之制作tomcat镜像"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker%E6%A1%88%E4%BE%8B%E4%B9%8B%E5%88%B6%E4%BD%9Ctomcat%E9%95%9C%E5%83%8F/"
-    >docker案例之制作tomcat镜像</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker%E6%A1%88%E4%BE%8B%E4%B9%8B%E5%88%B6%E4%BD%9Ctomcat%E9%95%9C%E5%83%8F/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.567Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker案例之制作tomcat镜像<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker案例之制作tomcat镜像<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 进入/opt/tomcat9路径下，上传我们需要的tomcat以及jdk安装包  <img alt="" height="179" src="https://img-blog.csdnimg.cn/20201226174125314.png" width="786"><li>下面我们开始在这个目录下编写Dockerfile文件<img alt="" height="197" src="https://img-blog.csdnimg.cn/20201226175221627.png" width="811"> Dockerfile内容： <pre><code class="language-bash">#基于我们从阿里云下载下来的centos基础镜像<br>FROM centos</p>
-<p>#定义维护者的信息<br>MAINTAINER kgf&lt;<a href="mailto:&#x6b;&#x67;&#x66;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;">&#x6b;&#x67;&#x66;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;</a>&gt;</p>
-<p>#把宿主机当前上下文的test1.txt文件拷贝到容器/usr/local/路径下<br>COPY readme.txt /usr/local/readme.txt</p>
-<p>#把java与tomcat添加到容器中,使用ADD命令会自动帮我们解压<br>ADD jdk-8u191-linux-x64.tar.gz /usr/local/<br>ADD apache-tomcat-9.0.12.tar.gz /usr/local/</p>
-<p>#安装vim编辑器<br>RUN yum -y install vim</p>
-<p>#设置工作访问时候的workdir路径，登录落脚点<br>ENV MY_PATH /usr/local<br>WORKDIR $MY_PATH</p>
-<p>#配置java与tomcat环境变量<br>ENV JAVA_HOME /usr/local/jdk1.8.0_191<br>ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.12<br>ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.12<br>ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin</p>
-<p>#容器运行时监听的端口<br>EXPOSE 8080</p>
-<p>#启动时运行tomcat,下面的三种方式随便一种都可以使用<br>#ENTRYPOINT [“/usr/local/apache-tomcat-9.0.12/bin/startup.sh”]<br>#CMD [“/usr/local/apache-tomcat-9.0.12/bin/catalina.sh”,”run”]<br>CMD /usr/local/apache-tomcat-9.0.12/bin/startup.sh &amp;&amp; tail -F /usr/local/apache-tomcat-9.0.12/bin/logs/catalina.out</code></pre>   </li>1. 执行dockerfile文件 命令：docker build -f /opt/tomcat9/Dockerfile -t mytomcat:v1.0 .<img alt="" height="311" src="https://img-blog.csdnimg.cn/20201226183350361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701"><img alt="" height="253" src="https://img-blog.csdnimg.cn/20201226183426240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="593"><li>运行镜像生成镜像的实例容器 命令：     <pre><code class="language-bash">docker run -d -p 9080:8080 --name myt9 <br>-v /opt/tomcat9/test:/usr/local/apache-tomcat-9.0.12/webapps/test <br>-v /opt/tomcat9/logs:/usr/local/apache-tomcat-9.0.12/logs <br>--privileged=true <br>mytomcat:v1.0</p>
-<p>#注释:<br>     -d：表示后台运行<br>     -p 宿主机端口号:容器内运行的软件程序端口  —&gt;表示将容器内端口映射到宿主机，对外开放<br>     –name +容器名称  —&gt;为运行启动的容器起一个别名<br>     -v +宿主机路径:容器内路径  —&gt;表示为宿主机和容器添加关联数据卷<br>     –privileged=true   —-&gt;这是为了防止数据卷没有读写权限<br>     mytomcat:v1.0   —-&gt;这个是镜像的名称:版本号</code></pre> <img alt="" height="182" src="https://img-blog.csdnimg.cn/20201226184329432.png" width="702"><img alt="" height="151" src="https://img-blog.csdnimg.cn/20201226184346517.png" width="1200"> </li>1. 查看运行效果：<img alt="" height="372" src="https://img-blog.csdnimg.cn/2020122618455694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="944">1. 查看本地主机是否同步了容器的数据卷<img alt="" height="355" src="https://img-blog.csdnimg.cn/20201226184801392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. 下面在自定义的tomcat9上发布web项目演示 ⑴因为我们在容器内创建关联的数据卷目录是test命令，所以我们就将一个     简单的名称为test的web项目部署到容器内。     a：注意          因为宿主机的test目录是和容器类的test关联目录，所以我们只需要将          项目内文件传递到宿主机内即可。     <img alt="" height="193" src="https://img-blog.csdnimg.cn/20201226194142382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="833"> b：查看容器内test目录下文件<img alt="" height="171" src="https://img-blog.csdnimg.cn/20201226194239600.png" width="893"> ⑵重新启动运行的容器<img alt="" height="169" src="https://img-blog.csdnimg.cn/20201226194331187.png" width="788"> 效果（完美）：<img alt="" height="257" src="https://img-blog.csdnimg.cn/20201226194406185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="812"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Docker安装Oracle12c知识点总结"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Docker%E5%AE%89%E8%A3%85Oracle12c%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
-    >Docker安装Oracle12c知识点总结</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Docker%E5%AE%89%E8%A3%85Oracle12c%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.565Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Docker安装Oracle12c知识点总结<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: Docker安装Oracle12c知识点总结<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. <strong><strong><strong>拉取指定版本的镜像</strong></strong></strong> docker pull sath89/oracle-12c1. <strong>查看已经下载的镜像</strong><img alt="" height="96" src="https://img-blog.csdnimg.cn/20200820180202495.png" width="554">1. <strong><strong><strong>数据库设置和数据将保存到</strong></strong><strong><strong>/mydata/oracle12c</strong></strong><strong><strong>/ oradata文件夹</strong></strong></strong> 1) 首先需要创建/mydata/oracle12c/oracledata文件夹路径 2)赋予读写等权限(很重要)     chmod -R a+w /mydata/oracle12c/oracledata  3)执行下面的创建实例语句     docker run –shm-size=1024MB -p 1521:1521 \     –privileged \     -e ORACLE_ALLOW_REMOTE=true \     -v /mydata/oracle12c/oracledata:/u01/app/oracle \     –name oracle12c –restart=always -d sath89/oracle-12c 1. **<strong><strong>进入Oracle内部查看  1) **</strong></strong>进入容器内部       docker exec -it 容器ID/bin/bash  2)切换为oracle用户      su oracle  3)进入数据库      $ORACLE_HOME/bin/sqlplus / as sysdba  4)查看数据库状态      <img alt="" height="167" src="https://img-blog.csdnimg.cn/20200820180535952.png" width="370">  5)修改system用户密码       alter user system identified by iamp1234;  6)连接Oracle     hostname: ip地址     port:1521     sid:xe     username:system     password:iamp1234</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker-swarm简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker-swarm%E7%AE%80%E4%BB%8B/"
-    >docker-swarm简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker-swarm%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.562Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker-swarm简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: docker-swarm简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1.  什么是Docker Swarm? Swarm是Docker的一个编排工具，在之前我们只是在一台机器来进行docker的管理：<img alt="" src="https://img-blog.csdnimg.cn/img_convert/ab7861100c2cb8903ab02d28b7c8ae18.png"> 但是有时容器并不一定都在一台主机上，如果是分布式的处于多台主机上，这时就可以借助于Swarm，Swarm是Docker自带的编排工具，只要你安装了Docker就会存在Docker Swarm工具。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/db33a0c994117f706f5286619e0fe19e.png"> Swarm中的模式是有两大类节点，一类是manager节点，另一类是worker节点，manager节点相当于对服务的创建和调度，worker节点主要是运行容器服务，当然manager节点也是可以运行的。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/6833ae9814f2ac492420cddd5930f2ea.png"> manager节点状态、信息的同步根据Raft consensus group(Raft一致性算法)的网络进行通信同步的，而worker之间的通信依靠的是Gossip network(<strong>Gossip</strong>协议是电脑之间的通信协议)做到的。 另外一个重要的概念就是service，我们可以在一个manager节点上创建一个服务，但是可以根据这一个服务创建多个容器的任务，这些容器任务运行在不同的节点上。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/25f70b33292dfbfeaa2a3ab246dbd122.png"> 那么如何进行Swarm集群的搭建呢？       1)在swarm模式下初始化一个Swarm集群，并且将当前主机加入到该集群作为manager节点       2)加入其它节点到该集群中       3)部署service到该集群中 1.  Docker Swarm集群搭建，这里我们总共有4台机器，我们准备创建的1主3从  主节点：192.168.56.10(docker01)  从节点：192.168.56.11(docker02)  从节点：192.168.56.12(docker03)  从节点：192.168.56.13(docker04) 1)创建多节点集群        1.1)查看docker-swarm命令              <img alt="" height="389" src="https://img-blog.csdnimg.cn/20210102202358243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="780">             可以看到其中有一个 init的命令，这就是初始化一个Swarm，我们再看看这个init的参数：             <img alt="" height="412" src="https://img-blog.csdnimg.cn/20210102202500999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1104">              可以看到它有很多的参数，其中第一个就是将本机的地址添加进去，让自己成为一个Manager节点，这样其它的节点都可以知道这个节点的存在。 2)创建一个Manager节点       命令：docker swarm init –advertise-addr=当前机器的ip地址        <img alt="" height="205" src="https://img-blog.csdnimg.cn/20210102203033169.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1112">       可以看到已经创建了一个swarm manager节点–advertise-addr参数的值192.168.56.10是自己的ip，相当于将自己加入到swarm中。它也说明了其它worker加入的方式。       其它work加入的命令是：           docker swarm join –token SWMTKN-1-42k5spdc2goa6lqy2o858uu43x3r6yne03aoaa4267wdxozq1a-9ak1flizh9gckgulxanvjvsqe 192.168.56.10:2377 3)创建一个worker节点 ,另外再开启一台虚拟机，将这台机器加入到swarm中成为worker节点,这一台机器ip为192.168.56.11        命令： docker swarm join –token SWMTKN-1-42k5spdc2goa6lqy2o858uu43x3r6yne03aoaa4267wdxozq1a-9ak1flizh9gckgulxanvjvsqe 192.168.56.10:2377        <img alt="" height="148" src="https://img-blog.csdnimg.cn/20210102204131147.png" width="1200">        可以看到已经成功了。 4)查看节点状态 ,注意的是查看节点状态只能在manager节点那台机器上查看，普通节点无法执行查看命令：     命令：docker node ls      <img alt="" height="126" src="https://img-blog.csdnimg.cn/20210102204249673.png" width="1200">      可以看到有两台机器了。  5)这里我们总共有4台机器，我们将剩余两台机器创建好work节点      <img alt="" height="120" src="https://img-blog.csdnimg.cn/20210102204623906.png" width="1160">      <img alt="" height="127" src="https://img-blog.csdnimg.cn/20210102204639503.png" width="1129"> 6)在docker01主节点上查看节点状态      <img alt="" height="283" src="https://img-blog.csdnimg.cn/20210102204901728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1011">     可以看到有4台机器了。  7)多节点容器创建      上面我们已经将节点创建好了，现在可以在这些节点上创建容器了，那么就需要看看docker service 的帮助信息：      <img alt="" height="419" src="https://img-blog.csdnimg.cn/20210102205215457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="851">     可以看到有create这个命令，可以这样理解，docker server create 相当于docker run 就是创建容器，只不过在swarm中是不同的表现方式。     7.1)manager节点上创建容器服务，这里我们以nginx为例            命令：docker service create -p 8888:80 –name my-nginx nginx            <img alt="" height="138" src="https://img-blog.csdnimg.cn/20210102210024130.png" width="823">           可以查看是否创建成功：           <img alt="" height="91" src="https://img-blog.csdnimg.cn/2021010221010672.png" width="906">           可以具体看这个service的内容：          <img alt="" height="76" src="https://img-blog.csdnimg.cn/20210102210206529.png" width="1177">     7.2)水平扩展容器服务,使用scale对容器服务的数量进行水平扩展，它可以帮助我们创建多个service            命令：docker service scale 服务名=数量           <img alt="" height="208" src="https://img-blog.csdnimg.cn/20210102210716663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="618">            通过命令docker service ls查看            <img alt="" height="96" src="https://img-blog.csdnimg.cn/20210102210842456.png" width="849">           再看看具体的容器数量：           命令：docker service ps 服务命令：           <img alt="" height="106" src="https://img-blog.csdnimg.cn/20210102210959533.png" width="991">           我们可以通过docker ps命令在4台服务器上查看我们创建的4个服务分别运行在哪个服务器上           <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210102211302898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1120">            如上可以发现4台服务器一台机器运行了一个容器服务     7.3)scale在swarm中除了水平扩展外，还有一个作用，那就是修复作用，比如将某一个节点中的容器删除掉，那么很快swarm中发觉并进行修复，数量保持原先的样子         假如现在删除worker中的一个容器，我们就删除docker02中的容器：         <img alt="" height="138" src="https://img-blog.csdnimg.cn/20210102211638906.png" width="1191">         我们在manager节点中查看容器情况：         <img alt="" height="127" src="https://img-blog.csdnimg.cn/20210102211803643.png" width="1158">        可以看到红色就是我们删掉的容器，但是后面它又马上补充了一个，保持了整个系统的稳定性。 8)我们在浏览器上访问4台服务器的nginx试试      <img alt="" height="244" src="https://img-blog.csdnimg.cn/20210102211940503.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1049"><img alt="" height="278" src="https://img-blog.csdnimg.cn/20210102212003689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1087"><img alt="" height="293" src="https://img-blog.csdnimg.cn/20210102212028823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1098"><img alt="" height="278" src="https://img-blog.csdnimg.cn/20210102212048178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> 1.  将我们部署的service移除命令：<img alt="" height="403" src="https://img-blog.csdnimg.cn/20210102212452219.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="772">  <img alt="" height="120" src="https://img-blog.csdnimg.cn/20210102212536429.png" width="1110"> 转载自： </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Dockerfile中的COPY和ADD指令详解与比较"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Dockerfile%E4%B8%AD%E7%9A%84COPY%E5%92%8CADD%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3%E4%B8%8E%E6%AF%94%E8%BE%83/"
-    >Dockerfile中的COPY和ADD指令详解与比较</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Dockerfile%E4%B8%AD%E7%9A%84COPY%E5%92%8CADD%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3%E4%B8%8E%E6%AF%94%E8%BE%83/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.560Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Dockerfile中的COPY和ADD指令详解与比较<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—Dockerfile中的COPY指令和ADD指令都可以将主机上的资源复制或加入到容器镜像中，都是在构建镜像的过程中完成的。</p>
-<p>COPY指令和ADD指令的唯一区别在于是否支持从远程URL获取资源。COPY指令只能从执行docker build所在的主机上读取资源并复制到镜像中。而ADD指令还支持通过URL从远程服务器读取资源并复制到镜像中。</p>
-<p>满足同等功能的情况下，推荐使用COPY指令。ADD指令更擅长读取本地tar文件并解压缩。</p>
-<ol>
-<li>COPY指令</li>
-</ol>
-<p>COPY指令能够将构建命令所在的主机本地的文件或目录，复制到镜像文件系统。</p>
-<p>exec格式用法（推荐）： COPY [“&lt;src&gt;”,… “&lt;dest&gt;”]，推荐，特别适合路径中带有空格的情况</p>
-<p>shell格式用法： COPY &lt;src&gt;… &lt;dest&gt;</p>
-<p> </p>
-<ol start="2">
-<li>ADD指令 ADD指令不仅能够将构建命令所在的主机本地的文件或目录，而且能够将远程URL所对应的文件或目录，作为资源复制到镜像文件系统。 所以，可以认为ADD是增强版的COPY，支持将远程URL的资源加入到镜像的文件系统。  </li>
-</ol>
-<p>exec格式用法（推荐）： ADD [“&lt;src&gt;”,… “&lt;dest&gt;”]，特别适合路径中带有空格的情况</p>
-<p>shell格式用法： ADD &lt;src&gt;… &lt;dest&gt;</p>
-<p> 说明，对于从远程URL获取资源的情况，由于ADD指令不支持认证，如果从远程获取资源需要认证，则只能使用RUN wget或RUN curl替代。 另外，如果源路径的资源发生变化，则该ADD指令将使Docker Cache失效，Dockerfile中后续的所有指令都不能使用缓存。因此尽量将ADD指令放在Dockerfile的后面。</p>
-<ol start="3">
-<li>COPY指令和ADD指令的用法非常相似，具体注意事项如下：</li>
-</ol>
-<ul>
-<li>源路径可以有多个- 源路径是相对于执行build的相对路径- 源路径如果是本地路径，必须是build上下文中的路径- 源路径如果是一个目录，则该目录下的所有内容都将被加入到容器，但是该目录本身不会- 目标路径必须是绝对路径，或相对于WORKDIR的相对路径- 目标路径如果不存在，则会创建相应的完整路径- 目标路径如果不是一个文件，则必须使用/结束- 路径中可以使用通配符</li>
-</ul>
-<ol start="4">
-<li>读取URL远程资源</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RUN mkdir -p /usr/src/things \</span><br><span class="line">    &amp;amp;&amp;amp; curl -SL http://example.com/big.tar.xz \</span><br><span class="line">    | tar -xJC /usr/src/things \</span><br><span class="line">    &amp;amp;&amp;amp; make -C /usr/src/things all</span><br></pre></td></tr></table></figure>
-
-<p>事实上，当要读取URL远程资源的时候，并不推荐使用ADD指令，而是建议使用RUN指令，在RUN指令中执行wget或curl命令。</p>
-<p>转载自：</p>
  
       <!-- reward -->
       

@@ -160,6 +160,626 @@
     
     
     <article
+  id="post-css选择器的使用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/"
+    >css选择器的使用</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.209Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: css选择器的使用<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.CSS选择器作用</p>
+<blockquote>
+<p> 找到指定的HTML页面元素，选择标签。 </p>
+</blockquote>
+<p>2.标签选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。 -  作用：可以把某一类标签全部选择出来。 -  优点：快速为网页中同类型的标签统一样式 -  缺点：不能设计差异化样式。 <pre>`标签名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; } `</pre> </li>
+</ul>
+<p>3.类选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>类选择器使用”.”(英文点号)进行标识，后面紧跟类名。 -  语法：类名选择器 <pre><code>.类名  &#123;   
+    属性1:属性值1; 
+    属性2:属性值2; 
+    属性3:属性值3;     
+&#125;
+</code></pre> 
+<pre><code class="language-html">&lt;p class='类名'&gt;&lt;/p&gt;
+</code></pre> 
+<ul>-  `优点`：可以为元素对象定义单独或相同的样式。可以选择一个或者多个标签。 <li> `注意`：类选择器使用“.”（英文点号）进行标识，后面紧跟类名(自定义，我们自己命名的) </li>
+<li> 长名称或词组可以使用中横线来为选择器命名。 -  不要纯数字、中文等命名， 尽量使用英文字母来表示。 -  多类名选择器：各个类名中间用空格隔开。 </li></ul></li>
+</ul>
+<p>4.<strong>id选择器」</strong>id选择器使用<code>#</code>进行标识，后面紧跟id名</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>元素的id值是唯一的，只能对应于文档中某一个具体的元素。 <pre><code>#id名 &#123;属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
+</code></pre> 
+<pre>`&lt;p id="id名"&gt;&lt;/p&gt;`</pre> </li>
+</ul>
+<p>5.通配符选择器</p>
+<blockquote>
+<p> 通配符选择器用<code>*</code>号表示，<code>*</code> 就是选择所有的标签。它是所有选择器中作用范围最广的，能匹配页面中所有的元素。 </p>
+</blockquote>
+<ul>
+<li><code>注意</code>：会匹配页面所有的元素，降低页面响应速度，不建议随便使用 <pre><code>* &#123; 属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
+</code></pre> 
+例如下面代码，使用通配符选择器定义CSS样式，清除所有HTML标记的默认边距。 <pre><code class="language-css">* &#123;
+  margin: 0;                    /* 定义外边距*/
+  padding: 0;                   /* 定义内边距*/
+&#125;</code></pre> </li>
+</ul>
+<p>6.基础选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|缺点|使用情况|用法
+</blockquote>
+</thead><tbody>|标签选择器|可以选出所有相同的标签，比如p|不能差异化选择|较多|p { color：red;}
+|类选择器|可以选出1个或者多个标签|可以根据需求选择|非常多|.nav { color: red; }
+|id选择器|一次只能选择器1个标签|只能使用一次|不推荐使用|#nav {color: red;}
+|通配符选择器|选择所有的标签|选择的太多，有部分不需要|不推荐使用|* {color: red;}
+</tbody></table>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-css相关属性"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/"
+    >css相关属性</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.207Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: css相关属性<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—title: css相关属性<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1. css3中opacity属性   指定透明度的属性是opacity,属性值从 0.0 到 1.0。值越小，越透明。   从 0.0 （完全透明）到 1.0（完全不透明）。<li>transition属性   过渡transition是一个复合属性，包括transition-property、transition-duration、transition-timing-function、   transition-delay这四个子  属性。通过这四个子属性的配合来完成一个完整的过渡效果。    transition: opacity 3s  —&gt;过渡：不透明度3s <pre><code class="language-html hljs">transition-property: 过渡属性(默认值为all)<br>transition-duration: 过渡持续时间(默认值为0s)<br>transiton-timing-function: 过渡函数(默认值为ease函数)<br>transition-delay: 过渡延迟时间(默认值为0s)</code></pre> </li>1.  CSS3 @keyframes 规则  a：简介        @keyframes 规则是创建动画。        @keyframes 规则内指定一个 CSS 样式和动画将逐步从目前的样式更改为新的样式   1.  transform属性   Transform属性应用于元素的2D或3D转换。这个属性允许你将元素旋转，缩放，移动，倾斜等。 1.  scale,  <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20191214095833437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">  <img alt="" class="has" height="462" src="https://img-blog.csdnimg.cn/20191214095851711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="586">  <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019121409591750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">  <img alt="" class="has" height="409" src="https://img-blog.csdnimg.cn/20191214095937591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">  <img alt="" class="has" height="504" src="https://img-blog.csdnimg.cn/20191214100042785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590"> 1.  CSS3 Animation,CSS3 Animation 是由三部分组成    a：关键帧(keyframes) - 定义动画在不同阶段的状态           关键帧主要分为3个阶段，0%、50%、100%   b：动画属性(properties) - 决定动画的播放时长，播放次数，以及用何种函数式去播放动画等。（可以类比音视频播放器）   c：css属性 - 就是css元素不同关键帧下的状态。 1.  border-top 属性  CSS属性 <strong>border-top</strong>是属性 border-top-width, border-top-style, and border-top-color的三者的缩写  例如：border-top: 10px solid #409EFF;  <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/20191214145118918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"> 
+ </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-CSS外观属性"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/"
+    >CSS外观属性</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.205Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS外观属性<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.color</p>
+<blockquote>
+<p> color属性用于定义文本的颜色 其取值方式有以下3种： </p>
+</blockquote>
+<ul>
+<li>实际工作中，用16进制的写法是最多的，且我们更喜欢简写方式比如#f0代表红色。 <table><thead>|表示表示|属性值
+</thead><tbody>|预定义的颜色值|red，green，blue，pink
+|十六进制|#FF0000，#FF6600，#29D794
+|RGB代码|rgb(255,0,0)或rgb(100%,0%,0%)
+</tbody></table></li>
+</ul>
+<p>2.text-align</p>
+<blockquote>
+<p> text-align属性用于设置文本内容的水平对齐方式，相当于html中的align对齐属性。 </p>
+</blockquote>
+<ul>
+<li>注意：是让盒子里面的文本内容水平居中， 而不是让盒子居中对齐<br>其可用属性值如下： <table><thead>|属性|解释
+</thead><tbody>|left|左对齐（默认值）
+|right|右对齐
+|center|居中对齐
+</tbody></table></li>
+</ul>
+<p>3.text-decoration</p>
+<blockquote>
+<p> text-decoration,通常我们用于给链接修改装饰效果<br> <table><thead>|值|描述</p>
+</blockquote>
+</thead><tbody>|none|默认。定义标准的文本。取消下划线（最常用）
+|underline|定义文本下的一条线。下划线 也是我们链接自带的（常用）
+|overline|定义文本上的一条线。（不用）
+|line-through|定义穿过文本下的一条线。（不常用）
+</tbody></table>
+
+
+<p>4.text-indent</p>
+<blockquote>
+<p> text-indent属性用于设置首行文本的缩进 </p>
+</blockquote>
+<ul>
+<li>其属性值可为不同单位的数值、em字符宽度的倍数、或相对于浏览器窗口宽度的百分比%，允许使用负值。 -  建议使用em作为设置单位。 -  1em 就是一个字的宽度。如果是汉字的段落，1em 就是一个汉字的宽度 <pre><code class="language-css">p &#123;
+      /*行间距*/
+      line-height: 25px;
+      /*首行缩进2个字  em  1个em 就是1个字的大小*/
+      text-indent: 2em;  
+ &#125;</code></pre> </li>
+</ul>
+<p>5.line-height</p>
+<blockquote>
+<p> line-height属性用于设置行间距，就是行与行之间的距离，即字符的垂直间距，一般称为行高。 </p>
+</blockquote>
+<ul>
+<li>line-height常用的属性值单位有三种，分别为像素px，相对值em和百分比%，实际工作中使用最多的是像素px <pre><code>一般情况下，行距比字号大7--8像素左右就可以了。
+line-height: 24px;
+</code></pre> 
+行高测量<br>行高测量方法：<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/8031634f470e114b1bae4f21548e4354.png"><br><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/3a214e8842ac7786729909abd1b5d5d2.png"><code>行高测量方法</code>行高我们利用最多的一个地方是：可以让单行文本在盒子中垂直居中对齐。 <blockquote> </li>
+</ul>
+<p>  <strong>文字的行高等于盒子的高度。</strong>行高   =  上距离 +  内容高度  + 下距离 上距离和下距离总是相等的，因此文字看上去是垂直居中的。 </p>
+<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/4cd41b5c8794db770924ea51b88bb32f.png">
+
+<p>行高与高度的三种关系</p>
+<ul>
+<li> 如果 行高 等 高度  文字会 垂直居中 -  如果行高 大于 高度   文字会 偏下 -  如果行高小于高度   文字会  偏上 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  /*line-height 要设置在font属性下面，否则无效，例如：*/</span><br><span class="line">  height: 80px;</span><br><span class="line">  text-align: center;</span><br><span class="line">  font: normal bold 30px &quot;宋体&quot;;</span><br><span class="line">  line-height: 80px;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>可以使用display:flex;布局方式让文字水平垂直居中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  display: flex;</span><br><span class="line">  align-items: center;     /* 侧轴对齐方式*/</span><br><span class="line">  justify-content: center; /* 主轴对齐方式 */</span><br></pre></td></tr></table></figure>
+
+<p>6.CSS外观属性总结</p>
+<blockquote>
+ <table><thead>|属性|表示|注意点
+</blockquote>
+</thead><tbody>|color|颜色|我们通常用  十六进制   比如 而且是简写形式 #fff
+|line-height|行高|控制行与行之间的距离
+|text-align|水平对齐|可以设定文字水平的对齐方式
+|text-indent|首行缩进|通常我们用于段落首行缩进2个字的距离   text-indent: 2em;
+|text-decoration|文本修饰|记住 添加 下划线  underline  取消下划线  none
+</tbody></table>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-CSS三大特性：继承性,层叠性,优先级"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/"
+    >CSS三大特性：继承性,层叠性,优先级</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.203Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS三大特性：继承性,层叠性,优先级<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.CSS 层叠性</p>
+<blockquote>
+ <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/b344df10be0a874a08eb3facfe676d9f.png"> 
+ -`概念`： 
+</blockquote>
+<ul>
+<li> 所谓层叠性是指多种CSS样式的叠加 -  是浏览器处理冲突的一个能力,如果一个属性通过两个相同选择器设置到同一个元素上，那么这个时候一个属性就会将另一个属性层叠掉 </li>
+<li><code>原则</code>： </li>
+<li> 样式冲突，遵循的原则是就近原则。 那个样式离着结构近，就执行那个样式。 -  样式不冲突，不会层叠。 </li>
+</ul>
+<p>2.CSS 继承性</p>
+<blockquote>
+ <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/9d2cc036b8878879f807166ec03fb36f.png"> 
+ -`概念`： 
+</blockquote>
+<ul>
+<li> 子标签会继承父标签的某些样式，如文本颜色和字号。 -  想要设置一个可继承的属性，只需将它应用于父元素即可。 </li>
+<li><code>注意</code>： </li>
+<li>恰当地使用继承可以简化代码，降低CSS样式的复杂性。比如有很多子级孩子都需要某个样式，可以给父级指定一个，这些孩子继承过来就好了。 -  子元素可以继承父元素的样式（<strong>text-，font-，line-这些元素开头的可以继承，以及color属性</strong>）<br>行高的继承： <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+ &lt;meta charset="UTF-8"&gt;
+ &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+ &lt;title&gt;CSS行高的继承&lt;/title&gt;
+&lt;style&gt;
+body&#123;
+color:cyan;
+font:12px/1.5 bold;
+&#125;</li>
+</ul>
+<p>div&#123;<br>  font-size:40px;//有指定文字大小，则为40x1.5px;<br>&#125;</p>
+<p>  &lt;/style&gt;<br>&lt;/head&gt;</p>
+<p>&lt;body&gt;<br>  &lt;div&gt;zzf1&lt;/div&gt;<br>  &lt;p&gt;我没有指定文字大小&lt;/p&gt;//没有指定文字大小，则为12px;<br>&lt;/body&gt;<br>&lt;/html&gt;</p>
+<p></code></pre><br>  <img alt="在这里插入图片描述" height="337" src="https://img-blog.csdnimg.cn/20200815161259653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2NzQ0NjM1,size_16,color_FFFFFF,t_70#pic_center" width="885"> 
+   </p>
+<p>3.优先级</p>
+<blockquote>
+<p>        <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/58c1cbcf6ab954ad9b8d66e766f1c7d1.png"><br> -<code>概念</code>：定义CSS样式时，经常出现两个或更多规则应用在同一元素上，此时， </p>
+</blockquote>
+<ul>
+<li> 选择器相同，则执行层叠性 -  选择器不同，就会出现优先级的问题。 </li>
+<li><code>权重计算公式</code>： <table><thead>|标签选择器|计算权重公式
+</thead><tbody>|继承或者 *|0,0,0,0
+|每个元素（标签选择器）|0,0,0,1
+|每个类，伪类|0,0,1,0
+|每个ID|0,1,0,0
+|每个行内样式 style=""|1,0,0,0
+|每个!important  最重要的|∞ 无穷大
+</tbody></table></li>
+<li> 值从左到右，左面的最大，一级大于一级，数位之间没有进制，级别之间不可超越。 -  关于CSS权重，我们需要一套计算公式来去计算，这个就是 CSS Specificity（特殊性） -  div { color: pink !important; } </li>
+<li><code>权重叠加</code>： <pre><code class="language-css"> div ul  li   ------&gt;      0,0,0,3
+ .nav ul li   ------&gt;      0,0,1,2
+ a:hover      -----—&gt;      0,0,1,1
+ .nav a       ------&gt;      0,0,1,1
+</code></pre> </li>
+<li><code>继承的权重是0</code>： </li>
+<li> 我们修改样式，一定要看该标签有没有被选中 -  如果选中了，那么以上面的公式来计权重。谁大听谁的。 -  如果没有选中，那么权重是0，因为继承的权重为0. </li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-css简介以及引入规范"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/"
+    >css简介以及引入规范</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.201Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: css简介以及引入规范<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—## CSS构造块</p>
+<p><strong>「1. HTML的局限性」</strong></p>
+<ul>
+<li> HTML满足不了设计者的需求，可以将网页结构与样式相分离，这样就可以在不更改网页结构的前提下，更换网站的样式。 -  操作html属性不方便 -  HTML里面添加样式带来的是无尽的臃肿和繁琐 </li>
+</ul>
+<p><strong>「2. CSS网页的美容师」</strong></p>
+<ul>
+<li> 让我们的网页更加丰富多彩，布局更加灵活自如。 -  CSS最大的贡献：让HTML从样式中脱离，实现了HTML专注去做结构呈现，样式交给CSS </li>
+</ul>
+<p><strong>「3. CSS」</strong>CSS(Cascading Style Sheets)通常称为CSS样式表或层叠样式表(级联样式表)。</p>
+<li> **作用** 
+  <ul>-  主要用于设置HTML页面中的文本内容(字体、大小、对齐方式等)\图片的外形(宽高、边框样式、边距等)以及版面的布局和外观显示样式。 -  CSS以HTML为基础，提供了丰富的功能，如字体、样式、背景的控制及整体排版等，而且可以针对不同的浏览器设置不同的样式。 
+**「4. CSS注释」**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* 这是注释 */</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="引入CSS样式表"><a href="#引入CSS样式表" class="headerlink" title="引入CSS样式表"></a>引入CSS样式表</h3><p><strong>「1.行内式(内联样式)」</strong></p>
+<p>通过标签的style属性来设置元素的样式</p>
+<ul>
+<li> style其实就是标签的属性 -  样式属性和值中间是: -  多组属性值直接用;隔开 -  只能控制当前的标签和以及嵌套在其中的字标签，造成代码冗余。 -  **缺点:**没有实现样式和结构相分离。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;标签名 style=&quot;属性1:属性值1; 属性2:属性值2; 属性3:属性值3;&quot;&amp;gt; 内容 &amp;lt;/标签名&amp;gt;</span><br><span class="line">例如：</span><br><span class="line">&amp;lt;div style=&quot;color: red; font-size: 12px;&quot;&amp;gt;青春不常在，抓紧谈恋爱&amp;lt;/div&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「2.内部样式表(内嵌样式表)」</strong></p>
+<p>也称为内嵌式，将CSS代码集中写在HTML文档的head头部标签中，并且用style标签定义。</p>
+<ul>
+<li> style标签一般位于head标签中，当然理论上他可以放在HTML文档的任何地方。 -  type=”text/css”  在html5中可以省略。 -  只能控制当前的页面 -  **缺点:**没有彻底分离结构与样式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;head&amp;gt;</span><br><span class="line">&amp;lt;style type=&quot;text/CSS&quot;&amp;gt;</span><br><span class="line">    选择器（选择的标签） &#123; </span><br><span class="line">      属性1: 属性值1;</span><br><span class="line">      属性2: 属性值2; </span><br><span class="line">      属性3: 属性值3;</span><br><span class="line">    &#125;</span><br><span class="line">&amp;lt;/style&amp;gt;</span><br><span class="line">&amp;lt;/head&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「3.外部样式表(外链式)」</strong></p>
+<p>也称链入式，是将所有的样式放在一个或多个以.css为扩展名的外部样式表文件中，通过link标签将外部样式表文件链接到HTML文档中。</p>
+<ul>
+<li> <code>rel</code>:定义当前文档与被链接文档之间的关系，在这里需要指定为“stylesheet”，表示被链接的文档是一个样式表文件。 -  <code>href</code>:定义所链接外部样式表文件的URL，可以是相对路径，也可以是绝对路径。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;index.css&quot;&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「4.团队约定-代码风格」</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/*1.紧凑格式 (Compact)*/</span><br><span class="line">h3 &#123; color: deeppink;font-size: 20px;&#125;</span><br><span class="line">// 2.一种是展开格式（推荐）</span><br><span class="line">h3 &#123;</span><br><span class="line"> color: deeppink;</span><br><span class="line">    font-size: 20px;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 团队约定-代码大小写*/</span><br><span class="line">/* 样式选择器，属性名，属性值关键字全部使用小写字母书写，属性字符串允许使用大小写。*/</span><br><span class="line">/* 推荐 */</span><br><span class="line">h3&#123;</span><br><span class="line"> color: pink;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">/* 不推荐 */</span><br><span class="line">H3&#123;</span><br><span class="line"> COLOR: PINK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-CSS复合选择器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/"
+    >CSS复合选择器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.199Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS复合选择器<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.简介</p>
+<blockquote>
+<p> 复合选择器是由两个或多个基础选择器，通过不同的方式组合而成的 </p>
+</blockquote>
+<p>2.后代选择器<strong>，</strong>又称为包含选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>用来选择元素或元素组的子孙后代 -  其写法就是把外层标签写在前面，内层标签写在后面，中间用<strong>「空格」</strong>分隔，先写父亲爷爷，再写儿子孙子。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内 的标签。 <pre><code class="language-css">父级 子级&#123;属性:属性值;属性:属性值;&#125;</li>
+</ul>
+<p>.class h3 &#123;color:red;font-size:16px;&#125;</code></pre><br>  <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"> </p>
+<ul>
+<li> 当标签发生嵌套时，内层标签就成为外层标签的后代。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内的标签。 </li>
+</ul>
+<p>3.子元素选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>子元素选择器只能选择作为某元素子元素(亲儿子)的元素。 -  其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 <code>&amp;gt;</code> 进行连接 -  这里的子,指的是亲儿子。不包含孙子 重孙子之类。 <pre>`.class&gt;h3 {color:red;font-size:14px;}`</pre> </li>
+</ul>
+<p>4.并集选择器</p>
+<blockquote>
+<p> 如果某些选择器定义的相同样式，就可以利用并集选择器，可以让代码更简洁。并集选择器（CSS选择器分组）是各个选择器通过<code>,</code>连接而成的，通常用于集体声明。 </p>
+</blockquote>
+<ul>
+<li>任何形式的选择器（包括标签选择器、class类选择器 id选择器等），都可以作为并集选择器的一部分。 -  并集选择器通常用于集体声明  ，逗号隔开的，所有选择器都会执行后面样式，逗号可以理解为和的意思。 <pre><code class="language-css">比如  
+.one, 
+p , 
+#test &#123;color: #F00;&#125;  
+表示   .one 和 p  和 #test 这三个选择器都会执行颜色为红色。 
+通常用于集体声明。  </code></pre> </li>
+</ul>
+<p>5.链接伪类选择器</p>
+<blockquote>
+<p> 用于向某些选择器添加特殊的效果。写的时候，他们的顺序尽量不要颠倒,按照lvha的顺序。否则可能引起错误。<br> 链接伪类，是利用交集选择器. </p>
+</blockquote>
+<ul>
+<li><code>a:link</code>  未访问的链接 -  <code>a:visited</code>  已访问的链接 -  <code>a:hover</code>  鼠标移动到链接上 -  <code>a:active</code>  选定的链接<br>实际工作中，很少写全四个状态，一般写法如下： <pre><code class="language-css">a &#123;   /* a是标签选择器  所有的链接 */
+   font-weight: 700;
+   font-size: 16px;
+   color: gray;
+      text-decoration: none; /* 清除链接默认的下划线*/
+&#125;
+a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
+   color: red; /*  鼠标经过的时候，由原来的 灰色 变成了红色 */
+&#125;</code></pre> </li>
+</ul>
+<p>6.focus伪类选择器</p>
+<blockquote>
+<p>  :focus 伪类选择器用于选取获得焦点的表单元素。<br> 焦点就是光标，一般情况下是&lt;input&gt;类表单元素才能获取，因此这个选择器也主要针对于表单元素来使用<br> <strong>W3C定义：接收键盘事件或其他用户输入的元素都允许 :focus 选择器。</strong><br> 简单来说就是支持input标签。可以在CSS中采用input:focus{}进行操作。<br> 如下是简单例子<br> &lt;div class=”outer”&gt;&lt;input type=”text” name=”” id=”” value=”” /&gt;&lt;/div&gt;<br> &lt;style&gt;    .outer{<!-- -->     width: 200px;     height: 200px;     background-color: red;    }    input:focus{<!-- -->     background-color: green;    } &lt;/style&gt;<br> <img alt="" src="https://img-blog.csdn.net/20180705113102315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><img alt="" src="https://img-blog.csdn.net/2018070511311843?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><br>                 点击前                                    选中后 </p>
+</blockquote>
+<p>7.复合选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|特征|使用情况|隔开符号及用法
+</blockquote>
+</thead><tbody>|后代选择器|用来选择元素后代|是选择所有的子孙后代|较多|符号是`空格` .nav a
+|子代选择器|选择 最近一级元素|只选亲儿子|较少|符号是`&gt;`   .nav&gt;p
+|交集选择器|选择两个标签交集的部分|既是 又是|较少|`没有符号`  p.one
+|并集选择器|选择某些相同样式的选择器|可以用于集体声明|较多|符号是`逗号` .nav, .header
+|链接伪类选择器|给链接更改状态| |较多|重点记住 a{} 和 a:hover  实际开发的写法
+</tbody></table>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-CSS背景(background)"
   class="article article-type-post"
   itemscope
@@ -584,608 +1204,6 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
 <h3 id="查看数据的导入"><a href="#查看数据的导入" class="headerlink" title="查看数据的导入"></a>查看数据的导入</h3><img alt="" height="631" src="https://img-blog.csdnimg.cn/20210411123055692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="724">
 
 <p>可以发现上面的数据发生了翻倍。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse算术函数"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/"
-    >clickhouse算术函数</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.344Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse算术函数<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—&gt;<br> <pre><code class="language-sql">--求和<br>SELECT plus(12, 21), plus(10, -10), plus(-10, -10);<br>+------------+-------------+--------------+<br>|plus(12, 21)|plus(10, -10)|plus(-10, -10)|<br>+------------+-------------+--------------+<br>|33          |0            |-20           |<br>+------------+-------------+--------------+</p>
-<p>–差值<br>SELECT minus(10, 5), minus(10, -10), minus(-10, -10);<br>+————+————–+—————+<br>|minus(10, 5)|minus(10, -10)|minus(-10, -10)|<br>+————+————–+—————+<br>|5           |20            |0              |<br>+————+————–+—————+</p>
-<p>–积<br>SELECT multiply(12, 2), multiply(12, -2), multiply(-12, -2);<br>+—————+—————-+—————–+<br>|multiply(12, 2)|multiply(12, -2)|multiply(-12, -2)|<br>+—————+—————-+—————–+<br>|24             |-24             |24               |<br>+—————+—————-+—————–+</p>
-<p>–平均值<br>SELECT divide(12, 4), divide(10, 3), divide(2, 4), divide(-4, -2), divide(-4, 2), divide(-4.5, 3);<br>+————-+——————+————+————–+————-+—————+<br>|divide(12, 4)|divide(10, 3)     |divide(2, 4)|divide(-4, -2)|divide(-4, 2)|divide(-4.5, 3)|<br>+————-+——————+————+————–+————-+—————+<br>|3            |3.3333333333333335|0.5         |2             |-2           |-1.5           |<br>+————-+——————+————+————–+————-+—————+</p>
-<p>SELECT intDiv(10, 3), divide(10, 3);<br>+————-+——————+<br>|intDiv(10, 3)|divide(10, 3)     |<br>+————-+——————+<br>|3            |3.3333333333333335|<br>+————-+——————+</p>
-<p>SELECT divide(10, 0), divide(-10, 0); – 出现无穷大字符“ ∞ ”或“ -∞ ”<br>+————-+————–+<br>|divide(10, 0)|divide(-10, 0)|<br>+————-+————–+<br>|∞            |-∞            |<br>+————-+————–+</p>
-<p>SELECT divide(0, 0); – 特殊字符（类似乱码）<br>+————+<br>|divide(0, 0)|<br>+————+<br>|NaN         |<br>+————+</p>
-<p>SELECT intDivOrZero(10, 0);<br>– 0<br>+——————-+<br>|intDivOrZero(10, 0)|<br>+——————-+<br>|0                  |<br>+——————-+</p>
-<p>–求余数<br>SELECT modulo(10, 3); –1<br>+————-+<br>|modulo(10, 3)|<br>+————-+<br>|1            |<br>+————-+</p>
-<p>SELECT modulo(10.5, 3);<br>+—————+<br>|modulo(10.5, 3)|<br>+—————+<br>|1              |<br>+—————+</p>
-<p>–取反<br>SELECT negate(10), negate(-10);<br>+———-+———–+<br>|negate(10)|negate(-10)|<br>+———-+———–+<br>|-10       |10         |<br>+———-+———–+</p>
-<p>–绝对值<br>SELECT abs(-10), abs(10);<br>+——–+——-+<br>|abs(-10)|abs(10)|<br>+——–+——-+<br>|10      |10     |<br>+——–+——-+</p>
-<p>–最大公约数<br>SELECT gcd(12, 24), gcd(-12, -24), gcd(-12, 24);<br>+———–+————-+————+<br>|gcd(12, 24)|gcd(-12, -24)|gcd(-12, 24)|<br>+———–+————-+————+<br>|12         |12           |12          |<br>+———–+————-+————+</p>
-<p>–最小公倍数<br>SELECT lcm(12, 24), lcm(-12, -24), lcm(-3, 4);<br>+———–+————-+———-+<br>|lcm(12, 24)|lcm(-12, -24)|lcm(-3, 4)|<br>+———–+————-+———-+<br>|24         |24           |12        |<br>+———–+————-+———-+</p>
-<p></code></pre> 
-   </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-ClickHouse数据查询"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/"
-    >ClickHouse数据查询</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.334Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: ClickHouse数据查询<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—### 1.查询语法</p>
-<blockquote>
- <pre><code class="language-sql">[WITH expr_list|(subquery)]
-SELECT [DISTINCT] expr_list
-[FROM [db.]table | (subquery) | table_function] [FINAL]
-[SAMPLE sample_coeff]
-[ARRAY JOIN ...]
-[GLOBAL] [ANY|ALL|ASOF] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI] JOIN (subquery)|table (ON &lt;expr_list&gt;)|(USING &lt;column_list&gt;)
-[PREWHERE expr]
-[WHERE expr]
-[GROUP BY expr_list] [WITH TOTALS]
-[HAVING expr]
-[ORDER BY expr_list] [WITH FILL] [FROM expr] [TO expr] [STEP expr]
-[LIMIT [offset_value, ]n BY columns]
-[LIMIT [n, ]m] [WITH TIES]
-[UNION ALL ...]
-[INTO OUTFILE filename]
-[FORMAT format]
-</blockquote>
-<p></code></pre><br> 可以看到ClickHouse的SELECT语句的语法和通用的SQL的SELECT语句非常类似，包括： </p>
-<ul>
-<li>SELECT: 指定返回结果字段- DISTINCT：去重- FROM: 指定要查询的表或子查询- JOIN：表连接，支持内连接和外连接、左连接和右连接- WHERE：筛选条件- GROUP BY：分组，和聚合函数一起使用- HAVING：分组后筛选- ORDER BY：排序- LIMIT：限制返回记录数- UNION ALL：并集；ClickHouse目前只支持UNION ALL，还不支持UNION<br>ClickHouse的SELECT语句中也有一些特殊的用法： </li>
-<li>WITH: 设置查询中要用到的变量- SAMPLE: 数据取样，类似Pandas库的sample()函数- PREWHERE: 预筛选，起到提升性能作用- ARRAY JOIN：数组连接，用来展开数组或嵌套字段，一行变多行- LIMIT BY: 分组，再从每组中取前n条记录- INTO OUTFILE: 导出表数据到文件，再用FORMAT指定文件格式</li>
-</ul>
-<h3 id="2-WITH子句"><a href="#2-WITH子句" class="headerlink" title="2.WITH子句"></a>2.WITH子句</h3><blockquote>
- <pre><code class="language-sql">-- 在WITH子句中定义一个变量并赋值，然后在SELECT子句中通过别名使用该变量
-with '2014-03-17' as dt \
-select count(1) from hits_v1 where EventDate = dt;
-</blockquote>
-<p>– 在WITH子句中定义一个函数，然后在SELECT子句中通过别名使用该函数<br>with round(Duration / 60)as duration_minutes <br>select StartDate, max(duration_minutes) as max_duration_minutes from visits_v1 <br>group by StartDate, Duration <br>order by max_duration_minutes desc <br>limit 10;</p>
-<p>– 在WITH子句中定义一个子查询，然后在SELECT子句中通过别名使用该子查询<br>– 该子查询只能返回一行数据<br>with ( <br>  select sum(Duration) from visits_v1 <br>) as total_duration <br>select StartDate, sum(Duration) / total_duration as duration_percentage from visits_v1 <br>group by StartDate, Duration <br>limit 10;</p>
-<p></code></pre><br> <h3> </h3> </p>
-<h3 id="3-SAMPLE子句"><a href="#3-SAMPLE子句" class="headerlink" title="3.SAMPLE子句"></a>3.SAMPLE子句</h3><blockquote>
-<p> 对使用了MergeTree表引擎的表，并且设置了SAMPLE BY的表，可以使用SAMPLE子句来对数据进行抽样。<br> 表例子：<br> <pre><code class="language-sql">CREATE TABLE tutorial.hits_v1 \<br>(<br>  ...<br>)<br>ENGINE = MergeTree() \<br>PARTITION BY toYYYYMM(EventDate) \<br>ORDER BY (CounterID, EventDate, intHash32(UserID)) \<br>SAMPLE BY intHash32(UserID) \<br>SETTINGS index_granularity = 8192;</p>
-</blockquote>
-<p></code></pre><br> hits_v1表使用MergeTree表引擎，并且SAMPLE BY为将UserID转换成32位的Hash值。<br> <img alt="" height="276" src="https://img-blog.csdnimg.cn/20210428212535801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> SAMPLE子句示例：<br> <pre><code class="language-sql">-- 按比例采样<br>-- 采样结果记录数<br>select count(1) from hits_v1 sample 0.1<br>-- 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1<br>-- 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 limit 10</p>
-<p>– 按记录数采样<br>– 采样记录数较小时，采样结果数据为0条<br>select count(1) from hits_v1 sample 100<br>– 采样记录数大过索引粒度时，采样结果数据记录数接近采样记录数<br>elect count(1) from hits_v1 sample 10000<br>– 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000<br>– 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000 limit 10</p>
-<p>– 按比例和偏移量采样，类似于按比例采样<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 offset 0.3 limit 10<br></code></pre><br> SAMPLE子句数据采样具有幂等性和近似性的特点： </p>
-<ul>
-<li>幂等性：采样条件不变时，两次采样的结果<strong>可能</strong>一样- 近似性：采样范围和采样结果不保证精确</li>
-</ul>
-<h3 id="4-PREWHERE子句"><a href="#4-PREWHERE子句" class="headerlink" title="4.PREWHERE子句"></a>4.PREWHERE子句</h3><blockquote>
-<p> 只有MergeTree表引擎的表才能使用PREWHERE子句，可以将PREWHERE看作是ClickHouse对WHERE子句的优化。<br> ClickHouse默认将WHERE自动优化为PREWHERE:<br> <pre><code class="language-sql">-- optimize_move_to_prewhere为1时，表示开始PREWHERE自动优化<br>select name, value from system.settings where name like '%prewhere%'<br></code></pre> 
-   </p>
-</blockquote>
-<h3 id="5-ARRAY-JOIN子句"><a href="#5-ARRAY-JOIN子句" class="headerlink" title="5.ARRAY JOIN子句"></a>5.ARRAY JOIN子句</h3><blockquote>
-<p> 可以用ARRAY JOIN子句来对数组（Array）或嵌套（Nested）类型做链接查询，可以将一行数组展成多行。<br> ARRAY JOIN数组示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, RefererCategories from hits_v1 where WatchID = 4944118417295196513</p>
-</blockquote>
-<p>– 结果：<br>┌─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │ [6,98,456,8586]   │<br>└─────────────────────┴───────────────────┘</p>
-<p>– 使用ARRAY JOIN<br>select WatchID, RefererCategories <br>from hits_v1 <br>array join RefererCategories <br>where WatchID = 4944118417295196513;</p>
-<p>– 结果：<br>─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │                 6 │<br>│ 4944118417295196513 │                98 │<br>│ 4944118417295196513 │               456 │<br>│ 4944118417295196513 │              8586 │<br>└─────────────────────┴───────────────────┘</p>
-<p></code></pre><br> ARRAY JOIN嵌套类型示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 from hits_v1 where WatchID = 5024825574842900819</p>
-<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1───────────┬─ParsedParams.Key2───┐<br>│ 5024825574842900819 │ [‘gen_timestamp’,’Toolbar’] │ [‘group’,’true” /‘] │<br>└─────────────────────┴─────────────────────────────┴─────────────────────┘</p>
-<p>– 使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 <br>from hits_v1 <br>array join ParsedParams <br>where WatchID = 5024825574842900819;</p>
-<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1─┬─ParsedParams.Key2─┐<br>│ 5024825574842900819 │ gen_timestamp     │ group             │<br>│ 5024825574842900819 │ Toolbar           │ true” /           │<br>└─────────────────────┴───────────────────┴───────────────────┘</p>
-<p></code></pre><br> ARRAY JOIN也支持左连接接<code>LEFT ARRAY JOIN</code>。 </p>
-<h3 id="6-LIMIT-BY子句"><a href="#6-LIMIT-BY子句" class="headerlink" title="6.LIMIT BY子句"></a>6.LIMIT BY子句</h3><blockquote>
-<p> LIMIT BY子句不同于通用SQL的LIMIT子句。<br> <code>LIMIT n BY expression</code> 对SELECT结果先按expression分组，再在每组里选出前n个，类似分类排行榜的概念。<br> 示例：<br> <pre><code class="language-sql">CREATE TABLE limit_by(id Int, val Int) ENGINE = Memory;<br>INSERT INTO limit_by VALUES (1, 10), (1, 11), (1, 12), (2, 20), (2, 21), (2, 22), (3, 31);<br></code></pre><br> <pre><code class="language-sql">-- 排序<br>SELECT * FROM limit_by ORDER BY id, val</p>
-</blockquote>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  1 │  12 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  2 │  22 │<br>│  3 │  31 │<br>└────┴─────┘</p>
-<p>– 分类排序，再在每个分组内取前2条记录<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2 BY id</p>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  3 │  31 │<br>└────┴─────┘</p>
-<p>– 注意，与LIMIT 2的不同<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2</p>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>└────┴─────┘</p>
-<p></code></pre><br> LIMIT BY子句也支持偏移量：<code>LIMIT n OFFSET m BY exression</code> </p>
-<h3 id="7-INTO-OUTFILE子句"><a href="#7-INTO-OUTFILE子句" class="headerlink" title="7.INTO OUTFILE子句"></a>7.INTO OUTFILE子句</h3><blockquote>
-<p> ClickHouse的INTO OUTFILE子句与MySQL的INTO OUTFILE子句类似。<br> <pre><code class="language-sql">-- 输出到当前目录<br>-- 默认格式为TSV<br>-- 注意文件名必须用单引号来括起来，且不能用双引号括起来，否则会报错：Expected string literal<br>-- 目录下不能存在同名文件，否则会报错<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile 'test.tsv'</p>
-</blockquote>
-<p>– 设置格式为CSV，CSV需要为全大小<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile ‘out.csv’ format CSV<br></code></pre> 
-   </p>
-<h3 id="8-执行计划"><a href="#8-执行计划" class="headerlink" title="8.执行计划"></a>8.执行计划</h3><blockquote>
- <h3>查看执行计划</h3> 
- 可以通过以下方式查看执行计划： 
- <ol>- 直接查看执行计划： ch --send_logs_level=trace &lt;&lt;&lt; 'select * from tutorial.hits_v1' &gt; /dev/null <li>可以将以下内容保持到一个脚本文件，比如`chx.sh`中： <pre><code class="language-bash">#!/bin/bash
-</blockquote>
-<p>clickhouse-client –send_logs_level=trace &lt;&lt;&lt; “$1” &gt; /dev/null<br></code></pre> 再通过<code>bash chi.sh &quot;select * from tutorial.hits_v1&quot;</code> 来查看执行计划。 </li>- 也可以在clickhouse-client执行sql同时，用<code>tail -f clickhouse-server.log</code> 查看clickhouse-server的日志。</ol><br> <h3>执行计划示例</h3><br> <code>select * from tutorial.hits_v1</code>的执行计划日志示例：<br> <pre><code class="language-bash">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0<br>&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete<br>&lt;Information&gt; executeQuery: Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.<br>&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 204.54 MiB.<br></code></pre><br> <strong>说明：</strong> </p>
-<ul>
-<li><strong>Key condition: unknown：没有使用主键索引。</strong>- <strong>MinMax index condition: unknown： 没有使用分区索引。</strong>- <strong>Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges： 共扫描了9个分区，共1094个mark。</strong>- <strong>Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.: 读取了8873898行数据，数据大小为7.88GB，用时47.964秒。</strong>- <strong>Peak memory usage (for query): 204.54 MiB.: 内存峰值（最大内存使用量）为204.54MB。</strong><br>将SQL改为只返回一个字段<code>select WatchID from tutorial.hits_v1</code>，再来看执行计划： <pre><code class="language-sql">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0
-&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
-&lt;Information&gt; executeQuery: Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.
-&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 12.32 MiB.
-</code></pre> 
-几个变化： </li>
-<li>Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.: 数据大小从7.88GB减小到67.70MB，用时从47.964秒减小到0.318秒。- Peak memory usage (for query): 12.32 MiB.: 内存峰值从204.54MB减小到12.32MB。<br>再将SQL改为指定分区查询： <pre><code class="language-sql">select WatchID from tutorial.hits_v1 where EventDate = '2014-03-17'
-</code></pre> 
-执行计划日志：  <pre><code class="language-bash">&lt;Debug&gt; executeQuery: (from 127.0.0.1:48102) SELECT WatchID FROM tutorial.hits_v1 WHERE EventDate = '2014-03-17'
-&lt;Debug&gt; InterpreterSelectQuery: MergeTreeWhereOptimizer: condition "EventDate = '2014-03-17'" moved to PREWHERE
-&lt;Trace&gt; ContextAccess (default): Access granted: SELECT(WatchID, EventDate) ON tutorial.hits_v1
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: (column 1 in [16146, 16146])
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: (column 0 in [16146, 16146])
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_1_6_1, approx. 818656, up to 818656 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_7_12_1, approx. 1621472, up to 1621472 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 15 ranges from part 201403_13_18_1, approx. 1349440, up to 1349440 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_19_24_1, approx. 1619776, up to 1619776 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 4 ranges from part 201403_25_25_0, approx. 278528, up to 278528 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_26_26_0, approx. 286720, up to 286720 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 2 ranges from part 201403_27_27_0, approx. 294912, up to 294912 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_28_28_0, approx. 229376, up to 229376 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_29_29_0, approx. 253952, up to 253952 rows starting from 0
-&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
-&lt;Information&gt; executeQuery: Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.
-&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 16.32 MiB.
-</code></pre> </li>
-</ul>
-<p> <strong>说明：</strong> </p>
-<ul>
-<li>MergeTreeWhereOptimizer: condition “EventDate = ‘2014-03-17’” moved to PREWHERE： 启动了PREWHERE优化。- Key condition: (column 1 in [16146, 16146])： 用了主键索引。- MinMax index condition: (column 0 in [16146, 16146])： 用了分区索引。- Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges：从1094 marks减少到833 marks。- Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.： 数据大小从67.70MB变为61.49MB，用时从0.318秒减少到0.097秒。</li>
-</ul>
-<h3 id="执行计划示例"><a href="#执行计划示例" class="headerlink" title="执行计划示例"></a>执行计划示例</h3> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之不常用数据格式"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/"
-    >clickhouse输入输出格式之不常用数据格式</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.326Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之不常用数据格式<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# 1. Native</p>
-<blockquote>
-<p> 数据以二进制数据块的方式进行读写。 数据的导出： clickhouse-client –query=“SELECT * FROM tsv_demo FORMAT Native” &gt; a.native<br> 数据的导入： clickhouse-client –query=“insert into tsv_demo FORMAT Native” &lt; a.native </p>
-</blockquote>
-<h1 id="2-Null"><a href="#2-Null" class="headerlink" title="2. Null"></a>2. Null</h1><blockquote>
-<p> 主要用于测试性能。 查询会被处理，并且数据会被传送到客户端，但是什么也不输出。 Null格式只能用于查询， 不能用于数据的导入。 </p>
-</blockquote>
-<h1 id="3-Pretty"><a href="#3-Pretty" class="headerlink" title="3. Pretty"></a>3. Pretty</h1><blockquote>
-<p> PrettyCompact：在交互式模式下，默认的数据显示格式。 PrettySpace </p>
-</blockquote>
-<h1 id="4-Values"><a href="#4-Values" class="headerlink" title="4. Values"></a>4. Values</h1><blockquote>
-<p> 每行之间使用逗号分隔，列之间也是使用逗号分隔。在括号中打印每一行。 INSERT INTO XX values<br> INSERT INTO XX FORMAT Values<br> insert into tsv_demo FORMAT Values (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’), (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’); </p>
-</blockquote>
-<h1 id="5-Vertical"><a href="#5-Vertical" class="headerlink" title="5. Vertical"></a>5. Vertical</h1><blockquote>
-<p> 数据以垂直的格式进行展示。 \G </p>
-</blockquote>
-<ul>
-<li>XML 只支持数据的查看。<br>select * from tsv_demo limit 2 FORMAT XML; </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之Parquet"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/"
-    >clickhouse输入输出格式之Parquet</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.320Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之Parquet<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# Parquet输入输出格式</p>
-<blockquote>
-<p> 支持Parquet格式的导出和导入。 </p>
-</blockquote>
-<h1 id="Parquet和ClickHouse类型的匹配关系"><a href="#Parquet和ClickHouse类型的匹配关系" class="headerlink" title="Parquet和ClickHouse类型的匹配关系"></a>Parquet和ClickHouse类型的匹配关系</h1><blockquote>
- <img alt="" height="772" src="https://img-blog.csdnimg.cn/20210411161702364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- 不支持的Parquet数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。 
- **注意：** 
-</blockquote>
-<ul>
-<li>ClickHouse表的列名必须与Parquet表的列名一致。- ClickHouse表的列数据类型可以不同于插入的Parquet数据类型。 在插入数据时， ClickHouse根据上表解释数据类型， 然后将数据类型转换为ClickHouse表的列数据类型。</li>
-</ul>
-<h1 id="数据的导出："><a href="#数据的导出：" class="headerlink" title="数据的导出："></a>数据的导出：</h1><p>备注：表随便找一张</p>
-<blockquote>
-<p> 命令：clickhouse-client –query=”SELECT * FROM tutorial.tsv_demo FORMAT Parquet” &gt; parquet_demo.parquet<br> <img alt="" height="142" src="https://img-blog.csdnimg.cn/20210411165153551.png" width="1200"> </p>
-</blockquote>
-<h1 id="数据的导入："><a href="#数据的导入：" class="headerlink" title="数据的导入："></a>数据的导入：</h1><blockquote>
-<p> 创建测试表：<br> 命令：create table parquet_demo (srcip String, destip String, time String) ENGINE=TinyLog;<br> 导入命令：<br> cat parquet_demo.parquet | clickhouse-client –query=”INSERT INTO parquet_demo FORMAT Parquet” </p>
-</blockquote>
-<h3 id="导入的数据查询："><a href="#导入的数据查询：" class="headerlink" title="导入的数据查询："></a>导入的数据查询：</h3><blockquote>
- <img alt="" height="311" src="https://img-blog.csdnimg.cn/20210411171838671.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"> 
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之ORC"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/"
-    >clickhouse输入输出格式之ORC</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.311Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之ORC<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# ORC数据的输入输出</p>
-<p>仅支持ORC格式的写入。</p>
-<h1 id="ORC和CH数据类型的匹配关系"><a href="#ORC和CH数据类型的匹配关系" class="headerlink" title="ORC和CH数据类型的匹配关系"></a>ORC和CH数据类型的匹配关系</h1><blockquote>
- <img alt="" height="721" src="https://img-blog.csdnimg.cn/20210411172805489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- **备注：** 
-</blockquote>
-<ul>
-<li>不支持的ORC数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。- ClickHouse表的列名必须与ORC表的列名一致。</li>
-</ul>
-<h1 id="使用Spark生成ORC文件"><a href="#使用Spark生成ORC文件" class="headerlink" title="使用Spark生成ORC文件"></a>使用Spark生成ORC文件</h1><blockquote>
-<p> val list = List(   (“113.248.234.232”, “123.212.22.01”, “2018-07-12 14:35:31”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:26:26”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:22:13”),   (“187.248.135.230”, “221.228.112.45”, “2019-08-09 13:17:39”),   (“187.248.234.232”, “221.228.112.24”, “2019-08-09 20:51:16”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 17:22:56”) )<br> val rdd = sc.makeRDD(list) import spark.implicits._ val df = rdd.toDF(“srcip”, “destip”, “time”) df.repartition(1).write.format(“orc”).mode(“append”).save(“/tmp/orc”)   </p>
-</blockquote>
-<h1 id="创建测试表"><a href="#创建测试表" class="headerlink" title="创建测试表"></a>创建测试表</h1><blockquote>
-<p> create table orc_demo (srcip String, destip String, time DateTime) ENGINE=TinyLog; </p>
-</blockquote>
-<h1 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h1><blockquote>
-<p> cat file.orc | clickhouse-client –query=”INSERT INTO test.orc_demo FORMAT ORC” </p>
-</blockquote>
-<h1 id="查询结果"><a href="#查询结果" class="headerlink" title="查询结果"></a>查询结果</h1><blockquote>
-<p> <code>select * from orc_demo</code> </p>
-</blockquote>
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318163404299.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70">
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/"
-    >clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.304Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# JSON</p>
-<h2 id="JSON格式的输入输出"><a href="#JSON格式的输入输出" class="headerlink" title="JSON格式的输入输出"></a>JSON格式的输入输出</h2><p>JSON格式只支持数据的输出，不支持数据的解析（数据导入）。</p>
-<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><h3 id="建表插数据"><a href="#建表插数据" class="headerlink" title="建表插数据"></a>建表插数据</h3><blockquote>
- <pre><code class="language-sql">create table t_json_demo(id UInt8, prov String) ENGINE=TinyLog;
-insert into t_json_demo values(1, 'jiangsu'),
-(1, 'jiangsu'),
-(2, 'anhui'),
-(2, 'anihu'),
-(3, 'beijing');
-</code></pre> 
-</blockquote>
-<h3 id="查询演示"><a href="#查询演示" class="headerlink" title="查询演示"></a>查询演示</h3><p><strong>以JSON格式查询</strong></p>
-<blockquote>
-<p> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="854" src="https://img-blog.csdnimg.cn/20210411144340734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="532"> </p>
-</blockquote>
-<h3 id="取出value的双引号"><a href="#取出value的双引号" class="headerlink" title="取出value的双引号"></a>取出value的双引号</h3><blockquote>
-<p> 默认情况下， Int64和UInit64的整型使用双引号包裹， 如果要移除双引号，设置配置参数output_format_json_quote_64bit_integers为0。<br> 命令：set output_format_json_quote_64bit_integers=0;<br> 再进行同样的查询<br> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="843" src="https://img-blog.csdnimg.cn/20210411144556516.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528"> </p>
-</blockquote>
-<h3 id="查询时出现rows-before-limit-at-least"><a href="#查询时出现rows-before-limit-at-least" class="headerlink" title="查询时出现rows_before_limit_at_least"></a>查询时出现rows_before_limit_at_least</h3><blockquote>
-<p> 只有查询包含LIMIT时才输出， 只有在包含group by的语句中才有意义。当查询没有LIMIT时， 执行结果的最小行数。 </p>
-</blockquote>
-<h3 id="设置显示极值的参数extremes-1（默认为0）"><a href="#设置显示极值的参数extremes-1（默认为0）" class="headerlink" title="设置显示极值的参数extremes=1（默认为0）"></a>设置显示极值的参数extremes=1（默认为0）</h3><blockquote>
-<p> set extremes=1;<br> 在进行查询<code>select id,count() as cnt from t_json_demo group by id format JSON;</code><br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318151530860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
-</blockquote>
-<p> </p>
-<h1 id="JSONCompact"><a href="#JSONCompact" class="headerlink" title="JSONCompact"></a>JSONCompact</h1><h2 id="JSONCompact的输入输出"><a href="#JSONCompact的输入输出" class="headerlink" title="JSONCompact的输入输出"></a>JSONCompact的输入输出</h2><blockquote>
-</blockquote>
-<ul>
-<li>JSON格式的数据以对象的方式输出， 而JSONCompact以数组的方式输出。- JSONCompact只支持数据的查看， 不支持数据的导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONCompact;` 
-<img alt="" height="729" src="https://img-blog.csdnimg.cn/20210411145009619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"> </li>
-</ul>
-<h1 id="JSONEachRow"><a href="#JSONEachRow" class="headerlink" title="JSONEachRow"></a>JSONEachRow</h1><h2 id="JSONEachRow数据输入输出"><a href="#JSONEachRow数据输入输出" class="headerlink" title="JSONEachRow数据输入输出"></a>JSONEachRow数据输入输出</h2><blockquote>
-</blockquote>
-<ul>
-<li>每行数据以换行符分隔的JSON对象。- 支持数据的输出和数据导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONEachRow;` 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318152711341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
-</ul>
-<h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
-</blockquote>
-<ul>
-<li>对象中键值对的顺序可任意排列。- 缺失某些字段。<h3>建表插入数据</h3> 
-<pre><code class="language-sql">#建表
-create table UserActivity (PageViews UInt8, UserID String, Duration UInt64, Sign Int8) ENGINE TinyLog;
-#插入数据
-INSERT INTO UserActivity FORMAT JSONEachRow &#123;"PageViews":5, "UserID":"4324182021466249494", "Duration":146,"Sign":-1&#125; &#123;"UserID":"4324182021466249494","PageViews":6,"Duration":185,"Sign":1&#125;
-</code></pre> 
-<h2>缺失值处理演示</h2> 
-<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS example_table
-(
- x UInt32,
- a DEFAULT x + 2
-) ENGINE = Memory;
-# 第二条数据第二个值没有设置
-insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":4&#125;;
-</code></pre> 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154207105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
-</ul>
-<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><blockquote>
-<p> 参数：input_format_defaults_for_omitted_fields 如果为0， 则x和a的默认值等于0（即UInt32数据类型的默认值）。 如果为1， 则x的默认值等于0， 但a的默认值等于x+2。 input_format_defaults_for_omitted_fields=1 </p>
-</blockquote>
-<h3 id="嵌套数据结构"><a href="#嵌套数据结构" class="headerlink" title="嵌套数据结构"></a>嵌套数据结构</h3><p><strong>案例演示</strong></p>
-<p><strong>建表插入数据</strong></p>
-<blockquote>
-<p> #建表 CREATE TABLE json_each_row_nested (n Nested (s String, i Int32) ) ENGINE = Memory; # 插入数据 INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n.s”: [“abc”, “def”], “n.i”: [1, 23]}; # 查看数据 select * from json_each_row_nested;<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154828387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
-</blockquote>
-<h3 id="要将数据作为分层JSON对象插入"><a href="#要将数据作为分层JSON对象插入" class="headerlink" title="要将数据作为分层JSON对象插入"></a>要将数据作为分层JSON对象插入</h3><blockquote>
-<p> 需要设置input_format_import_nested_json=1。（默认为0） </p>
-</blockquote>
-<h3 id="当参数设置为零时"><a href="#当参数设置为零时" class="headerlink" title="当参数设置为零时"></a>当参数设置为零时</h3><blockquote>
-<p> 当需要设置input_format_import_nested_json=0时： INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n”: {“s”: [“abc”, “def”], “i”: [1, 23]}}<br> Exception on client: Code: 117. DB::Exception: Unknown field found while parsing JSONEachRow format: n<br> Connecting to 192.168.0.200:9000 as user default. Connected to ClickHouse server version 20.1.4 revision 54431. </p>
-</blockquote>
  
       <!-- reward -->
       

@@ -160,6 +160,431 @@
     
     
     <article
+  id="post-Git之克隆仓库"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Git%E4%B9%8B%E5%85%8B%E9%9A%86%E4%BB%93%E5%BA%93/"
+    >Git之克隆仓库</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Git%E4%B9%8B%E5%85%8B%E9%9A%86%E4%BB%93%E5%BA%93/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.928Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Git之克隆仓库<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—一：简介</p>
+<p>      首先我们需要了解一下，我们为什么要克隆仓库？它的作用是什么？        因为在日常的工作中，我们开发项目是一个小团队，是多个人一起开发项目，而不是一个人开发。        那么这样的话，我们就需要将远程仓库的代码克隆一份到本地，然后在本地进行开发，同时在我们        开发完成之后我们是需要将我们开发完成后的代码提交到远程仓库的，这样的话别人就可以获取到        对方提交的代码，才可以一起协作开发。注意：<strong>克隆GitHub上面的仓库前提是本地Git已经和GitHub        远程连接起来了</strong>。</p>
+<p>二：我们在GitHub上面创建一个远程仓库进行操作</p>
+<p>       ⑴在GitHub上新建一个仓库            <img alt="" class="has" height="604" src="https://img-blog.csdn.net/20180923220712244?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="599">            <img alt="" class="has" height="485" src="https://img-blog.csdn.net/20180923220748307?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="716">       ⑵下面我们需要将在GitHub上创建的远程仓库克隆到本地             a：首先我们在本地新建一个文件夹用于存放仓库                   <img alt="" class="has" height="184" src="https://img-blog.csdn.net/2018092322105792?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="459">           b：通过命令窗口进行操作：先进入到指定的目录下，然后使用克隆命令：                git clone <a target="_blank" rel="noopener" href="https://github.com/kangf897570/clone_reso_demo.git">https://github.com/kangf897570/clone_reso_demo.git</a>                注释：git clone +GitHub上创建的仓库地址（被克隆仓库的地址）                <img alt="" class="has" height="145" src="https://img-blog.csdn.net/20180923221720458?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="454">           c：下面我们通过命令创建一个文件提交到本地仓库，并且同步到远程仓库               <img alt="" class="has" height="320" src="https://img-blog.csdn.net/20180923222316889?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="546">               <img alt="" class="has" height="284" src="https://img-blog.csdn.net/20180923222430525?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="566">               <img alt="" class="has" height="268" src="https://img-blog.csdn.net/20180923222659693?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">               <img alt="" class="has" height="237" src="https://img-blog.csdn.net/20180923223007917?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="539">               效果：                 <img alt="" class="has" height="361" src="https://img-blog.csdn.net/20180923223049167?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508"></p>
+<p>三：通过SourceTree的图形化界面进行操作</p>
+<p>       ⑴在GitHub上面创建一个远程仓库             <img alt="" class="has" height="592" src="https://img-blog.csdn.net/20180923223844860?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="632"><img alt="" class="has" height="476" src="https://img-blog.csdn.net/20180923223914359?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="732">         ⑵打开SourceTree对远程仓库进行克隆操作，点击克隆              <img alt="" class="has" height="532" src="https://img-blog.csdn.net/20180923224315314?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="681">              <img alt="" class="has" height="335" src="https://img-blog.csdn.net/20180923224514744?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="582">        ⑶我们在本地管理器中添加一点文件同步到远程仓库中             <img alt="" class="has" height="382" src="https://img-blog.csdn.net/20180923224737138?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="809">             <img alt="" class="has" height="374" src="https://img-blog.csdn.net/20180923224828279?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="695">               <img alt="" class="has" height="386" src="https://img-blog.csdn.net/20180923225018780?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="540">               <img alt="" class="has" height="330" src="https://img-blog.csdn.net/20180923225322641?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="533">               <img alt="" class="has" height="491" src="https://img-blog.csdn.net/20180923225352768?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="597">             效果：                  <img alt="" class="has" height="419" src="https://img-blog.csdn.net/20180923225441117?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="580"></p>
+<p><strong>以上就是克隆的基本操作了。</strong></p>
+<p>                             </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Git工具之标签管理"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Git%E5%B7%A5%E5%85%B7%E4%B9%8B%E6%A0%87%E7%AD%BE%E7%AE%A1%E7%90%86/"
+    >Git工具之标签管理</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Git%E5%B7%A5%E5%85%B7%E4%B9%8B%E6%A0%87%E7%AD%BE%E7%AE%A1%E7%90%86/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.926Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Git工具之标签管理<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—# 一：简介</p>
+<p>         首先我们需要知道标签是用来做什么的？它具体的作用是什么？          在我们平时的工作中，当我们开发完一个模块或者功能时，我们需要发布一个新的版本，通常我们会在版本库中打一个标                 签，这样我们就可以知道版本所对应的时间，那么以后如果我们想要回滚到某一时刻的版本，那么我们就可以通过标签找到             这一时间的版本，从而实现回滚。并且创建标签和删除标签的效率是很高的。在实际的项目中一般都是通过标签来进行版本             回滚的。</p>
+<p>二：和标签相关的命令：</p>
+<p>         1：查看所有标签                  git tag</p>
+<p>          2：创建标签                   git tag name   —-&gt;name就是你要创建的标签的名称           3：指定提交标签的备注信息                  git tag -a name -m “标签备注信息”           4：删除标签                   git tag -d name   —-&gt;name就是你要删除的标签的名称          5：标签发布(这个是将本地仓库的标签同步到远程仓库中)                   git push origin name   </p>
+<p>三：下面我们通过实际的例子来看一下</p>
+<p>        1：我们关联好GitHub上的远程仓库和本地仓库               <img alt="" class="has" height="432" src="https://img-blog.csdn.net/20180924102746651?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="582">               <img alt="" class="has" height="196" src="https://img-blog.csdn.net/20180924102851586?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="560"></p>
+<p>         2：我们向本地仓库中添加一个文件                <img alt="" class="has" height="296" src="https://img-blog.csdn.net/20180924103229919?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="539">                <img alt="" class="has" height="317" src="https://img-blog.csdn.net/20180924103814964?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="428">                <img alt="" class="has" height="217" src="https://img-blog.csdn.net/20180924104003831?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="556">                <img alt="" class="has" height="430" src="https://img-blog.csdn.net/20180924104026921?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="554">               3：下面我们来查看一下当前仓库的所有标签                    <img alt="" class="has" height="163" src="https://img-blog.csdn.net/20180924104315571?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="549">                 4：下面我们来创建一个标签                    <img alt="" class="has" height="149" src="https://img-blog.csdn.net/20180924104753986?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="395">               5：因为我们刚刚文件已经上传到远程仓库，所以我们将标签页同步过去                   <img alt="" class="has" height="111" src="https://img-blog.csdn.net/20180924105727186?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="532">                   <img alt="" class="has" height="437" src="https://img-blog.csdn.net/20180924105810825?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="425"></p>
+<p>              6：那么下面我们再通过SourceTree工具再次提交一次修改后的文件                     <img alt="" class="has" height="278" src="https://img-blog.csdn.net/20180924191657488?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="617">                     <img alt="" class="has" height="416" src="https://img-blog.csdn.net/20180924191908206?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="702">                     <img alt="" class="has" height="392" src="https://img-blog.csdn.net/2018092419213989?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="598">                     <img alt="" class="has" height="417" src="https://img-blog.csdn.net/20180924193734365?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="635">               7：下面我们使用SourceTree工具为刚刚提交的版本打上标签                    <img alt="" class="has" height="366" src="https://img-blog.csdn.net/20180924194043137?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="634">                   <img alt="" class="has" height="464" src="https://img-blog.csdn.net/20180924194314598?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508">                      8：下面我们如果将标签删除会怎么样呢？                       <img alt="" class="has" height="254" src="https://img-blog.csdn.net/20180924194730285?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="363">                               <img alt="" class="has" height="136" src="https://img-blog.csdn.net/20180924194756286?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="369">                       <img alt="" class="has" height="247" src="https://img-blog.csdn.net/20180924194924736?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="483">            <strong>上面就是Git标签管理基本的内容了OK!</strong></p>
+<p> </p>
+<p>  </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-git常用的相关操作命令"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/git%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/"
+    >git常用的相关操作命令</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/git%E5%B8%B8%E7%94%A8%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.924Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: git常用的相关操作命令<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—title: git常用的相关操作命令<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—1.   命令：git rm -r –cached 文件路径 1.    </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Git查看某一个文件的历史提交信息"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Git%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%86%E5%8F%B2%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AF/"
+    >Git查看某一个文件的历史提交信息</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Git%E6%9F%A5%E7%9C%8B%E6%9F%90%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E7%9A%84%E5%8E%86%E5%8F%B2%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AF/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.922Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Git查看某一个文件的历史提交信息<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—工作中我们有时候想要查看某一个文件的历史提交版本,]</p>
+<p>还想看都修改过那些内容,那么这两个简单的命令就会帮到你了,</p>
+<p>话不多说,comeBaby……</p>
+<p>1,首先查看一个文件的历史提交信息</p>
+<p>**git log 文件名 **</p>
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/b6e7617d09735246118484559efcd0a7.png">
+
+<p>2.查看某个版本文件修改情况</p>
+<p><strong>git show 版本号  文件名</strong></p>
+<img alt="" src="https://img-blog.csdnimg.cn/img_convert/b556f11dc21547773f506a6bac15483f.png">
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Git仓库之分支管理"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Git%E4%BB%93%E5%BA%93%E4%B9%8B%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/"
+    >Git仓库之分支管理</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Git%E4%BB%93%E5%BA%93%E4%B9%8B%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.917Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Git仓库之分支管理<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—一：简介</p>
+<p>       在日常工作中，如果我们要开发一个功能，但是这个功能模块需要几天的时间才能够完成，那么我们这几天就        无法将我们没有开发完成的代码提交到仓库中，因为怕没有开发完的代码有问题会对原有的功能产生影响，但是        如果我们把这个功能开发完成之后再提交，就会存在丢失进度的风险，因为你不敢去更新别人上传的最新代码，怕        产生冲突。那么这个时候我们就可以使用git仓库的分支管理策略，这个实际上就是一种生成现有代码的物理拷贝，        我们开发的时候只需要切换到当前的分支即可。当然我们的代码库只会有一个主分支，所有提供给用户使用的正式        版本都会在这个主分支上发布。</p>
+<p>二：下面我们在本地新建一个本地仓库进行实际演示</p>
+<p>       ⑴初始化一个新的仓库，并且向里面添加一个新的文件，然后提交commit到本地仓库             <img alt="" class="has" height="204" src="https://img-blog.csdn.net/20180924215335935?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="510">               <img alt="" class="has" height="275" src="https://img-blog.csdn.net/20180924221746113?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="534">             从上面的git status命令中可以发现，我们默认是在master分支上。        ⑵创建一个新的分支branch_x             <img alt="" class="has" height="99" src="https://img-blog.csdn.net/20180924222103185?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="455">             命令：git branch +分支命令              <img alt="" class="has" height="129" src="https://img-blog.csdn.net/20180924222321248?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="468">              命令：git branch         ⑶切换到我们新建的分支上             <img alt="" class="has" height="179" src="https://img-blog.csdn.net/2018092422270061?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="486">             命令：git checkout + 分支名称        ⑷下面我们在我们新建的分支上向文件中添加内容，并且提交到本地仓库            <img alt="" class="has" height="285" src="https://img-blog.csdn.net/20180924223026874?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="507">       ⑸我们需要切换到master分支，然后将branch_x分支上的新增内容合并到主分支master上           <img alt="" class="has" height="228" src="https://img-blog.csdn.net/20180924223304248?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="484">           合并命令：git merge +要合并到主分支的其他分支名称。       ⑸查看主分支上文件内容            <img alt="" class="has" height="173" src="https://img-blog.csdn.net/20180924223425699?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="443">        ⑹删除分支的命令             <img alt="" class="has" height="161" src="https://img-blog.csdn.net/2018092422355437?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="497">            命令：git branch -d +要删除分支的名称</p>
+<p>三：下面我们使用图形化界面演示一下</p>
+<p>       ⑴新建一个仓库             <img alt="" class="has" height="424" src="https://img-blog.csdn.net/20180924223830511?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="704">          ⑵向这个仓库中初始化添加一个文件                <img alt="" class="has" height="340" src="https://img-blog.csdn.net/20180924224037552?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="578">           ⑶我们将文件暂存并且提交commit到本地仓库                <img alt="" class="has" height="416" src="https://img-blog.csdn.net/20180924224224235?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="559">         ⑷创建一个分支，点击分支并且指定在哪一个版本代码基础上创建新的分支              <img alt="" class="has" height="341" src="https://img-blog.csdn.net/2018092422434625?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="729">         ⑸在branch_one分支下修改文件内容，并且提交             <img alt="" class="has" height="272" src="https://img-blog.csdn.net/2018092422464935?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="812">             <img alt="" class="has" height="340" src="https://img-blog.csdn.net/20180924224807270?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="679">        ⑹切换到master分支              <img alt="" class="has" height="289" src="https://img-blog.csdn.net/20180924225051280?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="705">         ⑺合并branch_demo上的内容              <img alt="" class="has" height="616" src="https://img-blog.csdn.net/20180924225343341?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="751">             效果：OK               <img alt="" class="has" height="336" src="https://img-blog.csdn.net/20180924225516380?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="749"></p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Git版本控制工具之Windows系统安装"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7%E4%B9%8BWindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/"
+    >Git版本控制工具之Windows系统安装</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7%E4%B9%8BWindows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/" class="article-date">
+  <time datetime="2021-07-18T14:23:18.915Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Git版本控制工具之Windows系统安装<br>categories:</p>
+<ul>
+<li>git</li>
+</ul>
+<p>—1：Git安装</p>
+<p>        ⑴Windows版本Git下载</p>
+<p>                a：地址</p>
+<p>                        </p>
+<p>                        <img alt="" class="has" height="514" src="https://img-blog.csdn.net/20180922114746546?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="672"></p>
+<p>                        注意：我们上面下载的是2.19.0的windows 64位的版本。</p>
+<p>       </p>
+<p>⑵进行安装如下</p>
+<p>               a：点击安装的包</p>
+<p>                        <img alt="" class="has" height="46" src="https://img-blog.csdn.net/20180922114821871?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="350">      </p>
+<p>                        <img alt="" class="has" height="392" src="https://img-blog.csdn.net/20180922114822778?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="509"></p>
+<p>                        <img alt="" class="has" height="387" src="https://img-blog.csdn.net/20180922114822704?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508"></p>
+<p>                        </p>
+<p>                        <img alt="" class="has" height="394" src="https://img-blog.csdn.net/20180922114824350?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="509"></p>
+<p>                        <img alt="" class="has" height="394" src="https://img-blog.csdn.net/20180922114822622?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="506"></p>
+<p>                        <img alt="" class="has" height="392" src="https://img-blog.csdn.net/20180922114824786?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="507"></p>
+<p>                        <img alt="" class="has" height="389" src="https://img-blog.csdn.net/20180922114824339?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508"></p>
+<p>                        <img alt="" class="has" height="392" src="https://img-blog.csdn.net/20180922114824317?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="507"></p>
+<p>                        后面一路Next即可，对于初级的用户而言，不需要太关注里面的安装信息。</p>
+<p>      ⑶安装完成之后我们需要配置自己的用户信息</p>
+<p>            a：为什么我们需要配置用户信息呢？</p>
+<p>                    因为Git是分布式版本控制系统， 所以要链接Git我们需要设置相应的链接用户。</p>
+<p>            b：配置用户信息的命令</p>
+<p>                    1：git config –global user.name “tyler”   ——&gt;这个是用来设置用户名的</p>
+<p>                    2：git config –global user.email “<a href="mailto:&#116;&#121;&#x6c;&#x65;&#114;&#x40;&#49;&#54;&#51;&#x2e;&#x63;&#x6f;&#x6d;">&#116;&#121;&#x6c;&#x65;&#114;&#x40;&#49;&#54;&#51;&#x2e;&#x63;&#x6f;&#x6d;</a>“   ——&gt;这个是用来设置用户邮箱的</p>
+<p>                    </p>
+<p>                    注释：  这两条信息很重要，每次Git提交时都会引用这两条信息，说明是谁提交了更新，所以</p>
+<p>                                会随着更新内容一起被永久的纳入历史记录。</p>
+<p>                                <img alt="" class="has" height="77" src="https://img-blog.csdn.net/20180922114849953?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="674"></p>
+<p>2：安装之后我们需要通过命令窗口打开Git的配置信息</p>
+<p>        a：在开始—》搜索Git Bash</p>
+<p>                <img alt="" class="has" height="607" src="https://img-blog.csdn.net/20180922114930158?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="392"></p>
+<p>         b：打开后的效果</p>
+<p>                 <img alt="" class="has" height="376" src="https://img-blog.csdn.net/201809221149314?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="583">      </p>
+<p>         c：在窗口配置我们的用户信息</p>
+<p>                <img alt="" class="has" height="215" src="https://img-blog.csdn.net/20180922114931757?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="464"></p>
+<p>        d：下面我们通过下面的命令查看用户信息是否配置成功</p>
+<p>                <img alt="" class="has" height="63" src="https://img-blog.csdn.net/20180922114931217?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="264"></p>
+<p>                <img alt="" class="has" height="365" src="https://img-blog.csdn.net/20180922114931759?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="478"></p>
+<p>         OK上面的操作之后就代表Git已经安装OK了。</p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-FastDFS简介"
   class="article article-type-post"
   itemscope
@@ -442,1177 +867,6 @@
 </blockquote>
 <h3 id="3、开始配置es"><a href="#3、开始配置es" class="headerlink" title="3、开始配置es"></a>3、开始配置es</h3><blockquote>
 <p> 3.1) 进入/opt/es781/elasticsearch-7.8.1/plugins/ik/config目录下修改IKAnalyzer.cfg.xml<br> <img alt="" height="363" src="https://img-blog.csdnimg.cn/20210704143225821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="925"><br> 3.2）重启es<br> 3.3）使用kibana查看<br>      <img alt="" height="136" src="https://img-blog.csdnimg.cn/20210704143626716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="578"><br> 3.4）测试一个单词“就是我”<br>       <img alt="" height="190" src="https://img-blog.csdnimg.cn/20210704143741562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591"><br>      我们在nginx的hotwords.txt中添加这个单词<br>        <img alt="" height="130" src="https://img-blog.csdnimg.cn/20210704143923740.png" width="506"><br> 不重启es直接查询：<br> <img alt="" height="280" src="https://img-blog.csdnimg.cn/2021070414394629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1053"> </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-ELK知识点学习"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/ELK%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >ELK知识点学习</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/ELK%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.453Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: ELK知识点学习<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—title: ELK知识点学习<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch之自动补全案例实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%B9%8B%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/"
-    >Elasticsearch之自动补全案例实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%B9%8B%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.451Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch之自动补全案例实战<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、案例需求：</p>
-<blockquote>
-<p> 通过拼音以及汉字筛选对应的明星！ </p>
-</blockquote>
-<h3 id="2、设置分词器以及mapping"><a href="#2、设置分词器以及mapping" class="headerlink" title="2、设置分词器以及mapping"></a>2、设置分词器以及mapping</h3><blockquote>
- <pre><code class="language-javascript">PUT starts
-&#123;
-  "settings": &#123;
-    "analysis": &#123;
-      "analyzer": &#123;
-        "start_name_analyzer":&#123;
-          "char_filter":["html_strip"],
-          "tokenizer":"keyword",
-          "filter":"start_name_filter"
-        &#125;
-      &#125;,
-      "filter": &#123;
-        "start_name_filter":&#123;
-          "type":"pinyin",
-          "keep_full_pinyin":false,
-          "keep_joined_full_pinyin":true,
-          "keep_original": true
-        &#125;
-      &#125;
-    &#125;
-  &#125;,
-  "mappings": &#123;
-    "properties": &#123;
-      "name":&#123;
-        "type": "completion",
-        "analyzer": "start_name_analyzer",
-        "search_analyzer": "keyword"
-      &#125;
-    &#125;
-  &#125;
-&#125;</code></pre> 
- <img alt="" height="808" src="https://img-blog.csdnimg.cn/20210704163948950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
-</blockquote>
-<h3 id="3、批量插入数据"><a href="#3、批量插入数据" class="headerlink" title="3、批量插入数据"></a>3、批量插入数据</h3><blockquote>
- <pre><code class="language-javascript">PUT starts/_bulk
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"张学友"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"刘德华"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"柳岩"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"李易峰"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"黄晓明"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"刘青云"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"易中天"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"李小璐"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"黄家驹"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"李思思"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"庄媛媛"&#125;
-&#123;"index":&#123;&#125;&#125;
-&#123;"name":"刘亦菲"&#125;</code></pre> 
- <img alt="" height="688" src="https://img-blog.csdnimg.cn/20210704164406424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
-</blockquote>
-<h3 id="4、在kibana上测试一下效果"><a href="#4、在kibana上测试一下效果" class="headerlink" title="4、在kibana上测试一下效果"></a>4、在kibana上测试一下效果</h3><blockquote>
- <pre><code class="language-java">GET starts/_search
-&#123;
-  "_source": false,
-  "suggest": &#123;
-    "start_name_suggest": &#123;
-      "prefix":"柳",
-      "completion":&#123;
-        "field":"name",
-        "size": 10,
-        "skip_duplicates": true
-      &#125;
-    &#125;
-  &#125;
-&#125;</code></pre> 
- <img alt="" height="835" src="https://img-blog.csdnimg.cn/20210704164750795.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- <img alt="" height="949" src="https://img-blog.csdnimg.cn/20210704164822955.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- <img alt="" height="862" src="https://img-blog.csdnimg.cn/20210704164910346.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- <img alt="" height="970" src="https://img-blog.csdnimg.cn/2021070416502437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
-</blockquote>
-<h3 id="5、在java服务端实现上面测试的自动补全案例"><a href="#5、在java服务端实现上面测试的自动补全案例" class="headerlink" title="5、在java服务端实现上面测试的自动补全案例"></a>5、在java服务端实现上面测试的自动补全案例</h3><blockquote>
-<p> 5.1、Springboot整合ES7.8.1已经提前整合了<br> 5.2、创建controller类<br> <pre><code class="language-java">package com.kgf.es.controller;</p>
-</blockquote>
-<p>import com.alibaba.fastjson.JSONArray;<br>import com.alibaba.fastjson.JSONObject;<br>import org.apache.http.util.EntityUtils;<br>import org.elasticsearch.client.Request;<br>import org.elasticsearch.client.Response;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.springframework.web.bind.annotation.GetMapping;<br>import org.springframework.web.bind.annotation.RequestMapping;<br>import org.springframework.web.bind.annotation.RestController;</p>
-<p>import javax.annotation.Resource;<br>import java.io.IOException;<br>import java.util.ArrayList;<br>import java.util.List;</p>
-<p>@RequestMapping(“start”)<br>@RestController<br>public class StartController &#123;</p>
-<pre><code>@Resource
-private RestHighLevelClient restHighLevelClient;
-
-@GetMapping(&quot;autoComplete&quot;)
-public Object autoComplete(String term) throws IOException &#123;
-    Request request = new Request(&quot;GET&quot;, &quot;starts/_search&quot;);
-    request.setJsonEntity(String.format(&quot;&#123;&quot; +
-            &quot;  \&quot;_source\&quot;: false,&quot; +
-            &quot;  \&quot;suggest\&quot;: &#123;&quot; +
-            &quot;    \&quot;start_name_suggest\&quot;: &#123;&quot; +
-            &quot;      \&quot;prefix\&quot;:\&quot;%s\&quot;,&quot; +
-            &quot;      \&quot;completion\&quot;:&#123;&quot; +
-            &quot;        \&quot;field\&quot;:\&quot;name\&quot;,&quot; +
-            &quot;        \&quot;size\&quot;: 10,&quot; +
-            &quot;        \&quot;skip_duplicates\&quot;: true&quot; +
-            &quot;      &#125;&quot; +
-            &quot;    &#125;&quot; +
-            &quot;  &#125;&quot; +
-            &quot;&#125;&quot;,term));
-    Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
-    String json = EntityUtils.toString(response.getEntity());
-    JSONObject jsonObject = JSONObject.parseObject(json);
-    JSONArray suggests = jsonObject.getJSONObject(&quot;suggest&quot;).getJSONArray(&quot;start_name_suggest&quot;);
-    JSONArray options = suggests.getJSONObject(0).getJSONArray(&quot;options&quot;);
-    List&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;&amp;gt;();
-    for (int i = 0; i &amp;lt; options.size(); i++) &#123;
-        JSONObject object = options.getJSONObject(i);
-        list.add(object.getString(&quot;text&quot;));
-    &#125;
-    return list;
-&#125;
-</code></pre>
-<p>}<br></code></pre> </p>
-<h3 id="6、访问测试效果"><a href="#6、访问测试效果" class="headerlink" title="6、访问测试效果"></a>6、访问测试效果</h3><blockquote>
- <img alt="" height="290" src="https://img-blog.csdnimg.cn/20210704181240367.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="807"> 
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch之新闻案例实战"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%B9%8B%E6%96%B0%E9%97%BB%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/"
-    >Elasticsearch之新闻案例实战</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%B9%8B%E6%96%B0%E9%97%BB%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.449Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch之新闻案例实战<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、创建数据库表且预置数据</p>
-<blockquote>
-<p> 1.1、表结构如下<br> <pre><code class="language-sql">DROP TABLE IF EXISTS <code>news</code>;<br>CREATE TABLE <code>news</code> (<br>    <code>id</code> int(11) NOT NULL AUTO_INCREMENT,<br>    <code>title</code> varchar(255) NOT NULL comment '主题',<br>    <code>url</code> varchar(255) DEFAULT NULL comment '连接',<br>    <code>content</code> text comment '内容',<br>    <code>tags</code> varchar(1000) DEFAULT NULL comment '搜索的关键字',<br>    PRIMARY KEY (<code>id</code>) USING BTREE<br>) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;</code></pre><br> 1.2、数据如下<br> <img alt="" height="629" src="https://img-blog.csdnimg.cn/20210704215709241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="2、定义分词器以及属性类型"><a href="#2、定义分词器以及属性类型" class="headerlink" title="2、定义分词器以及属性类型"></a>2、定义分词器以及属性类型</h3><blockquote>
- <pre><code class="language-javascript">PUT news
-&#123;
-  "settings": &#123;
-    "analysis": &#123;
-      "analyzer": &#123;
-        "news_tags_analyzer": &#123;
-          "char_filter": ["html_strip"],
-          "tokenizer": "keyword",
-          "filter": "news_tags_filter"
-        &#125;
-      &#125;,
-      "filter": &#123;
-        "news_tags_filter": &#123;
-          "type": "pinyin",
-          "keep_full_pinyin": true,
-          "keep_joined_full_pinyin": true,
-          "keep_original": true
-        &#125;
-      &#125;
-    &#125;
-  &#125;,
-  "mappings": &#123;
-    "properties": &#123;
-      "id": &#123;
-        "type": "long"
-      &#125;,
-      "title": &#123;
-        "type": "text",
-        "analyzer": "ik_max_word",
-        "search_analyzer": "ik_smart"
-      &#125;,
-      "content": &#123;
-        "type": "text",
-        "analyzer": "ik_max_word",
-        "search_analyzer": "ik_smart"
-      &#125;,
-      "url": &#123;
-        "type": "keyword"
-      &#125;,
-      "tags": &#123;
-        "type": "completion",
-        "analyzer": "news_tags_analyzer",
-        "search_analyzer": "keyword"
-      &#125;
-    &#125;
-  &#125;
-&#125;</code></pre> 
-<p>  <img alt="" height="590" src="https://img-blog.csdnimg.cn/20210704221658848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1185"> </p>
-</blockquote>
-<h3 id="3、将mysql数据导入es"><a href="#3、将mysql数据导入es" class="headerlink" title="3、将mysql数据导入es"></a>3、将mysql数据导入es</h3><blockquote>
-<p> 2.1、创建logstash-mysql-news.conf文件<br> <pre><code class="language-html">#input表示将数据读取到logstash中<br>input &#123;<br>  jdbc &#123;<br>    jdbc_driver_library =&gt; "/opt/es781/mysql/mysql-connector-java-5.1.49.jar"<br>    jdbc_driver_class =&gt; "com.mysql.jdbc.Driver"<br>    jdbc_connection_string =&gt; "jdbc:mysql://192.168.1.13:3306/oss?userUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimeZone=UTC"<br>    jdbc_user =&gt; "root"<br>    jdbc_password =&gt; "897570"<br>    #表示是否分页<br>    jdbc_paging_enabled =&gt; "true"<br>    #表示每页的数量<br>    jdbc_page_size =&gt; "20"<br>    #查询语句<br>    statement =&gt; "SELECT * FROM news where tags is not null"<br>  &#125;<br>&#125;<br>#这个filter表示对数据进行过滤<br>filter &#123;<br>  mutate &#123;<br>    #根据逗号切割关键字<br>    split =&gt; &#123; "tags" =&gt; ","&#125;<br>  &#125;<br>  #将下面两个字段过滤掉，logstash会自动帮我们加这两个属性，我们不需要，直接去掉<br>  mutate &#123;<br>    remove_field =&gt; ["@timestamp","@version"]<br>  &#125;<br>&#125;<br>#将logstash中的数据输出到es中<br>output &#123;<br>  elasticsearch &#123;<br>    document_id =&gt; "%&#123;id&#125;"<br>    document_type =&gt; "_doc"<br>    index =&gt; "news"<br>    hosts =&gt; ["<a href="http://192.168.56.20:9200&quot;]">http://192.168.56.20:9200&quot;]</a><br>  &#125;<br>  stdout&#123;<br>    codec =&gt; rubydebug<br>  &#125;<br>&#125;<br></code></pre><br> 2.2、将上面需要的mysql jar包上传到Linux服务器上<br> <img alt="" height="223" src="https://img-blog.csdnimg.cn/20210704220031533.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="804"><br> 2.3、将logstash-mysql-news.conf文件上传到/opt/es781/logstash-7.8.1/目录下<br> <img alt="" height="589" src="https://img-blog.csdnimg.cn/20210704220333418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="776"><br> 2.4、在/opt/es781/logstash-7.8.1/目录下执行下面的命令将数据从mysql中导入es,<br>      命令：bin/logstash -f /opt/es781/logstash-7.8.1/logstash-mysql-news.conf      <img alt="" height="903" src="https://img-blog.csdnimg.cn/20210704220730172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1089"><br> 2.5、在kibana上查询news索引是否成功导入数据<br> <img alt="" height="936" src="https://img-blog.csdnimg.cn/20210704220858401.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="4、根据需求编写kibana脚本"><a href="#4、根据需求编写kibana脚本" class="headerlink" title="4、根据需求编写kibana脚本"></a>4、根据需求编写kibana脚本</h3><blockquote>
-<p> 4.1、自动补全语句<br> <pre><code class="language-javascript">GET news/_search<br>&#123;<br>  "_source": false,<br>  "suggest": &#123;<br>    "news_tags_suggest": &#123;<br>      "prefix": "zh",<br>      "completion":&#123;<br>        "field":"tags",<br>        "size": 10,<br>        "skip_duplicates": true<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> <img alt="" height="464" src="https://img-blog.csdnimg.cn/20210704222803907.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 4.2、内容搜索<br> <pre><code class="language-javascript">GET news/_search<br>&#123;<br>  "_source": false,<br>  "query": &#123;<br>    "multi_match": &#123;<br>      "query": "中国",<br>      "fields": ["title","content"]<br>    &#125;<br>  &#125;,<br>  "highlight": &#123;<br>    "pre_tags": "&lt;span class='highLight'&gt;",<br>    "post_tags": "&lt;/span&gt;",<br>    "fields": &#123;<br>      "title": &#123;&#125;,<br>      "content": &#123;&#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> <img alt="" height="766" src="https://img-blog.csdnimg.cn/20210704222727872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="5、在java中使用代码实现上面两个搜索"><a href="#5、在java中使用代码实现上面两个搜索" class="headerlink" title="5、在java中使用代码实现上面两个搜索"></a>5、在java中使用代码实现上面两个搜索</h3><blockquote>
-<p> 5.1、创建news实体类<br> <pre><code class="language-java">package com.kgf.es.model;</p>
-</blockquote>
-<p>import lombok.AllArgsConstructor;<br>import lombok.Data;<br>import lombok.NoArgsConstructor;</p>
-<p>@Data<br>@AllArgsConstructor<br>@NoArgsConstructor<br>public class News &#123;<br>    private Integer id;<br>    private String title;<br>    private String content;<br>    private String url;<br>&#125;<br></code></pre><br> 5.2、创建NewsController<br> <pre><code class="language-java">package com.kgf.es.controller;</p>
-<p>import com.alibaba.fastjson.JSONArray;<br>import com.alibaba.fastjson.JSONObject;<br>import com.kgf.es.model.News;<br>import org.apache.http.util.EntityUtils;<br>import org.elasticsearch.client.Request;<br>import org.elasticsearch.client.Response;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.springframework.web.bind.annotation.GetMapping;<br>import org.springframework.web.bind.annotation.RequestMapping;<br>import org.springframework.web.bind.annotation.RestController;</p>
-<p>import javax.annotation.Resource;<br>import java.io.IOException;<br>import java.util.ArrayList;<br>import java.util.List;</p>
-<p>@RestController<br>@RequestMapping(“/news”)<br>public class NewsController &#123;</p>
-<pre><code>@Resource
-private RestHighLevelClient restHighLevelClient;
-
-
-@GetMapping(&quot;/tips&quot;)
-public Object autoComplete(String term) throws IOException &#123;
-    Request request = new Request(&quot;GET&quot;, &quot;news/_search&quot;);
-
-    request.setJsonEntity(String.format(&quot;&#123;&quot; +
-            &quot;  \&quot;_source\&quot;: false, &quot; +
-            &quot;  \&quot;suggest\&quot;: &#123;&quot; +
-            &quot;    \&quot;news_tags_suggest\&quot;: &#123;&quot; +
-            &quot;      \&quot;prefix\&quot;: \&quot;%s\&quot;,&quot; +
-            &quot;      \&quot;completion\&quot;: &#123;&quot; +
-            &quot;        \&quot;field\&quot;: \&quot;tags\&quot;,&quot; +
-            &quot;        \&quot;size\&quot;: 10,&quot; +
-            &quot;        \&quot;skip_duplicates\&quot;: true&quot; +
-            &quot;      &#125;&quot; +
-            &quot;    &#125;&quot; +
-            &quot;  &#125;&quot; +
-            &quot;&#125;&quot;, term));
-
-    Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
-
-    String jsonString = EntityUtils.toString(response.getEntity()); // &quot;&#123;\&quot;age\&quot;: 10&#125;&quot;  &#123;&quot;age&quot;: 10&#125;
-
-    JSONObject jsonObject = JSONObject.parseObject(jsonString);
-
-    JSONArray suggests = jsonObject.getJSONObject(&quot;suggest&quot;).getJSONArray(&quot;news_tags_suggest&quot;);
-
-    JSONArray options = suggests.getJSONObject(0).getJSONArray(&quot;options&quot;);
-
-    List&amp;lt;String&amp;gt; results = new ArrayList&amp;lt;&amp;gt;();
-    for(int i = 0; i &amp;lt; options.size(); i++) &#123;
-        JSONObject opt = options.getJSONObject(i);
-        results.add(opt.getString(&quot;text&quot;));
-    &#125;
-
-    return results;
-&#125;
-
-@GetMapping(&quot;/search&quot;)
-public List&amp;lt;News&amp;gt; query(String text) throws Exception&#123;
-    /**
-     * 1.对于高亮的数据，ES是抽取的一个个片段，然后将这些片段设置到一个数组中。
-     * 2.对于有些数据，可能title或者content中没有高亮的字眼，那么我们就需要取原始数据的 title 和 content.
-     */
-    Request request = new Request(&quot;GET&quot;, &quot;news/_search&quot;);
-    request.setJsonEntity(String.format(&quot;&#123;&quot; +
-            &quot;  \&quot;_source\&quot;: [\&quot;url\&quot;, \&quot;title\&quot;, \&quot;content\&quot;], &quot; +
-            &quot;  \&quot;query\&quot;: &#123;&quot; +
-            &quot;    \&quot;multi_match\&quot;: &#123;&quot; +
-            &quot;      \&quot;query\&quot;: \&quot;%s\&quot;,&quot; +
-            &quot;      \&quot;fields\&quot;: [\&quot;title\&quot;, \&quot;content\&quot;]&quot; +
-            &quot;    &#125;&quot; +
-            &quot;  &#125;,&quot; +
-            &quot;  \&quot;highlight\&quot;: &#123;&quot; +
-            &quot;    \&quot;pre_tags\&quot;: \&quot;&amp;lt;span class=&#39;highLight&#39;&amp;gt;\&quot;, &quot; +
-            &quot;    \&quot;post_tags\&quot;: \&quot;&amp;lt;/span&amp;gt;\&quot;, &quot; +
-            &quot;    \&quot;fields\&quot;: &#123;&quot; +
-            &quot;      \&quot;title\&quot;: &#123;&#125;,&quot; +
-            &quot;      \&quot;content\&quot;: &#123;&#125;&quot; +
-            &quot;    &#125;&quot; +
-            &quot;  &#125;&quot; +
-            &quot;&#125;&quot;, text));
-
-    Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
-
-    JSONObject jsonObject = JSONObject.parseObject(EntityUtils.toString(response.getEntity()));
-
-    JSONArray hits = jsonObject.getJSONObject(&quot;hits&quot;).getJSONArray(&quot;hits&quot;);
-
-    List&amp;lt;News&amp;gt; results = new ArrayList&amp;lt;&amp;gt;();
-
-    for (int i = 0; i &amp;lt; hits.size(); i++) &#123;
-        News news = new News();
-        JSONObject hit = hits.getJSONObject(i);
-        JSONObject highLight = hit.getJSONObject(&quot;highlight&quot;);  //获取高亮的数据结果
-
-        JSONObject _source = hit.getJSONObject(&quot;_source&quot;); //这个是原始的数据
-        news.setUrl(_source.getString(&quot;url&quot;));  //设置url
-
-        JSONArray highLightTitle = highLight.getJSONArray(&quot;title&quot;);  //获取高亮的 title 数组
-        JSONArray highLightContent = highLight.getJSONArray(&quot;content&quot;);
-
-        if(null != highLightTitle) &#123;
-            StringBuffer highLightTitleStringBuffer = new StringBuffer();
-            for (int j = 0; j &amp;lt; highLightTitle.size(); j++) &#123;
-                String titleSegment = highLightTitle.getString(j);
-                highLightTitleStringBuffer.append(titleSegment);
-            &#125;
-            news.setTitle(highLightTitleStringBuffer.toString());
-        &#125;else &#123;  // 如果不存在高亮的数据，那么就取原始数据
-            news.setTitle(_source.getString(&quot;title&quot;));
-        &#125;
-
-        if(null != highLightContent) &#123;
-            StringBuffer highLightContentStringBuffer = new StringBuffer();
-            for (int j = 0; j &amp;lt; highLightContent.size(); j++) &#123;
-                String contentSegment = highLightContent.getString(j);
-                highLightContentStringBuffer.append(contentSegment);
-            &#125;
-            news.setContent(highLightContentStringBuffer.toString());
-        &#125;else &#123;  // 如果不存在高亮的数据，那么就取原始数据
-            news.setContent(_source.getString(&quot;content&quot;));
-        &#125;
-
-        results.add(news);
-    &#125;
-    return results;
-&#125;
-</code></pre>
-<p>}<br></code></pre> </p>
-<h3 id="6、测试"><a href="#6、测试" class="headerlink" title="6、测试"></a>6、测试</h3><blockquote>
-<p> 6.1、测试tips,完成对tags的关键字检索<br> <img alt="" height="726" src="https://img-blog.csdnimg.cn/20210704230043938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="757"><br> 6.2、测试内容检索<br> <img alt="" height="918" src="https://img-blog.csdnimg.cn/20210704230215251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch之Request Body查询"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%B9%8BRequest%20Body%E6%9F%A5%E8%AF%A2/"
-    >Elasticsearch之Request Body查询</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%B9%8BRequest%20Body%E6%9F%A5%E8%AF%A2/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.446Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch之Request Body查询<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、term查询简介</p>
-<blockquote>
-<p> term是表达语义的最小单位，在搜索的时候基本都要使用到term。 term查询的种类有：Term Query、Range Query等。 在ES中，Term查询不会对输入进行分词处理，将输入作为一个整体，在倒排索引中查找准确的词项。 我们也可以使用 Constant Score 将查询转换为一个filter,避免算分，利用缓存，提高查询的效 率。 </p>
-</blockquote>
-<h3 id="2、term与terms"><a href="#2、term与terms" class="headerlink" title="2、term与terms"></a>2、term与terms</h3><blockquote>
-<p> 查询电影名字中包含有 beautiful 这个单词的所有的电影，用于查询的单词不会进行分词的处理<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “term”: {<!-- -->             “title”: {<!-- -->                 “value”: “beautiful”             }         }     } }<br> 查询电影名字中包含有 beautiful 或者 mind 这两个单词的所有的电影，用于查询的单词不会进行 分词的处理<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “terms”: {<!-- -->             “title”: [                 “beautiful”,                 “mind”             ]         }     } } </p>
-</blockquote>
-<h3 id="3、range"><a href="#3、range" class="headerlink" title="3、range"></a>3、range</h3><blockquote>
-<p> 查询上映在2016到2018年的所有的电影，再根据上映时间的倒序进行排序<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “range”: {<!-- -->             “year”: {<!-- -->                 “gte”: 2016,                 “lte”: 2018             }          }     },     “sort”: [         {<!-- -->             “year”: {<!-- -->                 “order”: “desc”             }         }     ] } </p>
-</blockquote>
-<h3 id="4、Constant-Score"><a href="#4、Constant-Score" class="headerlink" title="4、Constant Score"></a>4、Constant Score</h3><blockquote>
-<p> 查询title中包含有beautiful的所有的电影，不进行相关性算分，查询的数据进行缓存，提高效率<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “constant_score”: {<!-- -->             “filter”: {<!-- -->                 “term”: {<!-- -->                     “title”: “beautiful”                 }             }         }     } } </p>
-</blockquote>
-<h3 id="5、全文查询"><a href="#5、全文查询" class="headerlink" title="5、全文查询"></a>5、全文查询</h3><blockquote>
-<p> 全文查询的种类有: Match Query、Match Phrase Query、Query String Query等 索引和搜索的时候都会进行分词，在查询的时候，会对输入进行分词，然后每个词项会逐个到底层进行 查询，将最终的结果进行合并 </p>
-</blockquote>
-<h3 id="6、match"><a href="#6、match" class="headerlink" title="6、match"></a>6、match</h3><blockquote>
-<p> 查询电影名字中包含有beautiful的所有电影，每页十条，取第二页的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “match”: {<!-- -->             “title”: “beautiful”         }     },     “from”: 10,     “size”: 10 }<br> 查询电影名字中包含有 beautiful 或者 mind 的所有的数据，但是只查询title和id两个属性<br> GET movies/_search {<!-- -->     “_source”: [“title”, “id”],         “query”: {<!-- -->             “match”: {<!-- -->                 “title”: “beautiful mind”             }         } } </p>
-</blockquote>
-<h3 id="7、match-phrase"><a href="#7、match-phrase" class="headerlink" title="7、match_phrase"></a>7、match_phrase</h3><blockquote>
-<p> 查询电影名字中包含有 “beautiful mind” 这个短语的所有的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “match_phrase”: {<!-- -->             “title”: “beautiful mind”         }     } }<br> 注意：match_phrase和term区别<br> term是将传入的文本原封不动地（不分词）拿去查询。 match会对输入进行分词处理后再去查询，部分命中的结果也会按照评分由高到低显示出来。 match_phrase是按短语查询，只有存在这个短语的文档才会被显示出来。<br> 也就是说，term和match_phrase都可以用于精确匹配，而match用于模糊匹配。<br> 上面说的也不是很准确：<br> match_phrase总结如下： </p>
-</blockquote>
-<ul>
-<li>match_phrase还是分词后去搜的- 目标文档需要包含分词后的所有词- 目标文档还要保持这些词的相对顺序和文档中的一致</li>
-</ul>
-<h3 id="8、multi-match"><a href="#8、multi-match" class="headerlink" title="8、multi_match"></a>8、multi_match</h3><blockquote>
-<p> 查询 title 或 genre 中包含有 beautiful 或者 Adventure 的所有的数据<br> GET movies/_search     {<!-- -->     “query”: {<!-- -->         “multi_match”: {<!-- -->             “query”: “beautiful Adventure”,             “fields”: [“title”, “genre”]         }     } }   </p>
-</blockquote>
-<h3 id="9、match-all"><a href="#9、match-all" class="headerlink" title="9、match_all"></a>9、match_all</h3><blockquote>
-<p> 查询所有的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “match_all”: {}     } } </p>
-</blockquote>
-<h3 id="10、query-string"><a href="#10、query-string" class="headerlink" title="10、query_string"></a>10、query_string</h3><blockquote>
-<p> 查询 title 中包含有 beautiful 和 mind 的所有的电影<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “query_string”: {<!-- -->             “default_field”: “title”,             “query”: “mind AND beautiful”         }     } } 或者<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “query_string”: {<!-- -->             “default_field”: “title”,             “query”: “mind beautiful”,             “default_operator”: “AND”         }     } }   </p>
-</blockquote>
-<h3 id="11、simple-query-string"><a href="#11、simple-query-string" class="headerlink" title="11、simple_query_string"></a>11、simple_query_string</h3><blockquote>
-<p> simple_query_string 覆盖了很多其他查询的用法。<br> 查询 title 中包含有 beautiful 和 mind 的所有的电影<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “beautiful + mind”,             “fields”: [“title”]         }     } }<br> 或者<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “beautiful mind”,             “fields”: [“title”],             “default_operator”: “AND”         }     } }<br> 查询title中包含 “beautiful mind” 这个短语的所有的电影 (用法和match_phrase类似)<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “&quot;beautiful mind&quot;“,             “fields”: [“title”]         }     } }<br> 查询title或genre中包含有 beautiful mind romance 这个三个单词的所有的电影 （与multi_match类似）<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “beautiful mind Romance”,             “fields”: [“title”, “genre”]         }     } }<br> 查询title中包含 “beautiful mind” 或者 “Modern Romance” 这两个短语的所有的电影<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “&quot;beautiful mind&quot; | &quot;Modern Romance&quot;“,             “fields”: [“title”]         }     } }<br> 查询title或者genre中包含有 beautiful + mind 这个两个词，或者Comedy + Romance + Musical + Drama + Children 这个五个词的所有的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “(beautiful + mind) | (Comedy + Romance + Musical + Drama + Children)”,             “fields”: [“title”,”genre”]         }     } }<br> 查询 title 中包含 beautiful 和 people 但是不包含 Animals 的所有的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “simple_query_string”: {<!-- -->             “query”: “beautiful + people + -Animals”,             “fields”: [“title”]         }     } } </p>
-</blockquote>
-<h3 id="12、模糊搜索"><a href="#12、模糊搜索" class="headerlink" title="12、模糊搜索"></a>12、模糊搜索</h3><blockquote>
-<p> 查询title中从第6个字母开始只要最多纠正一次，就与 neverendign 匹配的所有的数据<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “fuzzy”: {<!-- -->             “title”: {<!-- -->                 “value”: “neverendign”,                 “fuzziness”: 1,                 “prefix_length”: 5             }         }     } } </p>
-</blockquote>
-<h3 id="13、多条件查询"><a href="#13、多条件查询" class="headerlink" title="13、多条件查询"></a>13、多条件查询</h3><blockquote>
-<p> 查询title中包含有beautiful或者mind单词，并且上映时间在2016<del>1018年的所有的电影<br> GET movies/_search {<!-- -->     “query”: {<!-- -->         “bool”: {<!-- -->             “must”: [                 {<!-- -->                     “simple_query_string”: {<!-- -->                         “query”: “beautiful mind”,                         “fields”: [“title”]                     }                 },                 {<!-- -->                     “range”: {<!-- -->                         “year”: {<!-- -->                             “gte”: 2016,                             “lte”: 2018                         }                     }                 }             ]         }     } }<br> 查询 title 中包含有 beautiful 这个单词，并且上映年份在2016</del>2018年间的所有电影，但是不 进行相关性的算分 </p>
-</blockquote>
-<h1 id="filter不会进行相关性的算分，并且会将查出来的结果进行缓存，效率上比-query-高-GET-movies-search-“query”-“bool”-“filter”-“term”-“title”-“beautiful”-“range”-“year”-“gte”-2016-“lte”-2018"><a href="#filter不会进行相关性的算分，并且会将查出来的结果进行缓存，效率上比-query-高-GET-movies-search-“query”-“bool”-“filter”-“term”-“title”-“beautiful”-“range”-“year”-“gte”-2016-“lte”-2018" class="headerlink" title="filter不会进行相关性的算分，并且会将查出来的结果进行缓存，效率上比 query 高 GET movies/_search {     “query”: {         “bool”: {             “filter”: [                 {                     “term”: {                         “title”: “beautiful”                     }                 },                 {                     “range”: {                         “year”: {                             “gte”: 2016,                             “lte”: 2018                         }                     }                 }             ]         }     } }"></a>filter不会进行相关性的算分，并且会将查出来的结果进行缓存，效率上比 query 高 GET movies/_search {<!-- -->     “query”: {<!-- -->         “bool”: {<!-- -->             “filter”: [                 {<!-- -->                     “term”: {<!-- -->                         “title”: “beautiful”                     }                 },                 {<!-- -->                     “range”: {<!-- -->                         “year”: {<!-- -->                             “gte”: 2016,                             “lte”: 2018                         }                     }                 }             ]         }     } }</h1><h3 id="14、Mapping"><a href="#14、Mapping" class="headerlink" title="14、Mapping"></a>14、Mapping</h3><blockquote>
-<p> mapping类似于数据库中的schema，作用如下:<br>         1. 定义索引中的字段类型；<br>         2. 定义字段的数据类型，例如：布尔、字符串、数字、日期…..<br>         3. 字段倒排索引的设置<br> 数据类型<img alt="" height="315" src="https://img-blog.csdnimg.cn/20210703130327728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="753"><br> Mapping的定义语法如下：<br> PUT users {<!-- -->     “mappings”: {<!-- -->         // define your mappings here     } }<br> 定义mapping的建议方式: 写入一个样本文档到临时索引中，ES会自动生成mapping信息，通过访问 mapping信息的api查询mapping的定义，修改自动生成的mapping成为我们需要方式，创建索引，删 除临时索引，简而言之就是 “卸磨杀驴” 。 </p>
-</blockquote>
-<h3 id="15、常见参数"><a href="#15、常见参数" class="headerlink" title="15、常见参数"></a>15、常见参数</h3><blockquote>
-<p> 1）index<br>       可以给属性添加一个 布尔类型的index属性，标识该属性是否能被倒排索引，也就是说是否能通过 该字段进行搜索。<br> 2) null_value<br> 在数据索引进ES的时候，当某些数据为 null 的时候，该数据是不能被搜索的，可以使用 null_value 属性指定一个值，当属性的值为 null 的时候，转换为一个通过 null_value 指 定的值。 null_value属性只能用于Keyword类型的属性 </p>
-</blockquote>
-<h3 id="16、聚合查询"><a href="#16、聚合查询" class="headerlink" title="16、聚合查询"></a>16、聚合查询</h3><blockquote>
-<p> 1）聚合搜索的语法格式如下：<br> GET indexName/_search {<!-- -->     “aggs”: {<!-- -->         “aggs_name”: { #聚合分析的名字是由用户自定义的             “aggs_type”: {<!-- -->                 // aggregation body             }         }     } } 2）给users索引创建mapping信息<br> <img alt="" height="507" src="https://img-blog.csdnimg.cn/20210703165950461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="406"><br> 3）往 users 索引中写入数据<br> <pre><code class="language-html">PUT employee/_bulk<br>&#123;"index": &#123;"_id": 1&#125;&#125;<br>&#123;"id": 1, "name": "Bob", "job": "java", "age": 21, "sal": 8000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 2&#125;&#125;<br>&#123;"id": 2, "name": "Rod", "job": "html", "age": 31, "sal": 18000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 3&#125;&#125;<br>&#123;"id": 3, "name": "Gaving", "job": "java", "age": 24, "sal": 12000, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 4&#125;&#125;<br>&#123;"id": 4, "name": "King", "job": "dba", "age": 26, "sal": 15000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 5&#125;&#125;<br>&#123;"id": 5, "name": "Jonhson", "job": "dba", "age": 29, "sal": 16000, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 6&#125;&#125;<br>&#123;"id": 6, "name": "Douge", "job": "java", "age": 41, "sal": 20000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 7&#125;&#125;<br>&#123;"id": 7, "name": "cutting", "job": "dba", "age": 27, "sal": 7000, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 8&#125;&#125;<br>&#123;"id": 8, "name": "Bona", "job": "html", "age": 22, "sal": 14000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 9&#125;&#125;<br>&#123;"id": 9, "name": "Shyon", "job": "dba", "age": 20, "sal": 19000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 10&#125;&#125;<br>&#123;"id": 10, "name": "James", "job": "html", "age": 18, "sal": 22000, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 11&#125;&#125;<br>&#123;"id": 11, "name": "Golsling", "job": "java", "age": 32, "sal": 23000, "gender":<br>"female"&#125;<br>&#123;"index": &#123;"_id": 12&#125;&#125;<br>&#123;"id": 12, "name": "Lily", "job": "java", "age": 24, "sal": 2000, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 13&#125;&#125;<br>&#123;"id": 13, "name": "Jack", "job": "html", "age": 23, "sal": 3000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 14&#125;&#125;<br>&#123;"id": 14, "name": "Rose", "job": "java", "age": 36, "sal": 6000, "gender": "female"&#125;<br>&#123;"index": &#123;"_id": 15&#125;&#125;<br>&#123;"id": 15, "name": "Will", "job": "dba", "age": 38, "sal": 4500, "gender": "male"&#125;<br>&#123;"index": &#123;"_id": 16&#125;&#125;<br>&#123;"id": 16, "name": "smith", "job": "java", "age": 32, "sal": 23000, "gender": "male"&#125;</code></pre><br> 4）单值的输出，ES中大多数的数学计算只输出一个值，如：min、max、sum、avg、cardinalit<br>     4.1）查询工资的总和<br>           <img alt="" height="254" src="https://img-blog.csdnimg.cn/20210703170233150.png" width="292"><br>     4.2）查询员工的平均工资<br>           <img alt="" height="257" src="https://img-blog.csdnimg.cn/20210703170322424.png" width="290"><br>     4.3）查询总共有多少个岗位, cardinality的值类似于sql中的 count distinct,即去重统计总数<br>            <img alt="" height="264" src="https://img-blog.csdnimg.cn/20210703170347326.png" width="298"><br>     4.4）查询航班票价的最高值、平均值、最低值<br>            <img alt="" height="483" src="https://img-blog.csdnimg.cn/20210703170430932.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="447"><br> 5）多值的输出,ES还有些函数，可以一次性输出很多个统计的数据: terms、stats<br>      5.1）查询工资的信息<br>             <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210703170608578.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="316"><br>      5.2）查询到达不同城市的航班数量<br>             <img alt="" height="260" src="https://img-blog.csdnimg.cn/20210703170635852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="368"><br>      5.3）查询每个岗位有多少人<br>             <img alt="" height="260" src="https://img-blog.csdnimg.cn/20210703170720626.png" width="279"><br>      5.4）查询目标地的航班次数以及天气信息<br>             <img alt="" height="417" src="https://img-blog.csdnimg.cn/20210703170751309.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="427"><br>      5.5）查询每个岗位下工资的信息(平均工资、最高工资、最少工资等)<br>             <img alt="" height="542" src="https://img-blog.csdnimg.cn/20210703170929821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="493"><br>      5.6）查询不同工种的男女员工数量、然后统计不同工种下男女员工的工资信息<br>               <img alt="" height="572" src="https://img-blog.csdnimg.cn/20210703171012471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="408"><br>      5.7）查询年龄最大的两位员工的信息<br>           <img alt="" height="543" src="https://img-blog.csdnimg.cn/20210703171105176.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="382"><br>      5.8）查询不同区间员工工资的统计信息<br>           <img alt="" height="645" src="https://img-blog.csdnimg.cn/2021070317114435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="442"><br>     5.9）以直方图的方式以每5000元为一个区间查看工资信息<br>          <img alt="" height="431" src="https://img-blog.csdnimg.cn/20210703171304558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553"><br>     5.10）查询平均工资最低的工种<br>          <img alt="" height="525" src="https://img-blog.csdnimg.cn/20210703171412288.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="490"><br>     5.11）求工资和工种的信息<br>          <img alt="" height="375" src="https://img-blog.csdnimg.cn/20210703171444218.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="351"><br>     5.12）查询年龄大于30岁的员工的平均工资<br>        <img alt="" height="423" src="https://img-blog.csdnimg.cn/20210703171518293.png" width="282"><br>     5.13）查询Java员工的平均工资<br>          <img alt="" height="488" src="https://img-blog.csdnimg.cn/20210703171556873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="303"><br>     5.14）求30岁以上的员工的平均工资和所有员工的平均工资<br>        <img alt="" height="757" src="https://img-blog.csdnimg.cn/20210703171629367.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="367"> </p>
-</blockquote>
-<h3 id="17、推荐搜索"><a href="#17、推荐搜索" class="headerlink" title="17、推荐搜索"></a>17、推荐搜索</h3><blockquote>
-<p> 在搜索过程中，因为单词的拼写错误，没有得到任何的结果，希望ES能够给我们一个推荐搜索。<br> <img alt="" height="456" src="https://img-blog.csdnimg.cn/20210703175229434.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="596"> </p>
-</blockquote>
-<h3 id="18、自动补全"><a href="#18、自动补全" class="headerlink" title="18、自动补全"></a>18、自动补全</h3><blockquote>
-<p> 自动补全应该是我们在日常的开发过程中最常见的搜索方式了，如百度搜索和京东商品搜索。<br> <img alt="" height="382" src="https://img-blog.csdnimg.cn/20210703175338116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="750"><br> <img alt="" height="671" src="https://img-blog.csdnimg.cn/20210703175400630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="753"><br> 定义mapping：<br> <img alt="" height="824" src="https://img-blog.csdnimg.cn/20210703175531835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="519"><br> <img alt="" height="314" src="https://img-blog.csdnimg.cn/20210703175551768.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="462"><br> 前缀搜索<br> <img alt="" height="330" src="https://img-blog.csdnimg.cn/20210703175642732.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="366"><br> <img alt="" height="804" src="https://img-blog.csdnimg.cn/20210703175715675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="19、高亮显示"><a href="#19、高亮显示" class="headerlink" title="19、高亮显示"></a>19、高亮显示</h3><blockquote>
-<p> 高亮显示在实际的应用中也会碰到很多，如下给出了百度和极客时间的两个高亮搜索的案例：<br> <img alt="" height="825" src="https://img-blog.csdnimg.cn/20210703180705816.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="925"><br> <img alt="" height="657" src="https://img-blog.csdnimg.cn/2021070318072243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="960"><br> 将所有的包含有 beautiful 的单词高亮显示<br> <img alt="" height="631" src="https://img-blog.csdnimg.cn/20210703180807646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551"><br> <img alt="" height="636" src="https://img-blog.csdnimg.cn/20210703180825496.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch之JAVA API操作"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%B9%8BJAVA%20API%E6%93%8D%E4%BD%9C/"
-    >Elasticsearch之JAVA API操作</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%B9%8BJAVA%20API%E6%93%8D%E4%BD%9C/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.444Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch之JAVA API操作<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、JavaAPI-环境准备</p>
-<blockquote>
-<p> 1.1、创建一个springboot项目<br>       <img alt="" height="300" src="https://img-blog.csdnimg.cn/2021062012261018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="477">      pom的依赖如下：<br> <pre><code class="language-html">&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>&lt;project xmlns="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0&quot;">http://maven.apache.org/POM/4.0.0&quot;</a><br>         xmlns:xsi="<a target="_blank" rel="noopener" href="http://www.w3.org/2001/XMLSchema-instance&quot;">http://www.w3.org/2001/XMLSchema-instance&quot;</a><br>         xsi:schemaLocation="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a target="_blank" rel="noopener" href="http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;">http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</a>&gt;<br>    &lt;parent&gt;<br>        &lt;artifactId&gt;kgf-java-learning&lt;/artifactId&gt;<br>        &lt;groupId&gt;com.kgf.learning&lt;/groupId&gt;<br>        &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;<br>        &lt;relativePath&gt;../kgf-java-learning/pom.xml&lt;/relativePath&gt;<br>    &lt;/parent&gt;<br>    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</p>
-</blockquote>
-<pre><code>&amp;lt;groupId&amp;gt;com.kgf.es7.8&amp;lt;/groupId&amp;gt;
-&amp;lt;artifactId&amp;gt;kgf-es7.8-api&amp;lt;/artifactId&amp;gt;
-&amp;lt;properties&amp;gt;
-    &amp;lt;!--自定义elasticsearch版本--&amp;gt;
-    &amp;lt;elasticsearch.version&amp;gt;7.8.0&amp;lt;/elasticsearch.version&amp;gt;
-    &amp;lt;lombok.version&amp;gt;1.18.16&amp;lt;/lombok.version&amp;gt;
-    &amp;lt;fastjson.version&amp;gt;1.2.75&amp;lt;/fastjson.version&amp;gt;
-&amp;lt;/properties&amp;gt;
-&amp;lt;dependencies&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;$&#123;fastjson.version&#125;&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;!--引入lombok依赖--&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;$&#123;lombok.version&#125;&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-starter-data-elasticsearch&amp;lt;/artifactId&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;!--引入Juntil单元测试 --&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-configuration-processor&amp;lt;/artifactId&amp;gt;
-        &amp;lt;optional&amp;gt;true&amp;lt;/optional&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-starter-thymeleaf&amp;lt;/artifactId&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-    &amp;lt;!--jsoup解析网页，tiks解析视频音乐--&amp;gt;
-    &amp;lt;dependency&amp;gt;
-        &amp;lt;groupId&amp;gt;org.jsoup&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;jsoup&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;1.10.2&amp;lt;/version&amp;gt;
-    &amp;lt;/dependency&amp;gt;
-&amp;lt;/dependencies&amp;gt;
-&amp;lt;build&amp;gt;
-    &amp;lt;plugins&amp;gt;
-        &amp;lt;plugin&amp;gt;
-            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;spring-boot-maven-plugin&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;2.2.11.RELEASE&amp;lt;/version&amp;gt;
-        &amp;lt;/plugin&amp;gt;
-        &amp;lt;plugin&amp;gt;
-            &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
-            &amp;lt;configuration&amp;gt;
-                &amp;lt;source&amp;gt;1.8&amp;lt;/source&amp;gt;
-                &amp;lt;target&amp;gt;1.8&amp;lt;/target&amp;gt;
-            &amp;lt;/configuration&amp;gt;
-        &amp;lt;/plugin&amp;gt;
-    &amp;lt;/plugins&amp;gt;
-&amp;lt;/build&amp;gt;
-</code></pre>
-<p>&lt;/project&gt;</code></pre><br> <pre><code>ElasticConfig.java如下：</code></pre><br> <pre><code class="language-java">package com.kgf.es.config;</p>
-<p>import org.apache.http.HttpHost;<br>import org.elasticsearch.client.RestClient;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.springframework.context.annotation.Bean;<br>import org.springframework.context.annotation.Configuration;</p>
-<p>@Configuration<br>public class ElasticConfig &#123;</p>
-<pre><code>@Bean
-public RestHighLevelClient restHighLevelClient()&#123;
-    RestHighLevelClient client = new RestHighLevelClient(
-            RestClient.builder(new HttpHost(&quot;127.0.0.1&quot;, 9200, &quot;http&quot;))
-    );
-    return client;
-&#125;
-</code></pre>
-<p>}<br></code></pre><br> 1.2、ESApplication.java如下<br> <pre><code class="language-java">package com.kgf.es;</p>
-<p>import org.springframework.boot.SpringApplication;<br>import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
-<p>@SpringBootApplication<br>public class ESApplication &#123;</p>
-<pre><code>public static void main(String[] args) &#123;
-
-    SpringApplication.run(ESApplication.class,args);
-
-&#125;
-</code></pre>
-<p>}<br></code></pre> 
-   </p>
-<h3 id="2、JavaAPI-索引-创建"><a href="#2、JavaAPI-索引-创建" class="headerlink" title="2、JavaAPI-索引-创建"></a>2、JavaAPI-索引-创建</h3><blockquote>
-<p> 2.1、在一个Junit测试类创建索引<br> <pre><code class="language-java">package es7;</p>
-</blockquote>
-<p>import com.kgf.es.ESApplication;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.elasticsearch.client.indices.CreateIndexRequest;<br>import org.elasticsearch.client.indices.CreateIndexResponse;<br>import org.junit.Test;<br>import org.junit.runner.RunWith;<br>import org.springframework.boot.test.context.SpringBootTest;<br>import org.springframework.test.context.junit4.SpringRunner;</p>
-<p>import javax.annotation.Resource;<br>import java.io.IOException;</p>
-<p>@RunWith(SpringRunner.class)<br>@SpringBootTest(classes = ESApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)<br>public class EsApplicationTest &#123;</p>
-<pre><code>@Resource
-private RestHighLevelClient restHighLevelClient;
-
-/***
- * 创建索引
- */
-@Test
-public void createIndexTest()&#123;
-    try &#123;
-        //创建索引对象
-        CreateIndexRequest indexRequest = new CreateIndexRequest(&quot;user&quot;);
-        //客户端执行请求
-        CreateIndexResponse response = restHighLevelClient.indices().create(indexRequest, RequestOptions.DEFAULT);
-
-        boolean acknowledged = response.isAcknowledged();
-        // 响应状态
-        System.out.println(&quot;操作状态 = &quot; + acknowledged);
-    &#125; catch (IOException e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre><br> 执行：<br> <img alt="" height="245" src="https://img-blog.csdnimg.cn/20210620123925330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="724"><br> 查看索引：<br> <img alt="" height="503" src="https://img-blog.csdnimg.cn/20210620124000441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1100"> </p>
-<h3 id="3、索引-查询-amp-删除"><a href="#3、索引-查询-amp-删除" class="headerlink" title="3、索引-查询 &amp; 删除"></a>3、索引-查询 &amp; 删除</h3><blockquote>
-<p> <strong>3.1、查询</strong><br> <pre><code class="language-java">   /***<br>     * 查询索引<br>     */<br>    @Test<br>    public void getIndexTest()&#123;<br>        try &#123;<br>            // 查询索引 - 请求对象<br>            GetIndexRequest request = new GetIndexRequest("user");<br>            // 发送请求，获取响应<br>            GetIndexResponse response = restHighLevelClient.indices().get(request,<br>                    RequestOptions.DEFAULT);</p>
-</blockquote>
-<pre><code>        System.out.println(&quot;aliases:&quot;+response.getAliases());
-        System.out.println(&quot;mappings:&quot;+response.getMappings());
-        System.out.println(&quot;settings:&quot;+response.getSettings());
-    &#125; catch (IOException e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;&lt;/code&gt;&lt;/pre&gt; 
-</code></pre>
-<p> 后台打印：<br> <pre><code class="language-java">aliases:&#123;user=[]&#125;<br>mappings:&#123;user=org.elasticsearch.cluster.metadata.MappingMetadata@872c984c&#125;<br>settings:&#123;user=&#123;"index.creation_date":"1624163950299","index.number_of_replicas":"1","index.number_of_shards":"1","index.provided_name":"user","index.uuid":"XvPUSw3rR7CjmrGk0BtdCw","index.version.created":"7080099"&#125;&#125;<br></code></pre><br> <strong>3.2、删除</strong><br> <pre><code class="language-java"> /***<br>     * 删除索引<br>     */<br>    @Test<br>    public void DelIndexTest()&#123;<br>        try &#123;<br>            // 删除索引 - 请求对象<br>            DeleteIndexRequest request = new DeleteIndexRequest("user");<br>            // 发送请求，获取响应<br>            AcknowledgedResponse response = restHighLevelClient.indices().delete(request,RequestOptions.DEFAULT);<br>            // 操作结果<br>            System.out.println("操作结果 ： " + response.isAcknowledged());<br>        &#125; catch (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code>操作结果 ： true<br></code></pre> 
-   </p>
-<h3 id="4、JavaAPI-文档-新增-amp-修改"><a href="#4、JavaAPI-文档-新增-amp-修改" class="headerlink" title="4、JavaAPI-文档-新增 &amp; 修改"></a>4、JavaAPI-文档-新增 &amp; 修改</h3><blockquote>
-<p> <strong>4.1、新增</strong><br> <pre><code class="language-java">/***<br>     * 添加文档<br>     */<br>    @Test<br>    public void addDocumentTest()&#123;<br>        try &#123;<br>            // 新增文档 - 请求对象<br>            IndexRequest request = new IndexRequest();<br>            // 设置索引及唯一性标识<br>            request.index("user").id("1001");</p>
-</blockquote>
-<pre><code>        // 创建数据对象
-        User user = new User();
-        user.setName(&quot;zhangsan&quot;);
-        user.setAge(30);
-        user.setSex(&quot;男&quot;);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String productJson = objectMapper.writeValueAsString(user);
-        // 添加文档数据，数据格式为 JSON 格式
-        request.source(productJson, XContentType.JSON);
-        // 客户端发送请求，获取响应对象
-        IndexResponse response = restHighLevelClient.index(request, RequestOptions.DEFAULT);
-        //打印结果信息
-        System.out.println(&quot;_index:&quot; + response.getIndex());
-        System.out.println(&quot;_id:&quot; + response.getId());
-        System.out.println(&quot;_result:&quot; + response.getResult());
-    &#125; catch (IOException e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;&lt;/code&gt;&lt;/pre&gt; 
-</code></pre>
-<p> 后台打印：<br> <img alt="" height="210" src="https://img-blog.csdnimg.cn/20210620172914512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668"><br> <strong>4.2、修改</strong><br> <pre><code class="language-java">/***<br>     * 修改文档信息<br>     */<br>    @Test<br>    public void updateDocument()&#123;<br>        try &#123;<br>            // 修改文档 - 请求对象<br>            UpdateRequest request = new UpdateRequest();<br>            // 配置修改参数<br>            request.index("user").id("1001");<br>            // 设置请求体，对数据进行修改<br>            request.doc(XContentType.JSON, "sex", "女");<br>            // 客户端发送请求，获取响应对象<br>            UpdateResponse response = restHighLevelClient.update(request, RequestOptions.DEFAULT);<br>            System.out.println("_index:" + response.getIndex());<br>            System.out.println("_id:" + response.getId());<br>            System.out.println("_result:" + response.getResult());<br>        &#125; catch (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <img alt="" height="188" src="https://img-blog.csdnimg.cn/20210620173126639.png" width="699"> </p>
-<h3 id="5、文档-查询-amp-删除"><a href="#5、文档-查询-amp-删除" class="headerlink" title="5、文档-查询 &amp; 删除"></a>5、文档-查询 &amp; 删除</h3><blockquote>
-<p> <strong>5.1、查询文档</strong><br> <pre><code class="language-java"> /***<br>     * 查询文档信息<br>     */<br>    @Test<br>    public void queryDocument()&#123;<br>        try &#123;<br>            //1.创建请求对象<br>            GetRequest request = new GetRequest().index("user").id("1001");<br>            //2.客户端发送请求，获取响应对象<br>            GetResponse response = restHighLevelClient.get(request, RequestOptions.DEFAULT);<br>            //打印结果信息<br>            System.out.println("_index:" + response.getIndex());<br>            System.out.println("_type:" + response.getType());<br>            System.out.println("_id:" + response.getId());<br>            System.out.println("source:" + response.getSourceAsString());<br>        &#125; catch (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code class="language-java">_index:user<br>_type:_doc<br>_id:1001<br>source:&#123;"name":"zhangsan","age":30,"sex":"男"&#125;</p>
-</blockquote>
-<p>Process finished with exit code 0<br></code></pre><br> <strong>5.2、删除</strong><br> <pre><code class="language-java"> /***<br>     * 删除文档操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void delDocumentTest() throws IOException &#123;<br>        //创建请求对象<br>        DeleteRequest request = new DeleteRequest().index("user").id("1001");<br>        //客户端发送请求，获取响应对象<br>        DeleteResponse response = restHighLevelClient.delete(request, RequestOptions.DEFAULT);<br>        //打印信息<br>        System.out.println(response.toString());<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code class="language-java">DeleteResponse[index=user,type=_doc,id=1001,version=16,result=deleted,shards=ShardInfo&#123;total=2, successful=1, failures=[]&#125;]</p>
-<p>Process finished with exit code 0<br></code></pre> 
-   </p>
-<h3 id="6、文档-批量新增-amp-批量删除"><a href="#6、文档-批量新增-amp-批量删除" class="headerlink" title="6、文档-批量新增 &amp; 批量删除"></a>6、文档-批量新增 &amp; 批量删除</h3><blockquote>
-<p> <strong>6.1、批量新增</strong><br> <pre><code class="language-java"> /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkInsertRequestTest() throws IOException &#123;<br>        //创建批量新增请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new<br>                IndexRequest().index("user").id("1001").source(XContentType.JSON, "name",<br>                "zhangsan"));<br>        request.add(new<br>                IndexRequest().index("user").id("1002").source(XContentType.JSON, "name",<br>                "lisi"));<br>        request.add(new<br>                IndexRequest().index("user").id("1003").source(XContentType.JSON, "name",<br>                "wangwu"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:294ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@2beee7ff</p>
-</blockquote>
-<p>Process finished with exit code 0<br></code></pre><br> <strong>6.2、批量删除</strong><br> <pre><code class="language-java">  /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkDeleteRequestTest() throws IOException &#123;<br>        //创建批量删除请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new DeleteRequest().index("user").id("1001"));<br>        request.add(new DeleteRequest().index("user").id("1002"));<br>        request.add(new DeleteRequest().index("user").id("1003"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:108ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@7b02881e</p>
-<p>Process finished with exit code 0</p>
-<p></code></pre> 
-   </p>
-<h3 id="7、文档-高级查询-全量查询"><a href="#7、文档-高级查询-全量查询" class="headerlink" title="7、文档-高级查询-全量查询"></a>7、文档-高级查询-全量查询</h3><blockquote>
-<p> 7.1、先批量增加数据<br> <pre><code class="language-java"> /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkInsertRequestTest() throws IOException &#123;<br>        //创建批量新增请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new IndexRequest().index("user").id("1001").source(XContentType.JSON, "name", "zhangsan", "age", "10", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1002").source(XContentType.JSON, "name", "lisi", "age", "30", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1003").source(XContentType.JSON, "name", "wangwu1", "age", "40", "sex","男"));<br>        request.add(new IndexRequest().index("user").id("1004").source(XContentType.JSON, "name", "wangwu2", "age", "20", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1005").source(XContentType.JSON, "name", "wangwu3", "age", "50", "sex","男"));<br>        request.add(new IndexRequest().index("user").id("1006").source(XContentType.JSON, "name", "wangwu4", "age", "20", "sex","男"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:168ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@2beee7ff</p>
-</blockquote>
-<p>Process finished with exit code 0<br></code></pre><br> <strong>查询所有索引数据</strong><br> <pre><code class="language-java">/***<br>     * 查询所有索引数据<br>     * @throws IOException<br>     */<br>    @Test<br>    public void searchRequestTest() throws IOException &#123;<br>        // 创建搜索请求对象<br>        SearchRequest request = new SearchRequest();<br>        request.indices("user");<br>        // 构建查询的请求体<br>        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();<br>        // 查询所有数据<br>        sourceBuilder.query(QueryBuilders.matchAllQuery());<br>        request.source(sourceBuilder);<br>        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);<br>        // 查询匹配<br>        SearchHits hits = response.getHits();<br>        System.out.println("took:" + response.getTook());<br>        System.out.println("timeout:" + response.isTimedOut());<br>        System.out.println("total:" + hits.getTotalHits());<br>        System.out.println("MaxScore:" + hits.getMaxScore());<br>        System.out.println("hits========&gt;&gt;");<br>        for (SearchHit hit : hits) &#123;<br>            //输出每条查询的结果信息<br>            System.out.println(hit.getSourceAsString());<br>        &#125;<br>        System.out.println("&lt;&lt;========");<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:2ms<br>timeout:false<br>total:6 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
-<p>Process finished with exit code 0<br></code></pre> 
-   </p>
-<h3 id="8、文档-高级查询-分页查询-amp-条件查询-amp-查询排序"><a href="#8、文档-高级查询-分页查询-amp-条件查询-amp-查询排序" class="headerlink" title="8、文档-高级查询-分页查询 &amp; 条件查询 &amp; 查询排序"></a>8、文档-高级查询-分页查询 &amp; 条件查询 &amp; 查询排序</h3><blockquote>
-<p> <strong>8.1、条件查询</strong><br> <pre><code class="language-java"> /***<br>     * 条件查询<br>     * @throws IOException<br>     */<br>    @Test<br>    public void queryByConditiontest() throws IOException &#123;<br>        // 创建搜索请求对象<br>        SearchRequest request = new SearchRequest();<br>        request.indices("user");<br>        // 构建查询的请求体<br>        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();<br>        sourceBuilder.query(QueryBuilders.termQuery("age", "30"));<br>        request.source(sourceBuilder);<br>        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);<br>        // 查询匹配<br>        SearchHits hits = response.getHits();<br>        System.out.println("took:" + response.getTook());<br>        System.out.println("timeout:" + response.isTimedOut());<br>        System.out.println("total:" + hits.getTotalHits());<br>        System.out.println("MaxScore:" + hits.getMaxScore());<br>        System.out.println("hits========&gt;&gt;");<br>        for (SearchHit hit : hits) &#123;<br>            //输出每条查询的结果信息<br>            System.out.println(hit.getSourceAsString());<br>        &#125;<br>        System.out.println("&lt;&lt;========");<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:1 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&lt;&lt;========<br></code></pre><br> <strong>8.2、分页查询</strong> </p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/***</span><br><span class="line">     * 条件查询</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    @Test</span><br><span class="line">    public void queryByPagetest() throws IOException &#123;</span><br><span class="line">        // 创建搜索请求对象</span><br><span class="line">        SearchRequest request = new SearchRequest();</span><br><span class="line">        request.indices(&quot;user&quot;);</span><br><span class="line">        // 构建查询的请求体</span><br><span class="line">        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();</span><br><span class="line">        sourceBuilder.query(QueryBuilders.matchAllQuery());</span><br><span class="line">        // 分页查询</span><br><span class="line">        // 当前页其实索引(第一条数据的顺序号)， from</span><br><span class="line">        sourceBuilder.from(0);</span><br><span class="line"></span><br><span class="line">        // 每页显示多少条 size</span><br><span class="line">        sourceBuilder.size(2);</span><br><span class="line">        request.source(sourceBuilder);</span><br><span class="line">        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);</span><br><span class="line">        // 查询匹配</span><br><span class="line">        SearchHits hits = response.getHits();</span><br><span class="line">        System.out.println(&quot;took:&quot; + response.getTook());</span><br><span class="line">        System.out.println(&quot;timeout:&quot; + response.isTimedOut());</span><br><span class="line">        System.out.println(&quot;total:&quot; + hits.getTotalHits());</span><br><span class="line">        System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());</span><br><span class="line">        System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);</span><br><span class="line">        for (SearchHit hit : hits) &#123;</span><br><span class="line">            //输出每条查询的结果信息</span><br><span class="line">            System.out.println(hit.getSourceAsString());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>后台打印</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">took:1ms</span><br><span class="line">timeout:false</span><br><span class="line">total:6 hits</span><br><span class="line">MaxScore:1.0</span><br><span class="line">hits========&amp;gt;&amp;gt;</span><br><span class="line">&#123;&quot;name&quot;:&quot;zhangsan&quot;,&quot;age&quot;:&quot;10&quot;,&quot;sex&quot;:&quot;女&quot;&#125;</span><br><span class="line">&#123;&quot;name&quot;:&quot;lisi&quot;,&quot;age&quot;:&quot;30&quot;,&quot;sex&quot;:&quot;女&quot;&#125;</span><br><span class="line">&amp;lt;&amp;lt;========</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="8-3、查询排序"><a href="#8-3、查询排序" class="headerlink" title="8.3、查询排序"></a>8.3、查询排序</h3><blockquote>
- <pre><code class="language-java">/***
-     * 条件查询
-     * @throws IOException
-     */
-    @Test
-    public void queryByOrdertest() throws IOException &#123;
-        // 创建搜索请求对象
-        SearchRequest request = new SearchRequest();
-        request.indices("user");
-</blockquote>
-<pre><code>    // 构建查询的请求体
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    sourceBuilder.query(QueryBuilders.matchAllQuery());
-    // 排序
-    sourceBuilder.sort(&quot;age&quot;, SortOrder.ASC);
-    request.source(sourceBuilder);
-    SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
-    // 查询匹配
-    SearchHits hits = response.getHits();
-    System.out.println(&quot;took:&quot; + response.getTook());
-    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
-    System.out.println(&quot;total:&quot; + hits.getTotalHits());
-    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
-    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
-    for (SearchHit hit : hits) &#123;
-        //输出每条查询的结果信息
-        System.out.println(hit.getSourceAsString());
-    &#125;
-    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
-&#125;&lt;/code&gt;&lt;/pre&gt; 
-</code></pre>
-<p> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:6 hits<br>MaxScore:NaN<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&lt;&lt;========<br></code></pre> 
-   </p>
-<h3 id="9、高级查询-组合查询-amp-范围查询"><a href="#9、高级查询-组合查询-amp-范围查询" class="headerlink" title="9、高级查询-组合查询 &amp; 范围查询"></a>9、高级查询-组合查询 &amp; 范围查询</h3><blockquote>
- <h3>9.1、组合查询</h3> 
- <pre><code class="language-java"> /***
-     * 条件查询
-     * @throws IOException
-     */
-    @Test
-    public void queryByCombinattest() throws IOException &#123;
-        // 创建搜索请求对象
-        SearchRequest request = new SearchRequest();
-        request.indices("user");
-        // 构建查询的请求体
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        // 必须包含
-        boolQueryBuilder.must(QueryBuilders.matchQuery("age", "30"));
-        // 一定不含
-        boolQueryBuilder.mustNot(QueryBuilders.matchQuery("name", "zhangsan"));
-        // 可能包含
-        boolQueryBuilder.should(QueryBuilders.matchQuery("sex", "男"));
-        sourceBuilder.query(boolQueryBuilder);
-        request.source(sourceBuilder);
-        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
-        // 查询匹配
-        SearchHits hits = response.getHits();
-        System.out.println("took:" + response.getTook());
-        System.out.println("timeout:" + response.isTimedOut());
-        System.out.println("total:" + hits.getTotalHits());
-        System.out.println("MaxScore:" + hits.getMaxScore());
-        System.out.println("hits========&gt;&gt;");
-        for (SearchHit hit : hits) &#123;
-            //输出每条查询的结果信息
-            System.out.println(hit.getSourceAsString());
-        &#125;
-        System.out.println("&lt;&lt;========");
-    &#125;</code></pre> 
- 后台打印 
- <pre><code class="language-java">took:28ms
-timeout:false
-total:1 hits
-MaxScore:1.0
-hits========&gt;&gt;
-&#123;"name":"lisi","age":"30","sex":"女"&#125;
-&lt;&lt;========
-</blockquote>
-<p>Process finished with exit code 0<br></code></pre><br> <strong>9.2、范围查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.sort.SortOrder;</p>
-<p>public class QueryDoc &#123;</p>
-<pre><code>public static final ElasticsearchTask SEARCH_BY_RANGE = client -&amp;gt; &#123;
-    // 创建搜索请求对象
-    SearchRequest request = new SearchRequest();
-    request.indices(&quot;user&quot;);
-    // 构建查询的请求体
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(&quot;age&quot;);
-    // 大于等于
-    //rangeQuery.gte(&quot;30&quot;);
-    // 小于等于
-    rangeQuery.lte(&quot;40&quot;);
-    sourceBuilder.query(rangeQuery);
-    request.source(sourceBuilder);
-    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-    // 查询匹配
-    SearchHits hits = response.getHits();
-    System.out.println(&quot;took:&quot; + response.getTook());
-    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
-    System.out.println(&quot;total:&quot; + hits.getTotalHits());
-    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
-    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
-    for (SearchHit hit : hits) &#123;
-    //输出每条查询的结果信息
-        System.out.println(hit.getSourceAsString());
-    &#125;
-    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
-&#125;;
-
-public static void main(String[] args) &#123;
-    ConnectElasticsearch.connect(SEARCH_BY_RANGE);
-&#125;
-</code></pre>
-<p>}</p>
-<p></code></pre><br> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:5 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
-<p>Process finished with exit code 0<br></code></pre> </p>
-<h3 id="10、高级查询-模糊查询-amp-高亮查询"><a href="#10、高级查询-模糊查询-amp-高亮查询" class="headerlink" title="10、高级查询-模糊查询 &amp; 高亮查询"></a><strong>10、</strong>高级查询-模糊查询 &amp; 高亮查询</h3><blockquote>
-<p> <strong>10.1、模糊查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.sort.SortOrder;</p>
-</blockquote>
-<p>public class QueryDoc &#123;</p>
-<pre><code>public static final ElasticsearchTask SEARCH_BY_FUZZY_CONDITION = client -&amp;gt; &#123;
-    // 创建搜索请求对象
-    SearchRequest request = new SearchRequest();
-    request.indices(&quot;user&quot;);
-    // 构建查询的请求体
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    sourceBuilder.query(QueryBuilders.fuzzyQuery(&quot;name&quot;,&quot;wangwu&quot;).fuzziness(Fuzziness.ONE));
-    request.source(sourceBuilder);
-    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-    // 查询匹配
-    SearchHits hits = response.getHits();
-    System.out.println(&quot;took:&quot; + response.getTook());
-    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
-    System.out.println(&quot;total:&quot; + hits.getTotalHits());
-    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
-    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
-    for (SearchHit hit : hits) &#123;
-        //输出每条查询的结果信息
-        System.out.println(hit.getSourceAsString());
-    &#125;
-    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
-&#125;;
-
-
-public static void main(String[] args) &#123;
-</code></pre>
-<p>//        ConnectElasticsearch.connect(SEARCH_ALL);<br>//        ConnectElasticsearch.connect(SEARCH_BY_CONDITION);<br>//        ConnectElasticsearch.connect(SEARCH_BY_PAGING);<br>//        ConnectElasticsearch.connect(SEARCH_WITH_ORDER);<br>//        ConnectElasticsearch.connect(SEARCH_BY_BOOL_CONDITION);<br>//        ConnectElasticsearch.connect(SEARCH_BY_RANGE);<br>        ConnectElasticsearch.connect(SEARCH_BY_FUZZY_CONDITION);<br>    }</p>
-<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">took:152ms<br>timeout:false<br>total:4 hits<br>MaxScore:1.2837042<br>hits========&gt;&gt;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
-<p>Process finished with exit code 0<br></code></pre><br> <strong>10.2、高亮查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
-<p>import java.util.Map;</p>
-<p>public class QueryDoc &#123;</p>
-<pre><code>public static final ElasticsearchTask SEARCH_WITH_HIGHLIGHT = client -&amp;gt; &#123;
-    // 高亮查询
-    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
-    //2.创建查询请求体构建器
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    //构建查询方式：高亮查询
-    TermsQueryBuilder termsQueryBuilder =
-            QueryBuilders.termsQuery(&quot;name&quot;,&quot;zhangsan&quot;);
-    //设置查询方式
-    sourceBuilder.query(termsQueryBuilder);
-    //构建高亮字段
-    HighlightBuilder highlightBuilder = new HighlightBuilder();
-    highlightBuilder.preTags(&quot;&amp;lt;font color=&#39;red&#39;&amp;gt;&quot;);//设置标签前缀
-    highlightBuilder.postTags(&quot;&amp;lt;/font&amp;gt;&quot;);//设置标签后缀
-    highlightBuilder.field(&quot;name&quot;);//设置高亮字段
-    //设置高亮构建对象
-    sourceBuilder.highlighter(highlightBuilder);
-    //设置请求体
-    request.source(sourceBuilder);
-    //3.客户端发送请求，获取响应对象
-    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-    //4.打印响应结果
-    SearchHits hits = response.getHits();
-    System.out.println(&quot;took::&quot;+response.getTook());
-    System.out.println(&quot;time_out::&quot;+response.isTimedOut());
-    System.out.println(&quot;total::&quot;+hits.getTotalHits());
-    System.out.println(&quot;max_score::&quot;+hits.getMaxScore());
-    System.out.println(&quot;hits::::&amp;gt;&amp;gt;&quot;);
-    for (SearchHit hit : hits) &#123;
-        String sourceAsString = hit.getSourceAsString();
-        System.out.println(sourceAsString);
-        //打印高亮结果
-        Map&amp;lt;String, HighlightField&amp;gt; highlightFields = hit.getHighlightFields();
-        System.out.println(highlightFields);
-    &#125;
-    System.out.println(&quot;&amp;lt;&amp;lt;::::&quot;);
-&#125;;
-
-
-public static void main(String[] args) &#123;
-    ConnectElasticsearch.connect(SEARCH_WITH_HIGHLIGHT);
-&#125;
-</code></pre>
-<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">took::672ms<br>time_out::false<br>total::1 hits<br>max_score::1.0<br>hits::::&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;name=[name], fragments[[&lt;font color='red'&gt;zhangsan&lt;/font&gt;]]&#125;<br>&lt;&lt;::::</p>
-<p>Process finished with exit code 0<br></code></pre> 
-   </p>
-<h3 id="11、高级查询-最大值查询-amp-分组查询"><a href="#11、高级查询-最大值查询-amp-分组查询" class="headerlink" title="11、高级查询-最大值查询 &amp; 分组查询"></a>11、高级查询-最大值查询 &amp; 分组查询</h3><blockquote>
-<p> <strong>1、最大值查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.aggregations.AggregationBuilders;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
-</blockquote>
-<p>import java.util.Map;</p>
-<p>public class QueryDoc &#123;</p>
-<pre><code>public static final ElasticsearchTask SEARCH_WITH_MAX = client -&amp;gt; &#123;
-    // 高亮查询
-    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    sourceBuilder.aggregation(AggregationBuilders.max(&quot;maxAge&quot;).field(&quot;age&quot;));
-    //设置请求体
-    request.source(sourceBuilder);
-    //3.客户端发送请求，获取响应对象
-    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-    //4.打印响应结果
-    SearchHits hits = response.getHits();
-    System.out.println(response);
-&#125;;
-
-public static void main(String[] args) &#123;
-    ConnectElasticsearch.connect(SEARCH_WITH_MAX);
-&#125;
-</code></pre>
-<p>}<br></code></pre><br> 后台打印<br> <pre><code>&#123;"took":16,"timed_out":false,"_shards":&#123;"total":1,"successful":1,"skipped":0,"failed":0&#125;,"hits":&#123;"total":&#123;"value":6,"relation":"eq"&#125;,"max_score":1.0,"hits":[&#123;"_index":"user","_type":"_doc","_id":"1001","_score":1.0,"_source":&#123;"name":"zhangsan","age":"10","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1002","_score":1.0,"_source":&#123;"name":"lisi","age":"30","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1003","_score":1.0,"_source":&#123;"name":"wangwu1","age":"40","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1004","_score":1.0,"_source":&#123;"name":"wangwu2","age":"20","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1005","_score":1.0,"_source":&#123;"name":"wangwu3","age":"50","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1006","_score":1.0,"_source":&#123;"name":"wangwu4","age":"20","sex":"男"&#125;&#125;]&#125;,"aggregations":&#123;"max#maxAge":&#123;"value":50.0&#125;&#125;&#125;</p>
-<p>Process finished with exit code 0<br></code></pre><br> <h3>分组查询</h3><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.aggregations.AggregationBuilders;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
-<p>import java.util.Map;</p>
-<p>public class QueryDoc &#123;</p>
-<pre><code>public static final ElasticsearchTask SEARCH_WITH_GROUP = client -&amp;gt; &#123;
-    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
-    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    sourceBuilder.aggregation(AggregationBuilders.terms(&quot;age_groupby&quot;).field(&quot;age&quot;));
-    //设置请求体
-    request.source(sourceBuilder);
-    //3.客户端发送请求，获取响应对象
-    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-    //4.打印响应结果
-    SearchHits hits = response.getHits();
-    System.out.println(response);
-&#125;;
-
-public static void main(String[] args) &#123;
-    ConnectElasticsearch.connect(SEARCH_WITH_GROUP);
-&#125;
-</code></pre>
-<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">&#123;"took":10,"timed_out":false,"_shards":&#123;"total":1,"successful":1,"skipped":0,"failed":0&#125;,"hits":&#123;"total":&#123;"value":6,"relation":"eq"&#125;,"max_score":1.0,"hits":[&#123;"_index":"user","_type":"_doc","_id":"1001","_score":1.0,"_source":&#123;"name":"zhangsan","age":"10","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1002","_score":1.0,"_source":&#123;"name":"lisi","age":"30","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1003","_score":1.0,"_source":&#123;"name":"wangwu1","age":"40","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1004","_score":1.0,"_source":&#123;"name":"wangwu2","age":"20","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1005","_score":1.0,"_source":&#123;"name":"wangwu3","age":"50","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1006","_score":1.0,"_source":&#123;"name":"wangwu4","age":"20","sex":"男"&#125;&#125;]&#125;,"aggregations":&#123;"lterms#age_groupby":&#123;"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[&#123;"key":20,"doc_count":2&#125;,&#123;"key":10,"doc_count":1&#125;,&#123;"key":30,"doc_count":1&#125;,&#123;"key":40,"doc_count":1&#125;,&#123;"key":50,"doc_count":1&#125;]&#125;&#125;&#125;</p>
-<p>Process finished with exit code 0<br></code></pre> 
-   </p>
-<p> </p>
-<p> </p>
-<p> </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch之analysis"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%B9%8Banalysis/"
-    >Elasticsearch之analysis</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%B9%8Banalysis/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.442Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch之analysis<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、简介</p>
-<blockquote>
-<p> analysis(只是一个概念)，文本分析是将全文本转换为一系列单词的过程，也叫分词。analysis是通 过analyzer(分词器)来实现的，可以使用Elasticsearch内置的分词器，也可以自己去定制一些分词 器。 除了在数据写入的时候进行分词处理，那么在查询的时候也可以使用分析器对查询语句进行分词。<br> anaylzer是由三部分组成，例如有：Hello a World, the world is beautiful </p>
-</blockquote>
-<ol>
-<li>Character Filter: 将文本中html标签剔除掉。 </li>
-<li>Tokenizer: 按照规则进行分词，在英文中按照空格分词。 </li>
-<li>Token Filter: 去掉stop world(停顿词，a, an, the, is, are等)，然后转换小写 <img alt="" height="201" src="https://img-blog.csdnimg.cn/20210701230820389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="739"> </li>
-</ol>
-<h3 id="2、内置分词器"><a href="#2、内置分词器" class="headerlink" title="2、内置分词器"></a>2、内置分词器</h3><blockquote>
- <img alt="" height="296" src="https://img-blog.csdnimg.cn/20210701230857488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="740"> 
- 内置分词器示例： 
- <img alt="" height="545" src="https://img-blog.csdnimg.cn/20210701231016915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779"> 
- <img alt="" height="557" src="https://img-blog.csdnimg.cn/20210701231031310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="796"> 
-</blockquote>
-<h3 id="3、ik分词器"><a href="#3、ik分词器" class="headerlink" title="3、ik分词器"></a>3、ik分词器</h3><blockquote>
-<p> IK分词器在任何操作系统下安装步骤均⼀样: 在ES的家⽬录下的 plugins ⽬录下创建名为 ik 的 ⽂件夹，然后将下载后的 zip 包拷⻉到 ik 解压即可<br> IK分词器提供了两种分词⽅式：<br> <img alt="" height="271" src="https://img-blog.csdnimg.cn/20210704114331635.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="991"><br> 验证：<br> <img alt="" height="280" src="https://img-blog.csdnimg.cn/20210704114423155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1007"><br> <img alt="" height="76" src="https://img-blog.csdnimg.cn/20210704114551497.png" width="483"><img alt="" height="205" src="https://img-blog.csdnimg.cn/20210704114605160.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="992"> </p>
-</blockquote>
-<h3 id="4、⾃定义词库"><a href="#4、⾃定义词库" class="headerlink" title="4、⾃定义词库"></a>4、⾃定义词库</h3><blockquote>
-<p> 在很多的时候，业务上的⼀些词库极有可能不在IK分词器的词库中，需要去定制属于我们⾃⼰的词 库。例如下⾯的例⼦中， 正井猫 、 up主 被切分为⼀个个的字，我们希望这两个词语是不被拆 分；另外 的 作为中⽂的停顿词，也不希望出现在分词中，所以我们需要⾃定义词库和停顿词词 库。<br> <img alt="" height="166" src="https://img-blog.csdnimg.cn/20210704115725621.png" width="988"><img alt="" height="798" src="https://img-blog.csdnimg.cn/20210704115746521.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 进⼊到 $ES_HOME/plugins/ik/config ⽬录下，创建 custom ⽬录，在⽬录下创建 mydic.dic 、 ext_stopword.dic ⽂件，<br> 在 mydic.dic ⽂件中添加两⾏内容：<br> <img alt="" height="101" src="https://img-blog.csdnimg.cn/20210704121115600.png" width="620"> 在 ext_stopword.dic 中添加⼀⾏内容:<br> <img alt="" height="61" src="https://img-blog.csdnimg.cn/20210704121136941.png" width="485"><br> 最后修改 $ES_HOME/plugins/ik/config/IKAnalyzer.cfg.xml ⽂件，内容如下：<br> <img alt="" height="501" src="https://img-blog.csdnimg.cn/2021070412115725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1102"><br> 重启重启elasticsearch elasticsearch ， 重新执⾏如上的命令，结果如下：<br> <img alt="" height="579" src="https://img-blog.csdnimg.cn/20210704121221247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="5、IK分词器在工作中的实际案例"><a href="#5、IK分词器在工作中的实际案例" class="headerlink" title="5、IK分词器在工作中的实际案例"></a>5、IK分词器在工作中的实际案例</h3><blockquote>
-<p> 5.1、首先创建new索引的mapping<br> <pre><code class="language-javascript">PUT news<br>&#123;<br>  "mappings": &#123;<br>    "properties": &#123;<br>      "title":&#123;<br>        "type": "text",<br>        "analyzer": "ik_max_word",<br>        "search_analyzer": "ik_smart"<br>      &#125;,<br>      "content":&#123;<br>        "type": "text",<br>        "analyzer": "ik_max_word",<br>        "search_analyzer": "ik_smart"<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 注意：analyzer和search_analyzer的区别如下：<br>       analyzer：表示数据在进入news这个索引中的时候，我们尽量让它多的对我们数据进行分词，后面才能够达到精准的匹配。<br>       search_analyzer：对我们的数据进行搜索的时候不要进行过多的分词处理，提高效率。<br> 5.2、查看创建的索引结构<br>      GET news/_mapping<br>      <img alt="" height="402" src="https://img-blog.csdnimg.cn/20210704123038178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520"><br> 5.3、创建数据进入索引<br> <img alt="" height="438" src="https://img-blog.csdnimg.cn/20210704123835184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="854"><br> 5.4、通过语句查询<br> <img alt="" height="234" src="https://img-blog.csdnimg.cn/20210704124000129.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="659"><br> <img alt="" height="758" src="https://img-blog.csdnimg.cn/20210704124016440.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1157"><br> 下面我们再新增两条数据测试<br> <img alt="" height="212" src="https://img-blog.csdnimg.cn/2021070412571235.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="638"><br> 查询一下柳岩：<br> <img alt="" height="181" src="https://img-blog.csdnimg.cn/20210704125756473.png" width="660"><br> <img alt="" height="766" src="https://img-blog.csdnimg.cn/20210704125822468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1160"><br> 可以发现我们其实仅仅只是查询柳岩，但是两条数据都查询出来了，那么我们首先配置一下mydic.dic扩展词典：<br> <img alt="" height="212" src="https://img-blog.csdnimg.cn/20210704130118770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="422"><br> 重新启动elasticsearch:<br> 因为我们之前的数据已经分过词了，所以我们需要重新分词相关数据：<br> 先重新索引柳岩：<br> <pre><code class="language-html">POST news/_update_by_query<br>&#123;<br>  "query": &#123;<br>    "bool": &#123;<br>      "should": [<br>        &#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "岩"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;,&#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "岩"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 先重新索引柳真：<br> <pre><code class="language-html">POST news/_update_by_query<br>&#123;<br>  "query": &#123;<br>    "bool": &#123;<br>      "should": [<br>        &#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "真"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;,&#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "真"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 再次查询：<br> <img alt="" height="200" src="https://img-blog.csdnimg.cn/20210704134645260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579"><br> <img alt="" height="625" src="https://img-blog.csdnimg.cn/20210704134700972.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1179"> </p>
-</blockquote>
-<h3 id="6、pinyin分词器的安装"><a href="#6、pinyin分词器的安装" class="headerlink" title="6、pinyin分词器的安装"></a>6、pinyin分词器的安装</h3><blockquote>
-<p> pinyin 分词器在任何操作系统下安装步骤均⼀样: 在ES的家⽬录下的 plugins ⽬录下创建名为 pinyin 的⽂件夹，然后将下载后的 zip 包拷⻉到 pinyin 解压即可<br> <img alt="" height="219" src="https://img-blog.csdnimg.cn/202107041449420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="827"><br> 重启es<br> 测试pingyin插件<br> <img alt="" height="154" src="https://img-blog.csdnimg.cn/20210704145316140.png" width="653"><br> 效果：<br> <img alt="" height="539" src="https://img-blog.csdnimg.cn/2021070414533563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484"> </p>
-</blockquote>
-<h3 id="6、Elasticsearch之⾃定义分词器以及应⽤"><a href="#6、Elasticsearch之⾃定义分词器以及应⽤" class="headerlink" title="6、Elasticsearch之⾃定义分词器以及应⽤"></a>6、Elasticsearch之⾃定义分词器以及应⽤</h3><blockquote>
-<p> 6.1、案例需求：<br> <img alt="" height="58" src="https://img-blog.csdnimg.cn/20210704154206109.png" width="796"><img alt="" height="783" src="https://img-blog.csdnimg.cn/20210704154226316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="463"><br> 6.2、设置分词器<br> <img alt="" height="621" src="https://img-blog.csdnimg.cn/20210704154308863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="699"><br> 6.3、验证分词器效果<br> <img alt="" height="135" src="https://img-blog.csdnimg.cn/20210704154525604.png" width="800"><br> <img alt="" height="588" src="https://img-blog.csdnimg.cn/20210704154546577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="982"><br> 6.4、为属性添加分词器<br> <img alt="" height="373" src="https://img-blog.csdnimg.cn/20210704154634587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="996"><br> 6.5、结果验证<br>    执⾏如下命令添加数据<br>    <img alt="" height="234" src="https://img-blog.csdnimg.cn/20210704154704254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="452">    <img alt="" height="728" src="https://img-blog.csdnimg.cn/20210704154744408.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="462" src="https://img-blog.csdnimg.cn/20210704154800679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="566" src="https://img-blog.csdnimg.cn/20210704154826224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
 </blockquote>
  
       <!-- reward -->

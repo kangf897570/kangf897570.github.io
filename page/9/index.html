@@ -160,6 +160,665 @@
     
     
     <article
+  id="post-clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/"
+    >clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.268Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.分布式表与集群配置</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>分布式表基于Distributed引擎创建，在多个分片上运行分布式查询。- 读取是自动并行化的，可使用远程服务器上的索引（如果有）。- 数据在请求的本地服务器上尽可能地被部分处理。例如，对于GROUP BY查询，数据将在远程服务器 上聚合，聚合函数的中间状态将发送到请求服务器，然后数据将进一步聚合。<br>创建分布式表： <pre><code class="language-sql">ENGINE = Distributed(cluster_name, db_name, table_name[, sharding_key[, policy_name]])
+</code></pre> </li>
+</ul>
+<p> <strong>参数：</strong> </p>
+<ul>
+<li><strong>cluster_name:集群名称。</strong>- <strong>db_name:数据库名称，可使用常量表达式：currentDatabase()。</strong>- <strong>table_name: 各分片上的表名称。</strong>- <strong>sharding_key: (可选)分片的key，可设置为rand()。</strong>- <strong>policy_name: (可选）策略名称，用于存储异步发送的临时文件。</strong><br>例如下面的/etc/metrika.xml的一部分内容： <pre><code class="language-XML">&lt;remote_servers&gt;
+ &lt;logs&gt;
+     &lt;shard&gt;
+         &lt;weight&gt;1&lt;/weight&gt;
+         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-01-1&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-01-2&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+     &lt;/shard&gt;
+     &lt;shard&gt;
+         &lt;weight&gt;2&lt;/weight&gt;
+         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-02-1&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-02-2&lt;/host&gt;
+             &lt;secure&gt;1&lt;/secure&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+     &lt;/shard&gt;
+ &lt;/logs&gt;
+&lt;/remote_servers&gt;
+</code></pre> 
+这里定义了一个名为logs的集群名称，它有两个分片（shard）组成，每个分片包含两个副本（replica）。<br>分片是包含数据的不同服务器（要读取所有数据，必须访问所有分片）。<br>副本是存储复制数据的服务器（要读取所有数据，访问该分片上的任意一个副本上的数据即可）。 </li>
+</ul>
+<p> 1.weight : 可选，写入数据时分片的权重，建议忽略该配置。 2.internal_repliacation : 可选，同一时刻是否只将数据写入其中一个副本。默认值：false（将数据写入所有副本），建议设置为true。写一个即可。避免重复写。 3.副本配置：配置每个Server的信息，必须参数:host和port，可选参数：user、password、secure和compression。 （1）、host ： 远程服务器地址。支持IPv4和IPv6。也可指定域名，更改域名解析需 重启服务。 （2）、port ： 消息传递的TCP端口。配置文件的tcp_port指定的端口，通常设置为 9000。 （3）、user ： 用于连接到服务的用户名称。默认值：true。在users.xml文件中配置 了访问权限。 （4）、password：用于连接到远程服务的密码。默认值：空字符串。 （5）、secure ： 使用ssl进行连接，通常还应该定义port=9440。 （6）、compression ： 使用数据压缩。默认值：true。 </p>
+<h3 id="2-数据副本与复制表"><a href="#2-数据副本与复制表" class="headerlink" title="2.数据副本与复制表"></a>2.数据副本与复制表</h3><blockquote>
+</blockquote>
+<ul>
+<li>只有MergeTree系列引擎支持数据副本，支持副本的引擎是在MergeTree引擎名称的前面加上前缀 Replicated。- 副本是表级别的而不是整个服务器级别的，因此服务器可以同时存储复制表和非复制表。- 副本不依赖于分片，每个分片都有自己独立的副本。</li>
+</ul>
+<p> <strong>副本表如：</strong> </p>
+<ul>
+<li><strong>ReplicatedMergeTree</strong>- <strong>ReplicatedSummingMergeTree</strong>- <strong>ReplicatedReplacingMergeTree</strong>- <strong>ReplicatedAggregatingMergeTree</strong>- <strong>ReplicatedCollapsingMergeTree</strong>- <strong>ReplicatedVersionedCollapsingMergeTree</strong>- <strong>ReplicatedGraphiteMergeTree</strong></li>
+</ul>
+<h3 id="3-ZooKeeper整合"><a href="#3-ZooKeeper整合" class="headerlink" title="3.ZooKeeper整合"></a>3.ZooKeeper整合</h3><blockquote>
+<p> ClickHouse使用Apache ZooKeeper来存储副本元信息, 在配置文件设置 zookeeper相关的参数。 ClickHouse在创建复制表的时候指定Zookeeper的目录，指定的目录会在建 表时自动创建。 如果ClickHouse的配置文件未配置ZooKeeper， 则无法创建复制表， 并且 任何存量的复制表都将是只读的。 对本地复制表的查询，不会使用ZooKeeper， 其查询速度和非复制表一样快。<br> 本地复制表的数据插入，针对每个数据块（一个块最多有 max_insert_block_size = 1048576条记录），会通过几个事务将大约十个条目添加到Zookeeper。因此，与非复制表相比， 复制表的INSERT操作等 待时间稍长。<br> <pre><code class="language-XML">&lt;zookeeper&gt;<br>    &lt;node index="1"&gt;<br>        &lt;host&gt;example1&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="2"&gt;<br>        &lt;host&gt;example2&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="3"&gt;<br>        &lt;host&gt;example3&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>&lt;/zookeeper&gt;<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="4-创建复制表"><a href="#4-创建复制表" class="headerlink" title="4.创建复制表"></a>4.创建复制表</h3><blockquote>
+<p> 复制表的引擎要以Replicated为前缀，例如：ReplicatedMergeTree。<br> <pre><code class="language-sql">CREATE TABLE table_name<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_name', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> 引擎参数包含了变量，这些变量是在配置文件的”macros”部分配置的，例如：<br> <pre><code class="language-XML">&lt;macros&gt;<br>    &lt;layer&gt;05&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;clickhouse1&lt;/replica&gt;<br>&lt;/macros&gt;<br></code></pre><br> <strong>Replicated*MergeTree引擎参数：</strong> zoo_path : ZooKeeper中表的路径。 replica_name : ZooKeeper中的副本名称。<br> 1.第一个参数ZooKeeper路径组成： （1）、通用前缀：/clickhouse/tables/,建议复制表都使用类似这样的前缀。 （2）、分片标识符：{layer}-{shard},在本示例中，分片标识符有两部分组成，只要保证分片标识符能唯一标识一个分片即可。 （3）、ZooKeeper节点名称：table_name。节点名称最好与表名相同，节点名称在定义后不会更改，即使执行表的重命名操作。<strong>2.第二个参数是副本名称，用于标识同一个分片的不同副本。副本名称只需要在每个shard中唯一即可。</strong><br> 上面的示例中，复制引擎的参数使用了变量替换。ClickHouse也支持使用显示的参数。在这种情况下，不能使用分布式的DDL查询（ON CLUSTER）。建议使用变量替换的方式传入参数，<br> 降低出错概率。<br> 在每个副本服务器上运行CREATE TABLE语句，如果该分片的表在其他节点已经创建且有数据，则该新副本自动同步其他副本的数据。 </p>
+</blockquote>
+<h3 id="5-副本同步机制"><a href="#5-副本同步机制" class="headerlink" title="5.副本同步机制"></a>5.副本同步机制</h3><blockquote>
+</blockquote>
+<ul>
+<li>复制是多主异步的。- INSERT语句（以及ALTER）可在任意可用的服务器上执行。数据首先插入到本地的服务器 （即运行查询的服务器），然后数据被复制到其他服务器。- 由于复制是异步的，所以最近插入的数据出现在其他副本上会有一定的延迟。- 如果部分副本不可用，则在它们可用时写入数据。- 如果副本可用， 则等待的时间是通过网络传输压缩数据块所耗费的时间。- 默认情况下， INSERT操作只需等待一个副本写入成功后返回。如果仅将数据成功写入一个 副本，并且该副本的服务器不再存在， 则存储的数据将丢失。要启动来自多个副本的写入确 认机制，使用insert_quorum选项。</li>
+</ul>
+<h3 id="6-数据原子写入与去重"><a href="#6-数据原子写入与去重" class="headerlink" title="6.数据原子写入与去重"></a>6.数据原子写入与去重</h3><blockquote>
+</blockquote>
+<ul>
+<li>INSERT查询按照数据块插入数据，每个数据块最多max_insert_block_size(默认 max_insert_block_size = 1048576)条记录。换言之， 如果INSERT插入少于1048576条记 录，则插入操作是原子的。单个数据块的写入是原子的。- 数据块是去重的。 对于同一数据块的多次写入（相同大小的的数据块，包含相同的行以及相 同的顺序），该块仅写入一次。在出现网口故障等异常情况下， 客户端应用程序不知道数据 是否已将数据成功写入数据库，因此可以简单地重复执行INSERT查询。相同的数据发送到哪 个副本进行插入并不重要，INSERT是幂等的。数据去重可通过参数 insert_deduplicate控 制，默认为0(开启去重)。- 在复制过程中， 只有插入的源数据通过网络传输。进一步的数据转换（合并）会在所有副本 上以相同的方式进行处理。 这样可以最大限度减少网络带宽占用，这意味着当副本位于不同 的数据中心时，复制的效果也很好。- ClickHouse内部监控副本的数据同步，并能够在发生故障后恢复。故障转义是自动的（对于数据的微小差异）或半自动的（当数据的差异太大时，这可能表示配置错误）。- ClickHouse内部监控副本上的数据同步，并能够在发生故障后恢复。故障转移是自动的（对于数据的微小差异）或半自动的（当数据差异太大时，这可能表示配置错误）。</li>
+</ul>
+<h3 id="7-负载平衡策略"><a href="#7-负载平衡策略" class="headerlink" title="7.负载平衡策略"></a>7.负载平衡策略</h3><blockquote>
+<p> 执行分布式查询时，首先计算分片的每个副本的错误数，然后将查询发送至最少错误的副本。如果没有错误或者错误数相同，则按如下的策略查询数据： 1.random(默认) ： 将查询发送至任意一个副本。 2.nearest_hostname : 将查询发送至主机名最相似的副本。 3.in_order : 将查询按配置文件中的配置顺序发送至副本。 4.first_or_random : 选择第一个副本，如果第一个副本不可用，随机选择一个可用的副本。<br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/202012162320232.png#pic_center"><br> <strong>设置策略的方式：</strong><br> <pre><code class="language-sql">set load_balancing = 'first_or_random';<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="8-案例"><a href="#8-案例" class="headerlink" title="8.案例"></a>8.案例</h3><blockquote>
+<p> <strong>1.在所有节点执行如下语句：</strong><br> **     **创建本地复制表：<br> <pre><code class="language-sql">CREATE TABLE table_local on cluster mycluster<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> <strong>执行效果图： 在docker01-node节点执行的效果图如下：</strong><br> <img alt="" height="669" src="https://img-blog.csdnimg.cn/20210424154112568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1074"> <br> <strong>在docker02-node上执行后的效果如下（提示已经存在了）：</strong><br> <pre><code class="language-sql">docker02-node :) CREATE TABLE table_local on cluster mycluster<br>:-] (<br>:-]     EventDate DateTime,<br>:-]     CounterID UInt32,<br>:-]     UserID UInt32<br>:-] ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>:-] PARTITION BY toYYYYMM(EventDate)<br>:-] ORDER BY (CounterID, EventDate, intHash32(UserID))<br>:-] SAMPLE BY intHash32(UserID);</p>
+</blockquote>
+<p>CREATE TABLE table_local ON CLUSTER mycluster<br>(<br>    <code>EventDate</code> DateTime,<br>    <code>CounterID</code> UInt32,<br>    <code>UserID</code> UInt32<br>)<br>ENGINE = ReplicatedMergeTree(‘/clickhouse/tables/{layer}-{shard}/table_local’, ‘{replica}’)<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID)</p>
+<p>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.13 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   3 │                1 │<br>│ 192.168.56.11 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   2 │                1 │<br>│ 192.168.56.10 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   1 │                1 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.12 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   0 │                0 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>↓ Progress: 0.00 rows, 0.00 B (0.00 rows/s., 0.00 B/s.)                                                                                                                                0%Received exception from server (version 20.1.4):<br>Code: 57. DB::Exception: Received from 192.168.56.11:9000. DB::Exception: There was an error on [192.168.56.13:9000]: Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)).</p>
+<p>4 rows in set. Elapsed: 0.617 sec.</p>
+<p>docker02-node :)</code></pre><br> 通过上面的案例可以知道，只要在一个节点上创建了副本表之后，在其它节点上也已经存在了。<br> <strong>创建分布式表(每个节点都要创建)：</strong><br> <pre><code class="language-sql">CREATE TABLE table_distributed as table_local ENGINE = Distributed(mycluster, default, table_local, rand());<br></code></pre><br> <strong>2.验证副本的复制****在clickhouse1上，对本地表操作。</strong><br> <img alt="" height="505" src="https://img-blog.csdnimg.cn/20210424154842225.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="903"><br> <strong>在docker02-node上（docker02-node的分片副本节点）上，验证数据是否同步：</strong><br> <img alt="" height="335" src="https://img-blog.csdnimg.cn/20210424154940833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="961"><br> <strong>在docker03-node和docker04-node上执行（即shard2上）。发现查询不到结果，效果如下：</strong><br> <img alt="" height="218" src="https://img-blog.csdnimg.cn/20210424155132498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="558"><br> <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210424155146647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557"><br> 3.<strong>验证集群的功能</strong><br> 在任意节点查看分布式表的数据（都将出现下面的效果）。<br> <img alt="" height="277" src="https://img-blog.csdnimg.cn/20210424155259421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738"><br> 在任意一个节点往分布式表里面插入5条数据：<br> <pre><code class="language-sql">insert into table_distributed values('2020-03-11 12:12:31', 21, 1);    docker04-node上执行<br>insert into table_distributed values('2020-03-12 12:12:32', 22, 2);    docker04-node上执行<br>insert into table_distributed values('2020-03-13 12:12:33', 23, 3);    docker03-node上执行<br>insert into table_distributed values('2020-03-14 12:12:34', 24, 4);    docker03-node上执行<br>insert into table_distributed values('2020-03-15 12:12:35', 25, 5);    docker02-node上执行<br></code></pre><br> 然后在任意一台机器上执行：<br> <pre><code class="language-sql">select * from table_distributed;<br></code></pre><br> 都可以看到：<br> <pre><code class="language-sql">docker02-node :) select * from table_distributed;</p>
+<p>SELECT *<br>FROM table_distributed</p>
+<p>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:33 │        22 │     37 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-12 12:12:32 │        22 │      2 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:31 │        21 │      1 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-14 12:12:34 │        24 │      4 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-13 12:12:33 │        23 │      3 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-15 12:12:35 │        25 │      5 │<br>└─────────────────────┴───────────┴────────┘</p>
+<p>6 rows in set. Elapsed: 0.007 sec.</p>
+<p>docker02-node :)</code></pre><br> 然后，分别在两个分片的主机上查询本地表：<strong>在docker01-node上（shard1）发现的效果是：</strong><br> <img alt="" height="445" src="https://img-blog.csdnimg.cn/2021042416000130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555"><br> <strong>在docker03-node上（shard2）发现的效果是：</strong><br> <img alt="" height="340" src="https://img-blog.csdnimg.cn/20210424160051386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="564"><br> 可以看到，使用分布式表插入数据，数据分散到不同分片（shard）的本地表。 </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse分布式集群部署"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"
+    >clickhouse分布式集群部署</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.261Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse分布式集群部署<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.节点规划</p>
+<blockquote>
+ <table align="left" border="1" cellpadding="1" cellspacing="1"><thead><th style="width:268px;text-align:center;vertical-align:middle;">主机名</th><th style="width:265px;text-align:center;vertical-align:middle;">IP地址</th><th style="width:250px;text-align:center;vertical-align:middle;">分片</th><th style="width:213px;text-align:center;vertical-align:middle;">副本</th>
+</blockquote>
+</thead><tbody><td style="width:268px;">docker01-node</td><td style="width:265px;">192.168.56.10</td><td style="width:250px;">shard1</td><td style="width:213px;">副本1</td>
+<td style="width:268px;">docker02-node</td><td style="width:265px;">192.168.56.11</td><td style="width:250px;">shard1</td><td style="width:213px;">副本2</td>
+<td style="width:268px;">docker03-node</td><td style="width:265px;">192.168.56.12</td><td style="width:250px;">shard2</td><td style="width:213px;">副本1</td>
+<td style="width:268px;">docker04-node</td><td style="width:265px;">192.168.56.13</td><td style="width:250px;">shard2</td><td style="width:213px;"> 副本2 </td>
+</tbody></table>
+
+
+<p>规划4个节点， 2个分片， 每个分片2个副本。 分片1的副本在主机clickhouse1和clickhouse2上， 2分片的副本在主机clickhouse3和clickhouse4上。 </p>
+<h3 id="2-操作系统准备工作"><a href="#2-操作系统准备工作" class="headerlink" title="2.操作系统准备工作"></a>2.<strong>操作系统准备工作</strong></h3><blockquote>
+<p> 1）<strong>修改主机名</strong><br> **      <strong>hostname按照上面主机名进行修改。<br> 2）</strong>关闭防火墙、selinux等。**<br> <pre><code class="language-bash">关闭防火墙：<br>systemctl stop firewalld.service<br>systemctl disable firewalld.service<br>systemctl is-enabled firewalld.service</p>
+</blockquote>
+<p>selinux的配置：<br>vim /etc/sysconfig/selinux<br>SELINUX=enforcing 改为 SELINUX=disabled</p>
+<p>检查SELinux的状态<br>[root@localhost etc]# getenforce<br>Disabled<br>[root@localhost etc]#<br></code></pre><br> 3）<strong>配置/etc/hosts</strong><br> **        **必须在/etc/hosts配置主机名和ip地址映射关系， 否则副本之间的数据不能同步。<br> <img alt="" height="183" src="https://img-blog.csdnimg.cn/20210424113605739.png" width="925"> </p>
+<h3 id="3-安装配置zookeeper"><a href="#3-安装配置zookeeper" class="headerlink" title="3.安装配置zookeeper"></a><strong>3.安装配置zookeeper</strong></h3><blockquote>
+<p> 下载zookeeper,zookeeper版本要求3.4.5以上。<br> 1)将下载的安装包上传到Linux上<br>       <img alt="" height="158" src="https://img-blog.csdnimg.cn/20210424122424231.png" width="872"><br> 2)将conf目录下的zoo_sample.cfg复制一份，命名为：zoo.cfg<br>       <img alt="" height="203" src="https://img-blog.csdnimg.cn/20210424122632832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="735"><br>       在zoo.cfg增加配置：<br>       <img alt="" height="146" src="https://img-blog.csdnimg.cn/20210424123230341.png" width="696"><br>     上面配置目录需要手工创建。<br> 3)<strong>环境配置：</strong><br> <pre><code class="language-bash">export ZOOKEEPER_HOME=/opt/zk/apache-zookeeper-3.6.2-bin/<br>export PATH=$PATH:$ZOOKEEPER_HOME/bin<br></code></pre><br> **4)**然后启动zookeeper即可。<br>      启动命令： ./bin/zkServer.sh start<br>      <img alt="" height="646" src="https://img-blog.csdnimg.cn/20210424124150418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"> </p>
+</blockquote>
+<h3 id="4-在所有的主机安装clickhouse-参考之前的安装即可"><a href="#4-在所有的主机安装clickhouse-参考之前的安装即可" class="headerlink" title="4.在所有的主机安装clickhouse,参考之前的安装即可"></a><strong>4.在所有的主机安装clickhouse,参考之前的安装即可</strong></h3><h3 id="5-修改clickhouse的网络相关配置"><a href="#5-修改clickhouse的网络相关配置" class="headerlink" title="5.修改clickhouse的网络相关配置"></a><strong>5.修改clickhouse的网络相关配置</strong></h3><blockquote>
+<p> 修改配置文件：/etc/clickhouse-server/config.xml<br> 打开以下注释，并做相关修改：<br> <img alt="" height="116" src="https://img-blog.csdnimg.cn/20210424130017519.png" width="731"><br> <strong>clickhouse1上的修改如下：</strong><br> <img alt="" height="104" src="https://img-blog.csdnimg.cn/20210424130128454.png" width="552"><br> <strong>Clickhouse2上的修改如下：</strong><br> <img alt="" height="75" src="https://img-blog.csdnimg.cn/20210424130246450.png" width="553"><br> <strong>Clickhouse3上的修改如下：</strong><br> <img alt="" height="91" src="https://img-blog.csdnimg.cn/20210424130315221.png" width="507"><br> <strong>Clickhouse4上的修改如下：</strong><br> <img alt="" height="115" src="https://img-blog.csdnimg.cn/20210424130406733.png" width="538"> </p>
+</blockquote>
+<h3 id="6-增加配置文件：-etc-metrika-xml"><a href="#6-增加配置文件：-etc-metrika-xml" class="headerlink" title="6.增加配置文件：/etc/metrika.xml"></a><strong>6.增加配置文件：/etc/metrika.xml</strong></h3><blockquote>
+<p> docker01-node的配置如下：<br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;</p>
+</blockquote>
+<p>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index=”1”&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.10&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker02-node的配置如下：<br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;</p>
+<p>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index=”1”&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.11&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker03-node<strong>的配置如下：</strong><br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;<br>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index="1"&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.12&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker04-node<strong>的配置如下：</strong><br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;<br>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index="1"&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.13&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> 其中如下这段配置在每个节点是不相同的：<br> <pre><code class="language-XML">&lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.10&lt;/replica&gt;<br>&lt;/macros&gt;<br></code></pre><br> layer表示分层， shard表示分片的编号， 按照配置顺序从1开始。这里的01表示第一个分片。 replica配置副本的标识， 这里配置为本机的主机名。 使用这三个参数可以唯一表示一个副本分片。 这里表示layer为01的分片1的副本，副本标识：192.168.106.103。<br> 配置完成后， 在每个节点启动ClickHouse服务。 systemctl start clickhouse-server<br> 查看状态：systemctl status clickhouse-server<br> <img alt="" height="868" src="https://img-blog.csdnimg.cn/20210424133344316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+<h3 id="7-进入docker01-node查看系统表"><a href="#7-进入docker01-node查看系统表" class="headerlink" title="7.进入docker01-node查看系统表"></a><strong>7.进入</strong>docker01-node查看系统表</h3><p>命令：clickhouse-client -h 服务器ip地址</p>
+<img alt="" height="169" src="https://img-blog.csdnimg.cn/20210424133428164.png" width="707">
+
+<p>查看系统表命令：select * from system.clusters where cluster=’mycluster’;</p>
+<img alt="" height="359" src="https://img-blog.csdnimg.cn/20210424133513204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse20.1.4.14-2单机版安装"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/"
+    >clickhouse20.1.4.14-2单机版安装</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.254Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse20.1.4.14-2单机版安装<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—## 1.安装文件清单</p>
+<blockquote>
+ <img alt="" height="126" src="https://img-blog.csdnimg.cn/20210405111422953.png" width="481"> 
+</blockquote>
+<h2 id="2-安装方式"><a href="#2-安装方式" class="headerlink" title="2.安装方式"></a>2.安装方式</h2><blockquote>
+</blockquote>
+<ul>
+<li>rpm方式，这种方式适用于环境的依赖都很全，不需要安装其他的环境依赖包  命令：rpm -ivh ./*.rpm- yum方式，这种方式依赖于yum，但是不需要安装其他的环境依赖包，缺少的话会自动帮你安装  命令：yum install *.rpm</li>
+</ul>
+<h3 id="3-使用rpm方式安装"><a href="#3-使用rpm方式安装" class="headerlink" title="3.使用rpm方式安装"></a>3.使用rpm方式安装</h3><p>   1)在/opt/clickhouse目录下        <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210405112658964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1004"></p>
+<p>   2）安装           <img alt="" height="295" src="https://img-blog.csdnimg.cn/20210405112853346.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">        </p>
+<h3 id="4-启动clickhouse命令"><a href="#4-启动clickhouse命令" class="headerlink" title="4.启动clickhouse命令"></a>4.启动clickhouse命令</h3><blockquote>
+<p> systemctl start clickhouse-server </p>
+</blockquote>
+<h3 id="5-查看状态命令"><a href="#5-查看状态命令" class="headerlink" title="5.查看状态命令"></a>5.查看状态命令</h3><blockquote>
+<p> systemctl status clickhouse-server<br> <img alt="" height="297" src="https://img-blog.csdnimg.cn/20210405113223195.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="6-重启命令"><a href="#6-重启命令" class="headerlink" title="6.重启命令"></a>6.重启命令</h3><blockquote>
+<p> systemctl restart clickhouse-server </p>
+</blockquote>
+<h3 id="7-使用客户端命令进入"><a href="#7-使用客户端命令进入" class="headerlink" title="7.使用客户端命令进入"></a>7.使用客户端命令进入</h3><blockquote>
+<p> 命令：clickhouse-client -m<br> <img alt="" height="373" src="https://img-blog.csdnimg.cn/20210405113420792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="814"> </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/"
+    >clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.246Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.运维管理与优化</p>
+<blockquote>
+<p> <strong>1.1)硬件管理与优化</strong><br>       1.1.1)CPU<br>                ClickHouse的并行数据处理机制，使得其能利用所有可用的硬件资源。在选择CPU处理器时，应选择更多核心数而不是更高频率的处理器。<br>                例如：频率为2600MHz的16核心处理器比3600MHz的8核心的处理器的效率更高。                           建议使用Turbo Boost和超线程技术，在高工作负载情况下能显著提高性能。<br>       1.1.2)内存<br>                ClickHouse的服务本身需要的RAM很少，但是ClickHouse需要内存来处理查询，建议至少使用4GB内存。                RAM的容量取决于：<br>                 a.查询的复杂性。<br>                 b.查询处理的数据量。<br>                 c.根据GROUP BY、DISTINCT、JOIN和其他操作产生的临时数据大小估算所需的RAM容量。<br>                对于少量数据，例如压缩后在200GB以下，使用数据量一样多的内存。                对于大量数据，以及交互式查询，热数据集缓存在操作系统的cache中，建议配置尽可能大的内存，例如128GB的内存性能明显比64GB高很多。<br>                如果内存不足， ClickHouse支持使用外部存储器处理数据，如外部聚合和外部排序等，当数据超过设置的阈值时使用外部存储器处理数据。<br>       1.1.3)网络<br>                推荐使用10GB或更高带宽的网络。<br>                ClickHouse在数据处理过程（数据导入、中间数据存储等）中会充分利用网络带宽。网络带宽对于处理具有大量中间数据的分布式查询至关重要。<br>                网络带宽会影响复制的过程。<br>       1.1.4)存储综合考虑安全性、性能和预算。                  如果使用RAID0，则需考虑使用副本机制。                  预算足够，使用SSD，然后HDD。                  RAID10的性能最佳，兼顾了安全性和性能，但是成本高，50%的磁盘利用率。                 主机的磁盘超过4块，可以考虑使用RAID6、RAID50、RAID5等。<br>                 优先使用具有多个本地磁盘的服务器，而不是具有附加磁盘架的服务器。<br>                 考虑压缩率、副本、磁盘存储容量、未来的数据增长估算存储资源。                 数据量：对数据进行采样，计算每行的平均大小，根据总行数估算数据量。                数据压缩系数：ClickHouse的数据通常被压缩5倍左右，根据原始数据大小和ClickHouse存储的表的数据目录占用空间进行比较。                副本：每份副本存储完整的数据。<br> <strong>1.2)操作系统的配置</strong><br>        1.2.1)CPU频率调整策略<br>              建议将CPU的电源管理策略调整为performance，即将CPU频率固定工作在其支持的最高运行频率上， 不动态调节，可以获取到最大的性能。              查看系统支持的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors<br>performance powersave<br></code></pre><br>              查看生效的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor<br>powersave<br></code></pre><br>               设置：<br> <pre><code>echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor<br></code></pre><br>  <br>        1.2.2) 关闭透明大页                开启透明大页，操作系统的内存分配活动需要各种内存锁，直接影响程序的内存访问性能，对于ClickHouse而言，透明大页会严重干扰内存分配器的工作，从而导致性能显著下降。<br> <pre><code class="language-bash">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag<br>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</p>
+</blockquote>
+<p>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag’&gt;&gt; /etc/rc.local<br>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled’&gt;&gt; /etc/rc.local<br></code></pre><br>        1.2.3)禁用swap文件<br>              避免将数据调度到swap上，影响性能。<br> <pre><code class="language-bash">dd if=/dev/zero of=/home/swap bs=1024 count=1048576<br>swapon /dev/dm-1</p>
+<h1 id="swapon"><a href="#swapon" class="headerlink" title="swapon"></a>swapon</h1><p>NAME TYPE SIZE USED PRIO<br>/dev/dm-1 partition 16G 0B -3</p>
+<p>swapoff   /dev/dm-1<br></code></pre><br>        1.2.4)内核分配策略<br>             overcommit_memory是一个内核对内存分配的一种策略。具体可见/proc/sys/vm/overcommit_memory下的值。             overcommit_memory取值有三种分别为0,1,2<br>             overcommit_memory=0，表示内核将检查是否有足够的可用内存供应用进程使用；如果有足够的可用内存，内存申请允许；否则，内存申请失败，并把错误返回给应用进程。             overcommit_memory=1，表示内核允许分配所有的物理内存，而不管当前的内存状态如何。             overcommit_memory=2，表示内核允许分配超过所有物理内存和交换空间总和的内存。<br>        1.2.5)彻底理解ClickHouse的配置文件<br>             ClickHouse支持多文件的配置管理，主配置文件为/etc/clickhouse-server/config.xml，其他的配置文件必须位于/etc/clickhouse-server/config.d目录中。<br>             所有配置文件必须为XML格式，每个文件具有相同的根元素，通常为.<br>            配置替换                  配置的元素可以指定incl属性，这个属性指定了一个”substitutions (替换)”。默认情况下，这个”替换”来自配置文件/etc/metrika.xml的元素，可以通过服务器的配置选项include_from修改”替换”文              件的路径。当指定了”替换”，将使用替换文件中相应元素的内容作为值。“替换”的值是引用”替换”文件的根节点（yarndex）下的子元素。如果incl中指定的”替换”不存在，则在服务器中记录日志，           如果不想记录日志，则为元素指定optional=”true”属性即可。            例如，”替换”文件/etc/metrika.xml中的部分内容：<br> <pre><code class="language-XML">&lt;yandex&gt;<br>...<br>&lt;zookeeper-servers&gt;<br>    &lt;host&gt;192.168.9.100&lt;/host&gt;<br>    &lt;port&gt;2181&lt;/port&gt;<br>&lt;/zookeeper-servers&gt;<br>...<br>&lt;/yandex&gt;<br></code></pre><br> ClickHouse的config.xml配置文件默认引用了这个文件的”替换”：zookeeper-servers，它是/etc/metrika.xml中根节点yandex下的子元素。如下： <br> <pre><code class="language-XML">&lt;zookeeper incl="zookeeper-servers" optional="true" /&gt;<br></code></pre><br> <strong>1.3)用户设置</strong><br>          在config.xml文件默认指定了一个单独的用户管理相关的配置文件，用于管理用户的权限、profiles、quotas等。这个配置文件由users_config元素指定文件路径，默认为users.xml。如果省略users_config元素，则直接在config.xml中指定用户管理相关的配置。<br> <pre><code class="language-XML">&lt;users_config&gt;users.xml&lt;/users_config&gt;<br></code></pre><br>      可以将用户配置拆分为多个配置文件，类似config.xml和config.d。用户配置的目录默认为users.d，目录名称的规则为：user_config设置的文件名去掉.xml后缀，并拼接上.d后缀。例如，如果user_config设置为abc.xml，则用户配置目录为：abc.d。 如下示例，为用户创建了一个单独的配置文件：<br> <pre><code class="language-XML">$ cat /etc/clickhouse-server/users.d/alice.xml<br>&lt;yandex&gt;<br>    &lt;users&gt;<br>      &lt;alice&gt;<br>          &lt;profile&gt;default&lt;/profile&gt;<br>          &lt;networks&gt;<br>              &lt;ip&gt;::/0&lt;/ip&gt;<br>          &lt;/networks&gt;<br>          &lt;password&gt;123&lt;/password&gt;<br>          &lt;quota&gt;default&lt;/quota&gt;<br>      &lt;/alice&gt;<br>    &lt;/users&gt;<br>&lt;/yandex&gt;<br></code></pre><br> <strong>1.4)重复设置项的处理</strong><br> **     **主配置文件的有些设置会被其他配置文件中的设置覆盖。      可以为这些配置文件的元素指定replace和remove属性。      如果replace和remove属性都不指定， ClickHouse将以递归的方式合并元素的内容，替换掉重复子元素的值。      如果指定了replace属性， 则使用当前的元素配置替换从其他配置文件引用的元素内容。      如果指定了remove属性， 则表示删除该元素。      例如下面的配置，它会替换networks元素（由incl指定）的整个配置，而保留当前定义的设置：<br> <pre><code class="language-XML">&lt;networks incl="networks" replace="replace"&gt;<br>    &lt;ip&gt;::/0&lt;/ip&gt;<br>&lt;/networks&gt;<br></code></pre><br>  <br> 1.5)预处理文件<br>      ClickHouse服务在启动时，会生成每类配置文件的预处理文件，这些文件包含了所有已完成的替换和重写，是ClickHouse最终应用的配置。<br>      ClickHouse会跟踪配置文件的更改，能动态加载变更的用户和集群设置。这意味着用户可以在线动态修改集群、用户等相关配置，而无需重新启动服务。<br>       预处理文件路径为/var/lib/clickhouse/preprocessed_configs，使用/etc/clickhouse-server/preprocessed软链接指向这个目录。<br> <pre><code class="language-bash"># ll /etc/clickhouse-server/preprocessed<br>lrwxrwxrwx 1 root root 41 3月   4 09:44 /etc/clickhouse-server/preprocessed -&gt; /var/lib/clickhouse//preprocessed_configs</p>
+<h1 id="ls-etc-clickhouse-server-preprocessed"><a href="#ls-etc-clickhouse-server-preprocessed" class="headerlink" title="ls /etc/clickhouse-server/preprocessed/"></a>ls /etc/clickhouse-server/preprocessed/</h1><p>abc_dictionary.xml  config.xml  users.xml<br></code></pre> 
+   </p>
+<h3 id="2-ZooKeeper的关键优化点"><a href="#2-ZooKeeper的关键优化点" class="headerlink" title="2.ZooKeeper的关键优化点"></a>2.ZooKeeper的关键优化点</h3><blockquote>
+ <ol>- **ZooKeeper节点数3个以上，奇数台。**- **与ClickHouse集群独立部署  **ZooKeeper对延迟非常敏感，ClickHouse可能会利用所有可用的系统资源。<li>**配置snapshot文件清理策略** <pre><code class="language-bash">autopurge.purgeInterval=1
+</blockquote>
+<p>autopurge.snapRetainCount=10<br></code></pre> autopurge.purgeInterval：开启清理事务日志和快照文件的功能，单位是小时。默认是0，表示不开启自动清理功能。 autopurge.snapRetainCount ： 指定了需要保留的文件数目。默认是保留3个。</li>- <strong>限制snapshot数量</strong> snapCount=3000000 每snapCount次事务日志输出后，触发一次快照(snapshot)。 ZooKeeper会生成一个snapshot文件和事务日志文件。 默认是100000。- <strong>log和data数据分磁盘存储</strong> dataDir：存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。 dataLogDir：事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。- <strong>ZooKeeper的磁盘建议使用SSD</strong> 如果数据在TB级别以上，且复制表的数量比较多，超过100个，建议使用SSD磁盘。提升ZooKeeper的响应速度，避免ClickHouse副本间数据同步的延迟。<li>**调整JVM大小  *<em>ZooKeeper的JVM内存默认是根据操作系统本身内存大小的一个百分比预先分配的，所以这不是我们所需要的。 在./bin/zkEnv.sh文件中，有如下配置项： <pre><code class="language-bash">if [ -f "$ZOOCFGDIR/java.env" ]<br>then<br>    . "$ZOOCFGDIR/java.env"<br>fi<br></code></pre> 我们在./conf/java.env文件中配置JVM的内存，增加如下配置： <pre><code class="language-bash">export JAVA_HOME=/usr/local/java/jdk1.8.0_151<br>export JVMFLAGS="-Xms1024m -Xmx2048m $JVMFLAGS"<br></code></pre> 修改完成使用jmap -heap $pid来验证内存修改情况。 </li><li><strong>其它配置</strong> <strong>tickTime=2000</strong> ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2</em>tickTime。 默认值2000，单位毫秒。 <strong>initLimit=10</strong> Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在 initLimit 时间内完成这个工作。通常情况下，我们不用太在意这个参数的设置。如果ZK集群的数据量确实很大了，F在启动的时候，从Leader上同步数据的时间也会相应变长，因此在这种情况下，有必要适当调大这个参数了。 initLimit=30000 <strong>syncLimit=5</strong> 在运行过程中，Leader负责与ZK集群中所有机器进行通信，例如通过一些心跳检测机制，来检测机器的存活状态。如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。注意：不要把这个参数设置得过大，否则可能会掩盖一些问题。 建议设置为10。 <strong>maxClientCnxns ：</strong> 单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。请注意这个限制的使用范围，仅仅是单台客户端机器与单台ZK服务器之间的连接数限制，不是针对指定客户端IP，也不是ZK集群的连接数限制，也不是单台ZK对所有客户端的连接数限制。 建议设置为2000 <strong>maxSessionTimeout=60000000</strong> Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。默认的Session超时时间是在2 * tickTime ~ 20 * tickTime 这个范围 <strong>preAllocSize=131072</strong> 预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。如果ZK的快照频率较大的话，建议适当减小这个参数。单位kb。 <strong>配置：</strong> <pre><code class="language-bash">tickTime=2000</p>
+<p>initLimit=30000<br>syncLimit=10</p>
+<p>maxClientCnxns=2000<br>maxSessionTimeout=60000000</p>
+<p>dataDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/data<br>dataLogDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/logs</p>
+<p>autopurge.purgeInterval=1<br>autopurge.snapRetainCount=10</p>
+<p>snapCount=3000000</p>
+<p>preAllocSize=131072<br></code></pre>   </li>- <strong>建ClickHouse表配置元数据压缩</strong> 建表的时候设置use_minimalistic_part_header_in_zookeeper=1， 则ZooKeeper中会存储较少的数据，支持副本的表使用单个znode紧凑地存储数据片段的头信息。如果表包含很多列， 则此存储方法将大大减少Zookeeper中存储的数据量。</ol></p>
+<h3 id="3-服务监控"><a href="#3-服务监控" class="headerlink" title="3.服务监控"></a>3.服务监控</h3><blockquote>
+<p> ClickHouse内置了自我状态检测的功能， 可根据系统表、查询日志等监控服务器计算资源的不同度量以及查询处理的通用统计信息。<br> <ol><li> 系统表  ClickHouse提供了system.metrics、system.events和system.asynchronous_metrics表收集服务器的不同的运行度量。  1.1)system.metrics           这张表的数据实时更新， 用于查看正在运行的查询或当前副本的延迟信息等。           包含的列有：               •metric(String) ： 度量名称。               •value(Int64) ：指标值。               •description (String) ：度量描述。           <strong>示例:</strong> <pre><code class="language-sql">select * from system.metrics;</p>
+</blockquote>
+<p>┌─metric───────────────────────────────────────┬────value─┬─description─────────────────────────────────────────────┐<br>│ Query                                        │        1 │ Number of executing queries                             │<br>│ Merge                                        │        0 │ Number of executing background merges                   │<br>│ PartMutation                                 │        0 │ Number of mutations (ALTER DELETE/UPDATE)               │<br>│ GlobalThread                                 │       65 │ Number of threads in global thread pool.                │<br>│ GlobalThreadActive                           │       51 │ Number of threads in global thread pool running a task. │<br>└──────────────────────────────────────────────┴──────────┴─────────────────────────────────────────────────────────┘<br></code></pre>   1.2)<strong>system.events         用于收集系统中发生的事件数的信息。例如，可以查询自ClickHouse服务启动以来已处理的SELECT 查询数。         列信息如下：             •event (String) ： 事件名称。             •value (UInt64) ： 发生的事件数。             •description (String) ： 事件描述。         示例：</strong> <pre><code class="language-sql">clickhouse1 :) select * from system.events LIMIT 5;</p>
+<p>SELECT *<br>FROM system.events<br>LIMIT 5</p>
+<p>┌─event───────────────────────┬───value─┬─description────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ Query                       │       7 │ Number of queries to be interpreted and potentially executed. Does not include queries that failed to parse or were rejected due to AST size limits, quota limits or limits on the number of simultaneously running queries. May include internal queries initiated by ClickHouse itself. Does not count subqueries. │<br>│ SelectQuery                 │       7 │ Same as Query, but only for SELECT queries.                                                                                                                                                                                                                │<br>│ QueryTimeMicroseconds       │  140616 │ Total time of all queries.                                                                                                                                                                                                                                 │<br>│ SelectQueryTimeMicroseconds │  140616 │ Total time of SELECT queries.                                                                                                                                                                                                                              │<br>│ FileOpen                    │ 3645730 │ Number of files opened.                                                                                                                                                                                                                                    │<br>└─────────────────────────────┴─────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>5 rows in set. Elapsed: 0.002 sec. </p>
+<p>clickhouse1 :)<br></code></pre>   1.3)<strong>system.asynchronous_metrics        <strong>用于实时监控后台定期计算的指标。例如，正在使用的RAM大小        列信息如下：</strong>             •metric (String)</strong> ： 事件名称。**             •value (Float64)** ：指标值。        **例如：        ** <pre><code class="language-sql">clickhouse1 :) SELECT * FROM system.asynchronous_metrics;</p>
+<p>SELECT *<br>FROM system.asynchronous_metrics</p>
+<p>┌─metric───────────────────────────────────┬──────value─┐<br>│ CPUFrequencyMHz_0                        │   2591.504 │<br>│ jemalloc.arenas.all.pmuzzy               │          0 │<br>│ jemalloc.arenas.all.pdirty               │       1311 │<br>│ jemalloc.background_thread.run_intervals │          0 │<br>│ jemalloc.background_thread.num_runs      │          0 │<br>│ jemalloc.retained                        │  894418944 │<br>│ jemalloc.mapped                          │  136331264 │<br>│ jemalloc.metadata                        │   13635904 │<br>│ jemalloc.resident                        │  126943232 │<br>│ jemalloc.allocated                       │  102341072 │<br>│ jemalloc.epoch                           │       1298 │<br>│ NumberOfTables                           │         73 │<br>│ jemalloc.active                          │  109989888 │<br>│ NumberOfDatabases                        │          3 │<br>│ MaxPartCountForPartition                 │          7 │<br>│ jemalloc.background_thread.num_threads   │          0 │<br>│ ReplicasSumQueueSize                     │          0 │<br>│ ReplicasMaxMergesInQueue                 │          0 │<br>│ MemoryShared                             │ 4238995456 │<br>│ MemoryCode                               │  432128000 │<br>│ ReplicasMaxAbsoluteDelay                 │          0 │<br>│ ReplicasMaxQueueSize                     │          0 │<br>│ jemalloc.arenas.all.muzzy_purged         │          0 │<br>│ MemoryVirtual                            │ 6097547264 │<br>│ MarkCacheBytes                           │          0 │<br>│ Uptime                                   │      77887 │<br>│ jemalloc.arenas.all.dirty_purged         │  379880169 │<br>│ ReplicasMaxRelativeDelay                 │          0 │<br>│ MemoryResident                           │ 4455157760 │<br>│ ReplicasMaxInsertsInQueue                │          0 │<br>│ jemalloc.metadata_thp                    │          0 │<br>│ UncompressedCacheCells                   │          0 │<br>│ CompiledExpressionCacheCount             │          0 │<br>│ ReplicasSumMergesInQueue                 │          0 │<br>│ UncompressedCacheBytes                   │          0 │<br>│ ReplicasSumInsertsInQueue                │          0 │<br>│ MarkCacheFiles                           │          0 │<br>│ MemoryDataAndStack                       │ 1824006144 │<br>│ jemalloc.arenas.all.pactive              │      26853 │<br>└──────────────────────────────────────────┴────────────┘</p>
+<p>39 rows in set. Elapsed: 0.049 sec. </p>
+<p>clickhouse1 :)<br></code></pre>   </li><li> 查询日志<strong>query_log</strong> 记录所有查询语句的开始时间、耗时、用户、资源占用等信息，包括SELECT、SET、ALTER等语句。 在ClickHouse的主配置文件config.xml配置了query_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;!-- Query log. Used only for queries with setting log_queries = 1. --&gt;<br>    &lt;query_log&gt;<br>        &lt;!-- What table to insert data. If table is not exist, it will be created.<br>             When query log structure is changed after system update,<br>              then old table will be renamed and new table will be created automatically.<br>        --&gt;<br>        &lt;database&gt;system&lt;/database&gt;<br>        &lt;table&gt;query_log&lt;/table&gt;<br>        &lt;!--<br>            PARTITION BY expr <a target="_blank" rel="noopener" href="https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/">https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/</a><br>            Example:<br>                event_date<br>                toMonday(event_date)<br>                toYYYYMM(event_date)<br>                toStartOfHour(event_time)<br>        --&gt;<br>        &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;</p>
+<pre><code>    &amp;lt;!-- Instead of partition_by, you can provide full engine expression (starting with ENGINE = ) with parameters,
+         Example: &amp;lt;engine&amp;gt;ENGINE = MergeTree PARTITION BY toYYYYMM(event_date) ORDER BY (event_date, event_time) SETTINGS index_granularity = 1024&amp;lt;/engine&amp;gt;
+      --&amp;gt;
+
+    &amp;lt;!-- Interval of flushing data. --&amp;gt;
+    &amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
+&amp;lt;/query_log&amp;gt;
+</code></pre>
+<p></code></pre> ClickHouse默认不会收集查询的日志， 可通过设置log_queries = 1开启查询日志的功能,下面开启的命令要在服务器的黑窗口执行。 <pre><code class="language-bash">set log_queries = 1;<br>show tables;</p>
+<p>SELECT * from <code>system</code>.query_log ql limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003637697.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>trace_log</strong> 存储query profilers收集的堆栈跟踪日志。 堆栈日志根据计时器类型分为REAL和CPU，分别表示实际时钟计时器和CPU时钟计时器。 计时器相关的两个设置： <pre><code class="language-sql">query_profiler_real_time_period_ns：设置query profilers的实际计时器的周期，单位为纳秒，默认为1000000000（1秒）<br>query_profiler_cpu_time_period_ns：设置query profilers的CPU计时器的周期，单位为纳秒，默认为1000000000（1秒）。<br></code></pre> 在ClickHouse的主配置文件config.xml配置了trace_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;trace_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;trace_log&lt;/table&gt;</p>
+<pre><code>&amp;lt;partition_by&amp;gt;toYYYYMM(event_date)&amp;lt;/partition_by&amp;gt;
+&amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
+</code></pre>
+<p>&lt;/trace_log&gt;<br></code></pre> <strong>示例：</strong> <pre><code class="language-sql">SELECT * FROM system.trace_log ORDER BY event_date ASC LIMIT 2;<br></code></pre> <strong>query_thread_log</strong> 查询线程日志， 记录查询执行的所有线程的信息。 在ClickHouse的主配置文件config.xml配置了query_thread_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;query_thread_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;query_thread_log&lt;/table&gt;<br>    &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/query_thread_log&gt;<br></code></pre> ClickHouse默认不会收集查询线程的日志， 可通过设置log_query_threads= 1开启查询日志的功能。 <pre><code class="language-sql">set log_query_threads = 1;</p>
+<p>select * from system.query_thread_log limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003929835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>part_log</strong> 用户监控MergeTree引擎表中针对数据片段所有操作（创建、删除、合并、下载等）的信息。 part_log默认是关闭， 在ClickHouse的主配置文件使用如下配置开启数据片段日志 <pre><code class="language-XML">&lt;part_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;part_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/part_log&gt;<br></code></pre> <strong>text_log</strong> text_log用于记录服务器的常规日志，但是以结构化和高效的方式存储在表中。 text_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。 <pre><code class="language-XML">&lt;text_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;text_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/text_log&gt;<br></code></pre> <strong>metric_log</strong> 用于存储来自表system.metrics和system.events指标值的历史记录。collect_interval_milliseconds用于设置采集的时间间隔。metric_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。</li></ol></p>
+<h3 id="4-用户管理"><a href="#4-用户管理" class="headerlink" title="4.用户管理"></a>4.用户管理</h3><blockquote>
+ <ol><li> profile管理 profile是一组设置的集合，类似于角色的概念，每个用户都有一个profile。 可以有两种方式使用profile： 在会话中应用profile的所有设置，例如：SET profile = ‘web’ 。 在users.xml的users部分为某个用户指定profile。**profiles在users.xml配置文件的profiles标签下配置：** <pre><code class="language-XML">&lt;!-- Settings profiles --&gt;
+&lt;profiles&gt;
+    &lt;!-- Default settings --&gt;
+    &lt;default&gt;
+        &lt;!-- The maximum number of threads when running a single query. --&gt;
+        &lt;max_threads&gt;8&lt;/max_threads&gt;
+    &lt;/default&gt;
+​
+    &lt;!-- Settings for quries from the user interface --&gt;
+    &lt;web&gt;
+        &lt;max_rows_to_read&gt;1000000000&lt;/max_rows_to_read&gt;
+        &lt;max_bytes_to_read&gt;100000000000&lt;/max_bytes_to_read&gt;
+​
+        &lt;max_rows_to_group_by&gt;1000000&lt;/max_rows_to_group_by&gt;
+        &lt;group_by_overflow_mode&gt;any&lt;/group_by_overflow_mode&gt;
+​
+        &lt;max_rows_to_sort&gt;1000000&lt;/max_rows_to_sort&gt;
+        &lt;max_bytes_to_sort&gt;1000000000&lt;/max_bytes_to_sort&gt;
+​
+        &lt;max_result_rows&gt;100000&lt;/max_result_rows&gt;
+        &lt;max_result_bytes&gt;100000000&lt;/max_result_bytes&gt;
+        &lt;result_overflow_mode&gt;break&lt;/result_overflow_mode&gt;
+​
+        &lt;max_execution_time&gt;600&lt;/max_execution_time&gt;
+        &lt;min_execution_speed&gt;1000000&lt;/min_execution_speed&gt;
+        &lt;timeout_before_checking_execution_speed&gt;15&lt;/timeout_before_checking_execution_speed&gt;
+​
+        &lt;max_columns_to_read&gt;25&lt;/max_columns_to_read&gt;
+        &lt;max_temporary_columns&gt;100&lt;/max_temporary_columns&gt;
+        &lt;max_temporary_non_const_columns&gt;50&lt;/max_temporary_non_const_columns&gt;
+​
+        &lt;max_subquery_depth&gt;2&lt;/max_subquery_depth&gt;
+        &lt;max_pipeline_depth&gt;25&lt;/max_pipeline_depth&gt;
+        &lt;max_ast_depth&gt;50&lt;/max_ast_depth&gt;
+        &lt;max_ast_elements&gt;100&lt;/max_ast_elements&gt;
+​
+        &lt;readonly&gt;1&lt;/readonly&gt;
+    &lt;/web&gt;
+&lt;/profiles&gt;
+</code></pre> 上面的配置指定了两个profile：default和web。默认的default不能省略，它包含默认的设置，在服务器启动时应用。web是常规的profile，可以使用SET语句或HTTP查询中的URL参数进行设置。 profile设置可相互继承。如果使用继承，在配置文件中列出的其他设置之前， 先指定一个或多个profile。如果一个设置在不同的profile都定义了，则使用最新的设置。 </li><li> Quotas设置 Quotas用于在一段时间内跟踪资源的使用情况或限制资源的使用。quotas在user.xml配置文件的quotas标签下配置，在users标签下分配给用户。 注意：quota用于限制一组查询，并且将所有远程服务器上的分布式查询处理的资源纳入限制范围，而不是限制单个查询。**quotas的配置示例1:** <pre><code class="language-XML">&lt;!-- Quotas --&gt;
+&lt;quotas&gt;
+    &lt;!-- Quota name. --&gt;
+    &lt;default&gt;
+        &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
+        &lt;interval&gt;
+            &lt;!-- Length of the interval. --&gt;
+            &lt;duration&gt;3600&lt;/duration&gt;
+​
+            &lt;!-- Unlimited. Just collect data for the specified time interval. --&gt;
+            &lt;queries&gt;0&lt;/queries&gt;
+            &lt;errors&gt;0&lt;/errors&gt;
+            &lt;result_rows&gt;0&lt;/result_rows&gt;
+            &lt;read_rows&gt;0&lt;/read_rows&gt;
+            &lt;execution_time&gt;0&lt;/execution_time&gt;
+        &lt;/interval&gt;
+    &lt;/default&gt;
+&lt;/quotas&gt;
+</code></pre> 默认情况下，quota只跟踪一个小时内的资源使用情况，并不会限制资源的使用。每个时间间隔内的资源消耗在每次请求之后输出到服务器日志。**Quota配置示例2：** <pre><code class="language-XML">&lt;statbox&gt;
+    &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
+    &lt;interval&gt;
+        &lt;!-- Length of the interval. --&gt;
+        &lt;duration&gt;3600&lt;/duration&gt;
+​
+        &lt;queries&gt;1000&lt;/queries&gt;
+        &lt;errors&gt;100&lt;/errors&gt;
+        &lt;result_rows&gt;1000000000&lt;/result_rows&gt;
+        &lt;read_rows&gt;100000000000&lt;/read_rows&gt;
+        &lt;execution_time&gt;900&lt;/execution_time&gt;
+    &lt;/interval&gt;
+</blockquote>
+<pre><code>&amp;lt;interval&amp;gt;
+    &amp;lt;duration&amp;gt;86400&amp;lt;/duration&amp;gt;
+</code></pre>
+<p>​<br>        &lt;queries&gt;10000&lt;/queries&gt;<br>        &lt;errors&gt;1000&lt;/errors&gt;<br>        &lt;result_rows&gt;5000000000&lt;/result_rows&gt;<br>        &lt;read_rows&gt;500000000000&lt;/read_rows&gt;<br>        &lt;execution_time&gt;7200&lt;/execution_time&gt;<br>    &lt;/interval&gt;<br>&lt;/statbox&gt;<br></code></pre> 上面配置了一个名称为statbox的quota，在每小时（3600秒）和每24小时（86400秒）设置了对资源的限制。间隔结束时，将清除所有收集的值，在接下来的下一个时间区间，quota将重新开始计算。 可用于quota限制的资源如下： queries ： 请求总数。 errors ： 抛出异常的总数。 result_rows : 作为结果给出的总行数。 read_rows : 在所有远程服务器上，从表中读取用于运行查询的源总行数。 execution_time : 查询执行的总耗时，单位为秒。如果在至少一个时间间隔内超过了限制，则会引发异常，异常信息包括限制的类型、时间间隔以及新时间间隔的开始时间。 对于分布式查询处理， 资源的累积量存储在请求服务器上，因此，如果用户转到另一个服务器，则这个服务器的quota将重新开始累积。重启服务器后，quota将重置。 </li><li> 约束管理 在users.xml配置文件的profiles部分定义对设置的约束，可以禁止用户使用SET语句更改某些设置。 约束的定义模板如下： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;profile_name&gt;<br>    &lt;constraints&gt;<br>      &lt;setting_name_1&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>      &lt;/setting_name_1&gt;<br>      &lt;setting_name_2&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_2&gt;<br>      &lt;setting_name_3&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_3&gt;<br>      &lt;setting_name_4&gt;<br>        &lt;readonly/&gt;<br>      &lt;/setting_name_4&gt;<br>    &lt;/constraints&gt;<br>  &lt;/profile_name&gt;<br>&lt;/profiles&gt;<br></code></pre> 如果用户尝试违法冲突，则会引发异常。 支持三种类型的约束：max、min和readonly。 max和min约束使用数值指定约束的上限和下限，这两个约束可以组合使用。 readonly约束指定了用户无法更改相应的设置。 使用示例： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;default&gt;<br>    &lt;max_memory_usage&gt;10000000000&lt;/max_memory_usage&gt;<br>    &lt;force_index_by_date&gt;0&lt;/force_index_by_date&gt;<br>    ...<br>    &lt;constraints&gt;<br>      &lt;max_memory_usage&gt;<br>        &lt;min&gt;5000000000&lt;/min&gt;<br>        &lt;max&gt;20000000000&lt;/max&gt;<br>      &lt;/max_memory_usage&gt;<br>      &lt;force_index_by_date&gt;<br>        &lt;readonly/&gt;<br>      &lt;/force_index_by_date&gt;<br>    &lt;/constraints&gt;<br>  &lt;/default&gt;<br>&lt;/profiles&gt;<br></code></pre> 上面的约束配置限制了max_memory_usage的范围在20000000000和5000000000之间，force_index_by_date设置为只读。 使用下面的语句修改配置将引发异常： <pre><code class="language-sql">SET max_memory_usage=20000000001;<br>SET max_memory_usage=4999999999;<br>SET force_index_by_date=1;<br></code></pre> <strong>异常信息如下：</strong> <pre><code class="language-sql">Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be greater than 20000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be less than 5000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting force_index_by_date should not be changed.<br></code></pre> Note：在default的profile中定义的约束为默认的约束，这些约束会限制所有的用户，除非用户在自己的profile中显式覆盖这些设置。 force_index_by_date，如果表的主键包含日期列，则查询条件必须包含该该列。如果表的主键不包含日期列，则无需包含日期列。 仅适用于MergeTree引擎。 </li><li> 查询权限 ClickHouse中的查询可分为如下几种类型：<strong>读取数据查询</strong>：SELECT、SHOW、DESCRIBE、EXISTS。<strong>写数据查询</strong>：INSERT、OPTIMIZE。<strong>更改设置查询</strong>：SET、USE。<strong>DDL查询</strong>：CREATE、ALTER、RENAME、ATTACH、DETACH、 DROP、TRUNCATE。 KILL QUERY 下面的设置可用户配置用户的查询权限：<strong>readonly <strong>：限制读取、写入和更改三类查询的权限。</strong>allow_ddl</strong>：限制DDL查询的权限。<strong>KILL QUERY</strong>不受任何设置的限制。 <pre><code>1. readonly<br>用于限制读取、写入和更改三类查询的权限，默认值为0。<br>readonly的取值如下：<br>0 ： 允许执行所有查询。<br>1 ： 仅允许读取数据的查询。<br>2 ： 允许读取数据和更改设置。<br>在设置readonly=1后，用户将无法在当前会话中更改readonly和allow_ddl的设置。<br>在HTTP请求中使用GET方法时将自动设置readonly=1。如果在http请求中修改数据，则必须使用POST方法。</p>
+<p>设置readonly=1将禁止用户更改所有的设置。如果要禁止用户修改某些特定的设置，可以在users.xml配置文件中配置profiles的约束。</p>
+<ol start="2">
+<li>allow_ddl<br>用于配置是否允许DDL操作的权限，默认值为1。<br>可设置的值如下：<br>0 ： 不允许DDL查询。<br>1 ： 允许DDL查询。<br>如果当前会话的allow_ddl=0，则无法执行： SET allow_ddl=0。</code></pre>   </li><li> 用户管理配置 xml文件的users标签的结构如下： <pre><code class="language-XML">&lt;users&gt;<br> &lt;!-- If user name was not specified, 'default' user is used. --&gt;<br> &lt;user_name&gt;<pre><code> &amp;lt;password&amp;gt;&amp;lt;/password&amp;gt;
+ &amp;lt;!-- Or --&amp;gt;
+ &amp;lt;password_sha256_hex&amp;gt;&amp;lt;/password_sha256_hex&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;networks incl=&quot;networks&quot; replace=&quot;replace&quot;&amp;gt;
+ &amp;lt;/networks&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;profile&amp;gt;profile_name&amp;lt;/profile&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;quota&amp;gt;default&amp;lt;/quota&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;databases&amp;gt;
+     &amp;lt;database_name&amp;gt;
+         &amp;lt;table_name&amp;gt;
+             &amp;lt;filter&amp;gt;expression&amp;lt;/filter&amp;gt;
+         &amp;lt;table_name&amp;gt;
+     &amp;lt;/database_name&amp;gt;
+ &amp;lt;/databases&amp;gt;
+</code></pre>
+​<pre><code>&amp;lt;allow_databases&amp;gt;
+    &amp;lt;database&amp;gt;test&amp;lt;/database&amp;gt;
+ &amp;lt;/allow_databases&amp;gt;
+ &amp;lt;allow_dictionaries&amp;gt;
+    &amp;lt;dictionary&amp;gt;test&amp;lt;/dictionary&amp;gt;
+ &amp;lt;/allow_dictionaries&amp;gt;
+</code></pre>
+ &lt;/user_name&gt;<br> &lt;!– Other users settings –&gt;</li>
+</ol>
+<p>&lt;/users&gt;<br></code></pre> 在上面的配置中，定义了一个user_name的用户，该用户的所有其他配置都通过该标签的子标签配置。下面详细介绍每个具体子标签的配置信息。 1）**user_name/password       **密码可以使用明文、SHA256或SHA1指定。       明文形式的密码通过password标签指定。       <strong>例如:</strong> <pre><code class="language-XML">&lt;password&gt;qwerty&lt;/password&gt;<br></code></pre>    密码可以为空。    SHA256散列密码通过password_sha256_hex标签指定。    示例： <pre><code class="language-XML">&lt;password_sha256_hex&gt;65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5&lt;/password_sha256_hex&gt;<br></code></pre> **   <strong>可通过如下shell命令生成SHA256散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha256sum | tr -d '-'<br></code></pre> **  <strong>命令的输出如下： <pre><code class="language-bash">pmpjaK2V<br>21c4185b8155e532ca5a1eb0d4ca74ecde83eddee4ca55af393007f7c29f7eb7<br></code></pre> 第一行是明文的密码，第二行对应的SHA256加密散列。 SHA1散列密码通过password_double_sha1_hex标签指定。 SHA1密码是为了兼容MySQL客户端。 使用示例： <pre><code class="language-XML">&lt;password_double_sha1_hex&gt;08b4a0f1de6ad37da17359e592c8d74788a83eb0&lt;/password_double_sha1_hex&gt;<br></code></pre> 可通过如下shell命令生成SHA1散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha1sum | tr -d '-' | xxd -r -p | sha1sum | tr -d '-'<br></code></pre> 命令的输出如下： <pre><code class="language-bash">KCXM95It<br>de4bbcb9bbb35e3e497fcbebafc0f04b3dcef383<br></code></pre> 第一行是明文的密码，第二行对应的SHA1加密散列。</strong>2）user_name/networks      <strong>networks用于配置网络列表，只有网络列表范围内的用户可以连接到ClickHouse。     列表中的元素可以使用如下形式定义：     ： IP地址或带掩码的IP地址。     例如： <pre><code class="language-bash">213.180.204.3, 10.0.0.1/8, 10.0.0.1/255.255.255.0, 2a02:6b8::3, 2a02:6b8::3/64, 2a02:6b8::3/ffff:ffff:ffff:ffff::<br></code></pre> ： 主机名。 例如： <pre><code class="language-bash">example01.host.ru<br></code></pre> &lt;host_regexp&gt; ： 主机名的正则表达式。</strong>例如：</strong> <pre><code class="language-bash">^example\d\d-\d\d-\d.host.ru$<br></code></pre> 使用这种方式指定网络列表，强烈建议regexp以$结尾。 示例1：用户可以从任意网络访问，指定： <pre><code class="language-XML">&lt;ip&gt;::/0&lt;/ip&gt;<br></code></pre> <strong>示例2：仅限本地网络访问，指定：</strong>   <pre><code class="language-XML">&lt;ip&gt;::1&lt;/ip&gt;<br>&lt;ip&gt;127.0.0.1&lt;/ip&gt;<br></code></pre> **3）user_name/profile        <strong>profile用于给用户分配一个配置好的profile，这个profile是在users.xml配置文件的profiles标签下配置的。</strong>4）user_name/quota      <strong>用于给用户分配quota，这里quota是在users.xml配置文件的quotas标签下配置的。quota用于在一定时间内跟踪或限制资源的使用。</strong>5）user_name/databases      <strong>用于限制当前用户的SELECT查询返回的行，可实现基本的行级安全性。     <strong>示例：</strong>      以下的配置将限制用户user1只能查询table1表中id=1000的行，其他记录对用户不可见，就好像表中不存在其他行一样。 <pre><code class="language-XML">&lt;user1&gt;<br>    &lt;databases&gt;<br>        &lt;database_name&gt;<br>            &lt;table1&gt;<br>                &lt;filter&gt;id = 1000&lt;/filter&gt;<br>            &lt;/table1&gt;<br>        &lt;/database_name&gt;<br>    &lt;/databases&gt;<br>&lt;/user1&gt;<br></code></pre> 使用这种方式需要注意WHERE子句的查询谓词不会下推，即禁用了WHERE移动到PREWHERE的优化。</strong>6）user_name/allow_databases      **用于指定用户可以访问的数据库列表。默认情况下，用户可以访问所有数据库。      Note： 用户对system数据库的访问始终是有权限的，因为用户需要根据此数据库处理查询。      配置示例，配置用户可访问test1和test2数据库： <pre><code class="language-XML">&lt;allow_databases&gt;<br>  &lt;database&gt;test1&lt;/database&gt;<br>  &lt;database&gt;test2&lt;/database&gt;<br>&lt;/allow_databases&gt;<br></code></pre> **7）user_name/allow_dictionaries       **配置可以访问的字典列表。默认情况下，用户可访问所有字典。      示例， 配置用户可访问test1和test2字典： <pre><code class="language-XML">&lt;allow_dictionaries&gt;<br>  &lt;dictionary&gt;test1&lt;/dictionary&gt;<br>  &lt;dictionary&gt;test2&lt;/dictionary&gt;<br>&lt;/allow_dictionaries&gt;<br></code></pre>   </li></ol></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Clickhouse 字典表使用场景"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/"
+    >Clickhouse 字典表使用场景</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.240Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Clickhouse 字典表使用场景<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—# 一.字典创建和查询</p>
+<h2 id="1-创建表和数据："><a href="#1-创建表和数据：" class="headerlink" title="1.创建表和数据："></a>1.创建表和数据：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">drop table t_region;</span><br><span class="line">create table t_region(region_id UInt64, parent_region UInt64, region_name String) ENGINE=TinyLog;</span><br><span class="line">insert into t_region values</span><br><span class="line">(1, 0, &#x27;jiangsu&#x27;),(2, 1, &#x27;suzhou&#x27;),(3, 2, &#x27;huqiu&#x27;),(4, 0, &#x27;anhui&#x27;),(5, 4, &#x27;hefei&#x27;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典， 指定HIERARCHICAL字段：</span><br><span class="line">DROP DICTIONARY t_dict_region;</span><br><span class="line">CREATE DICTIONARY t_dict_region (</span><br><span class="line">    region_id UInt64,</span><br><span class="line">    parent_region UInt64  HIERARCHICAL,</span><br><span class="line">    region_name String </span><br><span class="line">)</span><br><span class="line">PRIMARY KEY region_id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_region&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(HASHED())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-字典的查询"><a href="#2-字典的查询" class="headerlink" title="2.字典的查询"></a>2.字典的查询</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SELECT dictGetString(&#x27;default.t_dict_region&#x27;, &#x27;region_name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br><span class="line">┌─regionName─┐</span><br><span class="line">│ suzhou     │</span><br><span class="line">└────────────┘</span><br><span class="line">SELECT dictGetHierarchy(&#x27;default.t_dict_region&#x27;, toUInt64(3));</span><br><span class="line"></span><br><span class="line">┌─dictGetHierarchy(&#x27;default.t_dict_region&#x27;, toUInt64(3))─┐</span><br><span class="line">│ [3,2,1]                                                │</span><br><span class="line">└────────────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-字典数据源之mysql表"><a href="#3-字典数据源之mysql表" class="headerlink" title="3.字典数据源之mysql表"></a>3.字典数据源之mysql表</h2><li>在mysql数据库创建表并插入数据： <pre><code class="language-sql">drop table test.test_dc;
+create table test.test_dc(
+  id bigint,
+  name varchar(100),
+  age int,
+  PRIMARY KEY (id)
+);
+
+<p>insert into test.test_dc values(1, ‘flink’, 4);<br>insert into test.test_dc values(2, ‘spark’, 6);<br>insert into test.test_dc values(3, ‘clickhouse’, 5);</p>
+<p>查看MySQL数据：<br>mysql&gt; select * from test.test_dc;<br>+—-+————+——+<br>| id | name       | age  |<br>+—-+————+——+<br>|  1 | flink      |    4 |<br>|  2 | spark      |    6 |<br>|  3 | clickhouse |    5 |<br>+—-+————+——+</p>
+<p></code></pre>   </li></p>
+<h3 id="4-字典的数据源之文件数据源"><a href="#4-字典的数据源之文件数据源" class="headerlink" title="4.字典的数据源之文件数据源"></a>4.字典的数据源之文件数据源</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">TabSeparated格式</span><br><span class="line">文件示例：</span><br><span class="line"></span><br><span class="line">准备测试数据</span><br><span class="line">文件命名为person.tsv，存放在目录：/var/lib/clickhouse/user_files，字段之间使用制表符分隔，即格式为TabSeparated。数据如下：</span><br><span class="line">1	&#x27;id001&#x27;	&#x27;xiaohe&#x27;	23</span><br><span class="line">2	&#x27;id002&#x27;	&#x27;xiaoxue&#x27;	25</span><br><span class="line">3	&#x27;id003&#x27;	&#x27;xiaoyu&#x27;	26</span><br><span class="line">4	&#x27;id004&#x27;	&#x27;xiaoxi&#x27;	27</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(FILE(path &#x27;/var/lib/clickhouse/user_files/person.tsv&#x27; format &#x27;TabSeparated&#x27;))</span><br><span class="line">LAYOUT(FLAT())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SELECT dictGetString(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当然,字典类型的数据也可以通过配置实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;yandex&amp;gt; </span><br><span class="line">  &amp;lt;dictionary&amp;gt; </span><br><span class="line">    &amp;lt;name&amp;gt;t_dict_executable&amp;lt;/name&amp;gt;  </span><br><span class="line"></span><br><span class="line">    &amp;lt;structure&amp;gt; </span><br><span class="line">      &amp;lt;id&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;id&amp;lt;/name&amp;gt; </span><br><span class="line">      &amp;lt;/id&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;code&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;String&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;name&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;String&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;age&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;UInt8&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt; </span><br><span class="line">    &amp;lt;/structure&amp;gt;  </span><br><span class="line">    &amp;lt;source&amp;gt; </span><br><span class="line">      &amp;lt;executable&amp;gt;</span><br><span class="line">        &amp;lt;command&amp;gt;cat /var/lib/clickhouse/user_files/person.tsv&amp;lt;/command&amp;gt;</span><br><span class="line">        &amp;lt;format&amp;gt;TabSeparated&amp;lt;/format&amp;gt;</span><br><span class="line">      &amp;lt;/executable&amp;gt;</span><br><span class="line">    &amp;lt;/source&amp;gt;  </span><br><span class="line">    &amp;lt;layout&amp;gt; </span><br><span class="line">      &amp;lt;hashed/&amp;gt; </span><br><span class="line">    &amp;lt;/layout&amp;gt;  </span><br><span class="line">    &amp;lt;lifetime&amp;gt;10&amp;lt;/lifetime&amp;gt; </span><br><span class="line">  &amp;lt;/dictionary&amp;gt; </span><br><span class="line">&amp;lt;/yandex&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="二-字典的存储方式"><a href="#二-字典的存储方式" class="headerlink" title="二.字典的存储方式"></a>二.字典的存储方式</h1><p>以下测试均在default数据库。</p>
+<h2 id="1-flat-hash-sparse-hash-cache"><a href="#1-flat-hash-sparse-hash-cache" class="headerlink" title="1. flat/hash/sparse_hash/cache"></a>1. flat/hash/sparse_hash/cache</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_dic_ch&#x27;</span><br><span class="line">    where &#x27;id&amp;gt;0&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(CACHE(SIZE_IN_CELLS 10000))</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">SELECT dictGetString(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>FLAT()、HASHED()、SPARSE_HASHED()、CACHE(SIZE_IN_CELLS 10000)</strong></p>
+<h2 id="2-complex-key-hashed-complex-key-cache"><a href="#2-complex-key-hashed-complex-key-cache" class="headerlink" title="2. complex_key_hashed/complex_key_cache"></a>2. complex_key_hashed/complex_key_cache</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id,code</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_dic_ch&#x27;</span><br><span class="line">    where &#x27;id&amp;gt;0&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(COMPLEX_KEY_HASHED())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">SELECT dictGet(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, tuple(toUInt64(2), &#x27;id002&#x27;)) AS name;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>COMPLEX_KEY_HASHED()、COMPLEX_KEY_CACHE(SIZE_IN_CELLS 10000)</strong></p>
+<h2 id="3-range-hashed"><a href="#3-range-hashed" class="headerlink" title="3. range_hashed"></a>3. range_hashed</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">drop table t_hash_range;</span><br><span class="line">create table t_hash_range(id UInt64, start Date, end Date, amount Float32) ENGINE=TinyLog;</span><br><span class="line">insert into t_hash_range values</span><br><span class="line">(123, &#x27;2020-03-20&#x27;, &#x27;2020-03-22&#x27;, 0.15)</span><br><span class="line">(123, &#x27;2020-03-23&#x27;, &#x27;2020-03-27&#x27;, 0.25)</span><br><span class="line">(456, &#x27;2020-04-20&#x27;, &#x27;2020-04-30&#x27;, 0.35)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">查看数据：</span><br><span class="line">SELECT * FROM t_hash_range;</span><br><span class="line"></span><br><span class="line">┌──id─┬──────start─┬────────end─┬─amount─┐</span><br><span class="line">│ 123 │ 2020-03-20 │ 2020-03-22 │   0.15 │</span><br><span class="line">│ 123 │ 2020-03-23 │ 2020-03-27 │   0.25 │</span><br><span class="line">│ 456 │ 2020-04-20 │ 2020-04-30 │   0.35 │</span><br><span class="line">└─────┴────────────┴────────────┴────────┘</span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_hash_range;</span><br><span class="line">CREATE DICTIONARY t_dict_hash_range (</span><br><span class="line">    id UInt64,</span><br><span class="line">    start Date,</span><br><span class="line">    end Date,</span><br><span class="line">    amount Float32</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_hash_range&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(RANGE_HASHED())</span><br><span class="line">RANGE(MIN start MAX end)</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">查看id为123的记录，在日期2020-03-21日的amount：</span><br><span class="line">select dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-21&#x27;)) as amount;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查看id为123的记录，在日期2020-03-25日的amount：</span><br><span class="line">select dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-25&#x27;)) as amount;</span><br><span class="line"></span><br><span class="line">日期之外的记录：</span><br><span class="line">SELECT dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-29&#x27;)) AS amount;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-ip-tire"><a href="#4-ip-tire" class="headerlink" title="4. ip_tire"></a>4. ip_tire</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">创建表和测试数据：</span><br><span class="line">drop table t_ip_tire;</span><br><span class="line">create table t_ip_tire(prefix String, asn UInt32, ccode String) ENGINE=TinyLog;</span><br><span class="line">insert into t_ip_tire values</span><br><span class="line">(&#x27;202.79.32.0/20&#x27;, 17501, &#x27;NP&#x27;)</span><br><span class="line">(&#x27;2620:0:870::/48&#x27;, 3856, &#x27;US&#x27;)</span><br><span class="line">(&#x27;2a02:6b8:1::/48&#x27;, 13238, &#x27;RU&#x27;)</span><br><span class="line">(&#x27;2001:db8::/32&#x27;, 65536, &#x27;ZZ&#x27;)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">查看数据：</span><br><span class="line">SELECT * FROM t_ip_tire;</span><br><span class="line"></span><br><span class="line">┌─prefix──────────┬───asn─┬─ccode─┐</span><br><span class="line">│ 202.79.32.0/20  │ 17501 │ NP    │</span><br><span class="line">│ 2620:0:870::/48 │  3856 │ US    │</span><br><span class="line">│ 2a02:6b8:1::/48 │ 13238 │ RU    │</span><br><span class="line">│ 2001:db8::/32   │ 65536 │ ZZ    │</span><br><span class="line">└─────────────────┴───────┴───────┘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_ip_tire;</span><br><span class="line">CREATE DICTIONARY t_dict_ip_tire (</span><br><span class="line">    prefix String,</span><br><span class="line">    asn UInt32,</span><br><span class="line">    ccode String</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY prefix</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_ip_tire&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(IP_TRIE())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">检索数据：</span><br><span class="line">select</span><br><span class="line">dictGetUInt32(&#x27;default.t_dict_ip_tire&#x27;, &#x27;asn&#x27;, tuple(IPv4StringToNum(&#x27;202.79.32.22&#x27;))) as asn,</span><br><span class="line">dictGetString(&#x27;default.t_dict_ip_tire&#x27;, &#x27;ccode&#x27;, tuple(IPv4StringToNum(&#x27;202.79.32.22&#x27;))) as ccode</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-MapReduce知识点学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
+    >MapReduce知识点学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.243Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: MapReduce知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 1. 1. 1. 1. 1. 1. 1. </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介"
   class="article article-type-post"
   itemscope
@@ -1221,1148 +1880,6 @@ protected void map(LongWritable key, Text value,
 </code></pre>
 <p>}<br></code></pre> ⑹这里我们不需要reducer类，注意：可以没有reducer,但是mapper必须有，效果如下：       <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190806231953323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600"> </li></p>
 <h1 id=""><a href="#" class="headerlink" title=""></a></h1> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/"
-    >MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.199Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：Hadoop序列化</p>
-<ol>
-<li>为什么要序列化？  <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190727221421643.png" width="701">1. 什么是序列化？  <img alt="" class="has" height="166" src="https://img-blog.csdnimg.cn/20190727221450619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668"> 1.  为什么不用 Java ？  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190727221518294.png" width="711">1.   为什么序列化对 Hadoop  很重要？  <img alt="" class="has" height="374" src="https://img-blog.csdnimg.cn/20190727221546511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587">1.  常用数据序列化类型  <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190727221638148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="550">1.   自定义 bean  对象 实现序列化接口（Writable ）  ⑴自定义 bean 对象要想序列化传输，必须实现序列化接口，需要注意以下 7 项：         a：必须实现 Writable 接口         b：反序列化时，需要反射调用空参构造函数，所以必须有空参构造。         c：重写序列化方法         d：重写反序列化方法         e：注意反序列化的顺序和序列化的顺序完全一致         f：要想把结果显示在文件中，需要重写 toString()，可用”\t”分开，方便后续用         g：如果需要将自定义的 bean 放在 key 中传输，则还需要实现 comparable 接口，因为               mapreduce 框中的 shuffle 过程一定会对 key 进行排序。<li>  案例之流量汇总   ⑴需求：           统计每一个手机号耗费的总上行流量、下行流量、总流量(序列化)   ⑵数据准备(phone_data.txt)，数据格式如下，现在我们只知道每一行倒数第二个是下行流量，       倒数第三个是上行流量，总流量需要自己去算，第二个是手机号。           <img alt="" class="has" height="316" src="https://img-blog.csdnimg.cn/20190727223341939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557">   ⑶最后输出的数据格式大概如下：         <img alt="" class="has" height="120" src="https://img-blog.csdnimg.cn/20190727223727598.png" width="475">   ⑷基本思路分析如下：         ①Map 阶段                 <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190727224459494.png" width="426">         ②Reduce 阶段                <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190727224612980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">                <img alt="" class="has" height="84" src="https://img-blog.csdnimg.cn/20190727224638661.png" width="474">   ⑸代码实现如下：          ①首先定义一个bean序列化对象                 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</li>
-</ol>
-<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.Writable;</p>
-<p>/**</p>
-<ul>
-<li><p>首先我们需要实现序列化接口Writable</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class FlowBean implements Writable&#123;</p>
-<p>  /<strong>上行流量</strong>/<br>  private long upFlow;<br>  /<strong>下行流量</strong>/<br>  private long downFlow;<br>  /<strong>总流量</strong>/<br>  private long sumFlow;<br>  /**</p>
-<ul>
-<li>必须要有无参构造方法</li>
-<li>反序列化时，需要反射调用空参构造函数，所以必须有空参构造</li>
-<li>/<br>public FlowBean() &#123;<br>  super();<br>&#125;</li>
-</ul>
-<p>  public void setFlowBean(long upFlow, long downFlow) &#123;</p>
-<pre><code>  this.upFlow = upFlow;
-  this.downFlow = downFlow;
-  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
-</code></pre>
-<p>  }</p>
-<p>  public FlowBean(long upFlow, long downFlow) {</p>
-<pre><code>  this.upFlow = upFlow;
-  this.downFlow = downFlow;
-  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
-</code></pre>
-<p>  }</p>
-<p>  /***</p>
-<ul>
-<li>这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程</li>
-<li>/<br>@Override<br>public void write(DataOutput out) throws IOException {<br>  //按照顺序依次将数据写入<br>  out.writeLong(upFlow);<br>  out.writeLong(downFlow);<br>  out.writeLong(sumFlow);<br>}</li>
-</ul>
-<p>  /**</p>
-<ul>
-<li>这个是反序列化方法</li>
-<li>/<br>@Override<br>public void readFields(DataInput in) throws IOException {<br>  //这个反序列化顺序要和上面序列化顺序保持一致<br>  this.upFlow = in.readLong();<br>  this.downFlow = in.readLong();<br>  this.sumFlow = in.readLong();<br>}</li>
-</ul>
-<p>  @Override<br>  public String toString() {</p>
-<pre><code>  return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
-</code></pre>
-<p>  }</p>
-<p>  public long getUpFlow() {</p>
-<pre><code>  return upFlow;
-</code></pre>
-<p>  }</p>
-<p>  public void setUpFlow(long upFlow) {</p>
-<pre><code>  this.upFlow = upFlow;
-</code></pre>
-<p>  }</p>
-<p>  public long getDownFlow() {</p>
-<pre><code>  return downFlow;
-</code></pre>
-<p>  }</p>
-<p>  public void setDownFlow(long downFlow) {</p>
-<pre><code>  this.downFlow = downFlow;
-</code></pre>
-<p>  }</p>
-<p>  public long getSumFlow() {</p>
-<pre><code>  return sumFlow;
-</code></pre>
-<p>  }</p>
-<p>  public void setSumFlow(long sumFlow) {</p>
-<pre><code>  this.sumFlow = sumFlow;
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>     ⑵自定义mapper对象 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/**</p>
-<ul>
-<li><p>继承Mapper接口：定义输入和输出参数</p>
-</li>
-<li><p>输入参数：第一个是数据行号，第二个是一行数据</p>
-</li>
-<li><p>输出参数：第一个是手机号，第二个是自定义的实体对象</p>
-</li>
-<li><p>@author kgf</p>
-</li>
-<li></li>
-<li><p>/<br>public class FlowMapper extends Mapper&lt;LongWritable,Text, Text,FlowBean&gt;&#123;</p>
-<p>  //定义输出参数<br>  Text k = new Text();<br>  FlowBean v = new FlowBean();</p>
-<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  
-  //1:获取一行数据
-  String line = value.toString();
-  //2:对数据进行切割，这里数据间的是以制表符分割的，就是tab
-  String[] fields = line.split(&quot;\t&quot;);
-  //3:获取我们需要的数据
-  String phoneNum = fields[1];//手机号
-  long upFlow = Long.parseLong(fields[fields.length-3]);//上行流量
-  long downFlow = Long.parseLong(fields[fields.length-2]);//下行流量
-  //封装数据
-  v.setFlowBean(upFlow,downFlow);
-  k.set(phoneNum);
-  
-  //写出数据
-  context.write(k, v);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>    ⑶自定义FlowReducer <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>/**</p>
-<ul>
-<li><p>继承Reducer接口：</p>
-</li>
-<li><p>输入参数：手机号–&gt;自定义bean对象</p>
-</li>
-<li><p>输出参数：手机号–&gt;自定义bean对象</p>
-</li>
-<li><p>@author 86136</p>
-</li>
-<li></li>
-<li><p>/<br>public class FlowReducer extends Reducer&lt;Text, FlowBean, Text, FlowBean&gt;&#123;</p>
-<p>  @Override<br>  protected void reduce(Text key, Iterable&lt;FlowBean&gt; values,Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  //1：因为可能存在多条相同的手机号码，所以我们需要对相同的key数据进行数据汇总
-  long sum_upFlow = 0;
-  long sum_downFlow =0;
-  
-  //2:求和累加
-  for (FlowBean flowBean : values) &#123;
-      sum_upFlow+=flowBean.getUpFlow();
-      sum_downFlow+=flowBean.getDownFlow();
-  &#125;
-  
-  FlowBean flowBean = new FlowBean(sum_upFlow,sum_downFlow);
-  //3：输出数据
-  context.write(key, flowBean);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   ⑷自定义FlowDriver <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class FlowDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1:获取job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar包路径
-    job.setJarByClass(FlowDriver.class);
-    
-    //3:管理自定义的Mapper和Reducer类
-    job.setMapperClass(FlowMapper.class);
-    job.setReducerClass(FlowReducer.class);
-    
-    //4:Mapper输出类型
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(FlowBean.class);
-    
-    //5：Reducer输出类型
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(FlowBean.class);
-    
-    //6：设置输出路径
-    FileInputFormat.setInputPaths(job,new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    //7：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑸本地测试      a：设置运行的环境变量             <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20190728001704387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="263">              在输入目录下数据文件已经准备好。               <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190728001720271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="428">       b：效果（具体结果自己可以校验一下）             <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190728001818909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301">             <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728001908764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="387">    </li></p>
-<h1 id="二：MapTask-工作机制"><a href="#二：MapTask-工作机制" class="headerlink" title="二：MapTask  工作机制"></a>二：MapTask  工作机制</h1><ol>
-<li> 简介         maptask 的并行度决定 map 阶段的任务处理并发度，进而影响到整个 job 的处理速度。 一个 job 的 map 阶段 MapTask 并行度（个数），由客户端提交 job 时的切片个数决定1.  MapTask 并行度决定机制         <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019072808544236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528">     <h1 id="三：CombineTextInputFormat-切片机制"><a href="#三：CombineTextInputFormat-切片机制" class="headerlink" title="三：CombineTextInputFormat 切片机制"></a>三：CombineTextInputFormat 切片机制</h1></li>
-<li>关于大量小文件的优化策略       <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190728101550887.png" width="598">1. 优化策略        <img alt="" class="has" height="296" src="https://img-blog.csdnimg.cn/20190728101655451.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="535">1. 案例之大量小文件的切片优化   ⑴现在我们就使用之前的WordCount案例来测试，我们在输入路径下放入多个很小的文件，来使用WordCount       去计算，我们看看默认的切片机制，以及创建了几个maptask？        <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190728103453328.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604">       看运行结果和日志：       <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190728103622869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="674">      通过上面的日志可以发现，6个很小的文件在计算的时候却分为6个切片，开了6个maptask，肯定是      不太好的，处理效率极其低下，那么我们如何将其合为一个切片呢？    ⑵解决方案，在 WordcountDriver 中增加如下代码         <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20190728105228277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">         效果（可以发现只分了一个切片，只开了一个maptask）：         <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019072810530220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">          <h1 id="四：Partition-分区"><a href="#四：Partition-分区" class="headerlink" title="四：Partition 分区"></a>四：Partition 分区</h1></li>
-<li>要求将统计结果按照条件输出到不同文件中（分区）。比如：将统计结果按照手机归属地不同省份输出到不同文件中（分区）。1. 默认分区     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/2019072811064097.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">1. 自定义 Partitioner 分区   <img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190728131935896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="442">1.  在 job 驱动中，设置自定义 partitioner   <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20190728132941914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">   注意：   <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20190728133023471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="515">1.   运行效果   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20190728133157912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="375">         如下：第一个分区都是136的，后面都是根据不同手机号在不同的分区。   <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190728133232505.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="485"><h1 id="五：WritableComparable-排序"><a href="#五：WritableComparable-排序" class="headerlink" title="五：WritableComparable 排序"></a>五：WritableComparable 排序</h1></li>
-<li>简介        排序是 MapReduce 框架中最重要的操作之一。Map Task 和 Reduce Task 均会对数据（按照 key）进行排序。 该操作属于 Hadoop 的默认行为。任何应用程序中的数据均会被排序，而不管逻辑上是否需要。默认排序是按照字 典顺序排序，且实现该排序的方法是快速排序。        对于 Map Task，它会将处理的结果暂时放到一个缓冲区中，当缓冲区使用率达到一定阈值后，再对缓冲区中的 数据进行一次排序，并将这些有序数据写到磁盘上，而当数据处理完毕后，它会对磁盘上所有文件进行一次合并， 以将这些文件合并成一个大的有序文件。        对于 Reduce Task，它从每个 Map Task 上远程拷贝相应的数据文件，如果文件大小超过一定阈值，则放到磁盘上， 否则放到内存中。如果磁盘上文件数目达到一定阈值，则进行一次合并以生成一个更大文件；如果内存中文件大小或者 数目超过一定阈值，则进行一次合并后将数据写到磁盘上。当所有数据拷贝完毕后，Reduce Task 统一对内存和磁盘上 的所有数据进行一次合并。1.  排序的分类      ⑴部分排序                 MapReduce 根据输入记录的键对数据集排序。保证输出的每个文件内部排序。      ⑵全排序                 <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190728144810792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="524">       ⑶辅助排序：（GroupingComparator 分组）                <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/2019072814493740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="517">       ⑷二次排序                在自定义排序过程中，如果 compareTo 中的判断条件为两个即为二次排序。       ⑸自定义排序 WritableComparable            bean 对象实现 WritableComparable 接口重写 compareTo 方法，就可以实现排序 <li>案例之手机流量按总流量进行倒序排序       ⑴数据准备               <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728154515743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="415">       ⑵自定义Bean对象实现WritableComparable接口，重写 compareTo 方法 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</li>
-</ol>
-<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.WritableComparable;</p>
-<p>public class FlowSortBean implements WritableComparable&lt;FlowSortBean&gt;&#123;</p>
-<pre><code>/**上行流量**/
-private long upFlow;
-/**下行流量**/
-private long downFlow;
-/**总流量**/
-private long sumFlow;
-/**
- * 必须要有无参构造方法
- * 反序列化时，需要反射调用空参构造函数，所以必须有空参构造
- */
-public FlowSortBean() &#123;
-    super();
-&#125;
-
-public void setFlowSortBean(long upFlow, long downFlow) &#123;
-    this.upFlow = upFlow;
-    this.downFlow = downFlow;
-    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
-&#125;
-
-public FlowSortBean(long upFlow, long downFlow) &#123;
-    this.upFlow = upFlow;
-    this.downFlow = downFlow;
-    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
-&#125;
-
-/***
- * 这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程
- */
-@Override
-public void write(DataOutput out) throws IOException &#123;
-    //按照顺序依次将数据写入
-    out.writeLong(upFlow);
-    out.writeLong(downFlow);
-    out.writeLong(sumFlow);
-&#125;
-
-/**
- * 这个是反序列化方法
- */
-@Override
-public void readFields(DataInput in) throws IOException &#123;
-    //这个反序列化顺序要和上面序列化顺序保持一致
-    this.upFlow = in.readLong();
-    this.downFlow = in.readLong();
-    this.sumFlow = in.readLong();
-&#125;
-
-@Override
-public String toString() &#123;
-    return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
-&#125;
-
-public long getUpFlow() &#123;
-    return upFlow;
-&#125;
-
-public void setUpFlow(long upFlow) &#123;
-    this.upFlow = upFlow;
-&#125;
-
-public long getDownFlow() &#123;
-    return downFlow;
-&#125;
-
-public void setDownFlow(long downFlow) &#123;
-    this.downFlow = downFlow;
-&#125;
-
-public long getSumFlow() &#123;
-    return sumFlow;
-&#125;
-
-public void setSumFlow(long sumFlow) &#123;
-    this.sumFlow = sumFlow;
-&#125;
-
-/**
- * 按照总流量的倒序排序
- */
-@Override
-public int compareTo(FlowSortBean o) &#123;
-    return (int) (this.sumFlow-o.getSumFlow());
-&#125;
-</code></pre>
-<p>}<br></code></pre>   ⑶自定义Mapper类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/**</p>
-<ul>
-<li><p>我们需要将排序的参数作为KEY</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class FlowSortMapper extends Mapper&lt;LongWritable,Text,FlowSortBean,Text&gt;&#123;</p>
-<p>  FlowSortBean k = new FlowSortBean();<br>  Text v = new Text();</p>
-<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  //1：获取一行数据
-  String line = value.toString();
-  //2:切割数据
-  String[] fields = line.split(&quot;\t&quot;);
-  //3:封装对象
-  long upFlow = Long.parseLong(fields[1]);//上行流量
-  long downFlow = Long.parseLong(fields[2]);//下行流量
-  
-  k.setFlowSortBean(upFlow, downFlow);
-  v.set(fields[0]);
-  
-  //4：将数据写出
-  context.write(k, v);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   ⑷自定义Reducer类        <img alt="" class="has" height="259" src="https://img-blog.csdnimg.cn/2019072816005613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="429">    ⑸自定义Driver类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class FlowSortDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1:获取job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar包路径
-    job.setJarByClass(FlowSortDriver.class);
-    
-    //3:设置自定义的mapper和Reducer类
-    job.setMapperClass(FlowSortMapper.class);
-    job.setReducerClass(FlowSortReducer.class);
-    
-    //4:设置mapper输出的k,v类型
-    job.setMapOutputKeyClass(FlowSortBean.class);
-    job.setMapOutputValueClass(Text.class);
-    
-    //5:设置reducer的输出类型
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(FlowSortBean.class);
-    
-    //6：设置输入输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job,new Path(args[1]));
-    
-    //7:提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>   ⑹运行效果         <img alt="" class="has" height="235" src="https://img-blog.csdnimg.cn/20190728160205523.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="460">        <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728160235175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488"> </li>1.  在上面排序的基础上，将不同省份的手机号输出到不同的文件中，并且内部排序    ⑴增加分区类           <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190728162325650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377">             ⑵在Driver中引入自定义的分区          <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728162411687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="361">   ⑶效果：         <img alt="" class="has" height="209" src="https://img-blog.csdnimg.cn/20190728162438778.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407">        里面的每个文件内容都排了序：        <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20190728162529395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="538"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce实现寻找共同好友"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/"
-    >MapReduce实现寻找共同好友</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.192Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce实现寻找共同好友<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: MapReduce实现寻找共同好友<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 需求：给出A-O个人中每个人的好友列表，求出哪些人两两之间有共同好友，以及他们的共同好友都有谁。    注意：这些人好友都是单向的，可能A是B的好友，但是B不一定是A的好友，这种类似的微博的关注，               A关注B，但是B不一定关注了A。1. 原始文件如下：   <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190811145226975.png" width="289">  1. 要求输出的格式如下：  <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20190811145317894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="328">1. 思路分析：    ⑴我们从上面可以现在我们知道A-O每个人拥有哪些好友，但是我们现在是要找出两两之间的人有哪些共同好友。那么        我们可以逆向思维，第一步找出哪些好友拥有A,哪些好友拥有B…..依次找出，结果如下：        <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190811145923175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="320">    ⑵通过得出上面的数据后，我们可以对后面的好友进行排序，避免重复，将 “拥有这名朋友的所有人”进行两两配对，并将配对后的         字符串当做键，“朋友”当做值输出，即输出&lt;人-人，共同朋友&gt;        <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190811150157279.png" width="206"> <li>代码实现，通过两次job运算  a：FriendMapper01         <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>public class FriendMapper01 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
-<pre><code>Text k  =new Text();
-Text v  =new Text();
-
-@Override
-protected void map(LongWritable key, Text value,Context context)
-        throws IOException, InterruptedException &#123;
-    //1：获取一行数据
-    String line = value.toString();
-    //2：对一行数据进行切割
-    String[] fields = line.split(&quot;:&quot;);
-    String person = fields[0];
-    String[] friends = fields[1].split(&quot;,&quot;);
-    for (String friend : friends) &#123;
-        k.set(friend);
-        v.set(person);
-        context.write(k, v);
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre> b：FriendReducer       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import java.io.IOException;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>public class FriendReducer extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
-<pre><code>@Override
-protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
-        throws IOException, InterruptedException &#123;
-    
-    StringBuffer sb = new StringBuffer();
-    //1：获取哪些好友都有对应的人
-    for (Text text : values) &#123;
-        sb.append(text.toString()+&quot;,&quot;);
-    &#125;
-    sb.deleteCharAt(sb.length()-1);
-    context.write(key, new Text(sb.toString()));
-&#125;
-</code></pre>
-<p>}<br></code></pre> c：FriendDriver01       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class FriendDriver01 &#123;</p>
-<pre><code>public static void main(String[] args) throws Exception &#123;
-    //1：获取Job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar
-    job.setJarByClass(FriendDriver01.class);
-    
-    //3:关联Mapper和reducer
-    job.setMapperClass(FriendMapper01.class);
-    job.setReducerClass(FriendReducer.class);
-    
-    //4:设置mapper输出参数
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(Text.class);
-    
-    //5：设置最终输出
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(Text.class);
-    
-    //6:设置文件输入输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //7：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre> d：FriengMapper02 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import java.io.IOException;<br>import java.util.Arrays;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>public class FriengMapper02 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
-<pre><code>@Override
-protected void map(LongWritable key, Text value,Context context)
-        throws IOException, InterruptedException &#123;
-    //1：获取一行
-    String line = value.toString();
-    //2：切割数据
-    String[] fileds = line.split(&quot;\t&quot;);
-    String friend = fileds[0];
-    String[] persons = fileds[1].split(&quot;,&quot;);
-    Arrays.sort(persons);//排序
-    for (int i = 0; i &amp;lt; persons.length; i++) &#123;
-        for (int j = i+1; j &amp;lt; persons.length; j++) &#123;
-            context.write(new Text(persons[i]+&quot;-&quot;+persons[j]),new Text(friend));
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre> e：FriendReducer2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import java.io.IOException;<br>import java.util.HashSet;</p>
-<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>public class FriendReducer2 extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
-<pre><code>@Override
-protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
-        throws IOException, InterruptedException &#123;
-    
-    StringBuffer sb = new StringBuffer();
-    HashSet&amp;lt;String&amp;gt; set = new HashSet&amp;lt;String&amp;gt;();
-    
-    for (Text value : values) &#123;
-        String v = value.toString();
-        if(!set.contains(v)) &#123;
-            set.add(v);
-            sb.append(v).append(&quot;,&quot;);
-        &#125;
-    &#125;
-    sb.deleteCharAt(sb.length()-1);
-    context.write(key, new Text(sb.toString()));
-&#125;
-</code></pre>
-<p>}<br></code></pre> f：FriendDriver2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class FriendDriver2 &#123;</p>
-<pre><code>public static void main(String[] args) throws Exception &#123;
-    //1：获取Job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar
-    job.setJarByClass(FriendDriver2.class);
-    
-    //3:关联Mapper和reducer
-    job.setMapperClass(FriengMapper02.class);
-    job.setReducerClass(FriendReducer2.class);
-    
-    //4:设置mapper输出参数
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(Text.class);
-    
-    //5：设置最终输出
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(Text.class);
-    
-    //6:设置文件输入输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //7：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/"
-    >MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.183Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：MapTask工作流程</p>
-<ol>
-<li>简介      <img alt="" class="has" height="337" src="https://img-blog.csdnimg.cn/20190728221249534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="539">1.  详细流程如下    ⑴Read阶段：              Map Task 通过用户编写的 RecordReader，从输入 InputSplit 中解析出一个个 key/value。    ⑵Map 阶段：               该节点主要是将解析出的 key/value 交给用户编写 map()函数处理，并产生一系列新的 key/value。    ⑶Collect 收集阶段：               在用户编写 map()函数中，当数据处理完成后，一般会调用OutputCollector.collect()输出结果。       在该函数内部，它会将生成的 key/value 分区（调用Partitioner），并写入一个环形内存缓冲区中。    ⑷Spill 阶段：                即“溢写”，当环形缓冲区满后，MapReduce 会将数据写到本地磁盘上，生成一个临时文件。        需要注意的是，将数据写入本地磁盘之前，先要对数据进行一次本地排序，并在必要时对数据进        行合并、压缩等操作。                溢写阶段详情：                         a：利用快速排序算法对缓存区内的数据进行排序，排序方式是，先按照分区编号partition                               进行排序，然后按照 key 进行排序。这样，经过排序后，数据以分区为单位聚集在一起，                               且同一分区内所有数据按照 key 有序。                         b：按照分区编号由小到大依次将每个分区中的数据写入任务工作目录下的临时文件                               output/spillN.out（N 表示当前溢写次数）中。如果用户设置了 Combiner，则写入文件之                                前，对每个分区中的数据进行一次聚集操作。                         c：将分区数据的元信息写到内存索引数据结构 SpillRecord 中，其中每个分区的元信息包括                              在临时文件中的偏移量、压缩前数据大小和压缩后数据大小。如果当前内存索引大小超过                              1MB，则将内存索引写到文件 output/spillN.out.index 中。    ⑸Combine 阶段：             当所有数据处理完成后，MapTask 对所有临时文件进行一次合并以确保最终只会生成一个数据文件。             当所有数据处理完后，MapTask 会将所有临时文件合并成一个大文件，并保存到文件output/file.out 中，        同时生成相应的索引文件 output/file.out.index。              在进行文件合并过程中，MapTask 以分区为单位进行合并。对于某个分区，它将采用多轮递归合并的        方式。每轮合并 io.sort.factor（默认 100）个文件，并将产生的文件重新加入待合并列表中，对文件排序后，        重复以上过程，直到最终得到一个大文件。              让每个 MapTask 最终只生成一个数据文件，可避免同时打开大量文件和同时读取大量小文件产生的随机        读取带来的开销。         <h1 id="二：MapReduce-工作流程"><a href="#二：MapReduce-工作流程" class="headerlink" title="二：MapReduce  工作流程"></a>二：MapReduce  工作流程</h1></li>
-<li>流程示意图如下：      <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20190728223420512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="508">      <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190728223526161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">1.  流程详解如下：  ⑴maptask 收集我们的 map()方法输出的 kv 对，放到内存缓冲区中  ⑵从内存缓冲区不断溢出本地磁盘文件，可能会溢出多个文件  ⑶多个溢出文件会被合并成大的溢出文件  ⑷在溢出过程中，及合并的过程中，都要调用 partitioner 进行分区和针对 key 进行排序  ⑸reducetask 根据自己的分区号，去各个 maptask 机器上取相应的结果分区数据 。  ⑹reducetask 会取到同一个分区的来自不同 maptask 的结果文件，reducetask 会将这些      文件再进行合并（归并排序）  ⑺合并成大文件后，shuffle 的过程也就结束了，后面进入 reducetask 的逻辑运算过程          （从文件中取出一个一个的键值对 group，调用用户自定义的 reduce()方法）   注意：         Shuffle 中的缓冲区大小会影响到 mapreduce 程序的执行效率，原则上说，缓冲区越大，  磁盘 io 的次数越少，执行速度就越快。缓冲区的大小可以通过参数调整，参数：io.sort.mb 默认 100M。<h1 id="三：Combiner-合并"><a href="#三：Combiner-合并" class="headerlink" title="三：Combiner 合并"></a>三：Combiner 合并</h1></li>
-<li>简介       <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190729220522148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="583">       <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20190729220719373.png" width="635">1.  案例：我们在wordcount案例中使用Conbiner    ⑴数据准备            <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/2019072922243974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="469">    ⑵使用原本的wordcount代码看看日志           <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190729222738153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="363">    ⑶自定义一个 combiner 继承 Reducer，重写 reduce 方法           <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190729222824707.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="413">     ⑷在 job 驱动类中设置：          <img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20190729223022718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="358">     ⑸效果：         <img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20190729223311563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="339">               ⑹其实我们可以发现Combiner的代码和Reducer的代码一样，只不过执行的位置不同：          <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190729223603934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="440">          所以我们直接在Driver中将Combiner指定reducer也可以：          <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20190729223745619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="344"><h1 id="四：辅助-排序和二次排序案例（GroupingComparator）"><a href="#四：辅助-排序和二次排序案例（GroupingComparator）" class="headerlink" title="四：辅助 排序和二次排序案例（GroupingComparator）"></a>四：辅助 排序和二次排序案例（GroupingComparator）</h1></li>
-<li> 需求：     <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/20190730213326408.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521">1. 数据准备：    <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190731223724507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="274"><img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190731223812489.png" width="322">1.  思路分析   ⑴在Mapper中处理的事情：         a：获取每一行输入的数据         b：对数据进行切割，只需要订单号，金额         c：将切割好的数据分装到自定义的bean当中，并且对订单号以及金额进行排序，都是从大到小。               因为在后面定义分组的时候，只会传递一个key给reducer,这时候我们取最大金额的订单。    ⑵自定义分区，从mapper端传递过来的数据，只要订单号一样我们就分到一个分区之中，最后         3中编号的订单分到3个分区文件中。    ⑶自定义groupingcomparator分组，获取相同订单号的数据，并且取第一个订单号数据发送给reducer.    ⑷最后reducer分别把不同订单号的第一条金额最大的数据写出。<li>代码实现如下：   ⑴自定义bean，并且实现订单号以及金额排序           <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
-</ol>
-<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.WritableComparable;</p>
-<p>/***</p>
-<ul>
-<li><p>序列化排序自定义的bean对象</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class OrderBean implements WritableComparable&lt;OrderBean&gt;&#123;</p>
-<p>  /<strong>订单号</strong>/<br>  private int orderId;<br>  /<strong>价格</strong>/<br>  private double price;</p>
-<p>  public OrderBean(int orderId, double price) &#123;</p>
-<pre><code>  super();
-  this.orderId = orderId;
-  this.price = price;
-</code></pre>
-<p>  }<br>  public OrderBean() {</p>
-<pre><code>  super();
-</code></pre>
-<p>  }<br>  /***</p>
-<ul>
-<li>反序列化操作</li>
-<li>/<br>@Override<br>public void readFields(DataInput input) throws IOException {<br>  this.orderId = input.readInt();<br>  this.price = input.readDouble();<br>}<br>/***</li>
-<li>序列化操作</li>
-<li>/<br>@Override<br>public void write(DataOutput output) throws IOException {<br>  output.writeInt(orderId);<br>  output.writeDouble(price);<br>}<br>public int getOrderId() {<br>  return orderId;<br>}<br>public void setOrderId(int orderId) {<br>  this.orderId = orderId;<br>}<br>public double getPrice() {<br>  return price;<br>}<br>public void setPrice(double price) {<br>  this.price = price;<br>}<br>@Override<br>public String toString() {<br>  return orderId + “\t” + price;<br>}<br>@Override<br>public int compareTo(OrderBean o) {<br>  int result = 0;<br>  if(this.orderId&gt;o.getOrderId()) {<pre><code>  result = 1;
-</code></pre>
-  }else if(this.orderId&lt;o.getOrderId()) {<pre><code>  result = -1;
-</code></pre>
-  }else {<pre><code>  if(this.price&amp;gt;o.getPrice()) &#123;
-      result = -1;
-  &#125;else if(this.price&amp;lt;o.getPrice()) &#123;
-      result = 1;
-  &#125;
-</code></pre>
-  }<br>  return result;<br>}<br>}<br></code></pre> ⑵自定义OrderMapper对数据进行切割 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
-</ul>
-</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>/***</p>
-<ul>
-<li><p>继承Mapper接口,对读取的文件数据进行切割</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class OrderMapper extends Mapper&lt;LongWritable, Text, OrderBean, NullWritable&gt;&#123;</p>
-<p>  OrderBean k = new OrderBean();</p>
-<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  System.out.println(&quot;===========OrderMapper BEGIN=============&quot;);
-  //获取一行数据
-  String line = value.toString();
-  //切割数据
-  String[] fields = line.split(&quot;\t&quot;);
-  System.out.println(&quot;[fields:]&quot;+fields);
-  //封装数据对象
-  k.setOrderId(Integer.valueOf(fields[0]));
-  k.setPrice(Double.parseDouble(fields[2]));
-  //输出
-  context.write(k, NullWritable.get());
-  System.out.println(&quot;===========OrderMapper END=============&quot;);
-</code></pre>
-<p>  }<br>}<br></code></pre>  ⑶自定义分区，将不同订单号的数据写入到不同分区 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
-</li>
-</ul>
-<p>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Partitioner;</p>
-<p>/***</p>
-<ul>
-<li><p>继承分区函数，分为多个区</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class OrderPartitioner extends Partitioner&lt;OrderBean,NullWritable&gt;&#123;</p>
-<p>  /**</p>
-<ul>
-<li>注意：这个numberPartitions就是Driver中job.setNumReduceTasks(3);</li>
-<li>/<br>@Override<br>public int getPartition(OrderBean key, NullWritable value, int numberPartitions) &#123;<br>  return (key.getOrderId() &amp; Integer.MAX_VALUE) % numberPartitions;<br>&#125;</li>
-</ul>
-</li>
-</ul>
-<p>&#125;<br></code></pre> ⑷自定义分组，将相同订单号的第一条金额最大的数据写入到reducer中 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
-<p>import org.apache.hadoop.io.WritableComparable;<br>import org.apache.hadoop.io.WritableComparator;</p>
-<p>/***</p>
-<ul>
-<li>自定义GroupingComparator进行分组,WritableComparator是一个类 这个类是用于mapreduce编程模型中的比较 排序 .</li>
-<li>mapreduce中有两次排序 一次是 在环形缓冲区域之中进行分区 排序,还有一次是数据在reduce端获取文件之后进行分组</li>
-<li>它是用来给Key分组的,</li>
-<li>@author kgf</li>
-<li></li>
-<li>/<br>public class OrderGroupingComparator extends WritableComparator&#123;<br>   /***<pre><code>           * 无参构造子 必须调用父类的构造子 不然会报空指针 未初始化 buffer
-*/
-</code></pre>
-  public OrderGroupingComparator() {<pre><code>  super(OrderBean.class,true);
-</code></pre>
-  }<br>  /**<ul>
-<li>我们这里通过比较orderId分组，相同的一组</li>
-<li>/<br>@SuppressWarnings(“rawtypes”)<br>@Override<br>public int compare(WritableComparable a, WritableComparable b) {<br>  System.out.println(“======OrderGroupingComparator begin=======”);<br>  OrderBean aBean = (OrderBean) a;<br>  OrderBean bBean = (OrderBean) b;<br>  System.out.println(“[aBean:]”+aBean);<br>  System.out.println(“[bBean:]”+bBean);<br>  int result = 0;<br>  if(bBean.getOrderId()&gt;aBean.getOrderId()) {<pre><code>  result = 1;
-</code></pre>
-  }else if(bBean.getOrderId()&lt;aBean.getOrderId()) {<pre><code>  result = -1;
-</code></pre>
-  }else {<pre><code>  result = 0;
-</code></pre>
-  }<br>  System.out.println(“======OrderGroupingComparator end=======”);<br>  return result;<br>}<br>}<br></code></pre>  ⑸自定义reducer，写出不同订单号的金额最大的数据 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
-</ul>
-</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>/***</p>
-<ul>
-<li></li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class OrderReducer extends Reducer&lt;OrderBean, NullWritable, OrderBean, NullWritable&gt;&#123;</p>
-<p>  @Override<br>  protected void reduce(OrderBean key, Iterable&lt;NullWritable&gt; value,Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  System.out.println(&quot;=========OrderReducer=====begin=========&quot;);
-  context.write(key, NullWritable.get());
-  System.out.println(&quot;=========OrderReducer=====END=========&quot;);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre> ⑹OrderDriver启动服务类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class OrderDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    
-    //1：获取job配置信息
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    //2:设置jar包加载路径
-    job.setJarByClass(OrderDriver.class);
-    //3:加载自定义的mapper和reducer
-    job.setMapperClass(OrderMapper.class);
-    job.setReducerClass(OrderReducer.class);
-    //4:设置mapper的输出类型
-    job.setMapOutputKeyClass(OrderBean.class);
-    job.setMapOutputValueClass(NullWritable.class);
-    //5：设置reducer的输出类型
-    job.setOutputKeyClass(OrderBean.class);
-    job.setOutputValueClass(NullWritable.class);
-    //6:设置文件输入和输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job,new Path(args[1]));
-    
-    //8：设置分区
-    job.setPartitionerClass(OrderPartitioner.class);
-    job.setNumReduceTasks(3);
-    
-    //9:设置自定义分组
-    job.setGroupingComparatorClass(OrderGroupingComparator.class);
-    
-    //7:提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:-1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li>1. OVER</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hive知识点入门学习一"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
-    >Hive知识点入门学习一</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.176Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hive知识点入门学习一<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：Hive基本概念</p>
-<ol>
-<li> 什么是Hive？    <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190814222311472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="620">1. Hive优缺点  ⑴优点           <img alt="" class="has" height="208" src="https://img-blog.csdnimg.cn/20190815214618589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="616">  ⑵缺点           <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190815214836193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">1. Hive 架构原理 <img alt="" class="has" height="566" src="https://img-blog.csdnimg.cn/201908152155550.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="611"><img alt="" class="has" height="412" src="https://img-blog.csdnimg.cn/20190815215626780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610"><img alt="" class="has" height="182" src="https://img-blog.csdnimg.cn/2019081521564683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610"><img alt="" class="has" height="112" src="https://img-blog.csdnimg.cn/20190815215701849.png" width="610">1. Hive 和数据库比较  由于 Hive 采用了类似 SQL 的查询语言 HQL(Hive Query Language)，因此很容易 将 Hive 理解为数据库。其实从结构上来看，Hive 和数据库除了拥有类似的查询语言，再无 类似之处。数据库可以用在 Online 的应用中，但是 Hive 是为数据仓库而设计的，类似mysql, Oracle等常规数据库一般用于增删改查，但是Hive一般只用于查询。清楚这一点，有助于从应 用角度理解 Hive 的特性。 ⑴查询语言         <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190815221532680.png" width="546"> ⑵数据存储位置          <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/2019081522160170.png" width="551"> ⑶数据更新          <img alt="" class="has" height="128" src="https://img-blog.csdnimg.cn/2019081522163091.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553">  ⑷ 索引         <img alt="" class="has" height="209" src="https://img-blog.csdnimg.cn/20190815221713667.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="559"> ⑸执行         <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190815221748180.png" width="558"> ⑹执行延迟         <img alt="" class="has" height="167" src="https://img-blog.csdnimg.cn/2019081522181594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555"> ⑺可扩展性         <img alt="" class="has" height="136" src="https://img-blog.csdnimg.cn/20190815221845638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="556"> ⑻数据规模         <img alt="" class="has" height="62" src="https://img-blog.csdnimg.cn/20190815221911671.png" width="572"><h1 id="二：Hive-安装环境准备以及基本操作"><a href="#二：Hive-安装环境准备以及基本操作" class="headerlink" title="二：Hive 安装环境准备以及基本操作"></a>二：Hive 安装环境准备以及基本操作</h1></li>
-<li>Hive各个版本下载地址 ：****  <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190816213210468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="435">        1. 使用hive的版本  <img alt="" class="has" height="42" src="https://img-blog.csdnimg.cn/2019081621555789.png" width="311">1. 将软件包上传到/opt/software目录下  <img alt="" class="has" height="166" src="https://img-blog.csdnimg.cn/2019081621592082.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="593">1. 解压软件到/opt/module目录下<img alt="" class="has" height="59" src="https://img-blog.csdnimg.cn/20190816220052503.png" width="757"><img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190816220118970.png" width="579">1. 将名称修改为hive  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190816220446367.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484">1. 将/opt/module/hive/conf目录下的配置文件hive-env.sh.template名称修改为hive-env.sh<img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190816220725287.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="512">1. 修改hive-env.sh文件内容  <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190816221104424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">1. hadoop集群配置，因为hive是依赖于hadoop的，所以hadoop的hdfs和yarn必须启动 ⑴在hadoop102启动hdfs       <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190816221531105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="564"> ⑵到hadoop103上启动yarn        <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/2019081622173717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="478">     1. 在 HDFS 上创建/tmp 和/user/hive/warehouse(这个目录主要给hive存储数据用) 两个目录并修改他们的同组权限可写     <img alt="" class="has" height="100" src="https://img-blog.csdnimg.cn/20190816223829322.png" width="647">1. 修改新建目录权限   ⑴目前目录权限，同组用户可读，可执行，不可写,修改为可读可写          <img alt="" class="has" height="110" src="https://img-blog.csdnimg.cn/20190816224122506.png" width="763">          <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190816224502264.png" width="586">          <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/20190816224531899.png" width="587">           1. hive基本操作   ⑴启动hive          a：进入/opt/module/hive目录下，出现下面效果就启动完成                  <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190816225102613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="465">  ⑵查看数据库命令        <img alt="" class="has" height="180" src="https://img-blog.csdnimg.cn/20190816225235943.png" width="423"> ⑶打开默认数据库        <img alt="" class="has" height="192" src="https://img-blog.csdnimg.cn/20190816225325485.png" width="442">  ⑷显示数据库中的表         <img alt="" class="has" height="100" src="https://img-blog.csdnimg.cn/20190816225406640.png" width="326">  ⑸创建表         <img alt="" class="has" height="201" src="https://img-blog.csdnimg.cn/2019081622554793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">  ⑹向表中插入数据         <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190816225815241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="443">  ⑺查表中的数据        <img alt="" class="has" height="156" src="https://img-blog.csdnimg.cn/20190816225935445.png" width="484">    ⑻退出：          <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190816225958759.png" width="395">
- </li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hive知识点入门学习五"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/"
-    >Hive知识点入门学习五</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.169Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hive知识点入门学习五<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：函数 </p>
-<p>      <img alt="" class="has" height="257" src="https://img-blog.csdnimg.cn/20190825215121162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="427">       <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190825215231991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="627">       <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/20190825215259467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="534">       <img alt="" class="has" height="401" src="https://img-blog.csdnimg.cn/20190825215350821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536">       <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190825215423162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">       <img alt="" class="has" height="405" src="https://img-blog.csdnimg.cn/20190825215500629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
-<h1 id="二：行转列"><a href="#二：行转列" class="headerlink" title="二：行转列"></a>二：行转列</h1><ol>
-<li>表结构如下：  <img alt="" class="has" height="190" src="https://img-blog.csdnimg.cn/20190829215916927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647">1. 需求：把星座和血型一样的人归类到一起 ，效果如下  <img alt="" class="has" height="81" src="https://img-blog.csdnimg.cn/20190829220254118.png" width="295">1. sql步骤如下  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190829221220361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="711">           sql:        select              t1.base,              concat_ws(‘|’, collect_set(t1.name)) name         from (                    select                           name,                           concat(constellation,’,’,blood_type) as base                    from  person_info                  ) t1 group by t1.base<img alt="" class="has" height="202" src="https://img-blog.csdnimg.cn/20190829221438842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="507">  <img alt="" class="has" height="418" src="https://img-blog.csdnimg.cn/20190829221644867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="671">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190829221815775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567"><h1 id="三：列转行"><a href="#三：列转行" class="headerlink" title="三：列转行"></a>三：列转行</h1></li>
-<li>表结构  <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190831215607885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="688">1.  创建表   <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20190831220314536.png" width="520">1. 导入数据   <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190831220512348.png" width="434">  <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/201908312206423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="710">1. 将数组展开  <img alt="" class="has" height="89" src="https://img-blog.csdnimg.cn/20190831220853427.png" width="759">           sql如下：  <strong>select movie,category_name from movie_info lateral view explode(category) table_temp as category_name;</strong>  <img alt="" class="has" height="282" src="https://img-blog.csdnimg.cn/20190831221355527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695">1. 数组等相关简介  <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190831221557350.png" width="889">  <img alt="" class="has" height="412" src="https://img-blog.csdnimg.cn/20190831221629324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="636">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190831222953324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690"> <h1 id="四：youtube项目实战"><a href="#四：youtube项目实战" class="headerlink" title="四：youtube项目实战"></a>四：youtube项目实战</h1></li>
-<li>表结构  a：视频表结构相关字段          <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/2019090109262326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="625">  b：用户表         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190901092523720.png" width="588">1. 相关原始数据脚本  a：视频数据文件          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190901092742237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="651">  b：用户数据文件          <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190901092822641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377"><li>对原始数据进行ETL编码清洗   通过观察原始数据形式，可以发现，视频可以有多个所属分类，每个所属分类用&amp;符号分割， 且分割的两边有空格字符，同时相关视频也是可以有多个元素，多个相关视频又用“\t”进 行分割。为了分析数据时方便对存在多个子元素的数据进行操作，我们首先进行数据重组清 洗操作。即：将所有的类别用“&amp;”分割，同时去掉两边空格，多个相关视频 id 也使用“&amp;” 进行分割。 ⑴项目：       <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901124134443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="264">  ⑵pom.xml文件          <pre class="has"><code class="language-html">&lt;project xmlns="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0&quot;">http://maven.apache.org/POM/4.0.0&quot;</a> xmlns:xsi="<a target="_blank" rel="noopener" href="http://www.w3.org/2001/XMLSchema-instance&quot;">http://www.w3.org/2001/XMLSchema-instance&quot;</a> xsi:schemaLocation="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a target="_blank" rel="noopener" href="http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;">http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</a>&gt;<br>&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br>&lt;groupId&gt;com.kgf&lt;/groupId&gt;<br>&lt;artifactId&gt;youtube&lt;/artifactId&gt;<br>&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</li>
-</ol>
-<p>  &lt;properties&gt;<br>      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;<br>  &lt;/properties&gt;</p>
-<p>  &lt;dependencies&gt;<br>      &lt;!–引入hadoop依赖  –&gt;<br>      &lt;dependency&gt;<br>       &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>       &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;<br>       &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>      &lt;dependency&gt;<br>           &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>         &lt;artifactId&gt;hadoop-yarn-server-resourcemanager&lt;/artifactId&gt;<br>         &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>  &lt;/dependencies&gt;<br>&lt;/project&gt;</code></pre> ⑶ETLUtil工具类 <pre class="has"><code class="language-java">package com.kgf.youtube.utils;</p>
-<p>/**</p>
-<ul>
-<li>对数据文件中的一行数据进行处理</li>
-<li>@author KGF</li>
-<li></li>
-<li>/<br>public class ETLUtil &#123;<br>  //RX24KLBhwMI    lemonette    697    People &amp; Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo<br>  public static String getEtlString(String ori) &#123;<pre><code>  StringBuilder sb = new StringBuilder();
-  //对数据进行切割
-  String[] splitArray = ori.split(&quot;\t&quot;);
-  //一行数据中相关视频可以没有，其它相关数据必须存在，否则该条数据作废
-  if(splitArray.length&amp;lt;9)return null;
-  //因为视频类别是以&amp;amp;连接，我们将中间空格去掉，变成如下效果
-  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo
-  splitArray[3] = splitArray[3].replaceAll(&quot; &quot;,&quot;&quot;);
-  //拼接数据
-  for (int i = 0; i &amp;lt; splitArray.length; i++) &#123;
-      sb.append(splitArray[i]);
-      if(i&amp;lt;9) &#123;
-          if(i!=splitArray.length-1) &#123;
-              sb.append(&quot;\t&quot;);
-          &#125;
-      &#125;else &#123;
-          if(i!=splitArray.length-1) &#123;
-              sb.append(&quot;&amp;amp;&quot;);//这里对相关视频进行特殊处理，使用&amp;amp;连接
-          &#125;
-      &#125;
-  &#125;
-  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE&amp;amp;WZgoejVDZlo
-  return sb.toString();
-</code></pre>
-  }<br>}<br></code></pre> ⑷VideoEtlMapper.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.commons.lang.StringUtils;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import com.kgf.youtube.utils.ETLUtil;<br>/**</p>
-<ul>
-<li><p>读取一行对数据进行处理</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class VideoEtlMapper extends Mapper&lt;Object,Text, NullWritable, Text&gt; &#123;</p>
-<p>  Text k = new Text();</p>
-<p>  @Override<br>  protected void map(Object key, Text value, Mapper&lt;Object, Text, NullWritable, Text&gt;.Context context)</p>
-<pre><code>      throws IOException, InterruptedException &#123;
-  //对读取的一行数据进行处理
-  String etlString = ETLUtil.getEtlString(value.toString());
-  if(StringUtils.isNotBlank(etlString)) &#123;
-      k.set(etlString);
-      context.write(NullWritable.get(),k);
-  &#125;
-</code></pre>
-<p>  }<br>}<br></code></pre> ⑸VideoEtlRunner.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</p>
-</li>
-</ul>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.FileSystem;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
-<p>public class VideoEtlRunner implements Tool &#123;</p>
-<pre><code>private Configuration conf = null;
-
-@Override
-public void setConf(Configuration conf) &#123;
-    this.conf = conf;//使用集群中的conf赋值
-&#125;
-
-@Override
-public Configuration getConf() &#123;
-    return this.conf;
-&#125;
-
-@Override
-public int run(String[] args) throws Exception &#123;
-    //将路径存入conf中
-    conf.set(&quot;inpath&quot;,args[0]);
-    conf.set(&quot;outpath&quot;,args[1]);
-    //获取job对象
-    Job job = Job.getInstance(conf);
-    //设置jar
-    job.setJarByClass(VideoEtlRunner.class);
-    //设置mapper
-    job.setMapperClass(VideoEtlMapper.class);
-    job.setMapOutputKeyClass(NullWritable.class);
-    job.setMapOutputValueClass(Text.class);
-    //设置reduce
-    job.setNumReduceTasks(0);
-    //设置输入，输出路径
-    initInputJobPath(job);
-    initOutputJobPath(job);
-    boolean result = job.waitForCompletion(true);
-    return result?1:-1;
-&#125;
-
-private void initOutputJobPath(Job job) &#123;
-    try &#123;
-        Configuration conf = job.getConfiguration();
-        String outPath = conf.get(&quot;outpath&quot;);//获取conf中的输出路径
-        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
-        Path path = new Path(outPath);
-        if(fs.exists(path))&#123;
-            fs.delete(path, true);//删除文件夹，包括子目录
-        &#125;
-        FileOutputFormat.setOutputPath(job, path);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-
-private void initInputJobPath(Job job) &#123;
-    try &#123;
-        Configuration conf = job.getConfiguration();
-        String inPath = conf.get(&quot;inpath&quot;);//获取conf中的输出路径
-        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
-        Path path = new Path(inPath);
-        if(fs.exists(path))&#123;
-            FileInputFormat.setInputPaths(job, path);
-        &#125;else &#123;
-            throw new Exception(&quot;inPath not exists&quot;);
-        &#125;
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-
-public static void main(String[] args) throws Exception &#123;
-    //调用run方法
-    int resultCode = ToolRunner.run(new VideoEtlRunner(), args);
-    System.out.println(resultCode);
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑹将代码打成jar上传到集群       <img alt="" class="has" height="208" src="https://img-blog.csdnimg.cn/20190901124457905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">  ⑺将原始数据文件video.txt上传到集群/youtube/video/2008路径下      <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190901124619827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561"> ⑻执行jar生成文件      a：进入到/opt/module/hadoop-2.7.2目录下      b：执行如下命令           hadoop jar ../jars/youtube-0.0.1-SNAPSHOT.jar com.kgf.youtube.etl.VideoEtlRunner           /youtube/video/2008 /youtube/video/output          <img alt="" class="has" height="305" src="https://img-blog.csdnimg.cn/20190901124850213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604"> </li>1. 效果  <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190901124927461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="589">  <img alt="" class="has" height="279" src="https://img-blog.csdnimg.cn/20190901125028770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752"><li>创建表    <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901173330821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="364"><img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190901173428254.png" width="427">  <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/2019090117352126.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="450">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190901173547731.png" width="432">   <pre class="has"><code class="language-sql">create table youtube_ori(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;<br>)<br>row format delimited<br>fields terminated by "\t"<br>collection items terminated by "&amp;"<br>stored as textfile; </p>
-<p>create table youtube_user_ori(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as textfile;</p>
-<p>create table youtube_orc(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;)<br>clustered by (uploader) into 8 buckets<br>row format delimited fields terminated by “\t”<br>collection items terminated by “&amp;”<br>stored as orc;</p>
-<p>create table youtube_user_orc(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as orc; </code></pre> <img alt="" class="has" height="50" src="https://img-blog.csdnimg.cn/20190901173813131.png" width="829"><img alt="" class="has" height="232" src="https://img-blog.csdnimg.cn/20190901173855528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619"><img alt="" class="has" height="53" src="https://img-blog.csdnimg.cn/20190901173909838.png" width="426"> </li>1. 导入 ETL 后的数据到ori表中  <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190901174937582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="787"><img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190901175123561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="788">1. 向 ORC 表插入数据  a：insert into table youtube_orc select * from youtube_ori;   b：insert into table youtube_user_orc select * from youtube_user_ori;  1. 需求1：统计视频观看数 Top10   SQL:<strong>select videoId,category,views from  youtube_orc order by views desc limit 10;</strong>  <img alt="" class="has" height="353" src="https://img-blog.csdnimg.cn/20190901181041639.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="768">1. 需求2：统计视频类别热度 Top10   <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/2019090118113433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="765">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190901182646488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="621">  <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190901182737120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">1. 需求3：统计出视频观看数最高的 20 个视频的所属类别以及类别包含 这 Top20 视频的个数 <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/20190901210611997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"><img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190901210707215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1. 统计视频观看数 Top50 所关联视频的所属类别的热度排名   <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190901212411101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="437">  <img alt="" class="has" height="237" src="https://img-blog.csdnimg.cn/20190901212538808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hive知识点入门学习四"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/"
-    >Hive知识点入门学习四</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.163Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hive知识点入门学习四<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：分区表 </p>
-<ol>
-<li>简介  <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190823212951784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="745">1. 创建分区表语法   <img alt="" class="has" height="234" src="https://img-blog.csdnimg.cn/20190823213522674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">1.  加载数据到分区表中   <img alt="" class="has" height="282" src="https://img-blog.csdnimg.cn/2019082321412080.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="758">   <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190823214201146.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="736">1. 查询分区表中数据   <img alt="" class="has" height="317" src="https://img-blog.csdnimg.cn/20190823214419960.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647">1.  多分区联合查询   <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190823214530409.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 增加分区   ⑴创建单个分区      <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/2019082321493483.png" width="585">      <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190823214954441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591"> ⑵同时创建多个分区       <img alt="" class="has" height="91" src="https://img-blog.csdnimg.cn/20190823215112591.png" width="749"> 1. 查看分区表有多少分区   <img alt="" class="has" height="244" src="https://img-blog.csdnimg.cn/20190823215259130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557">1.   删除分区   a：删除单个分区        <img alt="" class="has" height="326" src="https://img-blog.csdnimg.cn/20190823215609913.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="608">  b：删除多个分区        <img alt="" class="has" height="346" src="https://img-blog.csdnimg.cn/20190823215700431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="655"> 1. 创建二级分区表   <img alt="" class="has" height="247" src="https://img-blog.csdnimg.cn/2019082322024328.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">1.   导入数据  <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190823220401984.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="743">     <img alt="" class="has" height="308" src="https://img-blog.csdnimg.cn/20190823220433743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718"><h1 id="二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式"><a href="#二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式" class="headerlink" title="二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式"></a>二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式</h1></li>
-<li>方式一：上传数据后修复   ⑴创建目录        <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20190824211553599.png" width="683">        <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190824211630627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="586">  ⑵上传数据        <img alt="" class="has" height="124" src="https://img-blog.csdnimg.cn/20190824211752784.png" width="699">        <img alt="" class="has" height="220" src="https://img-blog.csdnimg.cn/20190824211811832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="652">  ⑶查询数据，发现刚刚上传的20190824没有数据         <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190824211926590.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">  ⑷执行修复命令：msck repair table dept_partition2;       <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190824212109823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">1. 方式二：上传数据后添加分区    ⑴上传数据         <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20190824212316551.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="726">           <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190824212340738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">    ⑵执行添加分区         <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20190824212529214.png" width="776">     ⑶查询数据          <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190824212616933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="650">1. 方式三：上传数据后 load 数据到分区          ⑴ 创建目录，上传数据             <img alt="" class="has" height="201" src="https://img-blog.csdnimg.cn/20190824212818598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="793">         ⑵查询数据             <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190824212924424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607"><h1 id="三：修改表"><a href="#三：修改表" class="headerlink" title="三：修改表"></a>三：修改表</h1></li>
-<li>重命名表   <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190824214216327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705">1. 增加/修改/替换列信息   <img alt="" class="has" height="409" src="https://img-blog.csdnimg.cn/20190824214406119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">     <h1 id="四：数据导入"><a href="#四：数据导入" class="headerlink" title="四：数据导入"></a>四：数据导入</h1></li>
-<li>向表中装载数据（Load）   ⑴语法：load data [local] inpath ‘/opt/module/datas/student.txt’ [overwrite] into table student [partition (partcol1=val1,…)];       <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20190824220523291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="583"> ⑵实操案例        a：创建一张表              <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190824220737161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">        b：加载本地文件到 hive               <img alt="" class="has" height="248" src="https://img-blog.csdnimg.cn/20190824221040184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">        c： 上传文件到 HDFS ，加载 HDFS 上数据                <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190824221324500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">               <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190824221432772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">       d：加载数据覆盖表中已有的数据             <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190824221552622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="628">1.  通过查询语句向表中插入数据（Insert）   <img alt="" class="has" height="379" src="https://img-blog.csdnimg.cn/20190824224156549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">        <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190824224218340.png" width="653">   <h1 id="五：数据导出"><a href="#五：数据导出" class="headerlink" title="五：数据导出"></a>五：数据导出</h1></li>
-<li>将查询的结果格式化导出到本地     命令：insert overwrite local directory ‘/opt/module/datas/export/student’             row format delimited fields terminated by ‘\t’ select * from student ;   <img alt="" class="has" height="321" src="https://img-blog.csdnimg.cn/20190825130935356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690">    <img alt="" class="has" height="218" src="https://img-blog.csdnimg.cn/20190825131402981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="537">   1. 将查询的结果导出到 HDFS 上(没有 local)   命令：insert overwrite directory ‘/user/kgf/student’ row format delimited fields terminated by ‘\t’ select * from student；  <img alt="" class="has" height="350" src="https://img-blog.csdnimg.cn/20190825131553463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="679">   <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20190825131631583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="657">1. Hadoop 命令导出到本地   命令：dfs -get /user/hive/warehouse/dept_partition2/month=201907/day=23 /opt/module/datas/export/;  <img alt="" class="has" height="307" src="https://img-blog.csdnimg.cn/20190825132150261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">  <img alt="" class="has" height="280" src="https://img-blog.csdnimg.cn/20190825132221332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">1.  Hive Shell 命令导出   <img alt="" class="has" height="135" src="https://img-blog.csdnimg.cn/20190825132534284.png" width="784">1.  Export 导出到 HDFS 上    <img alt="" class="has" height="59" src="https://img-blog.csdnimg.cn/20190825132710154.png" width="758">1. 清除表中数据（Truncate）   <img alt="" class="has" height="97" src="https://img-blog.csdnimg.cn/20190825133323839.png" width="630"><h1 id="六：每个-MapReduce-内部排序（Sort-By）"><a href="#六：每个-MapReduce-内部排序（Sort-By）" class="headerlink" title="六：每个 MapReduce 内部排序（Sort By）"></a>六：每个 MapReduce 内部排序（Sort By）</h1></li>
-</ol>
-<p>     <img alt="" class="has" height="376" src="https://img-blog.csdnimg.cn/20190825140241161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705"></p>
-<h1 id="七：分区排序（Distribute-By）"><a href="#七：分区排序（Distribute-By）" class="headerlink" title="七：分区排序（Distribute By）"></a>七：分区排序（Distribute By）</h1><p>      <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190825141106860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="742">       <img alt="" class="has" height="94" src="https://img-blog.csdnimg.cn/20190825141136668.png" width="631">       <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20190825141157763.png" width="689">      </p>
-<h1 id="八：-Cluster-By"><a href="#八：-Cluster-By" class="headerlink" title="八： Cluster By"></a>八： Cluster By</h1><p>       <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190825141251326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="667"></p>
-<h1 id="九：分桶及抽样查询"><a href="#九：分桶及抽样查询" class="headerlink" title="九：分桶及抽样查询"></a>九：分桶及抽样查询</h1><ol>
-<li>分桶表数据存储简介  <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190825144141196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="772">1. 数据准备  <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/20190825162434915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="434">  1. 创建分桶表   <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/2019082516353533.png" width="560">  创建的表以id进行分区和排序，并且分为4桶。  <img alt="" class="has" height="330" src="https://img-blog.csdnimg.cn/20190825163854806.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="403">1. 数据通过子查询的方式导入到分桶表中 （<strong>直接导入没有效果</strong>）  a：先建一个普通的 stu 表 ，向普通的 stu 表中导入数据          <img alt="" class="has" height="185" src="https://img-blog.csdnimg.cn/2019082516440926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571">        <img alt="" class="has" height="411" src="https://img-blog.csdnimg.cn/20190825164607253.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">  b：设置一个属性 ，打开分桶        <img alt="" class="has" height="219" src="https://img-blog.csdnimg.cn/20190825165330800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">  c：通过子查询导入        命令：insert into table stu_buck select id,name from stu;         <img alt="" class="has" height="321" src="https://img-blog.csdnimg.cn/20190825165803884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="650">1. 分桶抽样查询    <img alt="" class="has" height="312" src="https://img-blog.csdnimg.cn/20190825170452928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">   <img alt="" class="has" height="142" src="https://img-blog.csdnimg.cn/20190825170522678.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619">   <img alt="" class="has" height="193" src="https://img-blog.csdnimg.cn/20190825170723319.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640">1. 数据块抽样   <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190825170903313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="691"></li>
-</ol>
- 
       <!-- reward -->
       
     </div>

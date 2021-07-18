@@ -160,6 +160,1148 @@
     
     
     <article
+  id="post-MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/"
+    >MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.199Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hadoop序列化</p>
+<ol>
+<li>为什么要序列化？  <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190727221421643.png" width="701">1. 什么是序列化？  <img alt="" class="has" height="166" src="https://img-blog.csdnimg.cn/20190727221450619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668"> 1.  为什么不用 Java ？  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190727221518294.png" width="711">1.   为什么序列化对 Hadoop  很重要？  <img alt="" class="has" height="374" src="https://img-blog.csdnimg.cn/20190727221546511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587">1.  常用数据序列化类型  <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190727221638148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="550">1.   自定义 bean  对象 实现序列化接口（Writable ）  ⑴自定义 bean 对象要想序列化传输，必须实现序列化接口，需要注意以下 7 项：         a：必须实现 Writable 接口         b：反序列化时，需要反射调用空参构造函数，所以必须有空参构造。         c：重写序列化方法         d：重写反序列化方法         e：注意反序列化的顺序和序列化的顺序完全一致         f：要想把结果显示在文件中，需要重写 toString()，可用”\t”分开，方便后续用         g：如果需要将自定义的 bean 放在 key 中传输，则还需要实现 comparable 接口，因为               mapreduce 框中的 shuffle 过程一定会对 key 进行排序。<li>  案例之流量汇总   ⑴需求：           统计每一个手机号耗费的总上行流量、下行流量、总流量(序列化)   ⑵数据准备(phone_data.txt)，数据格式如下，现在我们只知道每一行倒数第二个是下行流量，       倒数第三个是上行流量，总流量需要自己去算，第二个是手机号。           <img alt="" class="has" height="316" src="https://img-blog.csdnimg.cn/20190727223341939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557">   ⑶最后输出的数据格式大概如下：         <img alt="" class="has" height="120" src="https://img-blog.csdnimg.cn/20190727223727598.png" width="475">   ⑷基本思路分析如下：         ①Map 阶段                 <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190727224459494.png" width="426">         ②Reduce 阶段                <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190727224612980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">                <img alt="" class="has" height="84" src="https://img-blog.csdnimg.cn/20190727224638661.png" width="474">   ⑸代码实现如下：          ①首先定义一个bean序列化对象                 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.Writable;</p>
+<p>/**</p>
+<ul>
+<li><p>首先我们需要实现序列化接口Writable</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowBean implements Writable&#123;</p>
+<p>  /<strong>上行流量</strong>/<br>  private long upFlow;<br>  /<strong>下行流量</strong>/<br>  private long downFlow;<br>  /<strong>总流量</strong>/<br>  private long sumFlow;<br>  /**</p>
+<ul>
+<li>必须要有无参构造方法</li>
+<li>反序列化时，需要反射调用空参构造函数，所以必须有空参构造</li>
+<li>/<br>public FlowBean() &#123;<br>  super();<br>&#125;</li>
+</ul>
+<p>  public void setFlowBean(long upFlow, long downFlow) &#123;</p>
+<pre><code>  this.upFlow = upFlow;
+  this.downFlow = downFlow;
+  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+</code></pre>
+<p>  }</p>
+<p>  public FlowBean(long upFlow, long downFlow) {</p>
+<pre><code>  this.upFlow = upFlow;
+  this.downFlow = downFlow;
+  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+</code></pre>
+<p>  }</p>
+<p>  /***</p>
+<ul>
+<li>这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程</li>
+<li>/<br>@Override<br>public void write(DataOutput out) throws IOException {<br>  //按照顺序依次将数据写入<br>  out.writeLong(upFlow);<br>  out.writeLong(downFlow);<br>  out.writeLong(sumFlow);<br>}</li>
+</ul>
+<p>  /**</p>
+<ul>
+<li>这个是反序列化方法</li>
+<li>/<br>@Override<br>public void readFields(DataInput in) throws IOException {<br>  //这个反序列化顺序要和上面序列化顺序保持一致<br>  this.upFlow = in.readLong();<br>  this.downFlow = in.readLong();<br>  this.sumFlow = in.readLong();<br>}</li>
+</ul>
+<p>  @Override<br>  public String toString() {</p>
+<pre><code>  return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
+</code></pre>
+<p>  }</p>
+<p>  public long getUpFlow() {</p>
+<pre><code>  return upFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setUpFlow(long upFlow) {</p>
+<pre><code>  this.upFlow = upFlow;
+</code></pre>
+<p>  }</p>
+<p>  public long getDownFlow() {</p>
+<pre><code>  return downFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setDownFlow(long downFlow) {</p>
+<pre><code>  this.downFlow = downFlow;
+</code></pre>
+<p>  }</p>
+<p>  public long getSumFlow() {</p>
+<pre><code>  return sumFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setSumFlow(long sumFlow) {</p>
+<pre><code>  this.sumFlow = sumFlow;
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>     ⑵自定义mapper对象 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>继承Mapper接口：定义输入和输出参数</p>
+</li>
+<li><p>输入参数：第一个是数据行号，第二个是一行数据</p>
+</li>
+<li><p>输出参数：第一个是手机号，第二个是自定义的实体对象</p>
+</li>
+<li><p>@author kgf</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowMapper extends Mapper&lt;LongWritable,Text, Text,FlowBean&gt;&#123;</p>
+<p>  //定义输出参数<br>  Text k = new Text();<br>  FlowBean v = new FlowBean();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  
+  //1:获取一行数据
+  String line = value.toString();
+  //2:对数据进行切割，这里数据间的是以制表符分割的，就是tab
+  String[] fields = line.split(&quot;\t&quot;);
+  //3:获取我们需要的数据
+  String phoneNum = fields[1];//手机号
+  long upFlow = Long.parseLong(fields[fields.length-3]);//上行流量
+  long downFlow = Long.parseLong(fields[fields.length-2]);//下行流量
+  //封装数据
+  v.setFlowBean(upFlow,downFlow);
+  k.set(phoneNum);
+  
+  //写出数据
+  context.write(k, v);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>    ⑶自定义FlowReducer <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>/**</p>
+<ul>
+<li><p>继承Reducer接口：</p>
+</li>
+<li><p>输入参数：手机号–&gt;自定义bean对象</p>
+</li>
+<li><p>输出参数：手机号–&gt;自定义bean对象</p>
+</li>
+<li><p>@author 86136</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowReducer extends Reducer&lt;Text, FlowBean, Text, FlowBean&gt;&#123;</p>
+<p>  @Override<br>  protected void reduce(Text key, Iterable&lt;FlowBean&gt; values,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：因为可能存在多条相同的手机号码，所以我们需要对相同的key数据进行数据汇总
+  long sum_upFlow = 0;
+  long sum_downFlow =0;
+  
+  //2:求和累加
+  for (FlowBean flowBean : values) &#123;
+      sum_upFlow+=flowBean.getUpFlow();
+      sum_downFlow+=flowBean.getDownFlow();
+  &#125;
+  
+  FlowBean flowBean = new FlowBean(sum_upFlow,sum_downFlow);
+  //3：输出数据
+  context.write(key, flowBean);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   ⑷自定义FlowDriver <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FlowDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    //1:获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar包路径
+    job.setJarByClass(FlowDriver.class);
+    
+    //3:管理自定义的Mapper和Reducer类
+    job.setMapperClass(FlowMapper.class);
+    job.setReducerClass(FlowReducer.class);
+    
+    //4:Mapper输出类型
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(FlowBean.class);
+    
+    //5：Reducer输出类型
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(FlowBean.class);
+    
+    //6：设置输出路径
+    FileInputFormat.setInputPaths(job,new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑸本地测试      a：设置运行的环境变量             <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20190728001704387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="263">              在输入目录下数据文件已经准备好。               <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190728001720271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="428">       b：效果（具体结果自己可以校验一下）             <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190728001818909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301">             <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728001908764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="387">    </li></p>
+<h1 id="二：MapTask-工作机制"><a href="#二：MapTask-工作机制" class="headerlink" title="二：MapTask  工作机制"></a>二：MapTask  工作机制</h1><ol>
+<li> 简介         maptask 的并行度决定 map 阶段的任务处理并发度，进而影响到整个 job 的处理速度。 一个 job 的 map 阶段 MapTask 并行度（个数），由客户端提交 job 时的切片个数决定1.  MapTask 并行度决定机制         <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019072808544236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528">     <h1 id="三：CombineTextInputFormat-切片机制"><a href="#三：CombineTextInputFormat-切片机制" class="headerlink" title="三：CombineTextInputFormat 切片机制"></a>三：CombineTextInputFormat 切片机制</h1></li>
+<li>关于大量小文件的优化策略       <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190728101550887.png" width="598">1. 优化策略        <img alt="" class="has" height="296" src="https://img-blog.csdnimg.cn/20190728101655451.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="535">1. 案例之大量小文件的切片优化   ⑴现在我们就使用之前的WordCount案例来测试，我们在输入路径下放入多个很小的文件，来使用WordCount       去计算，我们看看默认的切片机制，以及创建了几个maptask？        <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190728103453328.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604">       看运行结果和日志：       <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190728103622869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="674">      通过上面的日志可以发现，6个很小的文件在计算的时候却分为6个切片，开了6个maptask，肯定是      不太好的，处理效率极其低下，那么我们如何将其合为一个切片呢？    ⑵解决方案，在 WordcountDriver 中增加如下代码         <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20190728105228277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">         效果（可以发现只分了一个切片，只开了一个maptask）：         <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019072810530220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">          <h1 id="四：Partition-分区"><a href="#四：Partition-分区" class="headerlink" title="四：Partition 分区"></a>四：Partition 分区</h1></li>
+<li>要求将统计结果按照条件输出到不同文件中（分区）。比如：将统计结果按照手机归属地不同省份输出到不同文件中（分区）。1. 默认分区     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/2019072811064097.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">1. 自定义 Partitioner 分区   <img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190728131935896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="442">1.  在 job 驱动中，设置自定义 partitioner   <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20190728132941914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">   注意：   <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20190728133023471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="515">1.   运行效果   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20190728133157912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="375">         如下：第一个分区都是136的，后面都是根据不同手机号在不同的分区。   <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190728133232505.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="485"><h1 id="五：WritableComparable-排序"><a href="#五：WritableComparable-排序" class="headerlink" title="五：WritableComparable 排序"></a>五：WritableComparable 排序</h1></li>
+<li>简介        排序是 MapReduce 框架中最重要的操作之一。Map Task 和 Reduce Task 均会对数据（按照 key）进行排序。 该操作属于 Hadoop 的默认行为。任何应用程序中的数据均会被排序，而不管逻辑上是否需要。默认排序是按照字 典顺序排序，且实现该排序的方法是快速排序。        对于 Map Task，它会将处理的结果暂时放到一个缓冲区中，当缓冲区使用率达到一定阈值后，再对缓冲区中的 数据进行一次排序，并将这些有序数据写到磁盘上，而当数据处理完毕后，它会对磁盘上所有文件进行一次合并， 以将这些文件合并成一个大的有序文件。        对于 Reduce Task，它从每个 Map Task 上远程拷贝相应的数据文件，如果文件大小超过一定阈值，则放到磁盘上， 否则放到内存中。如果磁盘上文件数目达到一定阈值，则进行一次合并以生成一个更大文件；如果内存中文件大小或者 数目超过一定阈值，则进行一次合并后将数据写到磁盘上。当所有数据拷贝完毕后，Reduce Task 统一对内存和磁盘上 的所有数据进行一次合并。1.  排序的分类      ⑴部分排序                 MapReduce 根据输入记录的键对数据集排序。保证输出的每个文件内部排序。      ⑵全排序                 <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190728144810792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="524">       ⑶辅助排序：（GroupingComparator 分组）                <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/2019072814493740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="517">       ⑷二次排序                在自定义排序过程中，如果 compareTo 中的判断条件为两个即为二次排序。       ⑸自定义排序 WritableComparable            bean 对象实现 WritableComparable 接口重写 compareTo 方法，就可以实现排序 <li>案例之手机流量按总流量进行倒序排序       ⑴数据准备               <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728154515743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="415">       ⑵自定义Bean对象实现WritableComparable接口，重写 compareTo 方法 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.WritableComparable;</p>
+<p>public class FlowSortBean implements WritableComparable&lt;FlowSortBean&gt;&#123;</p>
+<pre><code>/**上行流量**/
+private long upFlow;
+/**下行流量**/
+private long downFlow;
+/**总流量**/
+private long sumFlow;
+/**
+ * 必须要有无参构造方法
+ * 反序列化时，需要反射调用空参构造函数，所以必须有空参构造
+ */
+public FlowSortBean() &#123;
+    super();
+&#125;
+
+public void setFlowSortBean(long upFlow, long downFlow) &#123;
+    this.upFlow = upFlow;
+    this.downFlow = downFlow;
+    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+&#125;
+
+public FlowSortBean(long upFlow, long downFlow) &#123;
+    this.upFlow = upFlow;
+    this.downFlow = downFlow;
+    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+&#125;
+
+/***
+ * 这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程
+ */
+@Override
+public void write(DataOutput out) throws IOException &#123;
+    //按照顺序依次将数据写入
+    out.writeLong(upFlow);
+    out.writeLong(downFlow);
+    out.writeLong(sumFlow);
+&#125;
+
+/**
+ * 这个是反序列化方法
+ */
+@Override
+public void readFields(DataInput in) throws IOException &#123;
+    //这个反序列化顺序要和上面序列化顺序保持一致
+    this.upFlow = in.readLong();
+    this.downFlow = in.readLong();
+    this.sumFlow = in.readLong();
+&#125;
+
+@Override
+public String toString() &#123;
+    return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
+&#125;
+
+public long getUpFlow() &#123;
+    return upFlow;
+&#125;
+
+public void setUpFlow(long upFlow) &#123;
+    this.upFlow = upFlow;
+&#125;
+
+public long getDownFlow() &#123;
+    return downFlow;
+&#125;
+
+public void setDownFlow(long downFlow) &#123;
+    this.downFlow = downFlow;
+&#125;
+
+public long getSumFlow() &#123;
+    return sumFlow;
+&#125;
+
+public void setSumFlow(long sumFlow) &#123;
+    this.sumFlow = sumFlow;
+&#125;
+
+/**
+ * 按照总流量的倒序排序
+ */
+@Override
+public int compareTo(FlowSortBean o) &#123;
+    return (int) (this.sumFlow-o.getSumFlow());
+&#125;
+</code></pre>
+<p>}<br></code></pre>   ⑶自定义Mapper类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>我们需要将排序的参数作为KEY</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowSortMapper extends Mapper&lt;LongWritable,Text,FlowSortBean,Text&gt;&#123;</p>
+<p>  FlowSortBean k = new FlowSortBean();<br>  Text v = new Text();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：获取一行数据
+  String line = value.toString();
+  //2:切割数据
+  String[] fields = line.split(&quot;\t&quot;);
+  //3:封装对象
+  long upFlow = Long.parseLong(fields[1]);//上行流量
+  long downFlow = Long.parseLong(fields[2]);//下行流量
+  
+  k.setFlowSortBean(upFlow, downFlow);
+  v.set(fields[0]);
+  
+  //4：将数据写出
+  context.write(k, v);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   ⑷自定义Reducer类        <img alt="" class="has" height="259" src="https://img-blog.csdnimg.cn/2019072816005613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="429">    ⑸自定义Driver类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FlowSortDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    //1:获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar包路径
+    job.setJarByClass(FlowSortDriver.class);
+    
+    //3:设置自定义的mapper和Reducer类
+    job.setMapperClass(FlowSortMapper.class);
+    job.setReducerClass(FlowSortReducer.class);
+    
+    //4:设置mapper输出的k,v类型
+    job.setMapOutputKeyClass(FlowSortBean.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5:设置reducer的输出类型
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(FlowSortBean.class);
+    
+    //6：设置输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job,new Path(args[1]));
+    
+    //7:提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   ⑹运行效果         <img alt="" class="has" height="235" src="https://img-blog.csdnimg.cn/20190728160205523.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="460">        <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728160235175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488"> </li>1.  在上面排序的基础上，将不同省份的手机号输出到不同的文件中，并且内部排序    ⑴增加分区类           <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190728162325650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377">             ⑵在Driver中引入自定义的分区          <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728162411687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="361">   ⑶效果：         <img alt="" class="has" height="209" src="https://img-blog.csdnimg.cn/20190728162438778.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407">        里面的每个文件内容都排了序：        <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20190728162529395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="538"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-MapReduce实现寻找共同好友"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/"
+    >MapReduce实现寻找共同好友</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.192Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce实现寻找共同好友<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: MapReduce实现寻找共同好友<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 需求：给出A-O个人中每个人的好友列表，求出哪些人两两之间有共同好友，以及他们的共同好友都有谁。    注意：这些人好友都是单向的，可能A是B的好友，但是B不一定是A的好友，这种类似的微博的关注，               A关注B，但是B不一定关注了A。1. 原始文件如下：   <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190811145226975.png" width="289">  1. 要求输出的格式如下：  <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20190811145317894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="328">1. 思路分析：    ⑴我们从上面可以现在我们知道A-O每个人拥有哪些好友，但是我们现在是要找出两两之间的人有哪些共同好友。那么        我们可以逆向思维，第一步找出哪些好友拥有A,哪些好友拥有B…..依次找出，结果如下：        <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190811145923175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="320">    ⑵通过得出上面的数据后，我们可以对后面的好友进行排序，避免重复，将 “拥有这名朋友的所有人”进行两两配对，并将配对后的         字符串当做键，“朋友”当做值输出，即输出&lt;人-人，共同朋友&gt;        <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190811150157279.png" width="206"> <li>代码实现，通过两次job运算  a：FriendMapper01         <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>public class FriendMapper01 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
+<pre><code>Text k  =new Text();
+Text v  =new Text();
+
+@Override
+protected void map(LongWritable key, Text value,Context context)
+        throws IOException, InterruptedException &#123;
+    //1：获取一行数据
+    String line = value.toString();
+    //2：对一行数据进行切割
+    String[] fields = line.split(&quot;:&quot;);
+    String person = fields[0];
+    String[] friends = fields[1].split(&quot;,&quot;);
+    for (String friend : friends) &#123;
+        k.set(friend);
+        v.set(person);
+        context.write(k, v);
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre> b：FriendReducer       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class FriendReducer extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
+<pre><code>@Override
+protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
+        throws IOException, InterruptedException &#123;
+    
+    StringBuffer sb = new StringBuffer();
+    //1：获取哪些好友都有对应的人
+    for (Text text : values) &#123;
+        sb.append(text.toString()+&quot;,&quot;);
+    &#125;
+    sb.deleteCharAt(sb.length()-1);
+    context.write(key, new Text(sb.toString()));
+&#125;
+</code></pre>
+<p>}<br></code></pre> c：FriendDriver01       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FriendDriver01 &#123;</p>
+<pre><code>public static void main(String[] args) throws Exception &#123;
+    //1：获取Job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar
+    job.setJarByClass(FriendDriver01.class);
+    
+    //3:关联Mapper和reducer
+    job.setMapperClass(FriendMapper01.class);
+    job.setReducerClass(FriendReducer.class);
+    
+    //4:设置mapper输出参数
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5：设置最终输出
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
+    
+    //6:设置文件输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre> d：FriengMapper02 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import java.util.Arrays;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>public class FriengMapper02 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
+<pre><code>@Override
+protected void map(LongWritable key, Text value,Context context)
+        throws IOException, InterruptedException &#123;
+    //1：获取一行
+    String line = value.toString();
+    //2：切割数据
+    String[] fileds = line.split(&quot;\t&quot;);
+    String friend = fileds[0];
+    String[] persons = fileds[1].split(&quot;,&quot;);
+    Arrays.sort(persons);//排序
+    for (int i = 0; i &amp;lt; persons.length; i++) &#123;
+        for (int j = i+1; j &amp;lt; persons.length; j++) &#123;
+            context.write(new Text(persons[i]+&quot;-&quot;+persons[j]),new Text(friend));
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre> e：FriendReducer2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import java.util.HashSet;</p>
+<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class FriendReducer2 extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
+<pre><code>@Override
+protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
+        throws IOException, InterruptedException &#123;
+    
+    StringBuffer sb = new StringBuffer();
+    HashSet&amp;lt;String&amp;gt; set = new HashSet&amp;lt;String&amp;gt;();
+    
+    for (Text value : values) &#123;
+        String v = value.toString();
+        if(!set.contains(v)) &#123;
+            set.add(v);
+            sb.append(v).append(&quot;,&quot;);
+        &#125;
+    &#125;
+    sb.deleteCharAt(sb.length()-1);
+    context.write(key, new Text(sb.toString()));
+&#125;
+</code></pre>
+<p>}<br></code></pre> f：FriendDriver2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FriendDriver2 &#123;</p>
+<pre><code>public static void main(String[] args) throws Exception &#123;
+    //1：获取Job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar
+    job.setJarByClass(FriendDriver2.class);
+    
+    //3:关联Mapper和reducer
+    job.setMapperClass(FriengMapper02.class);
+    job.setReducerClass(FriendReducer2.class);
+    
+    //4:设置mapper输出参数
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5：设置最终输出
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
+    
+    //6:设置文件输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/"
+    >MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.183Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：MapTask工作流程</p>
+<ol>
+<li>简介      <img alt="" class="has" height="337" src="https://img-blog.csdnimg.cn/20190728221249534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="539">1.  详细流程如下    ⑴Read阶段：              Map Task 通过用户编写的 RecordReader，从输入 InputSplit 中解析出一个个 key/value。    ⑵Map 阶段：               该节点主要是将解析出的 key/value 交给用户编写 map()函数处理，并产生一系列新的 key/value。    ⑶Collect 收集阶段：               在用户编写 map()函数中，当数据处理完成后，一般会调用OutputCollector.collect()输出结果。       在该函数内部，它会将生成的 key/value 分区（调用Partitioner），并写入一个环形内存缓冲区中。    ⑷Spill 阶段：                即“溢写”，当环形缓冲区满后，MapReduce 会将数据写到本地磁盘上，生成一个临时文件。        需要注意的是，将数据写入本地磁盘之前，先要对数据进行一次本地排序，并在必要时对数据进        行合并、压缩等操作。                溢写阶段详情：                         a：利用快速排序算法对缓存区内的数据进行排序，排序方式是，先按照分区编号partition                               进行排序，然后按照 key 进行排序。这样，经过排序后，数据以分区为单位聚集在一起，                               且同一分区内所有数据按照 key 有序。                         b：按照分区编号由小到大依次将每个分区中的数据写入任务工作目录下的临时文件                               output/spillN.out（N 表示当前溢写次数）中。如果用户设置了 Combiner，则写入文件之                                前，对每个分区中的数据进行一次聚集操作。                         c：将分区数据的元信息写到内存索引数据结构 SpillRecord 中，其中每个分区的元信息包括                              在临时文件中的偏移量、压缩前数据大小和压缩后数据大小。如果当前内存索引大小超过                              1MB，则将内存索引写到文件 output/spillN.out.index 中。    ⑸Combine 阶段：             当所有数据处理完成后，MapTask 对所有临时文件进行一次合并以确保最终只会生成一个数据文件。             当所有数据处理完后，MapTask 会将所有临时文件合并成一个大文件，并保存到文件output/file.out 中，        同时生成相应的索引文件 output/file.out.index。              在进行文件合并过程中，MapTask 以分区为单位进行合并。对于某个分区，它将采用多轮递归合并的        方式。每轮合并 io.sort.factor（默认 100）个文件，并将产生的文件重新加入待合并列表中，对文件排序后，        重复以上过程，直到最终得到一个大文件。              让每个 MapTask 最终只生成一个数据文件，可避免同时打开大量文件和同时读取大量小文件产生的随机        读取带来的开销。         <h1 id="二：MapReduce-工作流程"><a href="#二：MapReduce-工作流程" class="headerlink" title="二：MapReduce  工作流程"></a>二：MapReduce  工作流程</h1></li>
+<li>流程示意图如下：      <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20190728223420512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="508">      <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190728223526161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">1.  流程详解如下：  ⑴maptask 收集我们的 map()方法输出的 kv 对，放到内存缓冲区中  ⑵从内存缓冲区不断溢出本地磁盘文件，可能会溢出多个文件  ⑶多个溢出文件会被合并成大的溢出文件  ⑷在溢出过程中，及合并的过程中，都要调用 partitioner 进行分区和针对 key 进行排序  ⑸reducetask 根据自己的分区号，去各个 maptask 机器上取相应的结果分区数据 。  ⑹reducetask 会取到同一个分区的来自不同 maptask 的结果文件，reducetask 会将这些      文件再进行合并（归并排序）  ⑺合并成大文件后，shuffle 的过程也就结束了，后面进入 reducetask 的逻辑运算过程          （从文件中取出一个一个的键值对 group，调用用户自定义的 reduce()方法）   注意：         Shuffle 中的缓冲区大小会影响到 mapreduce 程序的执行效率，原则上说，缓冲区越大，  磁盘 io 的次数越少，执行速度就越快。缓冲区的大小可以通过参数调整，参数：io.sort.mb 默认 100M。<h1 id="三：Combiner-合并"><a href="#三：Combiner-合并" class="headerlink" title="三：Combiner 合并"></a>三：Combiner 合并</h1></li>
+<li>简介       <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190729220522148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="583">       <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20190729220719373.png" width="635">1.  案例：我们在wordcount案例中使用Conbiner    ⑴数据准备            <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/2019072922243974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="469">    ⑵使用原本的wordcount代码看看日志           <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190729222738153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="363">    ⑶自定义一个 combiner 继承 Reducer，重写 reduce 方法           <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190729222824707.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="413">     ⑷在 job 驱动类中设置：          <img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20190729223022718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="358">     ⑸效果：         <img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20190729223311563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="339">               ⑹其实我们可以发现Combiner的代码和Reducer的代码一样，只不过执行的位置不同：          <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190729223603934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="440">          所以我们直接在Driver中将Combiner指定reducer也可以：          <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20190729223745619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="344"><h1 id="四：辅助-排序和二次排序案例（GroupingComparator）"><a href="#四：辅助-排序和二次排序案例（GroupingComparator）" class="headerlink" title="四：辅助 排序和二次排序案例（GroupingComparator）"></a>四：辅助 排序和二次排序案例（GroupingComparator）</h1></li>
+<li> 需求：     <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/20190730213326408.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521">1. 数据准备：    <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190731223724507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="274"><img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190731223812489.png" width="322">1.  思路分析   ⑴在Mapper中处理的事情：         a：获取每一行输入的数据         b：对数据进行切割，只需要订单号，金额         c：将切割好的数据分装到自定义的bean当中，并且对订单号以及金额进行排序，都是从大到小。               因为在后面定义分组的时候，只会传递一个key给reducer,这时候我们取最大金额的订单。    ⑵自定义分区，从mapper端传递过来的数据，只要订单号一样我们就分到一个分区之中，最后         3中编号的订单分到3个分区文件中。    ⑶自定义groupingcomparator分组，获取相同订单号的数据，并且取第一个订单号数据发送给reducer.    ⑷最后reducer分别把不同订单号的第一条金额最大的数据写出。<li>代码实现如下：   ⑴自定义bean，并且实现订单号以及金额排序           <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.WritableComparable;</p>
+<p>/***</p>
+<ul>
+<li><p>序列化排序自定义的bean对象</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class OrderBean implements WritableComparable&lt;OrderBean&gt;&#123;</p>
+<p>  /<strong>订单号</strong>/<br>  private int orderId;<br>  /<strong>价格</strong>/<br>  private double price;</p>
+<p>  public OrderBean(int orderId, double price) &#123;</p>
+<pre><code>  super();
+  this.orderId = orderId;
+  this.price = price;
+</code></pre>
+<p>  }<br>  public OrderBean() {</p>
+<pre><code>  super();
+</code></pre>
+<p>  }<br>  /***</p>
+<ul>
+<li>反序列化操作</li>
+<li>/<br>@Override<br>public void readFields(DataInput input) throws IOException {<br>  this.orderId = input.readInt();<br>  this.price = input.readDouble();<br>}<br>/***</li>
+<li>序列化操作</li>
+<li>/<br>@Override<br>public void write(DataOutput output) throws IOException {<br>  output.writeInt(orderId);<br>  output.writeDouble(price);<br>}<br>public int getOrderId() {<br>  return orderId;<br>}<br>public void setOrderId(int orderId) {<br>  this.orderId = orderId;<br>}<br>public double getPrice() {<br>  return price;<br>}<br>public void setPrice(double price) {<br>  this.price = price;<br>}<br>@Override<br>public String toString() {<br>  return orderId + “\t” + price;<br>}<br>@Override<br>public int compareTo(OrderBean o) {<br>  int result = 0;<br>  if(this.orderId&gt;o.getOrderId()) {<pre><code>  result = 1;
+</code></pre>
+  }else if(this.orderId&lt;o.getOrderId()) {<pre><code>  result = -1;
+</code></pre>
+  }else {<pre><code>  if(this.price&amp;gt;o.getPrice()) &#123;
+      result = -1;
+  &#125;else if(this.price&amp;lt;o.getPrice()) &#123;
+      result = 1;
+  &#125;
+</code></pre>
+  }<br>  return result;<br>}<br>}<br></code></pre> ⑵自定义OrderMapper对数据进行切割 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
+</ul>
+</li>
+</ul>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>/***</p>
+<ul>
+<li><p>继承Mapper接口,对读取的文件数据进行切割</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class OrderMapper extends Mapper&lt;LongWritable, Text, OrderBean, NullWritable&gt;&#123;</p>
+<p>  OrderBean k = new OrderBean();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  System.out.println(&quot;===========OrderMapper BEGIN=============&quot;);
+  //获取一行数据
+  String line = value.toString();
+  //切割数据
+  String[] fields = line.split(&quot;\t&quot;);
+  System.out.println(&quot;[fields:]&quot;+fields);
+  //封装数据对象
+  k.setOrderId(Integer.valueOf(fields[0]));
+  k.setPrice(Double.parseDouble(fields[2]));
+  //输出
+  context.write(k, NullWritable.get());
+  System.out.println(&quot;===========OrderMapper END=============&quot;);
+</code></pre>
+<p>  }<br>}<br></code></pre>  ⑶自定义分区，将不同订单号的数据写入到不同分区 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
+</li>
+</ul>
+<p>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Partitioner;</p>
+<p>/***</p>
+<ul>
+<li><p>继承分区函数，分为多个区</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class OrderPartitioner extends Partitioner&lt;OrderBean,NullWritable&gt;&#123;</p>
+<p>  /**</p>
+<ul>
+<li>注意：这个numberPartitions就是Driver中job.setNumReduceTasks(3);</li>
+<li>/<br>@Override<br>public int getPartition(OrderBean key, NullWritable value, int numberPartitions) &#123;<br>  return (key.getOrderId() &amp; Integer.MAX_VALUE) % numberPartitions;<br>&#125;</li>
+</ul>
+</li>
+</ul>
+<p>&#125;<br></code></pre> ⑷自定义分组，将相同订单号的第一条金额最大的数据写入到reducer中 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
+<p>import org.apache.hadoop.io.WritableComparable;<br>import org.apache.hadoop.io.WritableComparator;</p>
+<p>/***</p>
+<ul>
+<li>自定义GroupingComparator进行分组,WritableComparator是一个类 这个类是用于mapreduce编程模型中的比较 排序 .</li>
+<li>mapreduce中有两次排序 一次是 在环形缓冲区域之中进行分区 排序,还有一次是数据在reduce端获取文件之后进行分组</li>
+<li>它是用来给Key分组的,</li>
+<li>@author kgf</li>
+<li></li>
+<li>/<br>public class OrderGroupingComparator extends WritableComparator&#123;<br>   /***<pre><code>           * 无参构造子 必须调用父类的构造子 不然会报空指针 未初始化 buffer
+*/
+</code></pre>
+  public OrderGroupingComparator() {<pre><code>  super(OrderBean.class,true);
+</code></pre>
+  }<br>  /**<ul>
+<li>我们这里通过比较orderId分组，相同的一组</li>
+<li>/<br>@SuppressWarnings(“rawtypes”)<br>@Override<br>public int compare(WritableComparable a, WritableComparable b) {<br>  System.out.println(“======OrderGroupingComparator begin=======”);<br>  OrderBean aBean = (OrderBean) a;<br>  OrderBean bBean = (OrderBean) b;<br>  System.out.println(“[aBean:]”+aBean);<br>  System.out.println(“[bBean:]”+bBean);<br>  int result = 0;<br>  if(bBean.getOrderId()&gt;aBean.getOrderId()) {<pre><code>  result = 1;
+</code></pre>
+  }else if(bBean.getOrderId()&lt;aBean.getOrderId()) {<pre><code>  result = -1;
+</code></pre>
+  }else {<pre><code>  result = 0;
+</code></pre>
+  }<br>  System.out.println(“======OrderGroupingComparator end=======”);<br>  return result;<br>}<br>}<br></code></pre>  ⑸自定义reducer，写出不同订单号的金额最大的数据 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</li>
+</ul>
+</li>
+</ul>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>/***</p>
+<ul>
+<li></li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class OrderReducer extends Reducer&lt;OrderBean, NullWritable, OrderBean, NullWritable&gt;&#123;</p>
+<p>  @Override<br>  protected void reduce(OrderBean key, Iterable&lt;NullWritable&gt; value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  System.out.println(&quot;=========OrderReducer=====begin=========&quot;);
+  context.write(key, NullWritable.get());
+  System.out.println(&quot;=========OrderReducer=====END=========&quot;);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre> ⑹OrderDriver启动服务类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.order;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class OrderDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    
+    //1：获取job配置信息
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    //2:设置jar包加载路径
+    job.setJarByClass(OrderDriver.class);
+    //3:加载自定义的mapper和reducer
+    job.setMapperClass(OrderMapper.class);
+    job.setReducerClass(OrderReducer.class);
+    //4:设置mapper的输出类型
+    job.setMapOutputKeyClass(OrderBean.class);
+    job.setMapOutputValueClass(NullWritable.class);
+    //5：设置reducer的输出类型
+    job.setOutputKeyClass(OrderBean.class);
+    job.setOutputValueClass(NullWritable.class);
+    //6:设置文件输入和输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job,new Path(args[1]));
+    
+    //8：设置分区
+    job.setPartitionerClass(OrderPartitioner.class);
+    job.setNumReduceTasks(3);
+    
+    //9:设置自定义分组
+    job.setGroupingComparatorClass(OrderGroupingComparator.class);
+    
+    //7:提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:-1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li>1. OVER</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hive知识点入门学习一"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+    >Hive知识点入门学习一</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.176Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习一<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hive基本概念</p>
+<ol>
+<li> 什么是Hive？    <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190814222311472.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="620">1. Hive优缺点  ⑴优点           <img alt="" class="has" height="208" src="https://img-blog.csdnimg.cn/20190815214618589.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="616">  ⑵缺点           <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190815214836193.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">1. Hive 架构原理 <img alt="" class="has" height="566" src="https://img-blog.csdnimg.cn/201908152155550.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="611"><img alt="" class="has" height="412" src="https://img-blog.csdnimg.cn/20190815215626780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610"><img alt="" class="has" height="182" src="https://img-blog.csdnimg.cn/2019081521564683.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610"><img alt="" class="has" height="112" src="https://img-blog.csdnimg.cn/20190815215701849.png" width="610">1. Hive 和数据库比较  由于 Hive 采用了类似 SQL 的查询语言 HQL(Hive Query Language)，因此很容易 将 Hive 理解为数据库。其实从结构上来看，Hive 和数据库除了拥有类似的查询语言，再无 类似之处。数据库可以用在 Online 的应用中，但是 Hive 是为数据仓库而设计的，类似mysql, Oracle等常规数据库一般用于增删改查，但是Hive一般只用于查询。清楚这一点，有助于从应 用角度理解 Hive 的特性。 ⑴查询语言         <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190815221532680.png" width="546"> ⑵数据存储位置          <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/2019081522160170.png" width="551"> ⑶数据更新          <img alt="" class="has" height="128" src="https://img-blog.csdnimg.cn/2019081522163091.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553">  ⑷ 索引         <img alt="" class="has" height="209" src="https://img-blog.csdnimg.cn/20190815221713667.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="559"> ⑸执行         <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190815221748180.png" width="558"> ⑹执行延迟         <img alt="" class="has" height="167" src="https://img-blog.csdnimg.cn/2019081522181594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555"> ⑺可扩展性         <img alt="" class="has" height="136" src="https://img-blog.csdnimg.cn/20190815221845638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="556"> ⑻数据规模         <img alt="" class="has" height="62" src="https://img-blog.csdnimg.cn/20190815221911671.png" width="572"><h1 id="二：Hive-安装环境准备以及基本操作"><a href="#二：Hive-安装环境准备以及基本操作" class="headerlink" title="二：Hive 安装环境准备以及基本操作"></a>二：Hive 安装环境准备以及基本操作</h1></li>
+<li>Hive各个版本下载地址 ：****  <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190816213210468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="435">        1. 使用hive的版本  <img alt="" class="has" height="42" src="https://img-blog.csdnimg.cn/2019081621555789.png" width="311">1. 将软件包上传到/opt/software目录下  <img alt="" class="has" height="166" src="https://img-blog.csdnimg.cn/2019081621592082.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="593">1. 解压软件到/opt/module目录下<img alt="" class="has" height="59" src="https://img-blog.csdnimg.cn/20190816220052503.png" width="757"><img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190816220118970.png" width="579">1. 将名称修改为hive  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190816220446367.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484">1. 将/opt/module/hive/conf目录下的配置文件hive-env.sh.template名称修改为hive-env.sh<img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190816220725287.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="512">1. 修改hive-env.sh文件内容  <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190816221104424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">1. hadoop集群配置，因为hive是依赖于hadoop的，所以hadoop的hdfs和yarn必须启动 ⑴在hadoop102启动hdfs       <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190816221531105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="564"> ⑵到hadoop103上启动yarn        <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/2019081622173717.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="478">     1. 在 HDFS 上创建/tmp 和/user/hive/warehouse(这个目录主要给hive存储数据用) 两个目录并修改他们的同组权限可写     <img alt="" class="has" height="100" src="https://img-blog.csdnimg.cn/20190816223829322.png" width="647">1. 修改新建目录权限   ⑴目前目录权限，同组用户可读，可执行，不可写,修改为可读可写          <img alt="" class="has" height="110" src="https://img-blog.csdnimg.cn/20190816224122506.png" width="763">          <img alt="" class="has" height="61" src="https://img-blog.csdnimg.cn/20190816224502264.png" width="586">          <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/20190816224531899.png" width="587">           1. hive基本操作   ⑴启动hive          a：进入/opt/module/hive目录下，出现下面效果就启动完成                  <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190816225102613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="465">  ⑵查看数据库命令        <img alt="" class="has" height="180" src="https://img-blog.csdnimg.cn/20190816225235943.png" width="423"> ⑶打开默认数据库        <img alt="" class="has" height="192" src="https://img-blog.csdnimg.cn/20190816225325485.png" width="442">  ⑷显示数据库中的表         <img alt="" class="has" height="100" src="https://img-blog.csdnimg.cn/20190816225406640.png" width="326">  ⑸创建表         <img alt="" class="has" height="201" src="https://img-blog.csdnimg.cn/2019081622554793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">  ⑹向表中插入数据         <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190816225815241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="443">  ⑺查表中的数据        <img alt="" class="has" height="156" src="https://img-blog.csdnimg.cn/20190816225935445.png" width="484">    ⑻退出：          <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190816225958759.png" width="395">
+ </li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hive知识点入门学习五"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/"
+    >Hive知识点入门学习五</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.169Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习五<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：函数 </p>
+<p>      <img alt="" class="has" height="257" src="https://img-blog.csdnimg.cn/20190825215121162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="427">       <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190825215231991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="627">       <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/20190825215259467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="534">       <img alt="" class="has" height="401" src="https://img-blog.csdnimg.cn/20190825215350821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536">       <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190825215423162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">       <img alt="" class="has" height="405" src="https://img-blog.csdnimg.cn/20190825215500629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
+<h1 id="二：行转列"><a href="#二：行转列" class="headerlink" title="二：行转列"></a>二：行转列</h1><ol>
+<li>表结构如下：  <img alt="" class="has" height="190" src="https://img-blog.csdnimg.cn/20190829215916927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647">1. 需求：把星座和血型一样的人归类到一起 ，效果如下  <img alt="" class="has" height="81" src="https://img-blog.csdnimg.cn/20190829220254118.png" width="295">1. sql步骤如下  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190829221220361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="711">           sql:        select              t1.base,              concat_ws(‘|’, collect_set(t1.name)) name         from (                    select                           name,                           concat(constellation,’,’,blood_type) as base                    from  person_info                  ) t1 group by t1.base<img alt="" class="has" height="202" src="https://img-blog.csdnimg.cn/20190829221438842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="507">  <img alt="" class="has" height="418" src="https://img-blog.csdnimg.cn/20190829221644867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="671">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190829221815775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567"><h1 id="三：列转行"><a href="#三：列转行" class="headerlink" title="三：列转行"></a>三：列转行</h1></li>
+<li>表结构  <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190831215607885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="688">1.  创建表   <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20190831220314536.png" width="520">1. 导入数据   <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190831220512348.png" width="434">  <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/201908312206423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="710">1. 将数组展开  <img alt="" class="has" height="89" src="https://img-blog.csdnimg.cn/20190831220853427.png" width="759">           sql如下：  <strong>select movie,category_name from movie_info lateral view explode(category) table_temp as category_name;</strong>  <img alt="" class="has" height="282" src="https://img-blog.csdnimg.cn/20190831221355527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695">1. 数组等相关简介  <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190831221557350.png" width="889">  <img alt="" class="has" height="412" src="https://img-blog.csdnimg.cn/20190831221629324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="636">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190831222953324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690"> <h1 id="四：youtube项目实战"><a href="#四：youtube项目实战" class="headerlink" title="四：youtube项目实战"></a>四：youtube项目实战</h1></li>
+<li>表结构  a：视频表结构相关字段          <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/2019090109262326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="625">  b：用户表         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190901092523720.png" width="588">1. 相关原始数据脚本  a：视频数据文件          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190901092742237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="651">  b：用户数据文件          <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190901092822641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377"><li>对原始数据进行ETL编码清洗   通过观察原始数据形式，可以发现，视频可以有多个所属分类，每个所属分类用&amp;符号分割， 且分割的两边有空格字符，同时相关视频也是可以有多个元素，多个相关视频又用“\t”进 行分割。为了分析数据时方便对存在多个子元素的数据进行操作，我们首先进行数据重组清 洗操作。即：将所有的类别用“&amp;”分割，同时去掉两边空格，多个相关视频 id 也使用“&amp;” 进行分割。 ⑴项目：       <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901124134443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="264">  ⑵pom.xml文件          <pre class="has"><code class="language-html">&lt;project xmlns="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0&quot;">http://maven.apache.org/POM/4.0.0&quot;</a> xmlns:xsi="<a target="_blank" rel="noopener" href="http://www.w3.org/2001/XMLSchema-instance&quot;">http://www.w3.org/2001/XMLSchema-instance&quot;</a> xsi:schemaLocation="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a target="_blank" rel="noopener" href="http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;">http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</a>&gt;<br>&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br>&lt;groupId&gt;com.kgf&lt;/groupId&gt;<br>&lt;artifactId&gt;youtube&lt;/artifactId&gt;<br>&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</li>
+</ol>
+<p>  &lt;properties&gt;<br>      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;<br>  &lt;/properties&gt;</p>
+<p>  &lt;dependencies&gt;<br>      &lt;!–引入hadoop依赖  –&gt;<br>      &lt;dependency&gt;<br>       &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>       &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;<br>       &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>      &lt;dependency&gt;<br>           &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>         &lt;artifactId&gt;hadoop-yarn-server-resourcemanager&lt;/artifactId&gt;<br>         &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>  &lt;/dependencies&gt;<br>&lt;/project&gt;</code></pre> ⑶ETLUtil工具类 <pre class="has"><code class="language-java">package com.kgf.youtube.utils;</p>
+<p>/**</p>
+<ul>
+<li>对数据文件中的一行数据进行处理</li>
+<li>@author KGF</li>
+<li></li>
+<li>/<br>public class ETLUtil &#123;<br>  //RX24KLBhwMI    lemonette    697    People &amp; Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo<br>  public static String getEtlString(String ori) &#123;<pre><code>  StringBuilder sb = new StringBuilder();
+  //对数据进行切割
+  String[] splitArray = ori.split(&quot;\t&quot;);
+  //一行数据中相关视频可以没有，其它相关数据必须存在，否则该条数据作废
+  if(splitArray.length&amp;lt;9)return null;
+  //因为视频类别是以&amp;amp;连接，我们将中间空格去掉，变成如下效果
+  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo
+  splitArray[3] = splitArray[3].replaceAll(&quot; &quot;,&quot;&quot;);
+  //拼接数据
+  for (int i = 0; i &amp;lt; splitArray.length; i++) &#123;
+      sb.append(splitArray[i]);
+      if(i&amp;lt;9) &#123;
+          if(i!=splitArray.length-1) &#123;
+              sb.append(&quot;\t&quot;);
+          &#125;
+      &#125;else &#123;
+          if(i!=splitArray.length-1) &#123;
+              sb.append(&quot;&amp;amp;&quot;);//这里对相关视频进行特殊处理，使用&amp;amp;连接
+          &#125;
+      &#125;
+  &#125;
+  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE&amp;amp;WZgoejVDZlo
+  return sb.toString();
+</code></pre>
+  }<br>}<br></code></pre> ⑷VideoEtlMapper.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</li>
+</ul>
+<p>import java.io.IOException;</p>
+<p>import org.apache.commons.lang.StringUtils;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import com.kgf.youtube.utils.ETLUtil;<br>/**</p>
+<ul>
+<li><p>读取一行对数据进行处理</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class VideoEtlMapper extends Mapper&lt;Object,Text, NullWritable, Text&gt; &#123;</p>
+<p>  Text k = new Text();</p>
+<p>  @Override<br>  protected void map(Object key, Text value, Mapper&lt;Object, Text, NullWritable, Text&gt;.Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //对读取的一行数据进行处理
+  String etlString = ETLUtil.getEtlString(value.toString());
+  if(StringUtils.isNotBlank(etlString)) &#123;
+      k.set(etlString);
+      context.write(NullWritable.get(),k);
+  &#125;
+</code></pre>
+<p>  }<br>}<br></code></pre> ⑸VideoEtlRunner.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</p>
+</li>
+</ul>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.FileSystem;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>public class VideoEtlRunner implements Tool &#123;</p>
+<pre><code>private Configuration conf = null;
+
+@Override
+public void setConf(Configuration conf) &#123;
+    this.conf = conf;//使用集群中的conf赋值
+&#125;
+
+@Override
+public Configuration getConf() &#123;
+    return this.conf;
+&#125;
+
+@Override
+public int run(String[] args) throws Exception &#123;
+    //将路径存入conf中
+    conf.set(&quot;inpath&quot;,args[0]);
+    conf.set(&quot;outpath&quot;,args[1]);
+    //获取job对象
+    Job job = Job.getInstance(conf);
+    //设置jar
+    job.setJarByClass(VideoEtlRunner.class);
+    //设置mapper
+    job.setMapperClass(VideoEtlMapper.class);
+    job.setMapOutputKeyClass(NullWritable.class);
+    job.setMapOutputValueClass(Text.class);
+    //设置reduce
+    job.setNumReduceTasks(0);
+    //设置输入，输出路径
+    initInputJobPath(job);
+    initOutputJobPath(job);
+    boolean result = job.waitForCompletion(true);
+    return result?1:-1;
+&#125;
+
+private void initOutputJobPath(Job job) &#123;
+    try &#123;
+        Configuration conf = job.getConfiguration();
+        String outPath = conf.get(&quot;outpath&quot;);//获取conf中的输出路径
+        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
+        Path path = new Path(outPath);
+        if(fs.exists(path))&#123;
+            fs.delete(path, true);//删除文件夹，包括子目录
+        &#125;
+        FileOutputFormat.setOutputPath(job, path);
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+
+private void initInputJobPath(Job job) &#123;
+    try &#123;
+        Configuration conf = job.getConfiguration();
+        String inPath = conf.get(&quot;inpath&quot;);//获取conf中的输出路径
+        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
+        Path path = new Path(inPath);
+        if(fs.exists(path))&#123;
+            FileInputFormat.setInputPaths(job, path);
+        &#125;else &#123;
+            throw new Exception(&quot;inPath not exists&quot;);
+        &#125;
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+
+public static void main(String[] args) throws Exception &#123;
+    //调用run方法
+    int resultCode = ToolRunner.run(new VideoEtlRunner(), args);
+    System.out.println(resultCode);
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑹将代码打成jar上传到集群       <img alt="" class="has" height="208" src="https://img-blog.csdnimg.cn/20190901124457905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">  ⑺将原始数据文件video.txt上传到集群/youtube/video/2008路径下      <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190901124619827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561"> ⑻执行jar生成文件      a：进入到/opt/module/hadoop-2.7.2目录下      b：执行如下命令           hadoop jar ../jars/youtube-0.0.1-SNAPSHOT.jar com.kgf.youtube.etl.VideoEtlRunner           /youtube/video/2008 /youtube/video/output          <img alt="" class="has" height="305" src="https://img-blog.csdnimg.cn/20190901124850213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604"> </li>1. 效果  <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190901124927461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="589">  <img alt="" class="has" height="279" src="https://img-blog.csdnimg.cn/20190901125028770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752"><li>创建表    <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901173330821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="364"><img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190901173428254.png" width="427">  <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/2019090117352126.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="450">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190901173547731.png" width="432">   <pre class="has"><code class="language-sql">create table youtube_ori(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;<br>)<br>row format delimited<br>fields terminated by "\t"<br>collection items terminated by "&amp;"<br>stored as textfile; </p>
+<p>create table youtube_user_ori(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as textfile;</p>
+<p>create table youtube_orc(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;)<br>clustered by (uploader) into 8 buckets<br>row format delimited fields terminated by “\t”<br>collection items terminated by “&amp;”<br>stored as orc;</p>
+<p>create table youtube_user_orc(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as orc; </code></pre> <img alt="" class="has" height="50" src="https://img-blog.csdnimg.cn/20190901173813131.png" width="829"><img alt="" class="has" height="232" src="https://img-blog.csdnimg.cn/20190901173855528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619"><img alt="" class="has" height="53" src="https://img-blog.csdnimg.cn/20190901173909838.png" width="426"> </li>1. 导入 ETL 后的数据到ori表中  <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190901174937582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="787"><img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190901175123561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="788">1. 向 ORC 表插入数据  a：insert into table youtube_orc select * from youtube_ori;   b：insert into table youtube_user_orc select * from youtube_user_ori;  1. 需求1：统计视频观看数 Top10   SQL:<strong>select videoId,category,views from  youtube_orc order by views desc limit 10;</strong>  <img alt="" class="has" height="353" src="https://img-blog.csdnimg.cn/20190901181041639.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="768">1. 需求2：统计视频类别热度 Top10   <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/2019090118113433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="765">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190901182646488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="621">  <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190901182737120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">1. 需求3：统计出视频观看数最高的 20 个视频的所属类别以及类别包含 这 Top20 视频的个数 <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/20190901210611997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"><img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190901210707215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1. 统计视频观看数 Top50 所关联视频的所属类别的热度排名   <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190901212411101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="437">  <img alt="" class="has" height="237" src="https://img-blog.csdnimg.cn/20190901212538808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hive知识点入门学习四"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/"
+    >Hive知识点入门学习四</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.163Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习四<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：分区表 </p>
+<ol>
+<li>简介  <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190823212951784.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="745">1. 创建分区表语法   <img alt="" class="has" height="234" src="https://img-blog.csdnimg.cn/20190823213522674.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">1.  加载数据到分区表中   <img alt="" class="has" height="282" src="https://img-blog.csdnimg.cn/2019082321412080.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="758">   <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190823214201146.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="736">1. 查询分区表中数据   <img alt="" class="has" height="317" src="https://img-blog.csdnimg.cn/20190823214419960.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647">1.  多分区联合查询   <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190823214530409.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 增加分区   ⑴创建单个分区      <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/2019082321493483.png" width="585">      <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190823214954441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591"> ⑵同时创建多个分区       <img alt="" class="has" height="91" src="https://img-blog.csdnimg.cn/20190823215112591.png" width="749"> 1. 查看分区表有多少分区   <img alt="" class="has" height="244" src="https://img-blog.csdnimg.cn/20190823215259130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557">1.   删除分区   a：删除单个分区        <img alt="" class="has" height="326" src="https://img-blog.csdnimg.cn/20190823215609913.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="608">  b：删除多个分区        <img alt="" class="has" height="346" src="https://img-blog.csdnimg.cn/20190823215700431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="655"> 1. 创建二级分区表   <img alt="" class="has" height="247" src="https://img-blog.csdnimg.cn/2019082322024328.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">1.   导入数据  <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190823220401984.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="743">     <img alt="" class="has" height="308" src="https://img-blog.csdnimg.cn/20190823220433743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718"><h1 id="二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式"><a href="#二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式" class="headerlink" title="二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式"></a>二：把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式</h1></li>
+<li>方式一：上传数据后修复   ⑴创建目录        <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20190824211553599.png" width="683">        <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190824211630627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="586">  ⑵上传数据        <img alt="" class="has" height="124" src="https://img-blog.csdnimg.cn/20190824211752784.png" width="699">        <img alt="" class="has" height="220" src="https://img-blog.csdnimg.cn/20190824211811832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="652">  ⑶查询数据，发现刚刚上传的20190824没有数据         <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190824211926590.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">  ⑷执行修复命令：msck repair table dept_partition2;       <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190824212109823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">1. 方式二：上传数据后添加分区    ⑴上传数据         <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20190824212316551.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="726">           <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190824212340738.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">    ⑵执行添加分区         <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20190824212529214.png" width="776">     ⑶查询数据          <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190824212616933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="650">1. 方式三：上传数据后 load 数据到分区          ⑴ 创建目录，上传数据             <img alt="" class="has" height="201" src="https://img-blog.csdnimg.cn/20190824212818598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="793">         ⑵查询数据             <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20190824212924424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607"><h1 id="三：修改表"><a href="#三：修改表" class="headerlink" title="三：修改表"></a>三：修改表</h1></li>
+<li>重命名表   <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190824214216327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705">1. 增加/修改/替换列信息   <img alt="" class="has" height="409" src="https://img-blog.csdnimg.cn/20190824214406119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">     <h1 id="四：数据导入"><a href="#四：数据导入" class="headerlink" title="四：数据导入"></a>四：数据导入</h1></li>
+<li>向表中装载数据（Load）   ⑴语法：load data [local] inpath ‘/opt/module/datas/student.txt’ [overwrite] into table student [partition (partcol1=val1,…)];       <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20190824220523291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="583"> ⑵实操案例        a：创建一张表              <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190824220737161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">        b：加载本地文件到 hive               <img alt="" class="has" height="248" src="https://img-blog.csdnimg.cn/20190824221040184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">        c： 上传文件到 HDFS ，加载 HDFS 上数据                <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190824221324500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">               <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190824221432772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">       d：加载数据覆盖表中已有的数据             <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190824221552622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="628">1.  通过查询语句向表中插入数据（Insert）   <img alt="" class="has" height="379" src="https://img-blog.csdnimg.cn/20190824224156549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">        <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190824224218340.png" width="653">   <h1 id="五：数据导出"><a href="#五：数据导出" class="headerlink" title="五：数据导出"></a>五：数据导出</h1></li>
+<li>将查询的结果格式化导出到本地     命令：insert overwrite local directory ‘/opt/module/datas/export/student’             row format delimited fields terminated by ‘\t’ select * from student ;   <img alt="" class="has" height="321" src="https://img-blog.csdnimg.cn/20190825130935356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690">    <img alt="" class="has" height="218" src="https://img-blog.csdnimg.cn/20190825131402981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="537">   1. 将查询的结果导出到 HDFS 上(没有 local)   命令：insert overwrite directory ‘/user/kgf/student’ row format delimited fields terminated by ‘\t’ select * from student；  <img alt="" class="has" height="350" src="https://img-blog.csdnimg.cn/20190825131553463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="679">   <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20190825131631583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="657">1. Hadoop 命令导出到本地   命令：dfs -get /user/hive/warehouse/dept_partition2/month=201907/day=23 /opt/module/datas/export/;  <img alt="" class="has" height="307" src="https://img-blog.csdnimg.cn/20190825132150261.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">  <img alt="" class="has" height="280" src="https://img-blog.csdnimg.cn/20190825132221332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">1.  Hive Shell 命令导出   <img alt="" class="has" height="135" src="https://img-blog.csdnimg.cn/20190825132534284.png" width="784">1.  Export 导出到 HDFS 上    <img alt="" class="has" height="59" src="https://img-blog.csdnimg.cn/20190825132710154.png" width="758">1. 清除表中数据（Truncate）   <img alt="" class="has" height="97" src="https://img-blog.csdnimg.cn/20190825133323839.png" width="630"><h1 id="六：每个-MapReduce-内部排序（Sort-By）"><a href="#六：每个-MapReduce-内部排序（Sort-By）" class="headerlink" title="六：每个 MapReduce 内部排序（Sort By）"></a>六：每个 MapReduce 内部排序（Sort By）</h1></li>
+</ol>
+<p>     <img alt="" class="has" height="376" src="https://img-blog.csdnimg.cn/20190825140241161.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705"></p>
+<h1 id="七：分区排序（Distribute-By）"><a href="#七：分区排序（Distribute-By）" class="headerlink" title="七：分区排序（Distribute By）"></a>七：分区排序（Distribute By）</h1><p>      <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190825141106860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="742">       <img alt="" class="has" height="94" src="https://img-blog.csdnimg.cn/20190825141136668.png" width="631">       <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20190825141157763.png" width="689">      </p>
+<h1 id="八：-Cluster-By"><a href="#八：-Cluster-By" class="headerlink" title="八： Cluster By"></a>八： Cluster By</h1><p>       <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190825141251326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="667"></p>
+<h1 id="九：分桶及抽样查询"><a href="#九：分桶及抽样查询" class="headerlink" title="九：分桶及抽样查询"></a>九：分桶及抽样查询</h1><ol>
+<li>分桶表数据存储简介  <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190825144141196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="772">1. 数据准备  <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/20190825162434915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="434">  1. 创建分桶表   <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/2019082516353533.png" width="560">  创建的表以id进行分区和排序，并且分为4桶。  <img alt="" class="has" height="330" src="https://img-blog.csdnimg.cn/20190825163854806.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="403">1. 数据通过子查询的方式导入到分桶表中 （<strong>直接导入没有效果</strong>）  a：先建一个普通的 stu 表 ，向普通的 stu 表中导入数据          <img alt="" class="has" height="185" src="https://img-blog.csdnimg.cn/2019082516440926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571">        <img alt="" class="has" height="411" src="https://img-blog.csdnimg.cn/20190825164607253.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">  b：设置一个属性 ，打开分桶        <img alt="" class="has" height="219" src="https://img-blog.csdnimg.cn/20190825165330800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">  c：通过子查询导入        命令：insert into table stu_buck select id,name from stu;         <img alt="" class="has" height="321" src="https://img-blog.csdnimg.cn/20190825165803884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="650">1. 分桶抽样查询    <img alt="" class="has" height="312" src="https://img-blog.csdnimg.cn/20190825170452928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">   <img alt="" class="has" height="142" src="https://img-blog.csdnimg.cn/20190825170522678.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619">   <img alt="" class="has" height="193" src="https://img-blog.csdnimg.cn/20190825170723319.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640">1. 数据块抽样   <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190825170903313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="691"></li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-Hive知识点入门学习三"
   class="article article-type-post"
   itemscope
@@ -410,610 +1552,6 @@
 <p>—1. <strong>简介</strong>     Hive提供了与HBase的集成，使得能够在HBase表上使用HQL语句进行查询 插入操作以及进行Join和Union等复杂查询、 同时也可以将hive表中的数据映射到Hbase中。在工作中很常见。它的应用场景有很多，比如在Hadoop业务的开发流程如下：<img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20191007212421103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 其中在数据存入hbase—&gt;Hive对数据进行统计分析的这个步骤中就涉及到了Hive与Hbase的整合，所以了解Hive与Hbase的整合是很有必要的。 1. <strong>Hive与Hbase整合的必要性 **         Hive是建立在Hadoop之上的数据仓库基础构架、是为了减少MapReduce编写工作的批处理系统， Hive本身不存储和计算数据，它完全依赖于HDFS和MapReduce。Hive可以理解为一个客户端工具， 将我们的sql操作转换为相应的MapReduce jobs，然后在Hadoop上面运行。         Hbase全称为Hadoop Database，即Hbase是Hadoop的数据库，是一个分布式的存储系统。Hbase利用 Hadoop的HDFS作为其文件存储系统，利用Hadoop的MapReduce来处理Hbase中的海量数据。利用zookeeper 作为其协调工具。          Hbase数据库的缺点在于—-语法格式异类，没有类sql的查询方式，因此在实际的业务当中操作和计算数据非 常不方便，但是Hive就不一样了，Hive支持标准的sql语法，于是我们就希望通过Hive这个客户端工具对Hbase中的 数据进行操作与查询，进行相应的数据挖掘，这就是所谓Hive与hbase整合的含义。Hive与Hbase整合的示意图如下：<img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20191007212726676.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="832">1. <strong>hive与hbase版本兼容性</strong>  Hive版本：1.2.1  Hbase版本：1.3.1  ⑴hbase与hive哪些版本兼容？         a：hive0.90与hbase0.92是兼容的，早期的hive版本与hbase0.89/0.90兼容。         b：hive1.x与hbase0.98.x或则更低版本是兼容的。         c：hive2.x与hbase1.x及比hbase1.x更高版本兼容。           Hive 0.6.0推出了storage-handler，用于将数据存储到HDFS以外的其他存储上。并方便的通过hive进行插入、查询等操作。   同时hive提供了针对Hbase的hive-hbase-handler。这使我们在使用hive节省开发M/R代码成本的同时还能获得HBase的特性来快  速响应随机查询。           但是，hive自带的hive-hbase-handler是针对特定版本的Hbase的，比如，0.7.0版本的hive编译时使用的是0.89.0版本的Hbase，0.6.0版本的hive默认使用0.20.3版本的hbase进行编译。如果能够找到对应的版本，可以跳过编译的步骤直接使用。不过，我们现状已经找不到这些版本的Hbase与之配合使用了。所以只好自己来编译这个jar包。           注：使用不匹配的版本，一些功能会发生异常。其原因是由于没有重新编译storage-handler组件，发现在hive中查询HBase表存在问题。hive-hbase-handler.jar的作用在hbase与hive整合的时候发挥了重要作用，有了这个包，hbase与hive才能通信。 如果想hbase1.x与hive1.x整合，需要编译hive1.x 代码本身。1. <strong>下面我们创建项目去编译源码   <strong>⑴首先我们需要去网上下载对应hive版本的源码包         <img alt="" class="has" height="42" src="https://img-blog.csdnimg.cn/20191007220454629.png" width="290">        解压后：        <img alt="" class="has" height="49" src="https://img-blog.csdnimg.cn/2019100722080049.png" width="356">   ⑵在eclipse中创建一个项目。Java project即可。       <img alt="" class="has" height="76" src="https://img-blog.csdnimg.cn/20191007220540543.png" width="314">            ⑶在创建好的项目上点击右键，选择Import，选择General下的FileSystem，       找到源码包apache-hive-1.2.1-src\hbase-handler\src\java目录选择其中的java目录导入         <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20191007221108593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301"><img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/20191007221351985.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="354">   ⑷添加依赖包，导入代码后可以看到很多的错误提示。这时由于没有引入依赖的jar包导致的。        <img alt="" class="has" height="306" src="https://img-blog.csdnimg.cn/20191007221534971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="339">      下面，我们引入,需要hive、hbase下相关的lib包。新建lib目录，把对应的依赖包，导入       a：首先我们进入到hive的lib目录下，下载下来所有的jar,注意：文件夹不要，以及.pom文件不要。             <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20191007221946884.png" width="409">       b：我们再进入hbase的lib目录下，下载下来所有的jar，有相同的就去掉，注意：文件夹不要，以及.pom文件不要。            <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223116271.png" width="377"><img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223124805.png" width="377">            <img alt="" class="has" height="468" src="https://img-blog.csdnimg.cn/20191007223902727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">    ⑸至此可以导出我们需要的jar包了。在项目上点击右键，选择export ，选择JAR file            <img alt="" class="has" height="149" src="https://img-blog.csdnimg.cn/20191007224110155.png" width="653">            我们只编译源码，不要lib，名称就是我们要替换的原本的jar包名称hive-hbase-handler-1.2.1.jar             <img alt="" class="has" height="380" src="https://img-blog.csdnimg.cn/20191007224336482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="326">         到这里我们就生成了符合自己Hbase版本的hive-hbase-handler了。1. <strong>下面我们进入到hive的lib目录下删除原来的hive-hbase-handler-1.2.1.jar，****换成我们自己的</strong>   <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20191007224615174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">1. <strong>hive与hbase整合环境配置  ⑴</strong>进入/usr/local/module/apache-hive-1.2.1/conf目录下修改hive-site.xml文件，添加配置属性（zookeeper的地址）        <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/20191007225110949.png" width="658">1. <strong>引入hbase的依赖包</strong>  ⑴将hbase安装目录下的lib文件夹下的包导入到hive的环境变量中        a：在hive-env.sh 文件中添加             <img alt="" class="has" height="51" src="https://img-blog.csdnimg.cn/20191007225432137.png" width="819">1. 至此、hive与hbase整合环境准备完成<li>实战操作 ⑴</strong>建立 Hive 表，关联 HBase 表，插入数据到 Hive 表的同时能够影响 HBase 表。        a：在 Hive 中创建表同时关联 HBase                   ** <pre class="has"><code class="language-sql">CREATE TABLE hive_hbase_emp_table(<br>     empno int,<br>     ename string,<br>     job string,<br>     mgr int,<br>     hiredate string,<br>     sal double,<br>     comm double,<br>     deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table");    </code></pre> STORED BY ‘org.apache.hadoop.hive.hbase.HBaseStorageHandler’  //指定存储处理器Hbase.table.name属性是可选的，用它来指定此表在hbase中的名字，这就是说，允许同一个表在hive和hbase中有不同的名字。 每个hive的列，都需要在参数hbase.columns.mapping中指定一个对应的条目，多个列之间的条目通过逗号分隔；也就是说，如果某个表有n个列，则参数hbase.columns.mapping的值中就有n个以逗号分隔的条目，比如： <pre>"hbase.columns.mapping" = ":key,a:b,a:c,d:e" 代表有两个列族，一个是a一个是d，a列族中有两列，分别为b和c<br>注意，hbase.columns.mapping的值中是不允许出现空格的<br><strong>    b:效果<br>         </strong></strong>         <strong><strong><br>     c：现在我们需要向hive库中的hive_hbase_emp_table表中添加数据，注意：不能直接load数据到这张表中，<br>         否则数据不会同步到hbase对应的hbase_emp_table表中。 <br>         在 Hive 中创建临时中间表，用于 load 文件中的数据 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE TABLE emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>  deptno int<br>)<br>row format delimited fields terminated by '\t'; </code></pre> <pre></strong> **<br><strong>     d:向 Hive 中间表中 load 数据 <br>          </strong></strong>         <strong><strong>      e：通过 insert 命令将中间表中的数据导入到 Hive 关联 HBase 的那张表中 <br>         </strong><strong>      f：查看 Hive 以及关联的 HBase 表中是否已经成功的同步插入了数据 <br>         </strong></strong>         **<strong><br> <br>⑵在 HBase 中已经存储了某一张表 hbase_emp_table，然后在 Hive 中创建一个外部表来关联 HBase 中的<br>  hbase_emp_table 这张表，使之可以借助 Hive 来分析 HBase 这张表中的数据。<br>   a：在 Hive 中创建外部表 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE EXTERNAL TABLE relevance_hbase_emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>   deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table"); </code></pre> <pre></p>
 <p>b：关联后就可以使用 Hive 函数进行一些分析操作了 ，数据自动填充进来<br> <br> 这里使用外部表映射到HBase中的表，这样，在Hive中删除表，并不会删除HBase中的表，否则，就会删除。<br></pre> </li><br>参考文章：                      </p>
 <p> </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-HDFS的数据流以及Namenode工作机制"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/"
-    >HDFS的数据流以及Namenode工作机制</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.129Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: HDFS的数据流以及Namenode工作机制<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：通过IO流操作HDFS</p>
-<ol>
-<li>HDFS文件上传      <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190720090731704.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547">     效果：     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190720090802700.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">1. HDFS文件下载  <img alt="" class="has" height="317" src="https://img-blog.csdnimg.cn/20190720093258845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="514">1. 定位文件读取       ⑴下面的文件总共有188.5M，它是分在两块Block存储的，我们如何分块读取呢      <img alt="" class="has" height="164" src="https://img-blog.csdnimg.cn/20190720094556179.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="629">      <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190720094627331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="313">   ⑵我们指定每次读取的文件大小即可，第一次读取128M，后面再读取60.5M就读取完整了       <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190720095202534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555">      效果：      <img alt="" class="has" height="108" src="https://img-blog.csdnimg.cn/20190720095233507.png" width="315">     下面我们再读取第二块：      <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720095709972.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">      效果：      <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/20190720095852842.png" width="512">     我们可以将第二块的文件通过cmd上命令内容追加到第一块文件上，验证是否正确      <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190720100126750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="617">      <img alt="" class="has" height="112" src="https://img-blog.csdnimg.cn/20190720100236590.png" width="632"><h1 id="二：HDFS写数据流程"><a href="#二：HDFS写数据流程" class="headerlink" title="二：HDFS写数据流程"></a>二：HDFS写数据流程</h1></li>
-<li>剖析文件写入   <img alt="" class="has" height="497" src="https://img-blog.csdnimg.cn/20190720125256764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1.  网络拓扑的概念  <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190720125829474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="518">  <img alt="" class="has" height="465" src="https://img-blog.csdnimg.cn/20190720130440345.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">1.  机架感知<img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20190720144503947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571"><img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20190720144709457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="519"><img alt="" class="has" height="90" src="https://img-blog.csdnimg.cn/20190720145500612.png" width="504">      <h1 id="三：HDFS读数据流程"><a href="#三：HDFS读数据流程" class="headerlink" title="三：HDFS读数据流程"></a>三：HDFS读数据流程</h1></li>
-</ol>
-<p>         <img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720145850721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
-<h1 id="四：NameNode工作机制"><a href="#四：NameNode工作机制" class="headerlink" title="四：NameNode工作机制"></a>四：NameNode工作机制</h1><ol>
-<li>如下图<img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720153511862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 详情如下  ⑴第一阶段：namenode启动             a：第一次启动 namenode 格式化后，创建 fsimage 和 edits 文件。如果不是第一次启                   动，直接加载编辑日志和镜像文件到内存。             b：当客户端对元数据进行增删改的请求的时候，namenode 记录操作日志，更新滚动日志                   namenode 在内存中对数据进行增删改查  ⑵第二阶段：Secondary NameNode 工作            a：Secondary NameNode 询问 namenode 是否需要 checkpoint。直接带回 namenode 是                  否检查结果            b：Secondary NameNode 请求执行 checkpoint           c：namenode 滚动正在写的 edits 日志。           d：将滚动前的编辑日志和镜像文件拷贝到 Secondary NameNode           e：Secondary NameNode 加载编辑日志和镜像文件到内存，并合并           f：生成新的镜像文件 fsimage.chkpoint           g：拷贝 fsimage.chkpoint 到 namenode，namenode 将 fsimage.chkpoint 重新命名成 fsimage1. namenode简介  ⑴namenode主要负责三个功能：          a：管理元数据          b：维护目录树          c：响应客户请求  ⑵详情如下          <img alt="" class="has" height="324" src="https://img-blog.csdnimg.cn/20190720160107465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">          <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20190720160248837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="608">         <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190720160406633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="697">            <h1 id="五：镜像文件和编辑日志文件"><a href="#五：镜像文件和编辑日志文件" class="headerlink" title="五：镜像文件和编辑日志文件"></a>五：镜像文件和编辑日志文件</h1></li>
-<li> 简介        namenode被格式化之后，将在/opt/module/hadoop-2.7.2/data/tmp/dfs/name/current目录中产生如下文件        <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/2019072016440785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">       <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190720165933192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="549">  ⑴Fsimage 文件：HDFS 文件系统元数据的一个永久性的检查点，其中包含 HDFS文件系统的所有目录和     文件 idnode 的序列化信息。 ⑵Edits 文件：存放 HDFS 文件系统的所有更新操作的路径，文件系统客户端执行     的所有写操作首先会被记录到 edits 文件中。 ⑶seen_txid 文件保存的是一个数字，就是最后一个 edits_的数字 ⑷每次次 Namenode 启动的时候都会将 fsimage 文件读入内存，并从 00001 开始     到 seen_txid 中记录的数字依次执行每个 edits 里面的更新操作，保证内存中的元数据信息    是最新的、同步的，可以看成 Namenode 启动的时候就将 fsimage 和 edits 文件进行了合    并。1. 使用oiv查看Fsimage文件  ⑴基本语法：        hdfs oiv -p 文件类型 -i 镜像文件 -o 转换后文件输出路径  ⑵案例：        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190720170724543.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">      将文件下载到本地格式化看一下：        <img alt="" class="has" height="439" src="https://img-blog.csdnimg.cn/20190720171144829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">1.  使用oev命令查看edits文件   ⑴基本语法         hdfs oev -p 文件类型 -i 编辑日志 -o 转换后文件输出路径           ⑵案例        <img alt="" class="has" height="336" src="https://img-blog.csdnimg.cn/20190720212156658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">         将文件下载到本地格式化看一下：        <img alt="" class="has" height="193" src="https://img-blog.csdnimg.cn/20190720212830715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="374">       发现这个日志中没有什么东西，那么我们上传一个文件，试试：       <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/20190720213618676.png" width="516">       <img alt="" class="has" height="58" src="https://img-blog.csdnimg.cn/20190720213718300.png" width="724">      查看xml内容：     <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720213854379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407"><h1 id="六：滚动编辑日志"><a href="#六：滚动编辑日志" class="headerlink" title="六：滚动编辑日志"></a>六：滚动编辑日志</h1></li>
-<li>简介       正常情况 HDFS 文件系统有更新操作时，就会滚动编辑日志。也可以用命令强制滚动编辑日志。1.  滚动编辑日志（前提必须启动集群）  命令：hdfs dfsadmin -rollEdits       <h1 id="七：chkpoint-检查-时间-参数"><a href="#七：chkpoint-检查-时间-参数" class="headerlink" title="七：chkpoint  检查 时间 参数"></a>七：chkpoint  检查 时间 参数</h1></li>
-<li>通常情况下，SecondaryNameNode 每隔一小时执行一次。配置是在hdfs-site.xml中添加<img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190720222713915.png" width="558">         1. 一分钟检查一次操作次数，当操作次数达到 1 百万时，SecondaryNameNode 执行一次。<img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190720222746874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488">     <h1 id="八：SecondaryNameNode-目录结构"><a href="#八：SecondaryNameNode-目录结构" class="headerlink" title="八：SecondaryNameNode  目录结构"></a>八：SecondaryNameNode  目录结构</h1></li>
-<li> 进入SecondaryNameNode服务器的目录，/opt/module/hadoop-2.7.2/data/tmp/dfs/namesecondary/current  <img alt="" class="has" height="361" src="https://img-blog.csdnimg.cn/20190721102534154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="523">  SecondaryNameNode 的 namesecondary/current 目录和主 namenode 的 current 目录的布局相同。 好 处 ： 在 主 namenode 发 生 故 障 时 （ 假 设 没 有 及 时 备 份 数 据 ） ， 可 以 从SecondaryNameNode 恢复数据。     <h1 id="九：NameNode故障处理方法"><a href="#九：NameNode故障处理方法" class="headerlink" title="九：NameNode故障处理方法"></a>九：NameNode故障处理方法</h1></li>
-<li>Namenode 故障后，可以采用如下两种方法恢复数据。   方法一：将 SecondaryNameNode 中数据拷贝到 namenode 存储数据的目录；   方 法 二 ：使 用 -importCheckpoint 选 项 启 动 namenode 守 护 进 程 ， 从 而 将SecondaryNameNode 中                     数据拷贝到 namenode 目录中。1.  案例一：使用手动拷贝 SecondaryNameNode  数据解决问题   ⑴kill -9 namenode 进程           <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190721104854927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">   ⑵删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）            <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190721105154463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">   ⑶拷贝104服务器 SecondaryNameNode 中数据到102服务器的原 namenode 存储数据目录        <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/20190721110541295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520">    ⑷单独重新启动 namenode，这个我们最好使用单节点启动         <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190721110910948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">     ⑸效果，发现数据回来了         <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/20190721111541274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="494">1.   案例二：采用 importCheckpoint  命令贝 拷贝 SecondaryNameNode   ⑴修改 hdfs-site.xml 中的配置         <img alt="" class="has" height="342" src="https://img-blog.csdnimg.cn/20190721115756609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="676">  ⑵kill -9 namenode 进程          <img alt="" class="has" height="225" src="https://img-blog.csdnimg.cn/20190721120200675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="390">  ⑶删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190721120404664.png" width="469">  ⑷ 如 果 SecondaryNameNode 不 和 Namenode 在 一 个 主 机 节 点 上 ， 需 要 将SecondaryNameNode      存储数据的目录拷贝到 Namenode 存储数据的平级目录，并删除in_use.lock 文件      a：拷贝到下面这个目录下：           <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190721120620362.png" width="541">     b：拷贝文件，并删除lock文件           <img alt="" class="has" height="118" src="https://img-blog.csdnimg.cn/20190721120926592.png" width="701">           <img alt="" class="has" height="252" src="https://img-blog.csdnimg.cn/20190721121040805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">   ⑸导入检查点数据（等待一会 ctrl+c 结束掉，时间有点长，需要等一下），到指定的目录下：       <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190721140843982.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="490">             查看namenode的目录：发现数据已经同步回来了：      <img alt="" class="has" height="175" src="https://img-blog.csdnimg.cn/20190721141014184.png" width="589">  ⑹启动 namenode      <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190721141117690.png" width="634">  ⑺效果：数据回来了      <img alt="" class="has" height="385" src="https://img-blog.csdnimg.cn/20190721141149205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561">     <h1 id="十：集群安全-模式-操作"><a href="#十：集群安全-模式-操作" class="headerlink" title="十：集群安全 模式 操作"></a>十：集群安全 模式 操作</h1></li>
-<li> 简介      Namenode 启动时，首先将映像文件（fsimage）载入内存，并执行编辑日志（edits）中 的各项操作。一旦在内存中成功建立文件系统元数据的映像，则创建一个新的 fsimage 文件 和一个空的编辑日志。此时，namenode 开始监听 datanode 请求。但是此刻，namenode 运行 在安全模式，即 namenode 的文件系统对于客户端来说是只读的。系统中的数据块的位置并不是 由 namenode 维护的，而是以块列表的形式存储在datanode 中。在系统的正常操作期间， namenode 会在内存中保留所有块位置的映射信息。在安全模式下，各个 datanode 会向 namenode 发送最新的块列表信息，namenode 了解到足够多的块位置信息之后，即可高效运行文件系统。          如果满足“最小副本条件”，namenode 会在 30 秒钟之后就退出安全模式。所谓的最小副 本 条 件 指 的 是 在 整 个 文 件 系 统 中 99.9% 的 块 满 足 最 小 副 本 级 别 （ 默 认 值 ： dfs.replication.min=1）。在启动一个刚刚格式化的 HDFS 集群时，因为系统中还没有任何块， 所以 namenode 不会进入安全模式。           总之一句话，就是需要等待namenode和datanode完全建立链接之后，才会退出安全模式， 我们才能对集群进行操作。           集群处于安全模式，不能执行重要操作（写操作）。集群启动完成后，自动退出安全模式。1. 基本语法 （1）bin/hdfs dfsadmin -safemode get （功能描述：查看安全模式状态） （2）bin/hdfs dfsadmin -safemode enter （功能描述：进入安全模式状态） （3）bin/hdfs dfsadmin -safemode leave  （功能描述：离开安全模式状态） （4）bin/hdfs dfsadmin -safemode wait  （功能描述：等待安全模式状态）1.  案例    ⑴查看安全模式状态            <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190721163354661.png" width="472">    ⑵进入安全模式           <img alt="" class="has" height="99" src="https://img-blog.csdnimg.cn/20190721163453808.png" width="604">    ⑶在安全模式在我们上传一个文件试试           <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190721163815488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="510">    ⑷离开安全模式          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190721163935781.png" width="637">  1.  等待安全模式状态案例   a：需求           大数据中一般我们都是在晚上进行跑批的操作，跑批的时候系统是不能进行其他任何操作的，需要         进入安全模式，那么有些操作就要等待，等待系统一旦离开安全模式就会立即进行其他的操作，这里         我们可以通过脚本实现。   ⑴首先进入安全模式             <img alt="" class="has" height="132" src="https://img-blog.csdnimg.cn/20190721164757555.png" width="510">      ⑵创建一个脚本wait.sh,就是等待安全模式一结束就上传文件             <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/2019072116514518.png" width="478">    ⑶执行脚本              <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190721165648182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="352">            ⑷重新打开一个窗口，将安全模式退出              <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190721165953353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489"><h1 id="十一：Namenode-多目录配置"><a href="#十一：Namenode-多目录配置" class="headerlink" title="十一：Namenode 多目录配置"></a>十一：Namenode 多目录配置</h1></li>
-<li> 简介        众所周知，namenode很重要，它一旦挂掉，将会很麻烦，虽然有SecondaryNameNode进行数据  恢复，但也比较麻烦。所以namenode 的本地目录可以配置成多个，且每个目录存放内容相同，增加了可靠性。1.  具体配置如下    ⑴首先格式化集群，删除数据，回到初始状态           a：103服务器执行sbin/stop-yarn.sh           b：102服务器执行sbin/stop-dfs.sh           c：102，103，104服务器执行删除数据操作：rm -rf data/ logs/           d：格式化102服务器的namenode                  bin/hdfs namenode -format                  后面出现的data再次删除掉。    ⑵配置 hdfs-site.xml，进行多目录配置         <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190721173830229.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="498">         注意：这个${hadoop.tmp.dir}是在core-site.xml中配置的指定hadoop运行时产生文件的存储目录        <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190721174053149.png" width="507">  ⑶将 hdfs-site.xml同步到集群的各个服务器上       <img alt="" class="has" height="45" src="https://img-blog.csdnimg.cn/20190721174736248.png" width="457">   ⑷需要对102服务器再次格式化一下：bin/hdfs namenode -format   ⑸最后启动集群   ⑹效果：          <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190721190001501.png" width="579">       发现name1和name2中数据一致：       <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20190721190214655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668">       也就是说当我们进行数据操作的时候，信息会同时保存到这两个namenode当中。增强了保护性。         </li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hbase知识点学习"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >Hbase知识点学习</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.121Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hbase知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Hbase知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 1. 1. 1. 1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hbase与 Sqoop 的集成"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E4%B8%8E%20Sqoop%20%E7%9A%84%E9%9B%86%E6%88%90/"
-    >Hbase与 Sqoop 的集成</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E4%B8%8E%20Sqoop%20%E7%9A%84%E9%9B%86%E6%88%90/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.116Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hbase与 Sqoop 的集成<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Hbase与 Sqoop 的集成<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 需求：         将 RDBMS(关系型数据库) 中的数据抽取到 HBase 中 。1. 修改/usr/local/module/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/conf/目录下配置 文件sqoop-env.sh  <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/2019100821594772.png" width="618">1. 在 Mysql 中新建一个数据库 db_library，一张表 book   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191008220410503.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="246">  <img alt="" class="has" height="398" src="https://img-blog.csdnimg.cn/20191008220524952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569">1. 向表中插入一些数据   <img alt="" class="has" height="422" src="https://img-blog.csdnimg.cn/20191008220650498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="857"><li> 执行 Sqoop 导入数据的操作    <pre class="has"><code class="language-bash">bin/sqoop import \<br>--connect jdbc:mysql://hadoop111:3306/db_library \<br>--username root \<br>--password 897570 \<br>--table book \<br>--columns "id,name,price" \<br>--column-family "info" \<br>--hbase-create-table \<br>--hbase-row-key "id" \<br>--hbase-table "hbase_book" \<br>--num-mappers 1 \<br>--split-by id</code></pre> –num-mappers 1 \    表示1个mapper –split-by id                表示按照ID分割，一个id一条数据<img alt="" class="has" height="290" src="https://img-blog.csdnimg.cn/20191008221348362.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="744">  出错：  <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20191008221956830.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="740"> </li>1. 原因以及解决办法  原因：：sqoop1.4.6 只支持 HBase1.0.1 之前的版本的自动创建 HBase 表的功能 。  解决方案：手动创建 HBase 表     <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20191008222134693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="507">1. 再次执行  <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20191008222242933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555">  <img alt="" class="has" height="243" src="https://img-blog.csdnimg.cn/20191008222313120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="855"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hbase入门知识点入门学习一"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
-    >Hbase入门知识点入门学习一</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.109Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hbase入门知识点入门学习一<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：简介</p>
-<ol>
-<li>Hbase角色   Hbase一共存在两个角色，一个HMaster(主节点) ，一个RegionServer (从节点)1. HMaster功能  ⑴监控 RegionServer   ⑵处理 RegionServer 故障转移   ⑶处理元数据的变更   ⑷处理 region 的分配或移除   ⑸在空闲时间进行数据的负载均衡   ⑹通过 Zookeeper 发布自己的位置给客户端 1. RegionServer 功能  ⑴负责存储 HBase 的实际数据   ⑵处理分配给它的 Region(可以理解为table，用来存储数据)   ⑶刷新缓存到 HDFS  ⑷维护 HLog   ⑸执行压缩   ⑹负责处理 Region 分片 1.          <h1 id="二：Hbase架构"><a href="#二：Hbase架构" class="headerlink" title="二：Hbase架构"></a>二：Hbase架构</h1></li>
-<li> 架构图如下：  <img alt="" class="has" height="476" src="https://img-blog.csdnimg.cn/20190921111927883.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="679">  ⑴客户端client:           Client 访问用户数据前需要首先访问 ZooKeeper，因为ZooKeeper中存放着数据的元数据地址信息，      ZooKeeper负责维护元数据信息。  ⑵HRegionServer：           client通过ZooKeeper找到了元数据信息，那么就找到了这个数据的地址，这个数据又是存放在       HRegionServer中的，那么现在需要通过HRegionServer去访问数据本身了。       HRegionServer中又分为如下几个模块：       a：HLog               存在本地磁盘中用来做灾难恢复使用，HLog记录数据的所有变更，一旦region server 宕机，就可以从log中进行恢复。       b：HRegion（一个HRegionServer可以维护和管理多个HRegion）                  table在行的方向上分隔为多个Region。Region是HBase中分布式存储和负载均衡的最小单元，             即不同的region可以分别在不同的Region Server上，但同一个Region是不会拆分到多个server上。                  Region按大小分隔，每个表一般是只有一个region。随着数据不断插入表，region不断增大，             当region的某个列族达到一个阈值时就会分成两个新的region。       c：Store（一个HRegion中包含多个store）                   每一个region由一个或多个store组成，至少是一个store，hbase会把一起访问的数据放在一个store里面，             即为每个 ColumnFamily建一个store，如果有几个ColumnFamily，也就有几个Store。一个Store由一个             memStore和0或者 多个StoreFile组成。 HBase以store的大小来判断是否需要切分region。             HFile 存储在 Store 中，一个 Store 对应 HBase 表中的一个列族。        d：MemStore（一个Store对应一个MemStore）                    memStore 是放在内存里的。保存修改的数据即keyValues。当memStore的大小达到一个             阀值（默认128MB）时，memStore会被flush到文 件，即生成一个快照。目前hbase 会有一个            线程来负责memStore的flush操作。        e：StoreFile                    memStore内存中的数据写到文件后就是StoreFile，StoreFile底层是以HFile的格式保存。             当storefile文件的数量增长到一定阈值后，系统会进行合并（minor、major compaction），              在合并过程中会进行版本合并和删除工作（majar），形成更大的storefile。            f：HFile                   HBase中KeyValue数据的存储格式，HFile是Hadoop的 二进制格式文件，实际上StoreFile就是              对Hfile做了轻量级包装，即StoreFile底层就是HFile。这是在磁盘上保存原始数据的实际的物理文件，             是实际的存储文件。    <h1 id="三：HBase-部署与使用"><a href="#三：HBase-部署与使用" class="headerlink" title="三：HBase 部署与使用"></a>三：HBase 部署与使用</h1></li>
-<li> 解压 HBase 到指定目录  <img alt="" class="has" height="223" src="https://img-blog.csdnimg.cn/20190921205105140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">1.  修改hbase-env.sh 配置文件，在/opt/module/hbase-1.3.1/conf/目录下  <img alt="" class="has" height="216" src="https://img-blog.csdnimg.cn/20190921205813426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">   <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20190921205944145.png" width="682">   注意：如果使用的是 JDK8 以 上 版 本 ， 则 应 在 hbase-evn.sh 中 移除“HBASE_MASTER_OPTS”和“HBASE_REGIONSERVER_OPTS”配置。   <img alt="" class="has" height="146" src="https://img-blog.csdnimg.cn/2019092122161818.png" width="767"><li>修改hbase-site.xml 配置文件，在/opt/module/hbase-1.3.1/conf/目录下    <pre class="has"><code class="language-html">&lt;configuration&gt;<br>   &lt;!--设置HBase将数据写到哪个目录下--&gt;<pre><code> &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.rootdir&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;hdfs://hadoop102:9000/hbase&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-  &amp;lt;!--设置集群模式，完全分布式模式--&amp;gt;
-</code></pre>
- &lt;property&gt;<pre><code>         &amp;lt;name&amp;gt;hbase.cluster.distributed&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
-&lt;!– 0.98 后的新变动，之前版本没有.port,默认端口为 60000 –&gt;<br>&lt;property&gt;<pre><code>         &amp;lt;name&amp;gt;hbase.master.port&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;16000&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
- &amp;lt;!--设置zookeeper集群 --&amp;gt;
- &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.zookeeper.quorum&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;hadoop102:2181,hadoop103:2181,hadoop104:2181&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
- &lt;!–配置hbase中的元数据信息存放在zookeeper中的位置 –&gt;<pre><code> &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.zookeeper.property.dataDir&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;/opt/module/zookeeper-3.4.10/zkData&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
-&lt;/configuration&gt;<br></code></pre>   </li>1. 修改regionservers配置文件，在/opt/module/hbase-1.3.1/conf/目录下  <img alt="" class="has" height="371" src="https://img-blog.csdnimg.cn/20190921212321348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="799">1. HBase 需要依赖的 Jar 包  a：简介       由于 HBase 需要依赖 Hadoop，所以替换 HBase 的 lib 目录下的 jar 包，以解决兼容问题。 b：删除原有的 jar，zookeeper默认jar也删掉       <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190921214043277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="595">       <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/2019092121420143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="599">1. 拷贝新 jar，涉及的 jar 有：    <img alt="" class="has" height="346" src="https://img-blog.csdnimg.cn/20190921214846224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="508">     1. HBase 软连接 Hadoop 配置 (软链接文件有类似于Windows的快捷方式)   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190921215538868.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="652">1. HBase 远程 scp 到其他集群节点  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190921215728703.png" width="755">  <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/20190921215846729.png" width="732"> 1. 启动zookeeper和hadoop  <img alt="" class="has" height="223" src="https://img-blog.csdnimg.cn/20190921220543107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="469">1. HBase 服务的启动   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190921222209840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705">  <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190921222254952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="653">   <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190921222311207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">1. 效果，通过Hbase提供的页面查看  <img alt="" class="has" height="422" src="https://img-blog.csdnimg.cn/2019092122250398.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="562">
- </li>
-</ol>
-<h1 id="四：Hbase基本操作"><a href="#四：Hbase基本操作" class="headerlink" title="四：Hbase基本操作"></a>四：Hbase基本操作</h1><ol>
-<li> 进入 HBase 客户端命令行   命令：bin/hbase shell  <img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20190923210239122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569">1. 查看当前数据库中有哪些表   <img alt="" class="has" height="234" src="https://img-blog.csdnimg.cn/20190923210745340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528">1.  创建表 ，表名：student,列簇：info  <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190923212010264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="383">  <img alt="" class="has" height="418" src="https://img-blog.csdnimg.cn/2019092321222874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="449">1.  向表中插入数据(Hbase擅长存储非结构化数据)  语法：put ‘表名’,’rowkey(不用在创建表时候指定)’,’列簇:列名(这个列名不用在创建表时候指定)’,’数据’   <img alt="" class="has" height="183" src="https://img-blog.csdnimg.cn/20190923213227652.png" width="649">1. 扫描查看表数据   语法：scan ‘表名’  <img alt="" class="has" height="238" src="https://img-blog.csdnimg.cn/20190923213333224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="790">  <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190923213511452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="766">1.   将之前的name覆盖掉  <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190923213643557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">1. 可以指定不同的rowkey  <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/20190923213825286.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="837">1. 查看表结构 <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190923214405355.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">1.   查看“指定行”或“指定列族:列”的数据 (会扫描整张表，性能很低)  <img alt="" class="has" height="187" src="https://img-blog.csdnimg.cn/20190923214547336.png" width="829">  <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/20190923214639676.png" width="787">1.  删除数据   a：删除某 rowkey 的全部数据：         <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190923215109964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">  b：删除某 rowkey 的某一列数据：         <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190923215158162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1.  清空表数据  <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190923215248408.png" width="609"> 1. 删除表  a：首先需要先让该表为 disable 状态        <img alt="" class="has" height="158" src="https://img-blog.csdnimg.cn/20190923215411519.png" width="424">   b：然后才能 drop 这个表：         <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190923215449943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="482">1. 统计表数据行数 （这里统计的是rowkey的数量，因为Hbase是按列存储的）  <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190923215918117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536"></li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hbase入门知识点入门学习三"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/"
-    >Hbase入门知识点入门学习三</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.102Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hbase入门知识点入门学习三<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：Hbase和Hive对比</p>
-<ol>
-<li>Hive简介         <strong>Hive</strong>是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的sql查询功能， 可以将sql语句转换为MapReduce任务进行运行。         <strong>Hive <strong>是建立在 Hadoop 之上为了</strong>降低 MapReduce 编程复杂度</strong>的 ETL 工具。         <strong>Hive</strong>的本质其实就相当于将HDFS中已经存储的文件在Mysql中做了一个双射关系，以方便使用HQL去管理查询。         <strong>Hive</strong>适用于离线的数据分析和清洗，延迟较高。         <strong>Hive</strong>存储的数据依旧在DataNode上，编写的HQL语句终将是转换为MapReduce代码执行。         <strong>Hive</strong> 表是<strong>纯逻辑表</strong>，因为 Hive 的本身并不能做数据存储和计算，而是完全依赖 Hadoop        ** Hive <strong>是</strong>数据仓库工具，需要全表扫描<strong>，就用 Hive，因为 Hive 是</strong>文件存储，<strong>运行Hive查询会花费很长时间， 因为它会默认遍历表中所有的数据。1.  Hbase简介         <strong>HBase</strong>是Hadoop的数据库，一个分布式、可扩展、大数据的存储。         <strong>Hbase</strong>是一种面向列存储的非关系型数据库。          <strong>Hbase</strong>用于存储结构化和非结构化的数据,适用于单表非关系型数据的存储，不适合做关联查询，类似JOIN等操作.         <strong>Hbase</strong>基于HDFS,数据持久化存储的体现形式是Hfile，存放于DataNode中，被ResionServer以region的形式进行管理。         <strong>Hbase</strong>延迟较低，接入在线业务使用.面对大量的企业数据，HBase可以直线单表大量数据的存储，同时提供了高效的数据访问速度。         <strong>HBase</strong>通过存储key/value来工作。         <strong>HBase</strong> 是</strong>数据库，需要索引访问<strong>，则用 HBase，因为 HBase 是面向列的 NoSQL 数据库.         <strong>HBase</strong> 是</strong>物理表<strong>，提供了一张</strong>超大的内存 Hash 表来存储索引<strong>，方便查询.         <strong>HBase</strong> 是为了</strong>弥补 Hadoop 对实时操作的缺陷**         <h1 id="二：Hbase常用的-Shell-操作"><a href="#二：Hbase常用的-Shell-操作" class="headerlink" title="二：Hbase常用的 Shell 操作"></a>二：Hbase常用的 Shell 操作</h1></li>
-</ol>
-<p>         <img alt="" class="has" height="719" src="https://img-blog.csdnimg.cn/20191008223627732.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="768">         <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20191008223646373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="408">         <img alt="" class="has" height="839" src="https://img-blog.csdnimg.cn/2019100822370882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="749"></p>
-<h1 id="三：Hbase数据的备份与恢复"><a href="#三：Hbase数据的备份与恢复" class="headerlink" title="三：Hbase数据的备份与恢复"></a>三：Hbase数据的备份与恢复</h1><ol>
-<li>简介        停止 HBase 服务后，使用 distcp 命令运行 MapReduce 任务进行备份，将数据备份到另一个 地方，可以是同一个集群，也可以是专用的备份集群。1. 下面我们操作即，把数据转移到当前集群的其他目录下（也可以不在同一个集群中）:   a：我们将下面hdfs上的/hbase备份到另外一个目录下       <img alt="" class="has" height="492" src="https://img-blog.csdnimg.cn/20191008224456659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">1. 命令如下：  <img alt="" class="has" height="224" src="https://img-blog.csdnimg.cn/2019100822480886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="754">1.  效果  <img alt="" class="has" height="489" src="https://img-blog.csdnimg.cn/20191008225258202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">       <h1 id="四：Hbase高可用"><a href="#四：Hbase高可用" class="headerlink" title="四：Hbase高可用"></a>四：Hbase高可用</h1></li>
-<li>简介       在 HBase 中 Hmaster 负责监控 RegionServer 的生命周期，均衡 RegionServer 的负载，如果 Hmaster 挂掉了，那么整个 HBase 集群将陷入不健康的状态，并且此时的工作状态并不会维持太久。 所以 HBase 支持对 Hmaster 的高可用配置。1. 在hadoop111机器的 /usr/local/module/hbase-1.3.1/conf 目录下创建 backup-masters 文件      <img alt="" class="has" height="227" src="https://img-blog.csdnimg.cn/20191011215946527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="661">  hadoop111是之前的master节点，现在是让hadoop112成为备用的master节点1.  分发到其他的两台机器  <img alt="" class="has" height="106" src="https://img-blog.csdnimg.cn/20191011220348823.png" width="782">1.  在hadoop111机器上执行启动脚本      <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/201910112205116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 1. 效果  <img alt="" class="has" height="435" src="https://img-blog.csdnimg.cn/20191011220635680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="444"><img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20191011220654648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484"><h1 id=""><a href="#" class="headerlink" title=""></a></h1>                        </li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hbase入门知识点入门学习二"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
-    >Hbase入门知识点入门学习二</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.095Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hbase入门知识点入门学习二<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：Hbase读写流程</p>
-<ol>
-<li>读流程       ⑴client访问Zookeeper中，找到ROOT表的Region所在的RegionServer信息；       ⑵client连接RegionServer访问ROOT表查询.meta表的region位置信息       ⑶再去连接.meta表的region所在的regionserver然后访问meta表，找到目标数据在哪个region上           及region所在的regionserver位置信息       ⑷然后去访问目标数据所在的regionserver中的region,先在memstore中查询数据，memstore中不存在则在           BlockCache中读数据，           BlockCache中还是不存在的话就最后在storefile中读数据，并且将读取到的数据先写入到BlockCache中，然后再返回给客户端      <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190925225120501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="811">1. 写流程               ⑴Client访问Zookeeper集群，查询ROOT表region所在的regionserver地址信息，比如rs1      ⑵client连接rs1，访问ROOT表，根据写入信息查询.meta表的region位于哪些regionserver上，将得到的结果返回给client；      ⑶client去连接相应的rs，访问.meta表，根据写入的namespace、表名和rowkey找到对应的region信息         ⑷client连接最终的rs，为了持久化和恢复，将数据先写到Hlog（write ahead log）中;      ⑸再将数据写入到memstore中，当memstore达到预设阈值后，就会创建一个新的memstore，而老的memstore就会加入flush队         列，由单独的线程flush到磁盘上，形成一个storefile；      ⑹与此同时，系统会在Zookeeper记录一个checkpoint，表示这个时刻之前的数据变更已经持久化了，当系统出现意外可能导致           memstore中的数据丢失，就可以通过hlog来恢复checkpoint之后的数据；      ⑺每次flush就会形成一个storefile文件，而storefile文件是只读的，一旦创建之后就不可修改，因此hbase的更新就是不断追加的            操作；      ⑻随着storefile的数量不断增多，当达到设定阈值后就会触发compact合并操作，将多个storefile合并成一个大的storefile，同时进           行版本合并和数据删除；      ⑼当store中的单个storefile文件的大小超过阈值的时候，触发split操作，regionserver把当前的region split成2个新的region      ⑽父region就会下线，新split出的2个region就会被hmaster分配到两个regionserver上，实现负载均衡，使得原先一个region的压           力分流到两个region上。<img alt="" class="has" height="432" src="https://img-blog.csdnimg.cn/20190925225942751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1131">1.  <h1 id="二：Hbase中-meta简介"><a href="#二：Hbase中-meta简介" class="headerlink" title="二：Hbase中.meta简介"></a>二：Hbase中.meta简介</h1></li>
-<li> 简介        当我们在对HBase的读写操作时，都需要提前知道我们需要操作的region的所在位置，即是存在于哪个HRegionServer上，  因此在HBase中存在一张表元数据表.meta表（属于Hbase的内置表）专门存储了表的元数据信息，以及region位于哪个  regionserver上。.meta表的结构类似于下图：  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190925224043792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="759">  .meta表的RowKey由三部分组成：TableName（表名）、StartKey（起始键）、TimeStamp(时间戳)，rowkey存储的内容又称为  region的Name（扩展：用来存放Region的文件夹的名字为RegionName的hash值，因为某些RegionName包含某些非法字符，而 RegionName为什么会包含非法字符是因为startkey是允许包含任何值的）。将组成rowkey的三个部分用逗号隔开组成了整个完整的 rowkey。TimeStamp使用十进制的数字字符串来表示。 .meta表的info为表中最主要的列簇，含有三个column：regioninfo、server、serverstartcode。regioninfo存储的是region的详细信  息，包括startkey、endkey、以及每个family信息。server存储的是管理这个region的regionserver地址。 由于.meta存储的是region的信息，如果当hbase中表的数据非常大会被分成很多个region，那么此时在.meta中所占的空间也会变大，而.meta本身也是一张表，在存储数据非常大的情况下，也会被分割成多个region存储于不同的regionserver上，此时要是想把.meta表的region位置信息存储在zookeeper集群中就不太现实，.meta表region的位置信息是会发生变化的。因此，此时我们可以通过另外一张表来存储.meta表的元数据信息，即-ROOT-(根数据表)，hbase认为这张表不会太大，因此-ROOT-只会有一个region，这个region的信息存在于hbase中，而管理-ROOT-表的位置信息（regionserver地址）存储在Zookeeper中。 所以综上所述要想对HBase进行读写首先去访问Zookeeper集群，获得ROOT表的所在regionserver地址信息。          <h1 id="三：JAVA-api操作Hbase"><a href="#三：JAVA-api操作Hbase" class="headerlink" title="三：JAVA api操作Hbase"></a>三：JAVA api操作Hbase</h1></li>
-<li>在maven项目中添加依赖  <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190928215702389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="355">  配置文件：  <img alt="" class="has" height="126" src="https://img-blog.csdnimg.cn/20190928220100582.png" width="273">1. HbaseDemo.java类       ⑴判断表是否存在       <img alt="" class="has" height="433" src="https://img-blog.csdnimg.cn/20190928220535888.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">   ⑵创建表        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190928220620412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="727">       <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/20190928220853511.png" width="613">    ⑶删除表        <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190928221359776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="596">  ⑷添加一行数据        <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/2019092822232898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="645">    ⑸删除一行数据       <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190928223800513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">  ⑹删除多行数据        <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190928224100873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  ⑺扫描数据         <img alt="" class="has" height="332" src="https://img-blog.csdnimg.cn/20190928225338999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="696">           ⑻获取一个列簇的数据         <img alt="" class="has" height="344" src="https://img-blog.csdnimg.cn/20190928230225808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">
- </li>
-</ol>
-<h1 id="四：MapReduce"><a href="#四：MapReduce" class="headerlink" title="四：MapReduce"></a>四：MapReduce</h1><ol>
-<li> 简介        通过 HBase 的相关 JavaAPI，我们可以实现伴随 HBase 操作的 MapReduce 过程，比如使用 MapReduce 将数据从本地文件系统导入到 HBase 的表中，比如我们从 HBase 中读取一些原始数 据后使用 MapReduce 做数据分析。   1.  查看 HBase 的 MapReduce 任务所需的依赖  <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20191001113529507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">1. 执行环境变量的导入   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191001113933475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="820">1. 运行官方的 MapReduce 任务 ，统计 Student 表中有多少行数据   <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20191001115537753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779">   <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001115607426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="526">1.  让环境变量永久生效，修改**/etc/profile**配置文件  <img alt="" class="has" height="72" src="https://img-blog.csdnimg.cn/20191001145150761.png" width="784"><h1 id="五：-案例一：使用-MapReduce-将本地数据导入到-HBase"><a href="#五：-案例一：使用-MapReduce-将本地数据导入到-HBase" class="headerlink" title="五： 案例一：使用 MapReduce 将本地数据导入到 HBase"></a>五： 案例一：使用 MapReduce 将本地数据导入到 HBase</h1></li>
-<li>在本地创建一个 tsv 格式的文件：fruit.tsv   <img alt="" class="has" height="286" src="https://img-blog.csdnimg.cn/20191001123400511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="949">  <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20191001123430916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">1.   在 HDFS 中创建 input_fruit 文件夹并上传 fruit.tsv 文件   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20191001140033849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">  <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20191001140415572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="717">1. 创建 HBase 的fruit表  <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20191001140746465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="522">1. 执行 MapReduce 到 HBase 的 fruit 表中    <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20191001141233513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1022">  <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20191001145023335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="900">1.   进入hbase,查看fruit表  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20191001145335178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701">  <h1 id="六：自定义-HBase-MapReduce1"><a href="#六：自定义-HBase-MapReduce1" class="headerlink" title="六：自定义 HBase-MapReduce1"></a>六：自定义 HBase-MapReduce1</h1></li>
-<li>需求  目标：将 fruit 表中的一部分数据，通过 MR 迁入到 fruit_mr 表中。 1.  创建MAVEN项目  <img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20191001160346800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="342">  <img alt="" class="has" height="590" src="https://img-blog.csdnimg.cn/20191001160359509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"><li>创建ReadFruitMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.Cell;<br>import org.apache.hadoop.hbase.CellUtil;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Result;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapper;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/***</p>
-<ul>
-<li>创建mapper类，读数据</li>
-<li>ImmutableBytesWritable：可以看做是rowkey,代表一行数据</li>
-<li>Put:这里面封装了一条一条数据</li>
-<li>@author KGF</li>
-<li></li>
-<li>/<br>public class ReadFruitMapper extends TableMapper&lt;ImmutableBytesWritable,Put&gt; &#123;  /***<ul>
-<li>map方法处理数据</li>
-<li>/<br>@Override<br>protected void map(ImmutableBytesWritable key, Result value,<pre><code>  Mapper&amp;lt;ImmutableBytesWritable, Result, ImmutableBytesWritable, Put&amp;gt;.Context context)
-  throws IOException, InterruptedException &#123;
-</code></pre>
-  //读取数据，使用Put封装数据<br>  Put put = new Put(key.get());<br>  //遍历column<br>  for (Cell cell : value.rawCells()) {<pre><code>  //筛选，我们只需要info列簇的数据
-  if(&quot;info&quot;.equals(Bytes.toString(CellUtil.cloneFamily(cell)))) &#123;
-      //我们只要列名为name的数据
-      if(&quot;name&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))) &#123;
-          //将数据添加到put中
-          put.add(cell);
-      &#125;
-  &#125;
-</code></pre>
-  }<br>  //将数据写出<br>  context.write(key, put);<br>}</li>
-</ul>
-</li>
-</ul>
-<p>}<br></code></pre>   </li><li> 创建WriteFruitMRReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>/***</p>
-<ul>
-<li><p>创建reducer类</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class WriteFruitMRReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
-<p>  @Override<br>  protected void reduce(ImmutableBytesWritable key, Iterable&lt;Put&gt; values,</p>
-<pre><code>      Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
-      throws IOException, InterruptedException &#123;
-  for (Put put : values) &#123;
-      context.write(NullWritable.get(),put);
-  &#125;
-</code></pre>
-<p>  }<br>}<br></code></pre>   </li><li> 创建Fruit2FruitMRRunner.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
-</li>
-</ul>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
-<p>/***</p>
-<ul>
-<li><p>创建Runner</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class Fruit2FruitMRRunner implements Tool &#123;</p>
-<p>  private Configuration conf;</p>
-<p>  public void setConf(Configuration conf) &#123;</p>
-<pre><code>  //创建hbase的conf
-  this.conf = HBaseConfiguration.create();
-</code></pre>
-<p>  }</p>
-<p>  public Configuration getConf() {</p>
-<pre><code>  return this.conf;
-</code></pre>
-<p>  }</p>
-<p>  public int run(String[] args) throws Exception {</p>
-<pre><code>  //创建Job
-  Job job = Job.getInstance();
-  //设置入口jar
-  job.setJarByClass(Fruit2FruitMRRunner.class);
-  //配置job
-  Scan scan = new Scan();
-  //设置mapper
-  TableMapReduceUtil.initTableMapperJob(&quot;fruit&quot;, 
-          scan, 
-          ReadFruitMapper.class,ImmutableBytesWritable.class, 
-          Put.class, job);
-  //设置reducer
-  TableMapReduceUtil.initTableReducerJob(&quot;fruit_mr&quot;,WriteFruitMRReducer.class, job);
-  job.setNumReduceTasks(1);
-  boolean result = job.waitForCompletion(true);
-  return result?0:1;
-</code></pre>
-<p>  }</p>
-<p>  public static void main(String[] args) {</p>
-<pre><code>  try &#123;
-      int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
-      System.out.println(status);
-  &#125; catch (Exception e) &#123;
-      e.printStackTrace();
-  &#125;
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   </li>1.  打成jar包，上传Linux  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20191001160600622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">1.   在Hbase上创建fruit_mr表  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001160742374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="584">1.   执行jar包  <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20191001160912374.png" width="1200">  <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20191001162033873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1.  效果，数据成功导入  <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20191001162201361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1077"></p>
-<h1 id="七：自定义-HBase-MapReduce2"><a href="#七：自定义-HBase-MapReduce2" class="headerlink" title="七：自定义 HBase-MapReduce2"></a>七：自定义 HBase-MapReduce2</h1><ol>
-<li>需求：实现将 HDFS 中的数据(fruit.tsv)写入到 HBase 表中(先将fruit表数据清空)。 <li>创建ReadFruitFromHDFSMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/**</p>
-<ul>
-<li><p>创建mapper类，因为我们是从HDFS上读取数据，所以我们继承的是普通的mapper,</p>
-</li>
-<li><p>我们读取数据向HBASE中写所以使用ImmutableBytesWritable,Put写出,</p>
-</li>
-<li><p>读取HDFS上的fruit.tsv中的数据</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class ReadFruitFromHDFSMapper extends Mapper&lt;LongWritable, Text, ImmutableBytesWritable,Put&gt; &#123;</p>
-<p>  @Override<br>  protected void map(LongWritable key, Text value,</p>
-<pre><code>      Mapper&amp;lt;LongWritable, Text, ImmutableBytesWritable, Put&amp;gt;.Context context)
-      throws IOException, InterruptedException &#123;
-  //读取一行数据
-  String[] split = value.toString().split(&quot;\t&quot;);
-  byte[] rowkey = Bytes.toBytes(split[0]);
-  byte[] name = Bytes.toBytes(split[1]);
-  byte[] color = Bytes.toBytes(split[2]);
-  //创建Put对象
-  Put put = new Put(rowkey);
-  //为指定的列族，列添加数据
-  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;name&quot;), name);
-  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;color&quot;),color);
-  
-  //写出
-  context.write(new ImmutableBytesWritable(rowkey),put);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   </li><li> 创建Writer2HbaseReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>public class Writer2HbaseReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
-<pre><code>@Override
-protected void reduce(ImmutableBytesWritable key, Iterable&amp;lt;Put&amp;gt; values,
-        Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
-        throws IOException, InterruptedException &#123;
-    for (Put put : values) &#123;
-        context.write(NullWritable.get(),put);
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li><li>创建HDFS2HbaseRunner.java   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
-<p>import com.kgf.mr1.Fruit2FruitMRRunner;</p>
-<p>public class HDFS2HbaseRunner implements Tool &#123;</p>
-<pre><code>private Configuration conf;
-
-public void setConf(Configuration conf) &#123;
-    //创建hbase的conf
-    this.conf = HBaseConfiguration.create();
-&#125;
-
-public Configuration getConf() &#123;
-    return this.conf;
-&#125;
-
-public int run(String[] args) throws Exception &#123;
-    //创建Job
-    Job job = Job.getInstance();
-    //设置入口jar
-    job.setJarByClass(HDFS2HbaseRunner.class);
-    //设置mapper
-    job.setMapperClass(ReadFruitFromHDFSMapper.class);
-    job.setMapOutputKeyClass(ImmutableBytesWritable.class);
-    job.setMapOutputValueClass(Put.class);
-    
-    //设置reducer,OutPutFormat
-    TableMapReduceUtil.initTableReducerJob(&quot;fruit&quot;,Writer2HbaseReducer.class, job);
-    
-    //设置FileInputFormat
-    FileInputFormat.addInputPath(job, new Path(&quot;/input_fruit/&quot;));
-    job.setNumReduceTasks(1);
-    boolean result = job.waitForCompletion(true);
-    return result?0:1;
-&#125;
-
-public static void main(String[] args) &#123;
-    try &#123;
-        int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
-        System.out.println(status);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li>1. 打成jar包，上传Linux  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20191006231143621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="732">1. 进入/usr/local/module/hadoop-2.7.2目录下执行jar包  <img alt="" class="has" height="169" src="https://img-blog.csdnimg.cn/2019100623144363.png" width="1110"><img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20191007094918730.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="861"> 1. 查看fruit表信息  <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191007100122765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1028">       </p>
  
       <!-- reward -->
       
