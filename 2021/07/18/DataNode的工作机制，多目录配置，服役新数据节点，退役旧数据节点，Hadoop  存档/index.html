@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/DataNode%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%A4%9A%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%EF%BC%8C%E6%9C%8D%E5%BD%B9%E6%96%B0%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8C%E9%80%80%E5%BD%B9%E6%97%A7%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8CHadoop%20%C2%A0%E5%AD%98%E6%A1%A3/" class="article-date">
+  <time datetime="2021-07-18T14:10:34.901Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.2k</span>
         </span>
     </span>
 
@@ -79,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">4 分钟</span>
         </span>
     </span>
 </div>
@@ -94,19 +98,23 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—         rsync -rvl $pdir/$fname $user@hadoop$host:$pdir<br>done;</code></pre>   ⑸增加新增节点的ssh无密登录（102，103，104，105这几个节点上都要确保有所有节点的ssh免密登录）         注意：102的root用户也要配置对方的ssh免密登录   ⑹                  </li>1. 服役新节点具体步骤，在102服务器这个namenode节点上操作     ⑴在 102服务器namenode 的/opt/module/hadoop-2.7.2/etc/hadoop 目录下创建 dfs.hosts 文件           <img alt="" class="has" height="245" src="https://img-blog.csdnimg.cn/20190722220804852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">      ⑵在 namenode 的 hdfs-site.xml 配置文件中增加 dfs.hosts 属性             <img alt="" class="has" height="262" src="https://img-blog.csdnimg.cn/20190722221210500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="413">      ⑶刷新 namenode            <img alt="" class="has" height="219" src="https://img-blog.csdnimg.cn/20190722221330463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="552">      ⑷更新 resourcemanager 节点             <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/20190722221432616.png" width="659">      ⑸可以在浏览器上发现多了一个节点            <img alt="" class="has" height="369" src="https://img-blog.csdnimg.cn/20190722221540752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="386">    ⑹在 namenode 的 slaves 文件中增加新主机名称            <img alt="" class="has" height="160" src="https://img-blog.csdnimg.cn/20190722221706325.png" width="227">    ⑺将修改的hdfs-site.xml,slaves文件同步到其它服务器          <img alt="" class="has" height="316" src="https://img-blog.csdnimg.cn/20190722221929771.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="365">   ⑻到105服务器上单独命令启动新的数据节点和节点管理器         a:启动datanode                  <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/20190722222155289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="465">         b：启动nodemanager               <img alt="" class="has" height="106" src="https://img-blog.csdnimg.cn/20190722222259780.png" width="575">    ⑼我们到浏览器看一下状态           <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190722222355781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="424">     ⑽如果数据不均衡，可以用命令实现集群的再平衡            <img alt="" class="has" height="165" src="https://img-blog.csdnimg.cn/2019072222273332.png" width="580">      </p>
+<h1 id="四：退役旧数据节点"><a href="#四：退役旧数据节点" class="headerlink" title="四：退役旧数据节点"></a>四：退役旧数据节点</h1><ol>
+<li>需求：        随着公司业务的减少，数据量变少了，原有的数据节点的容量有点多了， 需要在原有集群基础上动态减少一些数据节点。1. 环境准备    ⑴保持集群正在运行状态           <img alt="" class="has" height="372" src="https://img-blog.csdnimg.cn/2019072321450086.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">   ⑵要退的节点我们选择105   ⑶在 namenode 的/opt/module/hadoop-2.7.2/etc/hadoop 目录下创建 dfs.hosts.exclude 文件，       在文件中添加主机名称（要退役的节点）       <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190723214828682.png" width="499">   ⑷在 namenode 的 hdfs-site.xml 配置文件中增加 dfs.hosts.exclude 属性       <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190723215125482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="527">  ⑸刷新 namenode、刷新 resourcemanager        <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190723215254849.png" width="619">         <img alt="" class="has" height="77" src="https://img-blog.csdnimg.cn/20190723215344699.png" width="676">   ⑹检查 web 浏览器，退役节点的状态为 decommission in progress（退役中），说明数据节点正在复制块到其他节点        <img alt="" class="has" height="67" src="https://img-blog.csdnimg.cn/20190723215646506.png" width="763">    ⑺等待退役节点状态为 decommissioned（所有块已经复制完成），停止该节点及节点资源管理器。       注意：如果副本数是 3，服役的节点小于等于 3，是不能退役成功的，需要修改副本数后才能退役       <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190723215747719.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="323">    ⑻到105节点上关闭指定的datanode和nodemanager         sbin/hadoop-daemon.sh stop datanode         sbin/yarn-daemon.sh stop nodemanager    ⑼后面还要进行下面操作          a:从 namenode 的 dfs.hosts 文件中删除退役节点 hadoop105               <img alt="" class="has" height="213" src="https://img-blog.csdnimg.cn/20190723221113495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377">          b：刷新 namenode，刷新 resourcemanager                  hdfs dfsadmin -refreshNodes                  yarn rmadmin -refreshNodes          c：从 namenode 的 slave 文件中删除退役节点 hadoop105                <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190723221406524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="333">         d:同步各个服务器的配置文件               <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190723221539134.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="313">     ⑽最后再次看浏览器，105已经没了          <img alt="" class="has" height="366" src="https://img-blog.csdnimg.cn/20190723221627586.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="391">
+ </li>
+</ol>
+<h1 id="五：集群间数据拷贝"><a href="#五：集群间数据拷贝" class="headerlink" title="五：集群间数据拷贝"></a>五：集群间数据拷贝</h1><ol>
+<li>采用 discp 命令实现两个 hadoop 集群之间的递归数据复制  <img alt="" class="has" height="86" src="https://img-blog.csdnimg.cn/20190723225029499.png" width="678">           1. scp 实现两个远程主机之间的文件复制（目前一直在用的）<h1 id="六：Hadoop-存档"><a href="#六：Hadoop-存档" class="headerlink" title="六：Hadoop  存档"></a>六：Hadoop  存档</h1></li>
+<li>简介       每个文件均按块存储，每个块的元数据存储在 namenode 的内存中，因此 hadoop 存储小文件会非常低效。 因为大量的小文件会耗尽 namenode 中的大部分内存。但注意，存储小文件所需要的磁盘容量和存储这些文件 原始内容所需要的磁盘空间相比也不会增多。例如，一个 1MB 的文件以大小为 128MB 的块存储，使用的是 1MB 的磁盘空间，而不是 128MB。       Hadoop 存档文件或 HAR 文件，是一个更高效的文件存档工具，它将文件存入 HDFS块，在减少 namenode 内存使用的同时，允许对文件进行透明的访问。具体说来，Hadoop存档文件可以用作 MapReduce 的输入。        就是说hadoop会将许多的小文件看成一个整体，这样就不会存在一个小文件占用一个数据块了。是这个Har 文件整体占用一个数据块。1.  案例实操     ⑴首先我们在hdfs上创建一个目录           <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/2019072322591116.png" width="542">     ⑵在这个目录下上传3个小文件          <img alt="" class="has" height="224" src="https://img-blog.csdnimg.cn/20190723230038141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="533">      ⑶归档文件：归档成一个叫做 xxx.har 的文件夹，该文件夹下有相应的数据文件。Xx.har 目录是                            一个整体，该目录看成是一个归档文件即可。                      下面这个命令表示，将/user/kgf/input目录下的锁文件归档到“/”根目录下，名称为myhar.har的归档文件           命令：hadoop archive -archiveName myhar.har -p /user/kgf/input /           效果：出现下面问题                 <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/2019072323282198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="775">         解决方法：发现集群重新启动一下就好了。             <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190723234140806.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="479">        ⑷如何查看归档文件里面的文件呢？              <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190723234325482.png" width="558">                   命令：hadoop fs -lsr har:///myhar.har              我们可以将这里面的文件拷贝到其它目录             <img alt="" class="has" height="177" src="https://img-blog.csdnimg.cn/20190723234526964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="654">             <img alt="" class="has" height="299" src="https://img-blog.csdnimg.cn/20190723234549256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590"> </li>
+</ol>
  
       <!-- reward -->
       
@@ -159,7 +167,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/DataNode%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%A4%9A%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%EF%BC%8C%E6%9C%8D%E5%BD%B9%E6%96%B0%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8C%E9%80%80%E5%BD%B9%E6%97%A7%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8CHadoop%20%C2%A0%E5%AD%98%E6%A1%A3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +178,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/Flume%20Taildir%20Source%E7%9B%91%E5%90%AC%E5%AE%9E%E6%97%B6%E8%BF%BD%E5%8A%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%96%87%E4%BB%B6/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            Flume Taildir Source监听实时追加内容的文件
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">azkaban知识点学习</div>
+      </a>
     
   </nav>
 

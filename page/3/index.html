@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title> 爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      
+<section class="cover">
+    
+      
+      <a class="forkMe" href="https://github.com/Shen-Yu/hexo-theme-ayer"
+        target="_blank"><img width="149" height="149" src="/images/forkme.png"
+          class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+    
+  <div class="cover-frame">
+    <div class="bg-box">
+      <img src="/images/cover1.jpg" alt="image frame" />
+    </div>
+    <div class="cover-inner text-center text-white">
+      <h1><a href="/">爱上口袋的天空</a></h1>
+      <div id="subtitle-box">
+        
+        <span id="subtitle"></span>
+        
+      </div>
+      <div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="cover-learn-more">
+    <a href="javascript:void(0)" class="anchor"><i class="ri-arrow-down-line"></i></a>
+  </div>
+</section>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script>
+
+
+<!-- Subtitle -->
+
+  <script>
+    try {
+      var typed = new Typed("#subtitle", {
+        strings: ['欢迎来到爱上口袋的天空的博客', '愿你一生努力，一生被爱', '想要的都拥有，得不到的都释怀'],
+        startDelay: 0,
+        typeSpeed: 200,
+        loop: true,
+        backSpeed: 100,
+        showCursor: true
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  </script>
+  
+<div id="main">
+  <section class="outer">
+  
+  <ul class="ads">
+    
+        <li>
+            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
+                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_1.jpg" width="300" alt="云服务器限时秒杀">
+            </a>
+        </li>
+    
+        <li>
+            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
+                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png" width="300" alt="vultr优惠vps">
+            </a>
+        </li>
+    
+</ul>
+  
+  
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
+  <article class="articles">
+    
+    
+    
+    
+    <article
+  id="post-Hbase入门知识点入门学习二"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
+    >Hbase入门知识点入门学习二</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.095Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hbase入门知识点入门学习二<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hbase读写流程</p>
+<ol>
+<li>读流程       ⑴client访问Zookeeper中，找到ROOT表的Region所在的RegionServer信息；       ⑵client连接RegionServer访问ROOT表查询.meta表的region位置信息       ⑶再去连接.meta表的region所在的regionserver然后访问meta表，找到目标数据在哪个region上           及region所在的regionserver位置信息       ⑷然后去访问目标数据所在的regionserver中的region,先在memstore中查询数据，memstore中不存在则在           BlockCache中读数据，           BlockCache中还是不存在的话就最后在storefile中读数据，并且将读取到的数据先写入到BlockCache中，然后再返回给客户端      <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190925225120501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="811">1. 写流程               ⑴Client访问Zookeeper集群，查询ROOT表region所在的regionserver地址信息，比如rs1      ⑵client连接rs1，访问ROOT表，根据写入信息查询.meta表的region位于哪些regionserver上，将得到的结果返回给client；      ⑶client去连接相应的rs，访问.meta表，根据写入的namespace、表名和rowkey找到对应的region信息         ⑷client连接最终的rs，为了持久化和恢复，将数据先写到Hlog（write ahead log）中;      ⑸再将数据写入到memstore中，当memstore达到预设阈值后，就会创建一个新的memstore，而老的memstore就会加入flush队         列，由单独的线程flush到磁盘上，形成一个storefile；      ⑹与此同时，系统会在Zookeeper记录一个checkpoint，表示这个时刻之前的数据变更已经持久化了，当系统出现意外可能导致           memstore中的数据丢失，就可以通过hlog来恢复checkpoint之后的数据；      ⑺每次flush就会形成一个storefile文件，而storefile文件是只读的，一旦创建之后就不可修改，因此hbase的更新就是不断追加的            操作；      ⑻随着storefile的数量不断增多，当达到设定阈值后就会触发compact合并操作，将多个storefile合并成一个大的storefile，同时进           行版本合并和数据删除；      ⑼当store中的单个storefile文件的大小超过阈值的时候，触发split操作，regionserver把当前的region split成2个新的region      ⑽父region就会下线，新split出的2个region就会被hmaster分配到两个regionserver上，实现负载均衡，使得原先一个region的压           力分流到两个region上。<img alt="" class="has" height="432" src="https://img-blog.csdnimg.cn/20190925225942751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1131">1.  <h1 id="二：Hbase中-meta简介"><a href="#二：Hbase中-meta简介" class="headerlink" title="二：Hbase中.meta简介"></a>二：Hbase中.meta简介</h1></li>
+<li> 简介        当我们在对HBase的读写操作时，都需要提前知道我们需要操作的region的所在位置，即是存在于哪个HRegionServer上，  因此在HBase中存在一张表元数据表.meta表（属于Hbase的内置表）专门存储了表的元数据信息，以及region位于哪个  regionserver上。.meta表的结构类似于下图：  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190925224043792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="759">  .meta表的RowKey由三部分组成：TableName（表名）、StartKey（起始键）、TimeStamp(时间戳)，rowkey存储的内容又称为  region的Name（扩展：用来存放Region的文件夹的名字为RegionName的hash值，因为某些RegionName包含某些非法字符，而 RegionName为什么会包含非法字符是因为startkey是允许包含任何值的）。将组成rowkey的三个部分用逗号隔开组成了整个完整的 rowkey。TimeStamp使用十进制的数字字符串来表示。 .meta表的info为表中最主要的列簇，含有三个column：regioninfo、server、serverstartcode。regioninfo存储的是region的详细信  息，包括startkey、endkey、以及每个family信息。server存储的是管理这个region的regionserver地址。 由于.meta存储的是region的信息，如果当hbase中表的数据非常大会被分成很多个region，那么此时在.meta中所占的空间也会变大，而.meta本身也是一张表，在存储数据非常大的情况下，也会被分割成多个region存储于不同的regionserver上，此时要是想把.meta表的region位置信息存储在zookeeper集群中就不太现实，.meta表region的位置信息是会发生变化的。因此，此时我们可以通过另外一张表来存储.meta表的元数据信息，即-ROOT-(根数据表)，hbase认为这张表不会太大，因此-ROOT-只会有一个region，这个region的信息存在于hbase中，而管理-ROOT-表的位置信息（regionserver地址）存储在Zookeeper中。 所以综上所述要想对HBase进行读写首先去访问Zookeeper集群，获得ROOT表的所在regionserver地址信息。          <h1 id="三：JAVA-api操作Hbase"><a href="#三：JAVA-api操作Hbase" class="headerlink" title="三：JAVA api操作Hbase"></a>三：JAVA api操作Hbase</h1></li>
+<li>在maven项目中添加依赖  <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190928215702389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="355">  配置文件：  <img alt="" class="has" height="126" src="https://img-blog.csdnimg.cn/20190928220100582.png" width="273">1. HbaseDemo.java类       ⑴判断表是否存在       <img alt="" class="has" height="433" src="https://img-blog.csdnimg.cn/20190928220535888.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">   ⑵创建表        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190928220620412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="727">       <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/20190928220853511.png" width="613">    ⑶删除表        <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190928221359776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="596">  ⑷添加一行数据        <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/2019092822232898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="645">    ⑸删除一行数据       <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190928223800513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">  ⑹删除多行数据        <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190928224100873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  ⑺扫描数据         <img alt="" class="has" height="332" src="https://img-blog.csdnimg.cn/20190928225338999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="696">           ⑻获取一个列簇的数据         <img alt="" class="has" height="344" src="https://img-blog.csdnimg.cn/20190928230225808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">
+ </li>
+</ol>
+<h1 id="四：MapReduce"><a href="#四：MapReduce" class="headerlink" title="四：MapReduce"></a>四：MapReduce</h1><ol>
+<li> 简介        通过 HBase 的相关 JavaAPI，我们可以实现伴随 HBase 操作的 MapReduce 过程，比如使用 MapReduce 将数据从本地文件系统导入到 HBase 的表中，比如我们从 HBase 中读取一些原始数 据后使用 MapReduce 做数据分析。   1.  查看 HBase 的 MapReduce 任务所需的依赖  <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20191001113529507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">1. 执行环境变量的导入   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191001113933475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="820">1. 运行官方的 MapReduce 任务 ，统计 Student 表中有多少行数据   <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20191001115537753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779">   <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001115607426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="526">1.  让环境变量永久生效，修改**/etc/profile**配置文件  <img alt="" class="has" height="72" src="https://img-blog.csdnimg.cn/20191001145150761.png" width="784"><h1 id="五：-案例一：使用-MapReduce-将本地数据导入到-HBase"><a href="#五：-案例一：使用-MapReduce-将本地数据导入到-HBase" class="headerlink" title="五： 案例一：使用 MapReduce 将本地数据导入到 HBase"></a>五： 案例一：使用 MapReduce 将本地数据导入到 HBase</h1></li>
+<li>在本地创建一个 tsv 格式的文件：fruit.tsv   <img alt="" class="has" height="286" src="https://img-blog.csdnimg.cn/20191001123400511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="949">  <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20191001123430916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">1.   在 HDFS 中创建 input_fruit 文件夹并上传 fruit.tsv 文件   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20191001140033849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">  <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20191001140415572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="717">1. 创建 HBase 的fruit表  <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20191001140746465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="522">1. 执行 MapReduce 到 HBase 的 fruit 表中    <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20191001141233513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1022">  <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20191001145023335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="900">1.   进入hbase,查看fruit表  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20191001145335178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701">  <h1 id="六：自定义-HBase-MapReduce1"><a href="#六：自定义-HBase-MapReduce1" class="headerlink" title="六：自定义 HBase-MapReduce1"></a>六：自定义 HBase-MapReduce1</h1></li>
+<li>需求  目标：将 fruit 表中的一部分数据，通过 MR 迁入到 fruit_mr 表中。 1.  创建MAVEN项目  <img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20191001160346800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="342">  <img alt="" class="has" height="590" src="https://img-blog.csdnimg.cn/20191001160359509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"><li>创建ReadFruitMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</li>
+</ol>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.Cell;<br>import org.apache.hadoop.hbase.CellUtil;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Result;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapper;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/***</p>
+<ul>
+<li>创建mapper类，读数据</li>
+<li>ImmutableBytesWritable：可以看做是rowkey,代表一行数据</li>
+<li>Put:这里面封装了一条一条数据</li>
+<li>@author KGF</li>
+<li></li>
+<li>/<br>public class ReadFruitMapper extends TableMapper&lt;ImmutableBytesWritable,Put&gt; &#123;  /***<ul>
+<li>map方法处理数据</li>
+<li>/<br>@Override<br>protected void map(ImmutableBytesWritable key, Result value,<pre><code>  Mapper&amp;lt;ImmutableBytesWritable, Result, ImmutableBytesWritable, Put&amp;gt;.Context context)
+  throws IOException, InterruptedException &#123;
+</code></pre>
+  //读取数据，使用Put封装数据<br>  Put put = new Put(key.get());<br>  //遍历column<br>  for (Cell cell : value.rawCells()) {<pre><code>  //筛选，我们只需要info列簇的数据
+  if(&quot;info&quot;.equals(Bytes.toString(CellUtil.cloneFamily(cell)))) &#123;
+      //我们只要列名为name的数据
+      if(&quot;name&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))) &#123;
+          //将数据添加到put中
+          put.add(cell);
+      &#125;
+  &#125;
+</code></pre>
+  }<br>  //将数据写出<br>  context.write(key, put);<br>}</li>
+</ul>
+</li>
+</ul>
+<p>}<br></code></pre>   </li><li> 创建WriteFruitMRReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>/***</p>
+<ul>
+<li><p>创建reducer类</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class WriteFruitMRReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
+<p>  @Override<br>  protected void reduce(ImmutableBytesWritable key, Iterable&lt;Put&gt; values,</p>
+<pre><code>      Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
+      throws IOException, InterruptedException &#123;
+  for (Put put : values) &#123;
+      context.write(NullWritable.get(),put);
+  &#125;
+</code></pre>
+<p>  }<br>}<br></code></pre>   </li><li> 创建Fruit2FruitMRRunner.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
+</li>
+</ul>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>/***</p>
+<ul>
+<li><p>创建Runner</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class Fruit2FruitMRRunner implements Tool &#123;</p>
+<p>  private Configuration conf;</p>
+<p>  public void setConf(Configuration conf) &#123;</p>
+<pre><code>  //创建hbase的conf
+  this.conf = HBaseConfiguration.create();
+</code></pre>
+<p>  }</p>
+<p>  public Configuration getConf() {</p>
+<pre><code>  return this.conf;
+</code></pre>
+<p>  }</p>
+<p>  public int run(String[] args) throws Exception {</p>
+<pre><code>  //创建Job
+  Job job = Job.getInstance();
+  //设置入口jar
+  job.setJarByClass(Fruit2FruitMRRunner.class);
+  //配置job
+  Scan scan = new Scan();
+  //设置mapper
+  TableMapReduceUtil.initTableMapperJob(&quot;fruit&quot;, 
+          scan, 
+          ReadFruitMapper.class,ImmutableBytesWritable.class, 
+          Put.class, job);
+  //设置reducer
+  TableMapReduceUtil.initTableReducerJob(&quot;fruit_mr&quot;,WriteFruitMRReducer.class, job);
+  job.setNumReduceTasks(1);
+  boolean result = job.waitForCompletion(true);
+  return result?0:1;
+</code></pre>
+<p>  }</p>
+<p>  public static void main(String[] args) {</p>
+<pre><code>  try &#123;
+      int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
+      System.out.println(status);
+  &#125; catch (Exception e) &#123;
+      e.printStackTrace();
+  &#125;
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   </li>1.  打成jar包，上传Linux  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20191001160600622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">1.   在Hbase上创建fruit_mr表  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001160742374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="584">1.   执行jar包  <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20191001160912374.png" width="1200">  <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20191001162033873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1.  效果，数据成功导入  <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20191001162201361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1077"></p>
+<h1 id="七：自定义-HBase-MapReduce2"><a href="#七：自定义-HBase-MapReduce2" class="headerlink" title="七：自定义 HBase-MapReduce2"></a>七：自定义 HBase-MapReduce2</h1><ol>
+<li>需求：实现将 HDFS 中的数据(fruit.tsv)写入到 HBase 表中(先将fruit表数据清空)。 <li>创建ReadFruitFromHDFSMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</li>
+</ol>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>创建mapper类，因为我们是从HDFS上读取数据，所以我们继承的是普通的mapper,</p>
+</li>
+<li><p>我们读取数据向HBASE中写所以使用ImmutableBytesWritable,Put写出,</p>
+</li>
+<li><p>读取HDFS上的fruit.tsv中的数据</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class ReadFruitFromHDFSMapper extends Mapper&lt;LongWritable, Text, ImmutableBytesWritable,Put&gt; &#123;</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,</p>
+<pre><code>      Mapper&amp;lt;LongWritable, Text, ImmutableBytesWritable, Put&amp;gt;.Context context)
+      throws IOException, InterruptedException &#123;
+  //读取一行数据
+  String[] split = value.toString().split(&quot;\t&quot;);
+  byte[] rowkey = Bytes.toBytes(split[0]);
+  byte[] name = Bytes.toBytes(split[1]);
+  byte[] color = Bytes.toBytes(split[2]);
+  //创建Put对象
+  Put put = new Put(rowkey);
+  //为指定的列族，列添加数据
+  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;name&quot;), name);
+  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;color&quot;),color);
+  
+  //写出
+  context.write(new ImmutableBytesWritable(rowkey),put);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   </li><li> 创建Writer2HbaseReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class Writer2HbaseReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
+<pre><code>@Override
+protected void reduce(ImmutableBytesWritable key, Iterable&amp;lt;Put&amp;gt; values,
+        Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
+        throws IOException, InterruptedException &#123;
+    for (Put put : values) &#123;
+        context.write(NullWritable.get(),put);
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li><li>创建HDFS2HbaseRunner.java   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>import com.kgf.mr1.Fruit2FruitMRRunner;</p>
+<p>public class HDFS2HbaseRunner implements Tool &#123;</p>
+<pre><code>private Configuration conf;
+
+public void setConf(Configuration conf) &#123;
+    //创建hbase的conf
+    this.conf = HBaseConfiguration.create();
+&#125;
+
+public Configuration getConf() &#123;
+    return this.conf;
+&#125;
+
+public int run(String[] args) throws Exception &#123;
+    //创建Job
+    Job job = Job.getInstance();
+    //设置入口jar
+    job.setJarByClass(HDFS2HbaseRunner.class);
+    //设置mapper
+    job.setMapperClass(ReadFruitFromHDFSMapper.class);
+    job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+    job.setMapOutputValueClass(Put.class);
+    
+    //设置reducer,OutPutFormat
+    TableMapReduceUtil.initTableReducerJob(&quot;fruit&quot;,Writer2HbaseReducer.class, job);
+    
+    //设置FileInputFormat
+    FileInputFormat.addInputPath(job, new Path(&quot;/input_fruit/&quot;));
+    job.setNumReduceTasks(1);
+    boolean result = job.waitForCompletion(true);
+    return result?0:1;
+&#125;
+
+public static void main(String[] args) &#123;
+    try &#123;
+        int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
+        System.out.println(status);
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li>1. 打成jar包，上传Linux  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20191006231143621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="732">1. 进入/usr/local/module/hadoop-2.7.2目录下执行jar包  <img alt="" class="has" height="169" src="https://img-blog.csdnimg.cn/2019100623144363.png" width="1110"><img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20191007094918730.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="861"> 1. 查看fruit表信息  <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191007100122765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1028">       </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-hashCode的作用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/"
+    >hashCode的作用</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.087Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: hashCode的作用<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—<strong>1、hashCoed 的特性：</strong></p>
+<p>（1）HashCode的存在主要是用于查找的快捷性，如Hashtable，HashMap等，HashCode经常用于确定对象的存储地址；</p>
+<p>（2）如果两个对象相同， equals方法一定返回true，并且这两个对象的HashCode一定相同；</p>
+<p>（3）两个对象的HashCode相同，并不一定表示两个对象就相同，即equals()不一定为true，只能够说明这两个对象在一个散列存储结构中。</p>
+<p>（4）如果对象的equals方法被重写，那么对象的HashCode也尽量重写。</p>
+<p>有关equals 与hashCode 方法可以参考这篇文章：</p>
+<p> </p>
+<p><strong>2、hashCode 的作用：</strong></p>
+<p>Java中的集合有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。 equals方法可用于保证元素不重复，但如果每增加一个元素就检查一次，若集合中现在已经有1000个元素，那么第1001个元素加入集合时，就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。</p>
+<p>哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上。这样一来，当集合要添加新的元素时，先调用这个元素的HashCode方法，就一下子能定位到它应该放置的物理位置上。</p>
+<p>（1）如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；</p>
+<p>（2）如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了；</p>
+<p>（3）不相同的话，也就是发生了Hash key相同导致冲突的情况，那么就在这个Hash key的地方产生一个链表，将所有产生相同HashCode的对象放到这个单链表上去，串在一起。这样一来实际调用equals方法的次数就大大降低了。 </p>
+<p> 所以hashCode在上面扮演的角色为寻域（寻找某个对象在集合中区域位置）。hashCode可以将集合分成若干个区域，每个对象都可以计算出他们的hash码，可以将hash码分组，每个分组对应着某个存储区域，根据一个对象的hash码就可以确定该对象所存储区域，这样就大大减少查询匹配元素的数量，提高了查询效率。  </p>
+<p><strong>3、hashCode实践：</strong></p>
+<p>hashCode是用于查找使用的，而equals是用于比较两个对象是否相等的。</p>
+<p>（1）例如内存中有这样的位置 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0  1  2  3  4  5  6  7    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>而我有个类，这个类有个字段叫ID，我要把这个类存放在以上8个位置之一，如果不用HashCode而任意存放，那么当查找时就需要到这八个位置里挨个去找，或者用二分法一类的算法。   但以上问题如果用HashCode就会使效率提高很多。  定义我们的HashCode为ID％8，比如我们的ID为9，9除8的余数为1，那么我们就把该类存在1这个位置，如果ID是13，求得的余数是5，那么我们就把该类放在5这个位置。依此类推。  </p>
+<p>（2）但是如果两个类有相同的HashCode，例如9除以8和17除以8的余数都是1，也就是说，我们先通过 HashCode来判断两个类是否存放某个桶里，但这个桶里可能有很多类，那么我们就需要再通过equals在这个桶里找到我们要的类。    </p>
+<p>请看下面这个例子 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">[HashTest@1, HashTest@1]</span><br></pre></td></tr></table></figure>
+
+<p>以上这个示例，我们只是重写了HashCode方法，从上面的结果可以看出，虽然两个对象的HashCode相等，但是实际上两个对象并不是相等，因为我们没有重写equals方法，那么就会调用Object默认的equals方法，Object的equals方法调用的是 == 进行比较两个对象，显示这是两个不同的对象。</p>
+<p>这里我们将生成的对象放到了HashSet中，而HashSet中只能够存放唯一的对象，也就是相同的（适用于equals方法）的对象只会存放一个，但是这里实际上是两个对象ab都被放到了HashSet中，这样HashSet就失去了他本身的意义了。</p>
+<p>下面我们继续重写equals方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public boolean equals(Object object) &#123;  </span><br><span class="line">        if (object == null) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (object == this) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (!(object instanceof HashTest)) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        HashTest other = (HashTest) object;  </span><br><span class="line">        if (other.getI() == this.getI()) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        return false;  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下所示:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">[HashTest@1]</span><br></pre></td></tr></table></figure>
+
+<p>从结果我们可以看出，现在两个对象就完全相等了，HashSet中也只存放了一份对象。</p>
+<p>原文地址：</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop知识点学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
+    >Hadoop知识点学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.080Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hadoop知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 1. 1. 1. 1. 1. 1. </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop之完全分布式模式环境搭建"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
+    >Hadoop之完全分布式模式环境搭建</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.073Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—rsync -rvl $pdir/$fname $user@hadoop202:$pdir<br></code></pre>  b:在103的服务器上，在/opt/module/hadoop-2.7.2/etc下执行下面命令      <img alt="" class="has" height="402" src="https://img-blog.csdnimg.cn/20190710224709359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="417">           </li></p>
+<h1 id="七：集群启动及测试"><a href="#七：集群启动及测试" class="headerlink" title="七：集群启动及测试"></a>七：集群启动及测试</h1><ol>
+<li> 进入/opt/module/hadoop-2.7.2目录下，103，104，202三台服务器都要清理之前启动的数据   <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190710225308526.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">1.  第一次启动集群，需要格式化namenode,进入/opt/module/hadoop-2.7.2目录下，只需要格式化103即可，因为我们  的namenode节点配置在103节点上   命令：bin/hdfs namenode -format   <img alt="" class="has" height="327" src="https://img-blog.csdnimg.cn/20190710225826151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">1. 下面我们在103这个namenode的节点上去启动集群，当然ssh必须要配置完成的情况下,进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-dfs.sh  这个命令一次性把namenode和datanode启动起来   <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20190710230437871.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">          我们可以分别到104，202服务器去看看   <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190710230549856.png" width="328"><img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190710230604118.png" width="415">1. 因为我们的resourcemanager是在104上面的，我们在104上启动resourcemanager和nodemanager, 进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-yarn.sh<img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190710231012172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567">  可以到103，202服务器上查看，发现NodeManager也启动了，可以对比上面我们的集群规划。1. 集群测试    ⑴集群基本测试           ①上传文件到集群                      a：上传小文件                                ㈠首先在103的hdfs上创建一个文件夹                                           命令：hadoop fs -mkdir -p /user/kgf/input                                            <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190712223047447.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">                                            可以通过浏览器50070端口页面看效果：                                            <img alt="" class="has" height="302" src="https://img-blog.csdnimg.cn/20190712223135342.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="513">                                 ㈡下面我们创建一个文件通过命令上传到上面刚建的hdfs上的文件夹中                                       <img alt="" class="has" height="176" src="https://img-blog.csdnimg.cn/20190712223517227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">                                         <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190712223543887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">                                       点击发现，三台服务器上都有该文件备份：                                       <img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/201907122245459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="373">                      b：上传一个大文件试试，大于128M的，因为我们可以发现上面Block Size是128，那么                            大于128M时，会怎么样呢？ 下面开始上传：                           <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190712225153998.png" width="479">                           <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190712225307761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">                          效果：                             <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190712225509961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="577">                             <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190712225627630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="416">                                                       1. 集群时间同步        ⑴问题：因为我们配置的是集群，那么我们在跑数据的时候，这几台服务器的时间必须要保持一致，                       不然会出现问题。        ⑵时间同步的方式                    找一个机器，作为时间服务器，所有的机器与这台集群时间进行定时的同步，比如每隔十分钟同步一次。             注意：配置时间同步操作必须使用root用户。        ⑶时间服务器配置（必须是root用户）                    a：检测ntp是否安装，命令：rpm -qa | grep ntp                          <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713084812614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="486">                   b：修改ntp配置文件，路径：/etc/ntp.conf                           ①设置本地网络上的主机不受限制                                  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190713085230255.png" width="567">                            ②设置为不采用公共的服务器                                  <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20190713085539502.png" width="433">                            ③添加默认的一个内部时钟数据，使用它为局域网用户提供服务                                 <img alt="" class="has" height="165" src="https://img-blog.csdnimg.cn/20190713085904915.png" width="499">                  c：修改/etc/sysconfig/ntpd文件                             a：让硬件时间与系统时间一起同步                                  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/2019071309050714.png" width="378">                             b：重启ntpd                                  命令：systemctl status ntpd   查看ntpd状态                                  启动命令：systemctl start ntpd                             c：设置开启自启动ntp服务                                   执行：systemctl enable ntpd.service         ⑷其它机器配置（必须是root用户）               a：在其它机器上配置10分钟与时间服务器同步一次（生产环境一般是10分钟，这里我们演示就1分钟）                      命令：crontab -e然后编写下面的脚本命令                       */1 * * * * /usr/sbin/ntpdate 要同步时间的服务器地址               b：下面我们先同步104服务器                        <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713093634836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="454">                        <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/20190713093705895.png" width="454">               c：同理，我们同步202的时间                     <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190713093825473.png" width="623">               d：测试，我们分别查看3台服务器时间，三台目前都是这个时间                    <img alt="" class="has" height="98" src="https://img-blog.csdnimg.cn/20190713094042110.png" width="369">                    下面我们将104的时间修改掉                     <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190713094506658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="425">                    一分钟后…..可以发现时间又同步回来了。                     <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/2019071309463594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="749"><h1 id=""><a href="#" class="headerlink" title=""></a></h1></li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-hadoop之快照管理,回收站"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/hadoop%E4%B9%8B%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86,%E5%9B%9E%E6%94%B6%E7%AB%99/"
+    >hadoop之快照管理,回收站</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/hadoop%E4%B9%8B%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86,%E5%9B%9E%E6%94%B6%E7%AB%99/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.066Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: hadoop之快照管理,回收站<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：快照管理</p>
+<ol>
+<li>简介       快照相当于对目录做一个备份。并不会立即复制所有文件，而是指向同一个文件。当写入发生时，才会产生新文件。1.   基本语法如下      <img alt="" class="has" height="342" src="https://img-blog.csdnimg.cn/2019072521270446.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="527">1.  案例实操     ⑴开启/禁用指定目录的快照功能                <img alt="" class="has" height="147" src="https://img-blog.csdnimg.cn/20190725213117140.png" width="590">     ⑵ 列出当前用户所有可快照目录                <img alt="" class="has" height="95" src="https://img-blog.csdnimg.cn/20190725213247981.png" width="657">         ⑶对指定目录创建快照，将快照放在/user/kgf/input/.snapshot/s20190725-213524.180这个目录下             <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190725213538808.png" width="563">           注意：生成的是隐藏文件，浏览器上看不到，但是可以直接访问。          <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190725213907297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">    ⑷重命名快照          <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190725214235569.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="624">          <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190725214258523.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="623">      ⑸比较两个快照目录的不同之处           a：创建过快照的目录下的一些文件                 <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190725215155901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="495">          b：删掉创建过快照的目录下的一些文件，并且新增一些其它文件                <img alt="" class="has" height="213" src="https://img-blog.csdnimg.cn/20190725215403106.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="517">          c：使用命令比较这个目录和之前创建的快照区别               <img alt="" class="has" height="143" src="https://img-blog.csdnimg.cn/20190725215722279.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="525">               就是说快照里面比现在的目录多了一个wait.sh,少了一个README.txt        <h1 id="二：回收站"><a href="#二：回收站" class="headerlink" title="二：回收站"></a>二：回收站</h1></li>
+<li>默认回收站，一般公司里，防止误删数据会保存一周时间      <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190725221204854.png" width="750">1.  启用回收站并且修改访问垃圾回收站用户名称（进入垃圾回收站用户名称，默认是 dr.who）  ⑴进入namenode的/opt/module/hadoop-2.7.2/etc/hadoop目录下在core-site.xml中修改       <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190725221945370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="406">    ⑵将修改后的文件分发到集群的各个服务器上          <img alt="" class="has" height="274" src="https://img-blog.csdnimg.cn/20190725222402894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="409">1.  重新启动集群，并且删除hdfs上一个文件    <img alt="" class="has" height="92" src="https://img-blog.csdnimg.cn/20190725223236997.png" width="823">           可以发现删除的文件进入回收站hdfs://hadoop102:9000/user/kgf/.Trash/Current目录下，一分钟后自动删除    <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190725223339934.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="651">1. 注意：  <img alt="" class="has" height="104" src="https://img-blog.csdnimg.cn/20190725223844497.png" width="582"></li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop之编译源码"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E7%BC%96%E8%AF%91%E6%BA%90%E7%A0%81/"
+    >Hadoop之编译源码</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E4%B9%8B%E7%BC%96%E8%AF%91%E6%BA%90%E7%A0%81/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.060Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop之编译源码<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：服务器，jar包等准备</p>
+<ol>
+<li>首先我们需要准备一台内存大约4G左右的服务器，2G的内存不一定够，4G的稳妥一点，并且  最好是一个纯净版的服务器，就是除了网络，主机名之外其它什么都没有配置的。1. 采用root用户编译，减少文件夹权限出现问题1. 将准备好的包上传到服务器上             <img alt="" class="has" height="249" src="https://img-blog.csdnimg.cn/20190713212010732.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. 安装JDK A：将jdk解压到module文件夹，并且配置JAVA_HOME路径在/etc/profile        <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/2019071321231673.png" width="469">        <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190713212339654.png" width="509">        效果：          <img alt="" class="has" height="181" src="https://img-blog.csdnimg.cn/20190713212419149.png" width="609"><h1 id="二：开始配置MAVEN"><a href="#二：开始配置MAVEN" class="headerlink" title="二：开始配置MAVEN"></a>二：开始配置MAVEN</h1></li>
+<li>解压软件包到module  <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190714104529965.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="699">  <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190714104557576.png" width="589">1.  配置MAVEN的环境变量  在/etc/profile中配置  <img alt="" class="has" height="107" src="https://img-blog.csdnimg.cn/20190714104718607.png" width="470">            <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/2019071410500076.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="511">      <img alt="" class="has" height="74" src="https://img-blog.csdnimg.cn/20190714105045844.png" width="465">   <img alt="" class="has" height="188" src="https://img-blog.csdnimg.cn/201907141051189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718"><h1 id="三：开始配置ANT"><a href="#三：开始配置ANT" class="headerlink" title="三：开始配置ANT"></a>三：开始配置ANT</h1></li>
+<li>解压软件包        <img alt="" class="has" height="118" src="https://img-blog.csdnimg.cn/20190714105350368.png" width="771">        <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190714105419404.png" width="643">1.   配置ANT的环境变量        <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190714105658799.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="556">1.   效果       <img alt="" class="has" height="129" src="https://img-blog.csdnimg.cn/20190714105742835.png" width="552">        <h1 id="四：安装glibc-headers-和g-命令"><a href="#四：安装glibc-headers-和g-命令" class="headerlink" title="四：安装glibc-headers 和g++命令"></a>四：安装glibc-headers 和g++命令</h1></li>
+<li>安装glibc-headers  命令：yum install glibc-headers1. 安装g++   命令：yum install gcc-c++         1. 安装make    命令：yum install make1. 安装cmake    命令：yum install cmake<h1 id="五：开始配置protobuf"><a href="#五：开始配置protobuf" class="headerlink" title="五：开始配置protobuf"></a>五：开始配置protobuf</h1></li>
+<li>解压软件包      <img alt="" class="has" height="104" src="https://img-blog.csdnimg.cn/20190714110646897.png" width="642">      <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190714110706298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="620">1.  开始配置protobuf   a：进入到/opt/module/protobuf-2.5.0目录下，执行./configure命令         <img alt="" class="has" height="117" src="https://img-blog.csdnimg.cn/20190714110911980.png" width="457">     b：在使用make命令编译一下        <img alt="" class="has" height="98" src="https://img-blog.csdnimg.cn/2019071411114969.png" width="443">   c：使用make check命令         <img alt="" class="has" height="104" src="https://img-blog.csdnimg.cn/20190714111522363.png" width="451">    d：执行make install          <img alt="" class="has" height="105" src="https://img-blog.csdnimg.cn/20190714111653738.png" width="451">    e：执行ldconfig          <img alt="" class="has" height="84" src="https://img-blog.csdnimg.cn/2019071411185587.png" width="399">    f：配置环境变量           <img alt="" class="has" height="246" src="https://img-blog.csdnimg.cn/20190714112330812.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="389">           <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190714112231262.png" width="531">         1. 安装openssl库  命令：yum install openssl-devel  <img alt="" class="has" height="119" src="https://img-blog.csdnimg.cn/20190714112516456.png" width="560">1. 安装ncurses-devel库      命令：yum install ncurses-devel   <img alt="" class="has" height="89" src="https://img-blog.csdnimg.cn/20190714112653636.png" width="564">    <h1 id="六：开始编译源码"><a href="#六：开始编译源码" class="headerlink" title="六：开始编译源码"></a>六：开始编译源码</h1></li>
+<li> 将hadoop-2.7.2-src.tar.gz源码包解压到/opt目录  <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20190714113147233.png" width="569"><img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190714113210834.png" width="632">1.  进入到/opt/hadoop-2.7.2-src目录，通过MAVEN执行编译命令 （时间大约30分钟）  命令：mvn package -Pdist,native -DskipTests -Dtar  <img alt="" class="has" height="107" src="https://img-blog.csdnimg.cn/20190714113733978.png" width="747">1. 效果  <img alt="" class="has" height="799" src="https://img-blog.csdnimg.cn/20190714131840370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="770">1. 成功后的64位hadoop包在/opt/hadoop-2.7.2-src/hadoop-dist/target目录下  <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20190714132131141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="712">​​​​​​​</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop之HDFS文件系统"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"
+    >Hadoop之HDFS文件系统</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.053Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop之HDFS文件系统<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：HDFS概述</p>
+<ol>
+<li>HDFS产生的背景       随着数据量越来越大，在一个操作系统管辖的范围内存不下了，那么就分配到更多的操作系统 管理的磁盘中，但是不方便管理和维护，迫切需要一种系统来管理多台机器上的文件，这就是分布式 文件管理系统。HDFS只是分布式文件管理系统中的一种。1.  HDFS概念       HDFS它是一个文件系统，用于存储文件，通过目录树来定位文件，其次它是分布式的，由很多 服务器联合起来实现其功能，集群中的服务器有各自的角色。       HDFS的设计适合一次写入，多次读出的场景，且不支持文件的修改。适合用来做数据分析，并 不适合用来做网盘应用。1. HDFS的优缺点       优点：                a：高容错性                             ⑴数据自动保存多个副本。它通过增加副本的形式，提高容错性。                             ⑵某一个副本丢失以后，它可以自动恢复。                b：适合大数据处理                             ⑴数据规模：                                         能够处理数据规模达到GB,TB甚至PB级别的数据。                             ⑵文件规模：                                         能够处理百万规模以上的文件数量，数量相当之大。                c：流式数据访问                             ⑴一次写入，多次读取，不能修改，只能追加                             ⑵它能保证数据的一致性。                d：可构建在廉价的机器上，通过多副本机制，提高可靠性。       缺点：                a：不适合低延迟数据访问。比如毫秒级的存储数据，是做不到的。                b：无法高效的对大量小文件进行存储                              ⑴存储大量小文件的话，它会占用NameNode大量的内存来存储文件，目录                                  和块信息。这样是不可取的，因为NameNode的内存总是有限的。                              ⑵小文件存储的寻道时间会超过读取时间，它违反了HDFS的设计目标。                c：并发写入，文件随机修改                               ⑴一个文件只能有一个写，不允许多个线程同时写。                               ⑵仅支持数据append(追加)，不支持文件随机修改。              <h1 id="二：HDFS块大小"><a href="#二：HDFS块大小" class="headerlink" title="二：HDFS块大小"></a>二：HDFS块大小</h1></li>
+</ol>
+<p>        <img alt="" class="has" height="136" src="https://img-blog.csdnimg.cn/20190714220247623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="775">                    <img alt="" class="has" height="372" src="https://img-blog.csdnimg.cn/2019071422120926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="667">   </p>
+<h1 id="三：HDFS命令行操作"><a href="#三：HDFS命令行操作" class="headerlink" title="三：HDFS命令行操作"></a>三：HDFS命令行操作</h1><ol>
+<li>首先启动集群  a：集群的部署重新调整了一下       <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190717215248590.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="630">  b：在hadoop102上启动namenode,datanode以及secondarynamenode        <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190717215346270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="516">  c：在hadoop103上启动yarn        <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/2019071721551871.png" width="403">       OK集群启动完毕。1. 相关命令  <img alt="" class="has" height="380" src="https://img-blog.csdnimg.cn/20190717215855669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="720">  <img alt="" class="has" height="352" src="https://img-blog.csdnimg.cn/20190717220258474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">         <h1 id="四：HDFS客户端环境准备"><a href="#四：HDFS客户端环境准备" class="headerlink" title="四：HDFS客户端环境准备"></a>四：HDFS客户端环境准备</h1></li>
+<li>通过Eclipse去连接hdfs，首先准备jar包  a：将hadoop-2.7.2.tar.gz解压到非中文目录       <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190717223355164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="350">  b：进入hadoop-2.7.2\share\hadoop文件夹，查找所有jar包，并且把jar都拷贝出来到新建的lib文件夹      <img alt="" class="has" height="341" src="https://img-blog.csdnimg.cn/20190717223948728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  c：新建一个source文件夹，将-source.jar结尾的jar挑出来，放到source文件夹中       <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190717224052282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">   d：再建立一个test文件夹，将-tests.jar结尾的jar挑出来，放到test文件夹中           <img alt="" class="has" height="281" src="https://img-blog.csdnimg.cn/20190718210547295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">      1. Eclipse环境准备   ⑴配置hadoop环境变量         <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190718212303557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="414">         1. 创建第一个java工程HdfsClientDemo1         <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190718212853542.png" width="374">    引入上面准备的jar包，除了test和source挑出的jar，其它的都引入。 ⑴将本地文件上传到hdfs上的第一种方式       <img alt="" class="has" height="325" src="https://img-blog.csdnimg.cn/20190718220301321.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">       注意：运行的时候我们需要配置环境变量，最后执行main方法       <img alt="" class="has" height="254" src="https://img-blog.csdnimg.cn/20190718220359443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="411">      效果：     <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190718220450436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">     <img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/20190718220523822.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="473">  ⑵第二种方式，不需要配置环境变量，直接在代码中配置用户名，效果和上面一样       <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20190718221021277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">       1. HDFS文件上传   ⑴在项目的src根目录下引入hdfs-site.xml配置文件，默认会读取根目录下的这个文件        <img alt="" class="has" height="303" src="https://img-blog.csdnimg.cn/20190719221020921.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="700">        <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190719221208565.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="577">       效果：       <img alt="" class="has" height="254" src="https://img-blog.csdnimg.cn/20190719221310378.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">1. 同理，我们可以直接在代码里面配置，这个优先级最高，可覆盖配置文件中的配置  <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190719221451855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="540">  效果：  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190719221609756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570">1. HDFS文件下载  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20190719223003129.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567"> 效果：<img alt="" class="has" height="214" src="https://img-blog.csdnimg.cn/20190719223041958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="512">1. HDFS创建目录  <img alt="" class="has" height="212" src="https://img-blog.csdnimg.cn/20190719223816315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="612"><img alt="" class="has" height="245" src="https://img-blog.csdnimg.cn/20190719223835240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="615">1. HDFS文件删除操作  <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190719225219938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571">1. HDFS上文件名称修改，第一个参数是原文件名，第二个是新的名称  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190719225736608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570"><li>HDFS文件详情的查看，主要是查看文件的名称，权限，长度，块信息   <pre class="has"><code class="language-java">public void readListFiles() throws IOException, InterruptedException, URISyntaxException &#123;<pre><code> //1：获取hadoop的文件系统
+ Configuration configuration = new Configuration();
+ //这里配置的是和core-site.xml文件中一样，主要是namenode的路径
+ FileSystem fs = FileSystem.get(new URI(&quot;hdfs://hadoop102:9000&quot;), configuration, &quot;kgf&quot;);
+ //2:在HDFS上修改文件名称
+ RemoteIterator&amp;lt;LocatedFileStatus&amp;gt; fileStatus = fs.listFiles(new Path(&quot;/&quot;),true);
+ while(fileStatus.hasNext()) &#123;
+     LocatedFileStatus file = fileStatus.next();
+     //文件名称
+     System.out.println(file.getPath().getName());
+     //文件大小
+     System.out.println(file.getLen());
+     //文件权限
+     System.out.println(file.getPermission());
+     //文件所属组
+     System.out.println(file.getGroup());
+     //获取文件块信息
+     BlockLocation[] blockLocations = file.getBlockLocations();
+     for (BlockLocation blockLocation : blockLocations) &#123;
+         //获取文件所属节点信息
+         String[] hosts = blockLocation.getHosts();
+         for (String host : hosts) &#123;
+             System.out.println(host);
+         &#125;
+     &#125;
+     System.out.println(&quot;====================================&quot;);
+ &#125;
+ //3:关闭资源
+ fs.close();
+</code></pre>
+ }</code></pre> 效果：<img alt="" class="has" height="455" src="https://img-blog.csdnimg.cn/20190719231824473.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="446"> </li>1. HDFS上文件和文件夹的判断  <img alt="" class="has" height="375" src="https://img-blog.csdnimg.cn/2019071923260996.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="636"></li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-hadoop入门之概述"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/"
+    >hadoop入门之概述</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.037Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: hadoop入门之概述<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：什么是Hadoop?</p>
+<ol>
+<li>Hadoop 是一个由 Apache 基金会所开发的分布式系统基础架构1. 主要解决，海量数据的存储和海量数据的分析计算问题。1. 广义上来说，HADOOP 通常是指一个更广泛的概念——HADOOP 生态圈         1. Hadoop 三大发行版本: Apache、Cloudera、Hortonworks。  a:Apache 版本最原始（最基础）的版本，对于入门学习最好。  b:Cloudera 在大型互联网企业中用的较多  c:Hortonworks 文档较好。<h1 id="二：Hadoop-的优势"><a href="#二：Hadoop-的优势" class="headerlink" title="二：Hadoop 的优势"></a>二：Hadoop 的优势</h1></li>
+<li>高可靠性      因为 Hadoop 假设计算元素和存储会出现故障，因为它维护多个工作数据副本，在出现故障时可以对失败的节点重新分布处理1. 高扩展性      在集群间分配任务数据，可方便的扩展数以千计的节点1.  高效性       在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度1.  高容错性       自动保存多份副本数据，并且能够自动将失败的任务重新分配    <h1 id="三：Hadoop-组成"><a href="#三：Hadoop-组成" class="headerlink" title="三：Hadoop  组成"></a>三：Hadoop  组成</h1></li>
+<li> Hadoop HDFS      一个高可靠、高吞吐量的分布式文件系统。1. Hadoop MapReduce      一个分布式的离线并行计算框架1. Hadoop YARN     作业调度与集群资源管理的框架。1. Hadoop Common     支持其他模块的工具模块（Configuration、RPC、序列化机制、日志 操作）。     <h1 id="四：HDFS-架构-概述"><a href="#四：HDFS-架构-概述" class="headerlink" title="四：HDFS  架构 概述"></a>四：HDFS  架构 概述</h1></li>
+<li>NameNode（nn）     存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限），以及每个文件的块列表和块所在的DataNode等。1. DataNode(dn)     在本地文件系统存储文件块数据，以及块数据的校验和。1. Secondary NameNode(2nn)      用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照     <h1 id="五：YARN-Yet-Another-Resource-Negotiator-架构"><a href="#五：YARN-Yet-Another-Resource-Negotiator-架构" class="headerlink" title="五：YARN(Yet Another Resource Negotiator)  架构"></a>五：YARN(Yet Another Resource Negotiator)  架构</h1></li>
+<li>ResourceManager(rm)      处理客户端请求、启动/监控 ApplicationMaster、监控 NodeManager、资源分配与调度1. NodeManager(nm)      单个节点上的资源管理、处理来自 ResourceManager 的命令、处理来自 ApplicationMaster 的命令。 它会定时地向RM汇报本节点上的资源使用情况和各个Container的运行状态；同时会接收并处理来自AM 的Container 启动/停止等请求。1. ApplicationMaster      数据切分、为应用程序申请资源，并分配给内部任务、任务监控与容错。 用户提交的应用程序均包含一个AM，负责应用的监控，跟踪应用执行状态，重启失败任务等。ApplicationMaster 是应用框架，它负责向ResourceManager协调资源，并且与NodeManager协同工作完成Task的执行和监控。1. Container      对任务运行环境的抽象，封装了 CPU、内存等多维资源以及环境变量、启动命令等任务运行相关的信息 。 Container是YARN中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等，当AM向RM 申请资源时，RM为AM返回的资源便是用Container 表示的。 YARN会为每个任务分配一个Container且该任务只能 使用该Container中描述的资源。1. 简介（detail）     YARN（Yet Another Resource Negotiator）是一个<strong>通用</strong>的资源管理平台，可为各类计算框架提供资源的管理和调度。 其核心出发点是为了分离资源管理与作业调度/监控，实现分离的做法是拥有一个全局的资源管理器。以及每个应用程序 对应一个的应用管理器（ApplicationMaster，AM）。1. 架构如下：     <img alt="" class="has" height="408" src="https://img-blog.csdnimg.cn/20190630220652270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642">   </li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Flume知识点入门学习一"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+    >Flume知识点入门学习一</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.026Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Flume知识点入门学习一<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：简介</p>
+<p>         <img alt="" class="has" height="250" src="https://img-blog.csdnimg.cn/20190907164649823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="817"></p>
+<h1 id="二：Flume-角色"><a href="#二：Flume-角色" class="headerlink" title="二：Flume 角色"></a>二：Flume 角色</h1><p>          <img alt="" class="has" height="387" src="https://img-blog.csdnimg.cn/20190907170335438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570">           <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190907170416665.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570"></p>
+<h1 id="三：Flume-传输过程"><a href="#三：Flume-传输过程" class="headerlink" title="三：Flume 传输过程"></a>三：Flume 传输过程</h1><p>        <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20190907170520627.png" width="699"></p>
+<h1 id="四：安装flume"><a href="#四：安装flume" class="headerlink" title="四：安装flume"></a>四：安装flume</h1><ol>
+<li>上传安装包到linux,并且解压到指定目录下   <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190907212016939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="723">    <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190907212204323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="717">1. 修改配置文件名称  <img alt="" class="has" height="306" src="https://img-blog.csdnimg.cn/20190907212941545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">1. 修改flume-env.sh文件  <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190907213705941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547">        <h1 id="五：案例一：监控端口数据"><a href="#五：案例一：监控端口数据" class="headerlink" title="五：案例一：监控端口数据"></a>五：案例一：监控端口数据</h1></li>
+<li>需求：Flume 监控一端 Console，另一端 Console 发送消息，使被监控端实时显示1. 创建 Flume Agent 配置文件 job_flume_telnet.conf   <img alt="" class="has" height="445" src="https://img-blog.csdnimg.cn/20190907220902438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="635">1. 判断 44444 端口是否被占用   <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190907221017173.png" width="681">1. 先开启 flume 先听端口   <img alt="" class="has" height="147" src="https://img-blog.csdnimg.cn/201909072224329.png" width="669">  <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/20190907222655263.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">1.  使用 telnet 工具向本机的 44444 端口发送内容   <img alt="" class="has" height="561" src="https://img-blog.csdnimg.cn/20190907222854781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">
+ </li>
+</ol>
+<h1 id="六：案例二：实时读取本地文件到-HDFS"><a href="#六：案例二：实时读取本地文件到-HDFS" class="headerlink" title="六：案例二：实时读取本地文件到 HDFS"></a>六：案例二：实时读取本地文件到 HDFS</h1><ol>
+<li>需求：**实时监控 hive 日志，并上传到 HDFS 中 **1.  拷贝 Hadoop 相关 jar 到 Flume 的 /opt/module/apache-flume-1.7.0-bin/lib/ 目录下：  <img alt="" class="has" height="172" src="https://img-blog.csdnimg.cn/20190908130750465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="635"><li>创建job_flume_2hdfs.conf 文件    <img alt="" class="has" height="142" src="https://img-blog.csdnimg.cn/20190908134244861.png" width="412">         内容：    <pre class="has"><code class="language-bash">#把agent起个名叫a2,sources叫r2,sinks叫k2.hdfs,channels叫c2<br>a2.sources = r2<br>a2.sinks = k2<br>a2.channels = c2 </li>
+</ol>
+<h1 id="Describe-configure-the-source"><a href="#Describe-configure-the-source" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><h1 id="exec即execute执行命令"><a href="#exec即execute执行命令" class="headerlink" title="exec即execute执行命令"></a>exec即execute执行命令</h1><p>a2.sources.r2.type = exec </p>
+<h1 id="要执行的命令"><a href="#要执行的命令" class="headerlink" title="要执行的命令"></a>要执行的命令</h1><p>a2.sources.r2.command = tail -F /opt/module/hive/logs/hive.log </p>
+<h1 id="执行shell脚本的绝对路径"><a href="#执行shell脚本的绝对路径" class="headerlink" title="执行shell脚本的绝对路径"></a>执行shell脚本的绝对路径</h1><p>a2.sources.r2.shell = /bin/bash -c </p>
+<h1 id="Describe-the-sink"><a href="#Describe-the-sink" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>a2.sinks.k2.type = hdfs </p>
+<h1 id="上传到hdfs的路径"><a href="#上传到hdfs的路径" class="headerlink" title="上传到hdfs的路径"></a>上传到hdfs的路径</h1><p>a2.sinks.k2.hdfs.path = hdfs://hadoop102:9000/flume/%Y%m%d/%H<br>#上传文件的前缀<br>a2.sinks.k2.hdfs.filePrefix = logs-<br>#是否按照时间滚动文件夹<br>a2.sinks.k2.hdfs.round = true<br>#多少时间单位创建一个新的文件夹<br>a2.sinks.k2.hdfs.roundValue = 1<br>#重新定义时间单位<br>a2.sinks.k2.hdfs.roundUnit = hour<br>#是否使用本地时间戳<br>a2.sinks.k2.hdfs.useLocalTimeStamp = true<br>#积攒多少个 Event 才 flush 到 HDFS 一次<br>a2.sinks.k2.hdfs.batchSize = 1000<br>#设置文件类型，可支持压缩<br>a2.sinks.k2.hdfs.fileType = DataStream<br>#多久生成一个新的文件 （单位：秒）<br>a2.sinks.k2.hdfs.rollInterval = 600<br>#设置每个文件的滚动大小 （单位：字节）<br>a2.sinks.k2.hdfs.rollSize = 134217700<br>#文件的滚动与 Event 数量无关<br>a2.sinks.k2.hdfs.rollCount = 0<br>#最小副本数<br>a2.sinks.k2.hdfs.minBlockReplicas = 1 </p>
+<h1 id="Use-a-channel-which-buffers-events-in-memory"><a href="#Use-a-channel-which-buffers-events-in-memory" class="headerlink" title="Use a channel which buffers events in memory"></a>Use a channel which buffers events in memory</h1><p>#channels阶段以内存的形式保存数据  event数量100<br>a2.channels.c2.type = memory<br>a2.channels.c2.capacity = 1000<br>a2.channels.c2.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel"><a href="#Bind-the-source-and-sink-to-the-channel" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>#把source和sink和channel对接   source可以对接多个channels  sinks只能对接一个channel<br>a2.sources.r2.channels = c2<br>a2.sinks.k2.channel = c2</code></pre>   </li>1. 启动hdfs集群1. 执行监控配置   <img alt="" class="has" height="360" src="https://img-blog.csdnimg.cn/20190908135744365.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="734">  下面我们再次打开一个控制台，操作hive:  <img alt="" class="has" height="497" src="https://img-blog.csdnimg.cn/20190908140009436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590">  在浏览器上查看hdfs:  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20190908141649630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">  </p>
+<h1 id="七：案例三：实时读取目录文件到-HDFS"><a href="#七：案例三：实时读取目录文件到-HDFS" class="headerlink" title="七：案例三：实时读取目录文件到 HDFS"></a>七：案例三：实时读取目录文件到 HDFS</h1><ol>
+<li>需求：使用 flume 监听整个目录的文件 <li>创建配置文件job_flume_dir.conf  <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190908163632722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="764">   内容：    <pre class="has"><code class="language-bash">#把agent起个名叫a3,sources叫r3,sinks叫k3.hdfs,channels叫c3<br>a3.sources = r3<br>a3.sinks = k3<br>a3.channels = c3 </li>
+</ol>
+<h1 id="Describe-configure-the-source-1"><a href="#Describe-configure-the-source-1" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>a3.sources.r3.type = spooldir<br>#要监听的目录<br>a3.sources.r3.spoolDir = /opt/module/apache-flume-1.7.0-bin/upload<br>#上传后的文件结尾<br>a3.sources.r3.fileSuffix = .COMPLETED<br>a3.sources.r3.fileHeader = true<br>#忽略所有以.tmp 结尾的文件，不上传<br>a3.sources.r3.ignorePattern = ([^ ]*.tmp) </p>
+<h1 id="Describe-the-sink-1"><a href="#Describe-the-sink-1" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>a3.sinks.k3.type = hdfs<br>a3.sinks.k3.hdfs.path = hdfs://hadoop102:9000/flume/upload/%Y%m%d/%H<br>#上传文件的前缀<br>a3.sinks.k3.hdfs.filePrefix = upload-<br>#是否按照时间滚动文件夹<br>a3.sinks.k3.hdfs.round = true<br>#多少时间单位创建一个新的文件夹<br>a3.sinks.k3.hdfs.roundValue = 1<br>#重新定义时间单位<br>a3.sinks.k3.hdfs.roundUnit = hour<br>#是否使用本地时间戳<br>a3.sinks.k3.hdfs.useLocalTimeStamp = true<br>#积攒多少个 Event 才 flush 到 HDFS 一次<br>a3.sinks.k3.hdfs.batchSize = 100<br>#设置文件类型，可支持压缩<br>a3.sinks.k3.hdfs.fileType = DataStream<br>#多久生成一个新的文件<br>a3.sinks.k3.hdfs.rollInterval = 600<br>#设置每个文件的滚动大小大概是 128M<br>a3.sinks.k3.hdfs.rollSize = 134217700<br>#文件的滚动与 Event 数量无关<br>a3.sinks.k3.hdfs.rollCount = 0<br>#最小副本数<br>a3.sinks.k3.hdfs.minBlockReplicas = 1 </p>
+<h1 id="Use-a-channel-which-buffers-events-in-memory-1"><a href="#Use-a-channel-which-buffers-events-in-memory-1" class="headerlink" title="Use a channel which buffers events in memory"></a>Use a channel which buffers events in memory</h1><p>a3.channels.c3.type = memory<br>#通道中存储的最大事件数<br>a3.channels.c3.capacity = 1000<br>#每个事务通道从源或提供给接收器的最大事件数<br>a3.channels.c3.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel-1"><a href="#Bind-the-source-and-sink-to-the-channel-1" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a3.sources.r3.channels = c3<br>a3.sinks.k3.channel = c3 </code></pre>   </li>1.  创建监听的目录，并且添加测试的文件   <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190908163901941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">1. 执行测试：执行如下脚本后，请向 upload 文件夹中添加文件试试   <img alt="" class="has" height="311" src="https://img-blog.csdnimg.cn/20190908164224658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">1. 查看upload目录  <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/20190908164321635.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="737">  再添加2个文件  <img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20190908164505248.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="588">1.  到hdfs上查看  <img alt="" class="has" height="259" src="https://img-blog.csdnimg.cn/20190908164653537.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="595">         <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190908164809207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="565"></p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Flume知识点入门学习二"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
+    >Flume知识点入门学习二</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.019Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Flume知识点入门学习二<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：案例四：Flume 与 Flume 之间数据传递，单 Flume 多 Channel、Sink</p>
+<ol>
+<li> 需求：使用 flume-1 监控文件变动，flume-1 将变动内容传递给 flume-2，flume-2 负责存储到HDFS。             同时 flume-1 将变动内容传递给 flume-3，flume-3 负责输出到local filesystem      <img alt="" class="has" height="319" src="https://img-blog.csdnimg.cn/20190908221502846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"><li>创建 flume-1.conf，用于监控 hive.log 文件的变动，同时产生两个 channel 和两个 sink 分 别输送给 flume-2 和 flume3，文件名称为job_flume1.conf   <pre class="has"><code class="language-bash"># Name the components on this agent<br>#把agent起个名叫a1,sources叫r1,sinks叫k1 k2,channels叫c1 c2<br>a1.sources = r1<br>a1.sinks = k1 k2<br>a1.channels = c1 c2 <h1 id="将数据流复制给多个-channel"><a href="#将数据流复制给多个-channel" class="headerlink" title="将数据流复制给多个 channel"></a>将数据流复制给多个 channel</h1>a1.sources.r1.selector.type = replicating </li>
+</ol>
+<h1 id="Describe-configure-the-source"><a href="#Describe-configure-the-source" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#配置执行监控hive日志<br>a1.sources.r1.type = exec<br>a1.sources.r1.command = tail -F /opt/module/hive/logs/hive.log<br>a1.sources.r1.shell = /bin/bash -c </p>
+<h1 id="Describe-the-sink"><a href="#Describe-the-sink" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#这里我们flume1中的sinks对接的是flume2,flume3中的sources,这种对接方式类型我们使用avro<br>a1.sinks.k1.type = avro<br>a1.sinks.k1.hostname = hadoop102<br>a1.sinks.k1.port = 4141 </p>
+<p>a1.sinks.k2.type = avro<br>a1.sinks.k2.hostname = hadoop102<br>a1.sinks.k2.port = 4142 </p>
+<h1 id="Describe-the-channel"><a href="#Describe-the-channel" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a1.channels.c1.type = memory<br>#通道中存储的最大事件数<br>a1.channels.c1.capacity = 1000<br>#每个事务通道从源或提供给接收器的最大事件数<br>a1.channels.c1.transactionCapacity = 100 </p>
+<p>a1.channels.c2.type = memory<br>a1.channels.c2.capacity = 1000<br>a1.channels.c2.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel"><a href="#Bind-the-source-and-sink-to-the-channel" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a1.sources.r1.channels = c1 c2<br>a1.sinks.k1.channel = c1<br>a1.sinks.k2.channel = c2 </code></pre> <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190908223703379.png" width="534"> </li><li> 创建 flume-2.conf，用于接收 flume-1 的 event，同时产生 1 个 channel 和 1 个 sink，将数据输送给 hdfs ,名称为job_flume2.conf    <pre class="has"><code class="language-bash"># Name the components on this agent<br>a2.sources = r1<br>a2.sinks = k1<br>a2.channels = c1 </p>
+<h1 id="Describe-configure-the-source-1"><a href="#Describe-configure-the-source-1" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#表示这个flume的source去hadoop102服务器的4141获取数据<br>a2.sources.r1.type = avro<br>a2.sources.r1.bind = hadoop102<br>a2.sources.r1.port = 4141 </p>
+<h1 id="Describe-the-sink-1"><a href="#Describe-the-sink-1" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#这个flume的sinks是将数据传输到hdfs上<br>a2.sinks.k1.type = hdfs<br>a2.sinks.k1.hdfs.path = hdfs://hadoop102:9000/flume2/%Y%m%d/%H<br>#上传文件的前缀<br>a2.sinks.k1.hdfs.filePrefix = flume2-<br>#是否按照时间滚动文件夹<br>a2.sinks.k1.hdfs.round = true<br>#多少时间单位创建一个新的文件夹<br>a2.sinks.k1.hdfs.roundValue = 1<br>#重新定义时间单位<br>a2.sinks.k1.hdfs.roundUnit = hour<br>#是否使用本地时间戳<br>a2.sinks.k1.hdfs.useLocalTimeStamp = true<br>#积攒多少个 Event 才 flush 到 HDFS 一次<br>a2.sinks.k1.hdfs.batchSize = 100<br>#设置文件类型，可支持压缩<br>a2.sinks.k1.hdfs.fileType = DataStream<br>#多久生成一个新的文件<br>a2.sinks.k1.hdfs.rollInterval = 600<br>#设置每个文件的滚动大小大概是 128M<br>a2.sinks.k1.hdfs.rollSize = 134217700<br>#文件的滚动与 Event 数量无关<br>a2.sinks.k1.hdfs.rollCount = 0<br>#最小冗余数<br>a2.sinks.k1.hdfs.minBlockReplicas = 1 </p>
+<h1 id="Describe-the-channel-1"><a href="#Describe-the-channel-1" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a2.channels.c1.type = memory<br>a2.channels.c1.capacity = 1000<br>a2.channels.c1.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel-1"><a href="#Bind-the-source-and-sink-to-the-channel-1" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a2.sources.r1.channels = c1<br>a2.sinks.k1.channel = c1 </code></pre> <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190908224342894.png" width="645"> </li><li>创建 flume-3.conf，用于接收 flume-1 的 event，同时产生 1 个 channel 和 1 个 sink，将数据输送给本地目录，名称job_flume3.conf   <pre class="has"><code class="language-bash"># Name the components on this agent<br>a3.sources = r1<br>a3.sinks = k1<br>a3.channels = c1 </p>
+<h1 id="Describe-configure-the-source-2"><a href="#Describe-configure-the-source-2" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#表示这个flume的source去hadoop102服务器的4142获取数据<br>a3.sources.r1.type = avro<br>a3.sources.r1.bind = hadoop102<br>a3.sources.r1.port = 4142 </p>
+<h1 id="Describe-the-sink-2"><a href="#Describe-the-sink-2" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#sinks将数据写到本地模式的类型<br>a3.sinks.k1.type = file_roll<br>#注意：输出的本地目录必须是已经存在的目录，如果该目录不存在，并不会创建新的目录<br>a3.sinks.k1.sink.directory = /opt/module/datas/flume3 </p>
+<h1 id="Describe-the-channel-2"><a href="#Describe-the-channel-2" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a3.channels.c1.type = memory<br>a3.channels.c1.capacity = 1000<br>a3.channels.c1.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel-2"><a href="#Bind-the-source-and-sink-to-the-channel-2" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a3.sources.r1.channels = c1<br>a3.sinks.k1.channel = c1 </code></pre> <img alt="" class="has" height="246" src="https://img-blog.csdnimg.cn/20190908224909157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597"> </li>1. 启动hadoop集群，并且开3个hadoop102窗口，用来启动3个flume  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190908225340812.png" width="917">1. 执行测试：分别开启对应 flume-job（依次启动 flume-3，flume-2，flume-1），  <img alt="" class="has" height="253" src="https://img-blog.csdnimg.cn/2019090822573657.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="639">   <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190908225805265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="637">  <img alt="" class="has" height="251" src="https://img-blog.csdnimg.cn/20190908225834660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642">1. 再开一个hadoop102操作hive  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20190908230034423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1. 查看效果  ⑴先看flume3是否写到本地，如下，是有数据 的。       <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20190908232517648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="678">   ⑵查看hdfs上数据           <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20190908232553876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">
+ </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+  </article>
+  
+
+  
+  <nav class="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/2/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">下一页</a>
+  </nav>
+  
+</section>
+</div>
+
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>Flume知识点入门学习二 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-Flume知识点入门学习二"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  Flume知识点入门学习二
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.019Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">916</span>
         </span>
     </span>
 
@@ -79,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">4 分钟</span>
         </span>
     </span>
 </div>
@@ -94,19 +98,29 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: Flume知识点入门学习二<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：案例四：Flume 与 Flume 之间数据传递，单 Flume 多 Channel、Sink</p>
+<ol>
+<li> 需求：使用 flume-1 监控文件变动，flume-1 将变动内容传递给 flume-2，flume-2 负责存储到HDFS。             同时 flume-1 将变动内容传递给 flume-3，flume-3 负责输出到local filesystem      <img alt="" class="has" height="319" src="https://img-blog.csdnimg.cn/20190908221502846.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"><li>创建 flume-1.conf，用于监控 hive.log 文件的变动，同时产生两个 channel 和两个 sink 分 别输送给 flume-2 和 flume3，文件名称为job_flume1.conf   <pre class="has"><code class="language-bash"># Name the components on this agent<br>#把agent起个名叫a1,sources叫r1,sinks叫k1 k2,channels叫c1 c2<br>a1.sources = r1<br>a1.sinks = k1 k2<br>a1.channels = c1 c2 <h1 id="将数据流复制给多个-channel"><a href="#将数据流复制给多个-channel" class="headerlink" title="将数据流复制给多个 channel"></a>将数据流复制给多个 channel</h1>a1.sources.r1.selector.type = replicating </li>
+</ol>
+<h1 id="Describe-configure-the-source"><a href="#Describe-configure-the-source" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#配置执行监控hive日志<br>a1.sources.r1.type = exec<br>a1.sources.r1.command = tail -F /opt/module/hive/logs/hive.log<br>a1.sources.r1.shell = /bin/bash -c </p>
+<h1 id="Describe-the-sink"><a href="#Describe-the-sink" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#这里我们flume1中的sinks对接的是flume2,flume3中的sources,这种对接方式类型我们使用avro<br>a1.sinks.k1.type = avro<br>a1.sinks.k1.hostname = hadoop102<br>a1.sinks.k1.port = 4141 </p>
+<p>a1.sinks.k2.type = avro<br>a1.sinks.k2.hostname = hadoop102<br>a1.sinks.k2.port = 4142 </p>
+<h1 id="Describe-the-channel"><a href="#Describe-the-channel" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a1.channels.c1.type = memory<br>#通道中存储的最大事件数<br>a1.channels.c1.capacity = 1000<br>#每个事务通道从源或提供给接收器的最大事件数<br>a1.channels.c1.transactionCapacity = 100 </p>
+<p>a1.channels.c2.type = memory<br>a1.channels.c2.capacity = 1000<br>a1.channels.c2.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel"><a href="#Bind-the-source-and-sink-to-the-channel" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a1.sources.r1.channels = c1 c2<br>a1.sinks.k1.channel = c1<br>a1.sinks.k2.channel = c2 </code></pre> <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190908223703379.png" width="534"> </li><li> 创建 flume-2.conf，用于接收 flume-1 的 event，同时产生 1 个 channel 和 1 个 sink，将数据输送给 hdfs ,名称为job_flume2.conf    <pre class="has"><code class="language-bash"># Name the components on this agent<br>a2.sources = r1<br>a2.sinks = k1<br>a2.channels = c1 </p>
+<h1 id="Describe-configure-the-source-1"><a href="#Describe-configure-the-source-1" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#表示这个flume的source去hadoop102服务器的4141获取数据<br>a2.sources.r1.type = avro<br>a2.sources.r1.bind = hadoop102<br>a2.sources.r1.port = 4141 </p>
+<h1 id="Describe-the-sink-1"><a href="#Describe-the-sink-1" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#这个flume的sinks是将数据传输到hdfs上<br>a2.sinks.k1.type = hdfs<br>a2.sinks.k1.hdfs.path = hdfs://hadoop102:9000/flume2/%Y%m%d/%H<br>#上传文件的前缀<br>a2.sinks.k1.hdfs.filePrefix = flume2-<br>#是否按照时间滚动文件夹<br>a2.sinks.k1.hdfs.round = true<br>#多少时间单位创建一个新的文件夹<br>a2.sinks.k1.hdfs.roundValue = 1<br>#重新定义时间单位<br>a2.sinks.k1.hdfs.roundUnit = hour<br>#是否使用本地时间戳<br>a2.sinks.k1.hdfs.useLocalTimeStamp = true<br>#积攒多少个 Event 才 flush 到 HDFS 一次<br>a2.sinks.k1.hdfs.batchSize = 100<br>#设置文件类型，可支持压缩<br>a2.sinks.k1.hdfs.fileType = DataStream<br>#多久生成一个新的文件<br>a2.sinks.k1.hdfs.rollInterval = 600<br>#设置每个文件的滚动大小大概是 128M<br>a2.sinks.k1.hdfs.rollSize = 134217700<br>#文件的滚动与 Event 数量无关<br>a2.sinks.k1.hdfs.rollCount = 0<br>#最小冗余数<br>a2.sinks.k1.hdfs.minBlockReplicas = 1 </p>
+<h1 id="Describe-the-channel-1"><a href="#Describe-the-channel-1" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a2.channels.c1.type = memory<br>a2.channels.c1.capacity = 1000<br>a2.channels.c1.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel-1"><a href="#Bind-the-source-and-sink-to-the-channel-1" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a2.sources.r1.channels = c1<br>a2.sinks.k1.channel = c1 </code></pre> <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190908224342894.png" width="645"> </li><li>创建 flume-3.conf，用于接收 flume-1 的 event，同时产生 1 个 channel 和 1 个 sink，将数据输送给本地目录，名称job_flume3.conf   <pre class="has"><code class="language-bash"># Name the components on this agent<br>a3.sources = r1<br>a3.sinks = k1<br>a3.channels = c1 </p>
+<h1 id="Describe-configure-the-source-2"><a href="#Describe-configure-the-source-2" class="headerlink" title="Describe/configure the source"></a>Describe/configure the source</h1><p>#表示这个flume的source去hadoop102服务器的4142获取数据<br>a3.sources.r1.type = avro<br>a3.sources.r1.bind = hadoop102<br>a3.sources.r1.port = 4142 </p>
+<h1 id="Describe-the-sink-2"><a href="#Describe-the-sink-2" class="headerlink" title="Describe the sink"></a>Describe the sink</h1><p>#sinks将数据写到本地模式的类型<br>a3.sinks.k1.type = file_roll<br>#注意：输出的本地目录必须是已经存在的目录，如果该目录不存在，并不会创建新的目录<br>a3.sinks.k1.sink.directory = /opt/module/datas/flume3 </p>
+<h1 id="Describe-the-channel-2"><a href="#Describe-the-channel-2" class="headerlink" title="Describe the channel"></a>Describe the channel</h1><p>a3.channels.c1.type = memory<br>a3.channels.c1.capacity = 1000<br>a3.channels.c1.transactionCapacity = 100 </p>
+<h1 id="Bind-the-source-and-sink-to-the-channel-2"><a href="#Bind-the-source-and-sink-to-the-channel-2" class="headerlink" title="Bind the source and sink to the channel"></a>Bind the source and sink to the channel</h1><p>a3.sources.r1.channels = c1<br>a3.sinks.k1.channel = c1 </code></pre> <img alt="" class="has" height="246" src="https://img-blog.csdnimg.cn/20190908224909157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597"> </li>1. 启动hadoop集群，并且开3个hadoop102窗口，用来启动3个flume  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190908225340812.png" width="917">1. 执行测试：分别开启对应 flume-job（依次启动 flume-3，flume-2，flume-1），  <img alt="" class="has" height="253" src="https://img-blog.csdnimg.cn/2019090822573657.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="639">   <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190908225805265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="637">  <img alt="" class="has" height="251" src="https://img-blog.csdnimg.cn/20190908225834660.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642">1. 再开一个hadoop102操作hive  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20190908230034423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1. 查看效果  ⑴先看flume3是否写到本地，如下，是有数据 的。       <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20190908232517648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="678">   ⑵查看hdfs上数据           <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20190908232553876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">
+ </p>
  
       <!-- reward -->
       
@@ -159,7 +173,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +184,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            Flume知识点入门学习一
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Flume知识点入门学习</div>
+      </a>
     
   </nav>
 

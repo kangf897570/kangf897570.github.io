@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.199Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hadoop序列化</p>
+<ol>
+<li>为什么要序列化？  <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190727221421643.png" width="701">1. 什么是序列化？  <img alt="" class="has" height="166" src="https://img-blog.csdnimg.cn/20190727221450619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668"> 1.  为什么不用 Java ？  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190727221518294.png" width="711">1.   为什么序列化对 Hadoop  很重要？  <img alt="" class="has" height="374" src="https://img-blog.csdnimg.cn/20190727221546511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587">1.  常用数据序列化类型  <img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190727221638148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="550">1.   自定义 bean  对象 实现序列化接口（Writable ）  ⑴自定义 bean 对象要想序列化传输，必须实现序列化接口，需要注意以下 7 项：         a：必须实现 Writable 接口         b：反序列化时，需要反射调用空参构造函数，所以必须有空参构造。         c：重写序列化方法         d：重写反序列化方法         e：注意反序列化的顺序和序列化的顺序完全一致         f：要想把结果显示在文件中，需要重写 toString()，可用”\t”分开，方便后续用         g：如果需要将自定义的 bean 放在 key 中传输，则还需要实现 comparable 接口，因为               mapreduce 框中的 shuffle 过程一定会对 key 进行排序。<li>  案例之流量汇总   ⑴需求：           统计每一个手机号耗费的总上行流量、下行流量、总流量(序列化)   ⑵数据准备(phone_data.txt)，数据格式如下，现在我们只知道每一行倒数第二个是下行流量，       倒数第三个是上行流量，总流量需要自己去算，第二个是手机号。           <img alt="" class="has" height="316" src="https://img-blog.csdnimg.cn/20190727223341939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557">   ⑶最后输出的数据格式大概如下：         <img alt="" class="has" height="120" src="https://img-blog.csdnimg.cn/20190727223727598.png" width="475">   ⑷基本思路分析如下：         ①Map 阶段                 <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190727224459494.png" width="426">         ②Reduce 阶段                <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190727224612980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">                <img alt="" class="has" height="84" src="https://img-blog.csdnimg.cn/20190727224638661.png" width="474">   ⑸代码实现如下：          ①首先定义一个bean序列化对象                 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.Writable;</p>
+<p>/**</p>
+<ul>
+<li><p>首先我们需要实现序列化接口Writable</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowBean implements Writable&#123;</p>
+<p>  /<strong>上行流量</strong>/<br>  private long upFlow;<br>  /<strong>下行流量</strong>/<br>  private long downFlow;<br>  /<strong>总流量</strong>/<br>  private long sumFlow;<br>  /**</p>
+<ul>
+<li>必须要有无参构造方法</li>
+<li>反序列化时，需要反射调用空参构造函数，所以必须有空参构造</li>
+<li>/<br>public FlowBean() &#123;<br>  super();<br>&#125;</li>
+</ul>
+<p>  public void setFlowBean(long upFlow, long downFlow) &#123;</p>
+<pre><code>  this.upFlow = upFlow;
+  this.downFlow = downFlow;
+  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+</code></pre>
+<p>  }</p>
+<p>  public FlowBean(long upFlow, long downFlow) {</p>
+<pre><code>  this.upFlow = upFlow;
+  this.downFlow = downFlow;
+  this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+</code></pre>
+<p>  }</p>
+<p>  /***</p>
+<ul>
+<li>这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程</li>
+<li>/<br>@Override<br>public void write(DataOutput out) throws IOException {<br>  //按照顺序依次将数据写入<br>  out.writeLong(upFlow);<br>  out.writeLong(downFlow);<br>  out.writeLong(sumFlow);<br>}</li>
+</ul>
+<p>  /**</p>
+<ul>
+<li>这个是反序列化方法</li>
+<li>/<br>@Override<br>public void readFields(DataInput in) throws IOException {<br>  //这个反序列化顺序要和上面序列化顺序保持一致<br>  this.upFlow = in.readLong();<br>  this.downFlow = in.readLong();<br>  this.sumFlow = in.readLong();<br>}</li>
+</ul>
+<p>  @Override<br>  public String toString() {</p>
+<pre><code>  return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
+</code></pre>
+<p>  }</p>
+<p>  public long getUpFlow() {</p>
+<pre><code>  return upFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setUpFlow(long upFlow) {</p>
+<pre><code>  this.upFlow = upFlow;
+</code></pre>
+<p>  }</p>
+<p>  public long getDownFlow() {</p>
+<pre><code>  return downFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setDownFlow(long downFlow) {</p>
+<pre><code>  this.downFlow = downFlow;
+</code></pre>
+<p>  }</p>
+<p>  public long getSumFlow() {</p>
+<pre><code>  return sumFlow;
+</code></pre>
+<p>  }</p>
+<p>  public void setSumFlow(long sumFlow) {</p>
+<pre><code>  this.sumFlow = sumFlow;
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>     ⑵自定义mapper对象 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>继承Mapper接口：定义输入和输出参数</p>
+</li>
+<li><p>输入参数：第一个是数据行号，第二个是一行数据</p>
+</li>
+<li><p>输出参数：第一个是手机号，第二个是自定义的实体对象</p>
+</li>
+<li><p>@author kgf</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowMapper extends Mapper&lt;LongWritable,Text, Text,FlowBean&gt;&#123;</p>
+<p>  //定义输出参数<br>  Text k = new Text();<br>  FlowBean v = new FlowBean();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  
+  //1:获取一行数据
+  String line = value.toString();
+  //2:对数据进行切割，这里数据间的是以制表符分割的，就是tab
+  String[] fields = line.split(&quot;\t&quot;);
+  //3:获取我们需要的数据
+  String phoneNum = fields[1];//手机号
+  long upFlow = Long.parseLong(fields[fields.length-3]);//上行流量
+  long downFlow = Long.parseLong(fields[fields.length-2]);//下行流量
+  //封装数据
+  v.setFlowBean(upFlow,downFlow);
+  k.set(phoneNum);
+  
+  //写出数据
+  context.write(k, v);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>    ⑶自定义FlowReducer <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>/**</p>
+<ul>
+<li><p>继承Reducer接口：</p>
+</li>
+<li><p>输入参数：手机号–&gt;自定义bean对象</p>
+</li>
+<li><p>输出参数：手机号–&gt;自定义bean对象</p>
+</li>
+<li><p>@author 86136</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowReducer extends Reducer&lt;Text, FlowBean, Text, FlowBean&gt;&#123;</p>
+<p>  @Override<br>  protected void reduce(Text key, Iterable&lt;FlowBean&gt; values,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：因为可能存在多条相同的手机号码，所以我们需要对相同的key数据进行数据汇总
+  long sum_upFlow = 0;
+  long sum_downFlow =0;
+  
+  //2:求和累加
+  for (FlowBean flowBean : values) &#123;
+      sum_upFlow+=flowBean.getUpFlow();
+      sum_downFlow+=flowBean.getDownFlow();
+  &#125;
+  
+  FlowBean flowBean = new FlowBean(sum_upFlow,sum_downFlow);
+  //3：输出数据
+  context.write(key, flowBean);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   ⑷自定义FlowDriver <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsum;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FlowDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    //1:获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar包路径
+    job.setJarByClass(FlowDriver.class);
+    
+    //3:管理自定义的Mapper和Reducer类
+    job.setMapperClass(FlowMapper.class);
+    job.setReducerClass(FlowReducer.class);
+    
+    //4:Mapper输出类型
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(FlowBean.class);
+    
+    //5：Reducer输出类型
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(FlowBean.class);
+    
+    //6：设置输出路径
+    FileInputFormat.setInputPaths(job,new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑸本地测试      a：设置运行的环境变量             <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20190728001704387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="263">              在输入目录下数据文件已经准备好。               <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190728001720271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="428">       b：效果（具体结果自己可以校验一下）             <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190728001818909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301">             <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728001908764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="387">    </li></p>
+<h1 id="二：MapTask-工作机制"><a href="#二：MapTask-工作机制" class="headerlink" title="二：MapTask  工作机制"></a>二：MapTask  工作机制</h1><ol>
+<li> 简介         maptask 的并行度决定 map 阶段的任务处理并发度，进而影响到整个 job 的处理速度。 一个 job 的 map 阶段 MapTask 并行度（个数），由客户端提交 job 时的切片个数决定1.  MapTask 并行度决定机制         <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019072808544236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528">     <h1 id="三：CombineTextInputFormat-切片机制"><a href="#三：CombineTextInputFormat-切片机制" class="headerlink" title="三：CombineTextInputFormat 切片机制"></a>三：CombineTextInputFormat 切片机制</h1></li>
+<li>关于大量小文件的优化策略       <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190728101550887.png" width="598">1. 优化策略        <img alt="" class="has" height="296" src="https://img-blog.csdnimg.cn/20190728101655451.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="535">1. 案例之大量小文件的切片优化   ⑴现在我们就使用之前的WordCount案例来测试，我们在输入路径下放入多个很小的文件，来使用WordCount       去计算，我们看看默认的切片机制，以及创建了几个maptask？        <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190728103453328.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604">       看运行结果和日志：       <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190728103622869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="674">      通过上面的日志可以发现，6个很小的文件在计算的时候却分为6个切片，开了6个maptask，肯定是      不太好的，处理效率极其低下，那么我们如何将其合为一个切片呢？    ⑵解决方案，在 WordcountDriver 中增加如下代码         <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20190728105228277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">         效果（可以发现只分了一个切片，只开了一个maptask）：         <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019072810530220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">          <h1 id="四：Partition-分区"><a href="#四：Partition-分区" class="headerlink" title="四：Partition 分区"></a>四：Partition 分区</h1></li>
+<li>要求将统计结果按照条件输出到不同文件中（分区）。比如：将统计结果按照手机归属地不同省份输出到不同文件中（分区）。1. 默认分区     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/2019072811064097.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">1. 自定义 Partitioner 分区   <img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190728131935896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="442">1.  在 job 驱动中，设置自定义 partitioner   <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20190728132941914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">   注意：   <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20190728133023471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="515">1.   运行效果   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20190728133157912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="375">         如下：第一个分区都是136的，后面都是根据不同手机号在不同的分区。   <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190728133232505.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="485"><h1 id="五：WritableComparable-排序"><a href="#五：WritableComparable-排序" class="headerlink" title="五：WritableComparable 排序"></a>五：WritableComparable 排序</h1></li>
+<li>简介        排序是 MapReduce 框架中最重要的操作之一。Map Task 和 Reduce Task 均会对数据（按照 key）进行排序。 该操作属于 Hadoop 的默认行为。任何应用程序中的数据均会被排序，而不管逻辑上是否需要。默认排序是按照字 典顺序排序，且实现该排序的方法是快速排序。        对于 Map Task，它会将处理的结果暂时放到一个缓冲区中，当缓冲区使用率达到一定阈值后，再对缓冲区中的 数据进行一次排序，并将这些有序数据写到磁盘上，而当数据处理完毕后，它会对磁盘上所有文件进行一次合并， 以将这些文件合并成一个大的有序文件。        对于 Reduce Task，它从每个 Map Task 上远程拷贝相应的数据文件，如果文件大小超过一定阈值，则放到磁盘上， 否则放到内存中。如果磁盘上文件数目达到一定阈值，则进行一次合并以生成一个更大文件；如果内存中文件大小或者 数目超过一定阈值，则进行一次合并后将数据写到磁盘上。当所有数据拷贝完毕后，Reduce Task 统一对内存和磁盘上 的所有数据进行一次合并。1.  排序的分类      ⑴部分排序                 MapReduce 根据输入记录的键对数据集排序。保证输出的每个文件内部排序。      ⑵全排序                 <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190728144810792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="524">       ⑶辅助排序：（GroupingComparator 分组）                <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/2019072814493740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="517">       ⑷二次排序                在自定义排序过程中，如果 compareTo 中的判断条件为两个即为二次排序。       ⑸自定义排序 WritableComparable            bean 对象实现 WritableComparable 接口重写 compareTo 方法，就可以实现排序 <li>案例之手机流量按总流量进行倒序排序       ⑴数据准备               <img alt="" class="has" height="313" src="https://img-blog.csdnimg.cn/20190728154515743.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="415">       ⑵自定义Bean对象实现WritableComparable接口，重写 compareTo 方法 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;<br>import org.apache.hadoop.io.WritableComparable;</p>
+<p>public class FlowSortBean implements WritableComparable&lt;FlowSortBean&gt;&#123;</p>
+<pre><code>/**上行流量**/
+private long upFlow;
+/**下行流量**/
+private long downFlow;
+/**总流量**/
+private long sumFlow;
+/**
+ * 必须要有无参构造方法
+ * 反序列化时，需要反射调用空参构造函数，所以必须有空参构造
+ */
+public FlowSortBean() &#123;
+    super();
+&#125;
+
+public void setFlowSortBean(long upFlow, long downFlow) &#123;
+    this.upFlow = upFlow;
+    this.downFlow = downFlow;
+    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+&#125;
+
+public FlowSortBean(long upFlow, long downFlow) &#123;
+    this.upFlow = upFlow;
+    this.downFlow = downFlow;
+    this.sumFlow = upFlow+downFlow;//总流量等于上行流量加上下行流量
+&#125;
+
+/***
+ * 这个是序列化方法:这个方法其实就是mapper阶段向Reduce阶段写数据的过程
+ */
+@Override
+public void write(DataOutput out) throws IOException &#123;
+    //按照顺序依次将数据写入
+    out.writeLong(upFlow);
+    out.writeLong(downFlow);
+    out.writeLong(sumFlow);
+&#125;
+
+/**
+ * 这个是反序列化方法
+ */
+@Override
+public void readFields(DataInput in) throws IOException &#123;
+    //这个反序列化顺序要和上面序列化顺序保持一致
+    this.upFlow = in.readLong();
+    this.downFlow = in.readLong();
+    this.sumFlow = in.readLong();
+&#125;
+
+@Override
+public String toString() &#123;
+    return upFlow + &quot;\t&quot; + downFlow + &quot;\t&quot; + sumFlow;//可用”\t”分开，方便后续用
+&#125;
+
+public long getUpFlow() &#123;
+    return upFlow;
+&#125;
+
+public void setUpFlow(long upFlow) &#123;
+    this.upFlow = upFlow;
+&#125;
+
+public long getDownFlow() &#123;
+    return downFlow;
+&#125;
+
+public void setDownFlow(long downFlow) &#123;
+    this.downFlow = downFlow;
+&#125;
+
+public long getSumFlow() &#123;
+    return sumFlow;
+&#125;
+
+public void setSumFlow(long sumFlow) &#123;
+    this.sumFlow = sumFlow;
+&#125;
+
+/**
+ * 按照总流量的倒序排序
+ */
+@Override
+public int compareTo(FlowSortBean o) &#123;
+    return (int) (this.sumFlow-o.getSumFlow());
+&#125;
+</code></pre>
+<p>}<br></code></pre>   ⑶自定义Mapper类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>我们需要将排序的参数作为KEY</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class FlowSortMapper extends Mapper&lt;LongWritable,Text,FlowSortBean,Text&gt;&#123;</p>
+<p>  FlowSortBean k = new FlowSortBean();<br>  Text v = new Text();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：获取一行数据
+  String line = value.toString();
+  //2:切割数据
+  String[] fields = line.split(&quot;\t&quot;);
+  //3:封装对象
+  long upFlow = Long.parseLong(fields[1]);//上行流量
+  long downFlow = Long.parseLong(fields[2]);//下行流量
+  
+  k.setFlowSortBean(upFlow, downFlow);
+  v.set(fields[0]);
+  
+  //4：将数据写出
+  context.write(k, v);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   ⑷自定义Reducer类        <img alt="" class="has" height="259" src="https://img-blog.csdnimg.cn/2019072816005613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="429">    ⑸自定义Driver类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.flowsort;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FlowSortDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    //1:获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar包路径
+    job.setJarByClass(FlowSortDriver.class);
+    
+    //3:设置自定义的mapper和Reducer类
+    job.setMapperClass(FlowSortMapper.class);
+    job.setReducerClass(FlowSortReducer.class);
+    
+    //4:设置mapper输出的k,v类型
+    job.setMapOutputKeyClass(FlowSortBean.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5:设置reducer的输出类型
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(FlowSortBean.class);
+    
+    //6：设置输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job,new Path(args[1]));
+    
+    //7:提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   ⑹运行效果         <img alt="" class="has" height="235" src="https://img-blog.csdnimg.cn/20190728160205523.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="460">        <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728160235175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488"> </li>1.  在上面排序的基础上，将不同省份的手机号输出到不同的文件中，并且内部排序    ⑴增加分区类           <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190728162325650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377">             ⑵在Driver中引入自定义的分区          <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20190728162411687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="361">   ⑶效果：         <img alt="" class="has" height="209" src="https://img-blog.csdnimg.cn/20190728162438778.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407">        里面的每个文件内容都排了序：        <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20190728162529395.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="538"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/MapReduce%E4%B9%8BReduce%20join%E4%BB%A5%E5%8F%8Amap%20join%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            MapReduce之Reduce join以及map join分布式缓存
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">MapReduce实现寻找共同好友</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

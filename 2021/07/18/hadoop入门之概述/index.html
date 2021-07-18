@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>归档: 2021 |  爱上口袋的天空</title>
+      <title>hadoop入门之概述 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -42,262 +42,207 @@
       
     <main class="content on">
       <section class="outer">
+  <article
+  id="post-hadoop入门之概述"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  hadoop入门之概述
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.037Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
   
-  <ul class="ads">
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_1.jpg" width="300" alt="云服务器限时秒杀">
-            </a>
-        </li>
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png" width="300" alt="vultr优惠vps">
-            </a>
-        </li>
-    
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">914</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">3 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: hadoop入门之概述<br>categories:</p>
+<ul>
+<li>BigData</li>
 </ul>
-  
-  
-  <article class="articles">
-    
-    
-    <h1 class="page-type-title">2021</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2021" class="archive-year">2021</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.243Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >MapReduce知识点学习</a> 
-</h2>
+<p>—# 一：什么是Hadoop?</p>
+<ol>
+<li>Hadoop 是一个由 Apache 基金会所开发的分布式系统基础架构1. 主要解决，海量数据的存储和海量数据的分析计算问题。1. 广义上来说，HADOOP 通常是指一个更广泛的概念——HADOOP 生态圈         1. Hadoop 三大发行版本: Apache、Cloudera、Hortonworks。  a:Apache 版本最原始（最基础）的版本，对于入门学习最好。  b:Cloudera 在大型互联网企业中用的较多  c:Hortonworks 文档较好。<h1 id="二：Hadoop-的优势"><a href="#二：Hadoop-的优势" class="headerlink" title="二：Hadoop 的优势"></a>二：Hadoop 的优势</h1></li>
+<li>高可靠性      因为 Hadoop 假设计算元素和存储会出现故障，因为它维护多个工作数据副本，在出现故障时可以对失败的节点重新分布处理1. 高扩展性      在集群间分配任务数据，可方便的扩展数以千计的节点1.  高效性       在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度1.  高容错性       自动保存多份副本数据，并且能够自动将失败的任务重新分配    <h1 id="三：Hadoop-组成"><a href="#三：Hadoop-组成" class="headerlink" title="三：Hadoop  组成"></a>三：Hadoop  组成</h1></li>
+<li> Hadoop HDFS      一个高可靠、高吞吐量的分布式文件系统。1. Hadoop MapReduce      一个分布式的离线并行计算框架1. Hadoop YARN     作业调度与集群资源管理的框架。1. Hadoop Common     支持其他模块的工具模块（Configuration、RPC、序列化机制、日志 操作）。     <h1 id="四：HDFS-架构-概述"><a href="#四：HDFS-架构-概述" class="headerlink" title="四：HDFS  架构 概述"></a>四：HDFS  架构 概述</h1></li>
+<li>NameNode（nn）     存储文件的元数据，如文件名，文件目录结构，文件属性（生成时间、副本数、文件权限），以及每个文件的块列表和块所在的DataNode等。1. DataNode(dn)     在本地文件系统存储文件块数据，以及块数据的校验和。1. Secondary NameNode(2nn)      用来监控HDFS状态的辅助后台程序，每隔一段时间获取HDFS元数据的快照     <h1 id="五：YARN-Yet-Another-Resource-Negotiator-架构"><a href="#五：YARN-Yet-Another-Resource-Negotiator-架构" class="headerlink" title="五：YARN(Yet Another Resource Negotiator)  架构"></a>五：YARN(Yet Another Resource Negotiator)  架构</h1></li>
+<li>ResourceManager(rm)      处理客户端请求、启动/监控 ApplicationMaster、监控 NodeManager、资源分配与调度1. NodeManager(nm)      单个节点上的资源管理、处理来自 ResourceManager 的命令、处理来自 ApplicationMaster 的命令。 它会定时地向RM汇报本节点上的资源使用情况和各个Container的运行状态；同时会接收并处理来自AM 的Container 启动/停止等请求。1. ApplicationMaster      数据切分、为应用程序申请资源，并分配给内部任务、任务监控与容错。 用户提交的应用程序均包含一个AM，负责应用的监控，跟踪应用执行状态，重启失败任务等。ApplicationMaster 是应用框架，它负责向ResourceManager协调资源，并且与NodeManager协同工作完成Task的执行和监控。1. Container      对任务运行环境的抽象，封装了 CPU、内存等多维资源以及环境变量、启动命令等任务运行相关的信息 。 Container是YARN中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等，当AM向RM 申请资源时，RM为AM返回的资源便是用Container 表示的。 YARN会为每个任务分配一个Container且该任务只能 使用该Container中描述的资源。1. 简介（detail）     YARN（Yet Another Resource Negotiator）是一个<strong>通用</strong>的资源管理平台，可为各类计算框架提供资源的管理和调度。 其核心出发点是为了分离资源管理与作业调度/监控，实现分离的做法是拥有一个全局的资源管理器。以及每个应用程序 对应一个的应用管理器（ApplicationMaster，AM）。1. 架构如下：     <img alt="" class="has" height="408" src="https://img-blog.csdnimg.cn/20190630220652270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642">   </li>
+</ol>
  
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.237Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/"
-    >MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.227Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/"
-    >MapReduce之入门概述以及WordCount 案例</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8BShuffle%E6%9C%BA%E5%88%B6%E4%BB%A5%E5%8F%8A%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%20InputFormat%EF%BC%89%EF%BC%8COutputFormat%20%E6%A1%88%E4%BE%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.219Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8BShuffle%E6%9C%BA%E5%88%B6%E4%BB%A5%E5%8F%8A%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%20InputFormat%EF%BC%89%EF%BC%8COutputFormat%20%E6%A1%88%E4%BE%8B/"
-    >MapReduce之Shuffle机制以及小文件处理案例（自定义 InputFormat），OutputFormat 案例</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8BReduce%20join%E4%BB%A5%E5%8F%8Amap%20join%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.209Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8BReduce%20join%E4%BB%A5%E5%8F%8Amap%20join%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/"
-    >MapReduce之Reduce join以及map join分布式缓存</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.199Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/"
-    >MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.192Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/"
-    >MapReduce实现寻找共同好友</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.183Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/"
-    >MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.176Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
-    >Hive知识点入门学习一</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.169Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/"
-    >Hive知识点入门学习五</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/archives/2021/page/2/">2</a><a class="page-number" href="/archives/2021/page/3/">3</a><a class="page-number" href="/archives/2021/page/4/">4</a><a class="extend next" rel="next" href="/archives/2021/page/2/">下一页</a>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Hadoop之HDFS文件系统
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Flume知识点入门学习一</div>
+      </a>
+    
   </nav>
-  
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -440,6 +385,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link

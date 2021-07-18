@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>MapReduce之Reduce join以及map join分布式缓存 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-MapReduce之Reduce join以及map join分布式缓存"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  MapReduce之Reduce join以及map join分布式缓存
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/MapReduce%E4%B9%8BReduce%20join%E4%BB%A5%E5%8F%8Amap%20join%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.209Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">10 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: MapReduce之Reduce join以及map join分布式缓存<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Reduce join </p>
+<ol>
+<li>简介：       ⑴原理：               Map 端的主要工作：                        为来自不同表(文件)的 key/value 对打标签以区别不同来源的记录然后用连接字段作为 key，                   其余部分和新加的标志作为 value，最后进行输出。                Reduce 端的主要工作：                        在 reduce 端以连接字段作为 key 的分组已经完成，我们只需要在每一个分组当中将那些来                   源于不同文件的记录(在 map 阶段已经打标志)分开，最后进行合并就 ok 了。         ⑵缺点：                这种方式的缺点很明显就是会造成 map和 reduce 端也就是 shuffle 阶段出现大量的数据传输，效率很低。   1.  案例：reduce 端表合并（数据倾斜）         ⑴需求：               订单数据表 t_order，在order.txt中：                     <img alt="" class="has" height="156" src="https://img-blog.csdnimg.cn/20190805220657652.png" width="435">                商品信息表 t_product，在t_product.txt文件中。                    <img alt="" class="has" height="119" src="https://img-blog.csdnimg.cn/20190805210117522.png" width="247">                将商品信息表中数据根据商品 pid 合并到订单数据表中。 最终数据如下：                 <img alt="" class="has" height="128" src="https://img-blog.csdnimg.cn/20190806205404170.png" width="254"> <li>代码实现     ⑴数据准备             <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190806205500385.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="311"><img alt="" class="has" height="97" src="https://img-blog.csdnimg.cn/20190806205522863.png" width="368">      ⑵思路分析：             a：首先订单表和产品表是多对一的关系，因为每个pid在产品表中是唯一的，而在订单表中可能很多个订单都包含                   这个产品。             b：我们需要定义一个bean对象，如下：                     <img alt="" class="has" height="237" src="https://img-blog.csdnimg.cn/20190806205902974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="314">             c：我们以pId作为Mapper阶段输出的key，其它内容为value                   mapper中整合后的数据如下：                   <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190806210343656.png" width="227">            d：在ruducer阶段，我们以key（pId）作为条件，一个pId在产品表中只有一条数据，那么就好办了，直接查出产品                  表中对应的名称，将order表中的名称填充上即可输出。      ⑶TableBean对象代码如下：             <pre class="has"><code class="language-java">package com.kgf.mapreduce.reducerJoin;</li>
+</ol>
+<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.Writable;</p>
+<p>/***</p>
+<ul>
+<li><p>定义实体对象</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class TableBean implements Writable &#123;</p>
+<p>  /<strong>订单ID</strong>/<br>  private String orderId;<br>  /<strong>产品ID</strong>/<br>  private String pId;<br>  /<strong>产品数量</strong>/<br>  private int amount;<br>  /<strong>产品名称</strong>/<br>  private String pName;<br>  /<strong>表类型：0-订单表，1-产品表</strong>/<br>  private String tableType;</p>
+<p>  public TableBean(String orderId, String pId, int amount, String pName, String tableType) &#123;</p>
+<pre><code>  super();
+  this.orderId = orderId;
+  this.pId = pId;
+  this.amount = amount;
+  this.pName = pName;
+  this.tableType = tableType;
+</code></pre>
+<p>  }</p>
+<p>  public TableBean() {</p>
+<pre><code>  super();
+</code></pre>
+<p>  }<br>  /***</p>
+<ul>
+<li>反序列化方法</li>
+<li>/<br>@Override<br>public void readFields(DataInput di) throws IOException {<br>  this.orderId = di.readUTF();<br>  this.pId = di.readUTF();<br>  this.amount = di.readInt();<br>  this.pName = di.readUTF();<br>  this.tableType = di.readUTF();<br>}<br>/***</li>
+<li>序列化操作方法</li>
+<li>/<br>@Override<br>public void write(DataOutput dot) throws IOException {<br>  dot.writeUTF(orderId);<br>  dot.writeUTF(pId);<br>  dot.writeInt(amount);<br>  dot.writeUTF(pName);<br>  dot.writeUTF(tableType);<br>}</li>
+</ul>
+<p>  @Override<br>  public String toString() {</p>
+<pre><code>  return orderId+&quot;\t&quot;+ pName + &quot;\t&quot;+amount;
+</code></pre>
+<p>  }</p>
+<p>  public String getOrderId() {</p>
+<pre><code>  return orderId;
+</code></pre>
+<p>  }</p>
+<p>  public void setOrderId(String orderId) {</p>
+<pre><code>  this.orderId = orderId;
+</code></pre>
+<p>  }</p>
+<p>  public String getpId() {</p>
+<pre><code>  return pId;
+</code></pre>
+<p>  }</p>
+<p>  public void setpId(String pId) {</p>
+<pre><code>  this.pId = pId;
+</code></pre>
+<p>  }</p>
+<p>  public int getAmount() {</p>
+<pre><code>  return amount;
+</code></pre>
+<p>  }</p>
+<p>  public void setAmount(int amount) {</p>
+<pre><code>  this.amount = amount;
+</code></pre>
+<p>  }</p>
+<p>  public String getpName() {</p>
+<pre><code>  return pName;
+</code></pre>
+<p>  }</p>
+<p>  public void setpName(String pName) {</p>
+<pre><code>  this.pName = pName;
+</code></pre>
+<p>  }</p>
+<p>  public String getTableType() {</p>
+<pre><code>  return tableType;
+</code></pre>
+<p>  }</p>
+<p>  public void setTableType(String tableType) {</p>
+<pre><code>  this.tableType = tableType;
+</code></pre>
+<p>  }<br>}<br></code></pre> ⑷TableMapper类代码： <pre class="has"><code class="language-java">package com.kgf.mapreduce.reducerJoin;</p>
+</li>
+</ul>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import org.apache.hadoop.mapreduce.lib.input.FileSplit;</p>
+<p>/***</p>
+<ul>
+<li><p>   创建mapper类：主要功能如下</p>
+</li>
+<li><p>   a：获取读取数据来自的标名称</p>
+</li>
+<li><p>   b：对每一行数据进行切割，将我们需要的数据筛选出来，并且标记来自的文件表</p>
+</li>
+<li><p>   c：最后将数据写出到reducer</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class TableMapper extends Mapper&lt;LongWritable, Text, Text, TableBean&gt; &#123;</p>
+<p>  TableBean v = new TableBean();</p>
+<p>  Text k = new Text();</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value, Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：获取读取文件的名称
+  FileSplit splitFile = (FileSplit) context.getInputSplit();
+  String fileName = splitFile.getPath().getName();
+  //2：获取一行数据
+  String line = value.toString();
+  //3：判断表文件，对数据进行切割
+  String[] files = line.split(&quot;\t&quot;);
+  if(fileName.startsWith(&quot;order&quot;)) &#123;
+      //订单表
+      v.setOrderId(files[0]);
+      v.setpId(files[1]);
+      v.setAmount(Integer.parseInt(files[2]));
+      v.setpName(&quot;&quot;);
+      v.setTableType(&quot;0&quot;);
+      k.set(files[1]);
+  &#125;else &#123;
+      //产品表
+      v.setOrderId(&quot;&quot;);
+      v.setpId(files[0]);
+      v.setAmount(0);
+      v.setpName(files[1]);
+      v.setTableType(&quot;1&quot;);
+      k.set(files[0]);
+  &#125;
+  //4:写出数据
+  context.write(k,v);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre> ⑸TableReducer类代码： <pre class="has"><code class="language-java">package com.kgf.mapreduce.reducerJoin;</p>
+<p>import java.io.IOException;<br>import java.lang.reflect.InvocationTargetException;<br>import java.util.ArrayList;<br>import java.util.List;</p>
+<p>import org.apache.commons.beanutils.BeanUtils;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;<br>/***</p>
+<ul>
+<li><pre><code>创建TableReducer类：
+</code></pre>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class TableReducer extends Reducer&lt;Text, TableBean, TableBean, NullWritable&gt; {</p>
+<p>  @Override<br>  protected void reduce(Text key, Iterable&lt;TableBean&gt; values,Context context) </p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //1：循环所有的values,
+  List&amp;lt;TableBean&amp;gt; tbList = new ArrayList&amp;lt;TableBean&amp;gt;();//用来存放订单表数据
+  TableBean tBean = new TableBean();//存放产品表数据
+  for (TableBean val : values) &#123;
+      //2：判断表类型
+      if(&quot;0&quot;.equals(val.getTableType())) &#123;//订单表
+          try &#123;
+              //3：创建一个TableBean对象
+              TableBean tb = new TableBean();
+              //4：将val拷贝到tb中
+              BeanUtils.copyProperties(tb, val);
+              tbList.add(tb);//注意：如果我们不进行拷贝会出问题，都是最后一个对象的值，前面的对象数据会被覆盖
+          &#125; catch (IllegalAccessException e) &#123;
+              e.printStackTrace();
+          &#125; catch (InvocationTargetException e) &#123;
+              e.printStackTrace();
+          &#125;
+      &#125;else &#123;//产品表
+          try &#123;
+              BeanUtils.copyProperties(tBean, val);
+          &#125; catch (IllegalAccessException e) &#123;
+              e.printStackTrace();
+          &#125; catch (InvocationTargetException e) &#123;
+              e.printStackTrace();
+          &#125;
+      &#125;
+  &#125;
+  //拼接表
+  for (TableBean tableBean : tbList) &#123;
+      tableBean.setpName(tBean.getpName());
+      context.write(tableBean, NullWritable.get());
+  &#125;
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre> ⑹TableDriver类代码 <pre class="has"><code class="language-java">package com.kgf.mapreduce.reducerJoin;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class TableDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
+    //1：获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    //2:设置jar对象
+    job.setJarByClass(TableDriver.class);
+    //3:关联mapper和reducer
+    job.setMapperClass(TableMapper.class);
+    job.setReducerClass(TableReducer.class);
+    //4:设置mapper输出参数
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(TableBean.class);
+    //5:设置最终输出参数
+    job.setOutputKeyClass(TableBean.class);
+    job.setOutputValueClass(NullWritable.class);
+    //6：设置数据路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    //7:提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li>1.  缺点       上面这种方式中，合并的操作是在 reduce 阶段完成，reduce 端的处理压力太大，map节点的运算负载则很低，资源利用率不高，且在 reduce 阶段极易产生数据倾斜 。 <li>  解决方案：map 端实现数据合并 之Map Join    ⑴ 使用场景：           Map Join适用于一张表十分小、一张表很大的场景    。  ⑵优点：         在Map端缓存多张表，提前处理业务逻辑，这样增加Map端业务，减少Reduce端数据的压力，尽可能的减少数据倾斜。  ⑶具体解决办法：        采用DistributedCache。        a:<strong>在Mapper的setup阶段，将文件读取到缓存集合中。        b:在驱动函数中加载缓存</strong>。  ⑷DistributedCacheDriver类代码： <pre class="has"><code class="language-java">package com.kgf.mapreduce.mapperJoin;</p>
+<p>import java.io.IOException;<br>import java.net.URI;<br>import java.net.URISyntaxException;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class DistributedCacheDriver &#123;</p>
+<pre><code>public static void main(String[] args) throws IOException, URISyntaxException, ClassNotFoundException, InterruptedException &#123;
+    //1：获取job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    //2:设置jar对象
+    job.setJarByClass(DistributedCacheDriver.class);
+    //3:关联mapper
+    job.setMapperClass(DistributedCacheMapper.class);
+    //4:设置最终输出参数
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(NullWritable.class);
+    //5：设置数据路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    //6：加载缓存数据
+    job.addCacheFile(new URI(&quot;file:///e:/t_product.txt&quot;));
+    
+    //7：map端join的逻辑不需要reducer阶段，设置reducetask的数量为0
+    job.setNumReduceTasks(0);
+    
+    //8:提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑸DistributedCacheMapper类： <pre class="has"><code class="language-java">package com.kgf.mapreduce.mapperJoin;</p>
+<p>import java.io.BufferedReader;<br>import java.io.File;<br>import java.io.FileInputStream;<br>import java.io.IOException;<br>import java.io.InputStreamReader;<br>import java.net.URI;<br>import java.util.HashMap;<br>import java.util.Map;</p>
+<p>import org.apache.commons.lang3.StringUtils;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>public class DistributedCacheMapper extends Mapper&lt;LongWritable, Text, Text, NullWritable&gt; &#123;</p>
+<pre><code>Map&amp;lt;String, String&amp;gt; pdMap = new HashMap&amp;lt;String, String&amp;gt;();
+
+/***
+ * 这个属于初始化方法，只执行一些，这个我们用来加载缓存中文件数据
+ */
+@Override
+protected void setup(Mapper&amp;lt;LongWritable, Text, Text, NullWritable&amp;gt;.Context context)
+        throws IOException, InterruptedException &#123;
+    // 1：获取缓存文件
+    URI[] cacheFiles = context.getCacheFiles();
+    String path = cacheFiles[0].getPath().toString();
+    BufferedReader reader = new BufferedReader(
+            new InputStreamReader(new FileInputStream(path), &quot;UTF-8&quot;));
+    String line = null;
+    while(StringUtils.isNoneBlank(line=reader.readLine())) &#123;
+        //对一行进行切割
+        String[] fields = line.split(&quot;\t&quot;);
+        //数据缓存到集合中
+        pdMap.put(fields[0],fields[1]);
+    &#125;
+    //关闭流
+    reader.close();
+&#125;
+
+Text k = new Text();
+
+@Override
+protected void map(LongWritable key, Text value,
+        Mapper&amp;lt;LongWritable, Text, Text, NullWritable&amp;gt;.Context context)
+        throws IOException, InterruptedException &#123;
+    //1：读取一行
+    String line = value.toString();
+    //2：切割
+    String[] fields = line.split(&quot;\t&quot;);
+    //3：获取pId
+    String pid = fields[1];
+    //4：获取pid对应的名称
+    String pName = pdMap.get(pid);
+    //5：替换掉名称
+    line = fields[0]+&quot;\t&quot;+pName+&quot;\t&quot;+fields[2];
+    k.set(line);
+    context.write(k, NullWritable.get());
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑹这里我们不需要reducer类，注意：可以没有reducer,但是mapper必须有，效果如下：       <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190806231953323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600"> </li></p>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/MapReduce%E4%B9%8BReduce%20join%E4%BB%A5%E5%8F%8Amap%20join%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/MapReduce%E4%B9%8BShuffle%E6%9C%BA%E5%88%B6%E4%BB%A5%E5%8F%8A%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%20InputFormat%EF%BC%89%EF%BC%8COutputFormat%20%E6%A1%88%E4%BE%8B/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            MapReduce之Shuffle机制以及小文件处理案例（自定义 InputFormat），OutputFormat 案例
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

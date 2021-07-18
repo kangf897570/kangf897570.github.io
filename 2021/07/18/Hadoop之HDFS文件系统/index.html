@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>Hadoop之HDFS文件系统 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-Hadoop之HDFS文件系统"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  Hadoop之HDFS文件系统
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.053Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.2k</span>
         </span>
     </span>
 
@@ -79,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">4 分钟</span>
         </span>
     </span>
 </div>
@@ -94,19 +98,49 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: Hadoop之HDFS文件系统<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：HDFS概述</p>
+<ol>
+<li>HDFS产生的背景       随着数据量越来越大，在一个操作系统管辖的范围内存不下了，那么就分配到更多的操作系统 管理的磁盘中，但是不方便管理和维护，迫切需要一种系统来管理多台机器上的文件，这就是分布式 文件管理系统。HDFS只是分布式文件管理系统中的一种。1.  HDFS概念       HDFS它是一个文件系统，用于存储文件，通过目录树来定位文件，其次它是分布式的，由很多 服务器联合起来实现其功能，集群中的服务器有各自的角色。       HDFS的设计适合一次写入，多次读出的场景，且不支持文件的修改。适合用来做数据分析，并 不适合用来做网盘应用。1. HDFS的优缺点       优点：                a：高容错性                             ⑴数据自动保存多个副本。它通过增加副本的形式，提高容错性。                             ⑵某一个副本丢失以后，它可以自动恢复。                b：适合大数据处理                             ⑴数据规模：                                         能够处理数据规模达到GB,TB甚至PB级别的数据。                             ⑵文件规模：                                         能够处理百万规模以上的文件数量，数量相当之大。                c：流式数据访问                             ⑴一次写入，多次读取，不能修改，只能追加                             ⑵它能保证数据的一致性。                d：可构建在廉价的机器上，通过多副本机制，提高可靠性。       缺点：                a：不适合低延迟数据访问。比如毫秒级的存储数据，是做不到的。                b：无法高效的对大量小文件进行存储                              ⑴存储大量小文件的话，它会占用NameNode大量的内存来存储文件，目录                                  和块信息。这样是不可取的，因为NameNode的内存总是有限的。                              ⑵小文件存储的寻道时间会超过读取时间，它违反了HDFS的设计目标。                c：并发写入，文件随机修改                               ⑴一个文件只能有一个写，不允许多个线程同时写。                               ⑵仅支持数据append(追加)，不支持文件随机修改。              <h1 id="二：HDFS块大小"><a href="#二：HDFS块大小" class="headerlink" title="二：HDFS块大小"></a>二：HDFS块大小</h1></li>
+</ol>
+<p>        <img alt="" class="has" height="136" src="https://img-blog.csdnimg.cn/20190714220247623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="775">                    <img alt="" class="has" height="372" src="https://img-blog.csdnimg.cn/2019071422120926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="667">   </p>
+<h1 id="三：HDFS命令行操作"><a href="#三：HDFS命令行操作" class="headerlink" title="三：HDFS命令行操作"></a>三：HDFS命令行操作</h1><ol>
+<li>首先启动集群  a：集群的部署重新调整了一下       <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190717215248590.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="630">  b：在hadoop102上启动namenode,datanode以及secondarynamenode        <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190717215346270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="516">  c：在hadoop103上启动yarn        <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/2019071721551871.png" width="403">       OK集群启动完毕。1. 相关命令  <img alt="" class="has" height="380" src="https://img-blog.csdnimg.cn/20190717215855669.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="720">  <img alt="" class="has" height="352" src="https://img-blog.csdnimg.cn/20190717220258474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">         <h1 id="四：HDFS客户端环境准备"><a href="#四：HDFS客户端环境准备" class="headerlink" title="四：HDFS客户端环境准备"></a>四：HDFS客户端环境准备</h1></li>
+<li>通过Eclipse去连接hdfs，首先准备jar包  a：将hadoop-2.7.2.tar.gz解压到非中文目录       <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190717223355164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="350">  b：进入hadoop-2.7.2\share\hadoop文件夹，查找所有jar包，并且把jar都拷贝出来到新建的lib文件夹      <img alt="" class="has" height="341" src="https://img-blog.csdnimg.cn/20190717223948728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  c：新建一个source文件夹，将-source.jar结尾的jar挑出来，放到source文件夹中       <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190717224052282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">   d：再建立一个test文件夹，将-tests.jar结尾的jar挑出来，放到test文件夹中           <img alt="" class="has" height="281" src="https://img-blog.csdnimg.cn/20190718210547295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">      1. Eclipse环境准备   ⑴配置hadoop环境变量         <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190718212303557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="414">         1. 创建第一个java工程HdfsClientDemo1         <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190718212853542.png" width="374">    引入上面准备的jar包，除了test和source挑出的jar，其它的都引入。 ⑴将本地文件上传到hdfs上的第一种方式       <img alt="" class="has" height="325" src="https://img-blog.csdnimg.cn/20190718220301321.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">       注意：运行的时候我们需要配置环境变量，最后执行main方法       <img alt="" class="has" height="254" src="https://img-blog.csdnimg.cn/20190718220359443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="411">      效果：     <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190718220450436.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">     <img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/20190718220523822.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="473">  ⑵第二种方式，不需要配置环境变量，直接在代码中配置用户名，效果和上面一样       <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20190718221021277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">       1. HDFS文件上传   ⑴在项目的src根目录下引入hdfs-site.xml配置文件，默认会读取根目录下的这个文件        <img alt="" class="has" height="303" src="https://img-blog.csdnimg.cn/20190719221020921.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="700">        <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190719221208565.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="577">       效果：       <img alt="" class="has" height="254" src="https://img-blog.csdnimg.cn/20190719221310378.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">1. 同理，我们可以直接在代码里面配置，这个优先级最高，可覆盖配置文件中的配置  <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190719221451855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="540">  效果：  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190719221609756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570">1. HDFS文件下载  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20190719223003129.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567"> 效果：<img alt="" class="has" height="214" src="https://img-blog.csdnimg.cn/20190719223041958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="512">1. HDFS创建目录  <img alt="" class="has" height="212" src="https://img-blog.csdnimg.cn/20190719223816315.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="612"><img alt="" class="has" height="245" src="https://img-blog.csdnimg.cn/20190719223835240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="615">1. HDFS文件删除操作  <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190719225219938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571">1. HDFS上文件名称修改，第一个参数是原文件名，第二个是新的名称  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190719225736608.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="570"><li>HDFS文件详情的查看，主要是查看文件的名称，权限，长度，块信息   <pre class="has"><code class="language-java">public void readListFiles() throws IOException, InterruptedException, URISyntaxException &#123;<pre><code> //1：获取hadoop的文件系统
+ Configuration configuration = new Configuration();
+ //这里配置的是和core-site.xml文件中一样，主要是namenode的路径
+ FileSystem fs = FileSystem.get(new URI(&quot;hdfs://hadoop102:9000&quot;), configuration, &quot;kgf&quot;);
+ //2:在HDFS上修改文件名称
+ RemoteIterator&amp;lt;LocatedFileStatus&amp;gt; fileStatus = fs.listFiles(new Path(&quot;/&quot;),true);
+ while(fileStatus.hasNext()) &#123;
+     LocatedFileStatus file = fileStatus.next();
+     //文件名称
+     System.out.println(file.getPath().getName());
+     //文件大小
+     System.out.println(file.getLen());
+     //文件权限
+     System.out.println(file.getPermission());
+     //文件所属组
+     System.out.println(file.getGroup());
+     //获取文件块信息
+     BlockLocation[] blockLocations = file.getBlockLocations();
+     for (BlockLocation blockLocation : blockLocations) &#123;
+         //获取文件所属节点信息
+         String[] hosts = blockLocation.getHosts();
+         for (String host : hosts) &#123;
+             System.out.println(host);
+         &#125;
+     &#125;
+     System.out.println(&quot;====================================&quot;);
+ &#125;
+ //3:关闭资源
+ fs.close();
+</code></pre>
+ }</code></pre> 效果：<img alt="" class="has" height="455" src="https://img-blog.csdnimg.cn/20190719231824473.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="446"> </li>1. HDFS上文件和文件夹的判断  <img alt="" class="has" height="375" src="https://img-blog.csdnimg.cn/2019071923260996.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="636"></li>
+</ol>
  
       <!-- reward -->
       
@@ -159,7 +193,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +204,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/Hadoop%E4%B9%8B%E7%BC%96%E8%AF%91%E6%BA%90%E7%A0%81/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            Hadoop之编译源码
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">hadoop入门之概述</div>
+      </a>
     
   </nav>
 

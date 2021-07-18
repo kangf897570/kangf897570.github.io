@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>MapReduce实现寻找共同好友 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-MapReduce实现寻找共同好友"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  MapReduce实现寻找共同好友
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.192Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.1k</span>
         </span>
     </span>
 
@@ -79,34 +83,174 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">5 分钟</span>
         </span>
     </span>
 </div>
  
     </div>
       
-    <div class="tocbot"></div>
-
 
 
 
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+  <p>title: MapReduce实现寻找共同好友<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: MapReduce实现寻找共同好友<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 需求：给出A-O个人中每个人的好友列表，求出哪些人两两之间有共同好友，以及他们的共同好友都有谁。    注意：这些人好友都是单向的，可能A是B的好友，但是B不一定是A的好友，这种类似的微博的关注，               A关注B，但是B不一定关注了A。1. 原始文件如下：   <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190811145226975.png" width="289">  1. 要求输出的格式如下：  <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20190811145317894.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="328">1. 思路分析：    ⑴我们从上面可以现在我们知道A-O每个人拥有哪些好友，但是我们现在是要找出两两之间的人有哪些共同好友。那么        我们可以逆向思维，第一步找出哪些好友拥有A,哪些好友拥有B…..依次找出，结果如下：        <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190811145923175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="320">    ⑵通过得出上面的数据后，我们可以对后面的好友进行排序，避免重复，将 “拥有这名朋友的所有人”进行两两配对，并将配对后的         字符串当做键，“朋友”当做值输出，即输出&lt;人-人，共同朋友&gt;        <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190811150157279.png" width="206"> <li>代码实现，通过两次job运算  a：FriendMapper01         <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>public class FriendMapper01 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
+<pre><code>Text k  =new Text();
+Text v  =new Text();
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+@Override
+protected void map(LongWritable key, Text value,Context context)
+        throws IOException, InterruptedException &#123;
+    //1：获取一行数据
+    String line = value.toString();
+    //2：对一行数据进行切割
+    String[] fields = line.split(&quot;:&quot;);
+    String person = fields[0];
+    String[] friends = fields[1].split(&quot;,&quot;);
+    for (String friend : friends) &#123;
+        k.set(friend);
+        v.set(person);
+        context.write(k, v);
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre> b：FriendReducer       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class FriendReducer extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
+<pre><code>@Override
+protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
+        throws IOException, InterruptedException &#123;
+    
+    StringBuffer sb = new StringBuffer();
+    //1：获取哪些好友都有对应的人
+    for (Text text : values) &#123;
+        sb.append(text.toString()+&quot;,&quot;);
+    &#125;
+    sb.deleteCharAt(sb.length()-1);
+    context.write(key, new Text(sb.toString()));
+&#125;
+</code></pre>
+<p>}<br></code></pre> c：FriendDriver01       <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FriendDriver01 &#123;</p>
+<pre><code>public static void main(String[] args) throws Exception &#123;
+    //1：获取Job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar
+    job.setJarByClass(FriendDriver01.class);
+    
+    //3:关联Mapper和reducer
+    job.setMapperClass(FriendMapper01.class);
+    job.setReducerClass(FriendReducer.class);
+    
+    //4:设置mapper输出参数
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5：设置最终输出
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
+    
+    //6:设置文件输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre> d：FriengMapper02 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import java.util.Arrays;</p>
+<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>public class FriengMapper02 extends Mapper&lt;LongWritable, Text, Text, Text&gt;&#123;</p>
+<pre><code>@Override
+protected void map(LongWritable key, Text value,Context context)
+        throws IOException, InterruptedException &#123;
+    //1：获取一行
+    String line = value.toString();
+    //2：切割数据
+    String[] fileds = line.split(&quot;\t&quot;);
+    String friend = fileds[0];
+    String[] persons = fileds[1].split(&quot;,&quot;);
+    Arrays.sort(persons);//排序
+    for (int i = 0; i &amp;lt; persons.length; i++) &#123;
+        for (int j = i+1; j &amp;lt; persons.length; j++) &#123;
+            context.write(new Text(persons[i]+&quot;-&quot;+persons[j]),new Text(friend));
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre> e：FriendReducer2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import java.io.IOException;<br>import java.util.HashSet;</p>
+<p>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class FriendReducer2 extends Reducer&lt;Text, Text, Text, Text&gt; &#123;</p>
+<pre><code>@Override
+protected void reduce(Text key, Iterable&amp;lt;Text&amp;gt; values,Context context)
+        throws IOException, InterruptedException &#123;
+    
+    StringBuffer sb = new StringBuffer();
+    HashSet&amp;lt;String&amp;gt; set = new HashSet&amp;lt;String&amp;gt;();
+    
+    for (Text value : values) &#123;
+        String v = value.toString();
+        if(!set.contains(v)) &#123;
+            set.add(v);
+            sb.append(v).append(&quot;,&quot;);
+        &#125;
+    &#125;
+    sb.deleteCharAt(sb.length()-1);
+    context.write(key, new Text(sb.toString()));
+&#125;
+</code></pre>
+<p>}<br></code></pre> f：FriendDriver2 <pre class="has"><code class="language-java">package com.kgf.mapreduce.friend;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
+<p>public class FriendDriver2 &#123;</p>
+<pre><code>public static void main(String[] args) throws Exception &#123;
+    //1：获取Job对象
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf);
+    
+    //2:设置jar
+    job.setJarByClass(FriendDriver2.class);
+    
+    //3:关联Mapper和reducer
+    job.setMapperClass(FriengMapper02.class);
+    job.setReducerClass(FriendReducer2.class);
+    
+    //4:设置mapper输出参数
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(Text.class);
+    
+    //5：设置最终输出
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
+    
+    //6:设置文件输入输出路径
+    FileInputFormat.setInputPaths(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    //7：提交
+    boolean result = job.waitForCompletion(true);
+    System.exit(result?0:1);
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li></p>
  
       <!-- reward -->
       
@@ -159,7 +303,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/MapReduce%E5%AE%9E%E7%8E%B0%E5%AF%BB%E6%89%BE%E5%85%B1%E5%90%8C%E5%A5%BD%E5%8F%8B/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +314,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/MapReduce%E4%B9%8BHadoop%E5%BA%8F%E5%88%97%E5%8C%96,MapTask%20%C2%A0%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8CCombineTextInputFormat%20%E5%88%87%E7%89%87%E6%9C%BA%E5%88%B6%EF%BC%8CPartition%20%E5%88%86%E5%8C%BA%EF%BC%8CWritableComparable%20%E6%8E%92%E5%BA%8F/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            MapReduce之Hadoop序列化,MapTask  工作机制，CombineTextInputFormat 切片机制，Partition 分区，WritableComparable 排序
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/MapReduce%EF%BC%8CMapTask%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%8CCombiner%20%E5%90%88%E5%B9%B6%E4%BB%A5%E5%8F%8A%E4%BA%8C%E6%AC%A1%E6%8E%92%E5%BA%8FGroupingComparator/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">MapReduce，MapTask工作流程，Combiner 合并以及二次排序GroupingComparator</div>
+      </a>
     
   </nav>
 

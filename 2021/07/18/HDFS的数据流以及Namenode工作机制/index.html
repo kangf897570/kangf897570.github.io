@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>HDFS的数据流以及Namenode工作机制 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-HDFS的数据流以及Namenode工作机制"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  HDFS的数据流以及Namenode工作机制
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.129Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: HDFS的数据流以及Namenode工作机制<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：通过IO流操作HDFS</p>
+<ol>
+<li>HDFS文件上传      <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190720090731704.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547">     效果：     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190720090802700.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">1. HDFS文件下载  <img alt="" class="has" height="317" src="https://img-blog.csdnimg.cn/20190720093258845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="514">1. 定位文件读取       ⑴下面的文件总共有188.5M，它是分在两块Block存储的，我们如何分块读取呢      <img alt="" class="has" height="164" src="https://img-blog.csdnimg.cn/20190720094556179.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="629">      <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190720094627331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="313">   ⑵我们指定每次读取的文件大小即可，第一次读取128M，后面再读取60.5M就读取完整了       <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190720095202534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555">      效果：      <img alt="" class="has" height="108" src="https://img-blog.csdnimg.cn/20190720095233507.png" width="315">     下面我们再读取第二块：      <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720095709972.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">      效果：      <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/20190720095852842.png" width="512">     我们可以将第二块的文件通过cmd上命令内容追加到第一块文件上，验证是否正确      <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190720100126750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="617">      <img alt="" class="has" height="112" src="https://img-blog.csdnimg.cn/20190720100236590.png" width="632"><h1 id="二：HDFS写数据流程"><a href="#二：HDFS写数据流程" class="headerlink" title="二：HDFS写数据流程"></a>二：HDFS写数据流程</h1></li>
+<li>剖析文件写入   <img alt="" class="has" height="497" src="https://img-blog.csdnimg.cn/20190720125256764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1.  网络拓扑的概念  <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190720125829474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="518">  <img alt="" class="has" height="465" src="https://img-blog.csdnimg.cn/20190720130440345.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">1.  机架感知<img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20190720144503947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571"><img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20190720144709457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="519"><img alt="" class="has" height="90" src="https://img-blog.csdnimg.cn/20190720145500612.png" width="504">      <h1 id="三：HDFS读数据流程"><a href="#三：HDFS读数据流程" class="headerlink" title="三：HDFS读数据流程"></a>三：HDFS读数据流程</h1></li>
+</ol>
+<p>         <img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720145850721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
+<h1 id="四：NameNode工作机制"><a href="#四：NameNode工作机制" class="headerlink" title="四：NameNode工作机制"></a>四：NameNode工作机制</h1><ol>
+<li>如下图<img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720153511862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 详情如下  ⑴第一阶段：namenode启动             a：第一次启动 namenode 格式化后，创建 fsimage 和 edits 文件。如果不是第一次启                   动，直接加载编辑日志和镜像文件到内存。             b：当客户端对元数据进行增删改的请求的时候，namenode 记录操作日志，更新滚动日志                   namenode 在内存中对数据进行增删改查  ⑵第二阶段：Secondary NameNode 工作            a：Secondary NameNode 询问 namenode 是否需要 checkpoint。直接带回 namenode 是                  否检查结果            b：Secondary NameNode 请求执行 checkpoint           c：namenode 滚动正在写的 edits 日志。           d：将滚动前的编辑日志和镜像文件拷贝到 Secondary NameNode           e：Secondary NameNode 加载编辑日志和镜像文件到内存，并合并           f：生成新的镜像文件 fsimage.chkpoint           g：拷贝 fsimage.chkpoint 到 namenode，namenode 将 fsimage.chkpoint 重新命名成 fsimage1. namenode简介  ⑴namenode主要负责三个功能：          a：管理元数据          b：维护目录树          c：响应客户请求  ⑵详情如下          <img alt="" class="has" height="324" src="https://img-blog.csdnimg.cn/20190720160107465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">          <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20190720160248837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="608">         <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190720160406633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="697">            <h1 id="五：镜像文件和编辑日志文件"><a href="#五：镜像文件和编辑日志文件" class="headerlink" title="五：镜像文件和编辑日志文件"></a>五：镜像文件和编辑日志文件</h1></li>
+<li> 简介        namenode被格式化之后，将在/opt/module/hadoop-2.7.2/data/tmp/dfs/name/current目录中产生如下文件        <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/2019072016440785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">       <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190720165933192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="549">  ⑴Fsimage 文件：HDFS 文件系统元数据的一个永久性的检查点，其中包含 HDFS文件系统的所有目录和     文件 idnode 的序列化信息。 ⑵Edits 文件：存放 HDFS 文件系统的所有更新操作的路径，文件系统客户端执行     的所有写操作首先会被记录到 edits 文件中。 ⑶seen_txid 文件保存的是一个数字，就是最后一个 edits_的数字 ⑷每次次 Namenode 启动的时候都会将 fsimage 文件读入内存，并从 00001 开始     到 seen_txid 中记录的数字依次执行每个 edits 里面的更新操作，保证内存中的元数据信息    是最新的、同步的，可以看成 Namenode 启动的时候就将 fsimage 和 edits 文件进行了合    并。1. 使用oiv查看Fsimage文件  ⑴基本语法：        hdfs oiv -p 文件类型 -i 镜像文件 -o 转换后文件输出路径  ⑵案例：        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190720170724543.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">      将文件下载到本地格式化看一下：        <img alt="" class="has" height="439" src="https://img-blog.csdnimg.cn/20190720171144829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">1.  使用oev命令查看edits文件   ⑴基本语法         hdfs oev -p 文件类型 -i 编辑日志 -o 转换后文件输出路径           ⑵案例        <img alt="" class="has" height="336" src="https://img-blog.csdnimg.cn/20190720212156658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">         将文件下载到本地格式化看一下：        <img alt="" class="has" height="193" src="https://img-blog.csdnimg.cn/20190720212830715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="374">       发现这个日志中没有什么东西，那么我们上传一个文件，试试：       <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/20190720213618676.png" width="516">       <img alt="" class="has" height="58" src="https://img-blog.csdnimg.cn/20190720213718300.png" width="724">      查看xml内容：     <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720213854379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407"><h1 id="六：滚动编辑日志"><a href="#六：滚动编辑日志" class="headerlink" title="六：滚动编辑日志"></a>六：滚动编辑日志</h1></li>
+<li>简介       正常情况 HDFS 文件系统有更新操作时，就会滚动编辑日志。也可以用命令强制滚动编辑日志。1.  滚动编辑日志（前提必须启动集群）  命令：hdfs dfsadmin -rollEdits       <h1 id="七：chkpoint-检查-时间-参数"><a href="#七：chkpoint-检查-时间-参数" class="headerlink" title="七：chkpoint  检查 时间 参数"></a>七：chkpoint  检查 时间 参数</h1></li>
+<li>通常情况下，SecondaryNameNode 每隔一小时执行一次。配置是在hdfs-site.xml中添加<img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190720222713915.png" width="558">         1. 一分钟检查一次操作次数，当操作次数达到 1 百万时，SecondaryNameNode 执行一次。<img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190720222746874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488">     <h1 id="八：SecondaryNameNode-目录结构"><a href="#八：SecondaryNameNode-目录结构" class="headerlink" title="八：SecondaryNameNode  目录结构"></a>八：SecondaryNameNode  目录结构</h1></li>
+<li> 进入SecondaryNameNode服务器的目录，/opt/module/hadoop-2.7.2/data/tmp/dfs/namesecondary/current  <img alt="" class="has" height="361" src="https://img-blog.csdnimg.cn/20190721102534154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="523">  SecondaryNameNode 的 namesecondary/current 目录和主 namenode 的 current 目录的布局相同。 好 处 ： 在 主 namenode 发 生 故 障 时 （ 假 设 没 有 及 时 备 份 数 据 ） ， 可 以 从SecondaryNameNode 恢复数据。     <h1 id="九：NameNode故障处理方法"><a href="#九：NameNode故障处理方法" class="headerlink" title="九：NameNode故障处理方法"></a>九：NameNode故障处理方法</h1></li>
+<li>Namenode 故障后，可以采用如下两种方法恢复数据。   方法一：将 SecondaryNameNode 中数据拷贝到 namenode 存储数据的目录；   方 法 二 ：使 用 -importCheckpoint 选 项 启 动 namenode 守 护 进 程 ， 从 而 将SecondaryNameNode 中                     数据拷贝到 namenode 目录中。1.  案例一：使用手动拷贝 SecondaryNameNode  数据解决问题   ⑴kill -9 namenode 进程           <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190721104854927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">   ⑵删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）            <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190721105154463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">   ⑶拷贝104服务器 SecondaryNameNode 中数据到102服务器的原 namenode 存储数据目录        <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/20190721110541295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520">    ⑷单独重新启动 namenode，这个我们最好使用单节点启动         <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190721110910948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">     ⑸效果，发现数据回来了         <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/20190721111541274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="494">1.   案例二：采用 importCheckpoint  命令贝 拷贝 SecondaryNameNode   ⑴修改 hdfs-site.xml 中的配置         <img alt="" class="has" height="342" src="https://img-blog.csdnimg.cn/20190721115756609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="676">  ⑵kill -9 namenode 进程          <img alt="" class="has" height="225" src="https://img-blog.csdnimg.cn/20190721120200675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="390">  ⑶删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190721120404664.png" width="469">  ⑷ 如 果 SecondaryNameNode 不 和 Namenode 在 一 个 主 机 节 点 上 ， 需 要 将SecondaryNameNode      存储数据的目录拷贝到 Namenode 存储数据的平级目录，并删除in_use.lock 文件      a：拷贝到下面这个目录下：           <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190721120620362.png" width="541">     b：拷贝文件，并删除lock文件           <img alt="" class="has" height="118" src="https://img-blog.csdnimg.cn/20190721120926592.png" width="701">           <img alt="" class="has" height="252" src="https://img-blog.csdnimg.cn/20190721121040805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">   ⑸导入检查点数据（等待一会 ctrl+c 结束掉，时间有点长，需要等一下），到指定的目录下：       <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190721140843982.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="490">             查看namenode的目录：发现数据已经同步回来了：      <img alt="" class="has" height="175" src="https://img-blog.csdnimg.cn/20190721141014184.png" width="589">  ⑹启动 namenode      <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190721141117690.png" width="634">  ⑺效果：数据回来了      <img alt="" class="has" height="385" src="https://img-blog.csdnimg.cn/20190721141149205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561">     <h1 id="十：集群安全-模式-操作"><a href="#十：集群安全-模式-操作" class="headerlink" title="十：集群安全 模式 操作"></a>十：集群安全 模式 操作</h1></li>
+<li> 简介      Namenode 启动时，首先将映像文件（fsimage）载入内存，并执行编辑日志（edits）中 的各项操作。一旦在内存中成功建立文件系统元数据的映像，则创建一个新的 fsimage 文件 和一个空的编辑日志。此时，namenode 开始监听 datanode 请求。但是此刻，namenode 运行 在安全模式，即 namenode 的文件系统对于客户端来说是只读的。系统中的数据块的位置并不是 由 namenode 维护的，而是以块列表的形式存储在datanode 中。在系统的正常操作期间， namenode 会在内存中保留所有块位置的映射信息。在安全模式下，各个 datanode 会向 namenode 发送最新的块列表信息，namenode 了解到足够多的块位置信息之后，即可高效运行文件系统。          如果满足“最小副本条件”，namenode 会在 30 秒钟之后就退出安全模式。所谓的最小副 本 条 件 指 的 是 在 整 个 文 件 系 统 中 99.9% 的 块 满 足 最 小 副 本 级 别 （ 默 认 值 ： dfs.replication.min=1）。在启动一个刚刚格式化的 HDFS 集群时，因为系统中还没有任何块， 所以 namenode 不会进入安全模式。           总之一句话，就是需要等待namenode和datanode完全建立链接之后，才会退出安全模式， 我们才能对集群进行操作。           集群处于安全模式，不能执行重要操作（写操作）。集群启动完成后，自动退出安全模式。1. 基本语法 （1）bin/hdfs dfsadmin -safemode get （功能描述：查看安全模式状态） （2）bin/hdfs dfsadmin -safemode enter （功能描述：进入安全模式状态） （3）bin/hdfs dfsadmin -safemode leave  （功能描述：离开安全模式状态） （4）bin/hdfs dfsadmin -safemode wait  （功能描述：等待安全模式状态）1.  案例    ⑴查看安全模式状态            <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190721163354661.png" width="472">    ⑵进入安全模式           <img alt="" class="has" height="99" src="https://img-blog.csdnimg.cn/20190721163453808.png" width="604">    ⑶在安全模式在我们上传一个文件试试           <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190721163815488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="510">    ⑷离开安全模式          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190721163935781.png" width="637">  1.  等待安全模式状态案例   a：需求           大数据中一般我们都是在晚上进行跑批的操作，跑批的时候系统是不能进行其他任何操作的，需要         进入安全模式，那么有些操作就要等待，等待系统一旦离开安全模式就会立即进行其他的操作，这里         我们可以通过脚本实现。   ⑴首先进入安全模式             <img alt="" class="has" height="132" src="https://img-blog.csdnimg.cn/20190721164757555.png" width="510">      ⑵创建一个脚本wait.sh,就是等待安全模式一结束就上传文件             <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/2019072116514518.png" width="478">    ⑶执行脚本              <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190721165648182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="352">            ⑷重新打开一个窗口，将安全模式退出              <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190721165953353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489"><h1 id="十一：Namenode-多目录配置"><a href="#十一：Namenode-多目录配置" class="headerlink" title="十一：Namenode 多目录配置"></a>十一：Namenode 多目录配置</h1></li>
+<li> 简介        众所周知，namenode很重要，它一旦挂掉，将会很麻烦，虽然有SecondaryNameNode进行数据  恢复，但也比较麻烦。所以namenode 的本地目录可以配置成多个，且每个目录存放内容相同，增加了可靠性。1.  具体配置如下    ⑴首先格式化集群，删除数据，回到初始状态           a：103服务器执行sbin/stop-yarn.sh           b：102服务器执行sbin/stop-dfs.sh           c：102，103，104服务器执行删除数据操作：rm -rf data/ logs/           d：格式化102服务器的namenode                  bin/hdfs namenode -format                  后面出现的data再次删除掉。    ⑵配置 hdfs-site.xml，进行多目录配置         <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190721173830229.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="498">         注意：这个${hadoop.tmp.dir}是在core-site.xml中配置的指定hadoop运行时产生文件的存储目录        <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190721174053149.png" width="507">  ⑶将 hdfs-site.xml同步到集群的各个服务器上       <img alt="" class="has" height="45" src="https://img-blog.csdnimg.cn/20190721174736248.png" width="457">   ⑷需要对102服务器再次格式化一下：bin/hdfs namenode -format   ⑸最后启动集群   ⑹效果：          <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190721190001501.png" width="579">       发现name1和name2中数据一致：       <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20190721190214655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668">       也就是说当我们进行数据操作的时候，信息会同时保存到这两个namenode当中。增强了保护性。         </li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Hive%E6%95%B4%E5%90%88Hbase%E8%AF%A6%E8%A7%A3/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Hive整合Hbase详解
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Hbase%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Hbase知识点学习</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

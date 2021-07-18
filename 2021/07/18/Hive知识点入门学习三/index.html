@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>Hive知识点入门学习三 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-Hive知识点入门学习三"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  Hive知识点入门学习三
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.156Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">608</span>
         </span>
     </span>
 
@@ -79,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">2 分钟</span>
         </span>
     </span>
 </div>
@@ -94,19 +98,16 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: Hive知识点入门学习三<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hive 常见属性配置 </p>
+<ol>
+<li>  Hive 数据仓库位置配置     ⑴Default 数据仓库的最原始位置是在 hdfs 上的：/user/hive/warehouse 路径下 。    ⑵在仓库目录下，没有对默认的数据库 default 创建文件夹。如果某张表属于 default        数据库，直接在数据仓库目录下创建一个文件夹。        <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190819223122673.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">    ⑶修改 default 数据仓库原始位置（将 hive-default.xml.template 如下配置信息拷贝到        hive-site.xml 文件中）         <img alt="" class="has" height="147" src="https://img-blog.csdnimg.cn/20190819223236422.png" width="665">         配置同组用户有执行权限 ：        bin/hdfs dfs -chmod g+w /user/hive/warehouse 1.  显示当前数据库，以及查询表的头信息配置  ⑴在 hive-site.xml 文件中添加如下配置信息         <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190819223610457.png" width="437">  ⑵效果：        <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190819223716280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="466"> 1.  Hive 运行日志信息配置     ⑴Hive 的 log 默认存放在/tmp/kgf/hive.log 目录下（当前用户名下）。     ⑵修改 hive 的 log 存放日志到/opt/module/hive/logs           a：修改/opt/module/hive/conf/hive-log4j.properties.template 文件名称为hive-log4j.properties                   <img alt="" class="has" height="287" src="https://img-blog.csdnimg.cn/20190819224138274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">                b：在 hive-log4j.properties 文件中修改 log 存放位置                  <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/2019081922430168.png" width="447">          c：重新启动hive,查看日志                <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190819224456124.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">               <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190819224522341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610">        <h1 id="二：Hive-数据类型"><a href="#二：Hive-数据类型" class="headerlink" title="二：Hive 数据类型"></a>二：Hive 数据类型</h1></li>
+<li> 基本数据类型   <img alt="" class="has" height="526" src="https://img-blog.csdnimg.cn/20190820220115405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="623">1. 集合数据类型   <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/2019082022021964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">  <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/2019082022030196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">1. 案例实操  ⑴需求：         <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190820220418141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="599">  ⑵基于上述数据结构，我们在 Hive 里创建对应的表，并导入数据。          a：创建本地测试文件 test.txt                <img alt="" class="has" height="86" src="https://img-blog.csdnimg.cn/20190820220903466.png" width="672">               <img alt="" class="has" height="197" src="https://img-blog.csdnimg.cn/20190820223457971.png" width="714">         b：Hive 上创建测试表 test                <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190820222540748.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="693">               <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190820223114431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">               <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190820223229937.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">       c：导入数据             <img alt="" class="has" height="139" src="https://img-blog.csdnimg.cn/20190820223714627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619">    ⑶访问三种集合列里的数据，以下分别是 ARRAY，MAP，STRUCT 的访问方式           <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20190820224559347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="664">1.  类型转化   <img alt="" class="has" height="459" src="https://img-blog.csdnimg.cn/2019082022464613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">      <h1 id="三：DDL数据定义"><a href="#三：DDL数据定义" class="headerlink" title="三：DDL数据定义"></a>三：DDL数据定义</h1></li>
+<li>创建数据库  <img alt="" class="has" height="281" src="https://img-blog.csdnimg.cn/2019082121445173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="457">  注意：避免要创建的数据库已经存在错误，增加 if not exists 判断。（标准写法）   <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190821214719765.png" width="525">    <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190821214826855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 创建一个数据库，指定数据库在 HDFS 上存放的位置   <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/2019082121542295.png" width="727">  <img alt="" class="has" height="280" src="https://img-blog.csdnimg.cn/20190821215432560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">1. 修改数据库  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190821220003912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="648">1.  查询数据库   <img alt="" class="has" height="509" src="https://img-blog.csdnimg.cn/20190821220237936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">1.   删除数据库   <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190821221230754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="606">  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190821221244886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597">1. 管理表   ⑴简介         <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190821223046384.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">  ⑵案例实操         a：普通创建表                 <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190821223705196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">                <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019082122372787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553">         b：根据查询结果创建表（查询的结果会添加到新创建的表中）                <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190821224316559.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="481">         c：根据已经存在的表结构创建表                <img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20190821224448961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">         d：查询表的类型               <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190821224556752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="503">1.  外部表   ⑴简介         <img alt="" class="has" height="73" src="https://img-blog.csdnimg.cn/20190822221648101.png" width="625">  ⑵使用场景         <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/20190822221740240.png" width="651">  ⑶案例实操：分别创建部门和员工外部表，并向表中导入数据。          a：创建部门表               <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190822222033545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="581">        b：创建员工表               <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190822222211120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">        c：<strong>我们向表中导入数据后，数据存储在hdfs上，删除表后，数据不会删除，重新建立表后，数据会重新              关联起来</strong>。</li>
+</ol>
  
       <!-- reward -->
       
@@ -159,7 +160,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +171,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            Hive知识点入门学习四
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Hive知识点入门学习二</div>
+      </a>
     
   </nav>
 

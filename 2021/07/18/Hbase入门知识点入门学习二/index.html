@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Hbase入门知识点入门学习二 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Hbase入门知识点入门学习二"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Hbase入门知识点入门学习二
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.095Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.6k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">11 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hbase入门知识点入门学习二<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hbase读写流程</p>
+<ol>
+<li>读流程       ⑴client访问Zookeeper中，找到ROOT表的Region所在的RegionServer信息；       ⑵client连接RegionServer访问ROOT表查询.meta表的region位置信息       ⑶再去连接.meta表的region所在的regionserver然后访问meta表，找到目标数据在哪个region上           及region所在的regionserver位置信息       ⑷然后去访问目标数据所在的regionserver中的region,先在memstore中查询数据，memstore中不存在则在           BlockCache中读数据，           BlockCache中还是不存在的话就最后在storefile中读数据，并且将读取到的数据先写入到BlockCache中，然后再返回给客户端      <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190925225120501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="811">1. 写流程               ⑴Client访问Zookeeper集群，查询ROOT表region所在的regionserver地址信息，比如rs1      ⑵client连接rs1，访问ROOT表，根据写入信息查询.meta表的region位于哪些regionserver上，将得到的结果返回给client；      ⑶client去连接相应的rs，访问.meta表，根据写入的namespace、表名和rowkey找到对应的region信息         ⑷client连接最终的rs，为了持久化和恢复，将数据先写到Hlog（write ahead log）中;      ⑸再将数据写入到memstore中，当memstore达到预设阈值后，就会创建一个新的memstore，而老的memstore就会加入flush队         列，由单独的线程flush到磁盘上，形成一个storefile；      ⑹与此同时，系统会在Zookeeper记录一个checkpoint，表示这个时刻之前的数据变更已经持久化了，当系统出现意外可能导致           memstore中的数据丢失，就可以通过hlog来恢复checkpoint之后的数据；      ⑺每次flush就会形成一个storefile文件，而storefile文件是只读的，一旦创建之后就不可修改，因此hbase的更新就是不断追加的            操作；      ⑻随着storefile的数量不断增多，当达到设定阈值后就会触发compact合并操作，将多个storefile合并成一个大的storefile，同时进           行版本合并和数据删除；      ⑼当store中的单个storefile文件的大小超过阈值的时候，触发split操作，regionserver把当前的region split成2个新的region      ⑽父region就会下线，新split出的2个region就会被hmaster分配到两个regionserver上，实现负载均衡，使得原先一个region的压           力分流到两个region上。<img alt="" class="has" height="432" src="https://img-blog.csdnimg.cn/20190925225942751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1131">1.  <h1 id="二：Hbase中-meta简介"><a href="#二：Hbase中-meta简介" class="headerlink" title="二：Hbase中.meta简介"></a>二：Hbase中.meta简介</h1></li>
+<li> 简介        当我们在对HBase的读写操作时，都需要提前知道我们需要操作的region的所在位置，即是存在于哪个HRegionServer上，  因此在HBase中存在一张表元数据表.meta表（属于Hbase的内置表）专门存储了表的元数据信息，以及region位于哪个  regionserver上。.meta表的结构类似于下图：  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190925224043792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="759">  .meta表的RowKey由三部分组成：TableName（表名）、StartKey（起始键）、TimeStamp(时间戳)，rowkey存储的内容又称为  region的Name（扩展：用来存放Region的文件夹的名字为RegionName的hash值，因为某些RegionName包含某些非法字符，而 RegionName为什么会包含非法字符是因为startkey是允许包含任何值的）。将组成rowkey的三个部分用逗号隔开组成了整个完整的 rowkey。TimeStamp使用十进制的数字字符串来表示。 .meta表的info为表中最主要的列簇，含有三个column：regioninfo、server、serverstartcode。regioninfo存储的是region的详细信  息，包括startkey、endkey、以及每个family信息。server存储的是管理这个region的regionserver地址。 由于.meta存储的是region的信息，如果当hbase中表的数据非常大会被分成很多个region，那么此时在.meta中所占的空间也会变大，而.meta本身也是一张表，在存储数据非常大的情况下，也会被分割成多个region存储于不同的regionserver上，此时要是想把.meta表的region位置信息存储在zookeeper集群中就不太现实，.meta表region的位置信息是会发生变化的。因此，此时我们可以通过另外一张表来存储.meta表的元数据信息，即-ROOT-(根数据表)，hbase认为这张表不会太大，因此-ROOT-只会有一个region，这个region的信息存在于hbase中，而管理-ROOT-表的位置信息（regionserver地址）存储在Zookeeper中。 所以综上所述要想对HBase进行读写首先去访问Zookeeper集群，获得ROOT表的所在regionserver地址信息。          <h1 id="三：JAVA-api操作Hbase"><a href="#三：JAVA-api操作Hbase" class="headerlink" title="三：JAVA api操作Hbase"></a>三：JAVA api操作Hbase</h1></li>
+<li>在maven项目中添加依赖  <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190928215702389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="355">  配置文件：  <img alt="" class="has" height="126" src="https://img-blog.csdnimg.cn/20190928220100582.png" width="273">1. HbaseDemo.java类       ⑴判断表是否存在       <img alt="" class="has" height="433" src="https://img-blog.csdnimg.cn/20190928220535888.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">   ⑵创建表        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190928220620412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="727">       <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/20190928220853511.png" width="613">    ⑶删除表        <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190928221359776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="596">  ⑷添加一行数据        <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/2019092822232898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="645">    ⑸删除一行数据       <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190928223800513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">  ⑹删除多行数据        <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190928224100873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  ⑺扫描数据         <img alt="" class="has" height="332" src="https://img-blog.csdnimg.cn/20190928225338999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="696">           ⑻获取一个列簇的数据         <img alt="" class="has" height="344" src="https://img-blog.csdnimg.cn/20190928230225808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">
+ </li>
+</ol>
+<h1 id="四：MapReduce"><a href="#四：MapReduce" class="headerlink" title="四：MapReduce"></a>四：MapReduce</h1><ol>
+<li> 简介        通过 HBase 的相关 JavaAPI，我们可以实现伴随 HBase 操作的 MapReduce 过程，比如使用 MapReduce 将数据从本地文件系统导入到 HBase 的表中，比如我们从 HBase 中读取一些原始数 据后使用 MapReduce 做数据分析。   1.  查看 HBase 的 MapReduce 任务所需的依赖  <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20191001113529507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">1. 执行环境变量的导入   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191001113933475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="820">1. 运行官方的 MapReduce 任务 ，统计 Student 表中有多少行数据   <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20191001115537753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779">   <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001115607426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="526">1.  让环境变量永久生效，修改**/etc/profile**配置文件  <img alt="" class="has" height="72" src="https://img-blog.csdnimg.cn/20191001145150761.png" width="784"><h1 id="五：-案例一：使用-MapReduce-将本地数据导入到-HBase"><a href="#五：-案例一：使用-MapReduce-将本地数据导入到-HBase" class="headerlink" title="五： 案例一：使用 MapReduce 将本地数据导入到 HBase"></a>五： 案例一：使用 MapReduce 将本地数据导入到 HBase</h1></li>
+<li>在本地创建一个 tsv 格式的文件：fruit.tsv   <img alt="" class="has" height="286" src="https://img-blog.csdnimg.cn/20191001123400511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="949">  <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20191001123430916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">1.   在 HDFS 中创建 input_fruit 文件夹并上传 fruit.tsv 文件   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20191001140033849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">  <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20191001140415572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="717">1. 创建 HBase 的fruit表  <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20191001140746465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="522">1. 执行 MapReduce 到 HBase 的 fruit 表中    <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20191001141233513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1022">  <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20191001145023335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="900">1.   进入hbase,查看fruit表  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20191001145335178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701">  <h1 id="六：自定义-HBase-MapReduce1"><a href="#六：自定义-HBase-MapReduce1" class="headerlink" title="六：自定义 HBase-MapReduce1"></a>六：自定义 HBase-MapReduce1</h1></li>
+<li>需求  目标：将 fruit 表中的一部分数据，通过 MR 迁入到 fruit_mr 表中。 1.  创建MAVEN项目  <img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20191001160346800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="342">  <img alt="" class="has" height="590" src="https://img-blog.csdnimg.cn/20191001160359509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"><li>创建ReadFruitMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</li>
+</ol>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.Cell;<br>import org.apache.hadoop.hbase.CellUtil;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Result;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapper;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/***</p>
+<ul>
+<li>创建mapper类，读数据</li>
+<li>ImmutableBytesWritable：可以看做是rowkey,代表一行数据</li>
+<li>Put:这里面封装了一条一条数据</li>
+<li>@author KGF</li>
+<li></li>
+<li>/<br>public class ReadFruitMapper extends TableMapper&lt;ImmutableBytesWritable,Put&gt; &#123;  /***<ul>
+<li>map方法处理数据</li>
+<li>/<br>@Override<br>protected void map(ImmutableBytesWritable key, Result value,<pre><code>  Mapper&amp;lt;ImmutableBytesWritable, Result, ImmutableBytesWritable, Put&amp;gt;.Context context)
+  throws IOException, InterruptedException &#123;
+</code></pre>
+  //读取数据，使用Put封装数据<br>  Put put = new Put(key.get());<br>  //遍历column<br>  for (Cell cell : value.rawCells()) {<pre><code>  //筛选，我们只需要info列簇的数据
+  if(&quot;info&quot;.equals(Bytes.toString(CellUtil.cloneFamily(cell)))) &#123;
+      //我们只要列名为name的数据
+      if(&quot;name&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))) &#123;
+          //将数据添加到put中
+          put.add(cell);
+      &#125;
+  &#125;
+</code></pre>
+  }<br>  //将数据写出<br>  context.write(key, put);<br>}</li>
+</ul>
+</li>
+</ul>
+<p>}<br></code></pre>   </li><li> 创建WriteFruitMRReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>/***</p>
+<ul>
+<li><p>创建reducer类</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class WriteFruitMRReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
+<p>  @Override<br>  protected void reduce(ImmutableBytesWritable key, Iterable&lt;Put&gt; values,</p>
+<pre><code>      Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
+      throws IOException, InterruptedException &#123;
+  for (Put put : values) &#123;
+      context.write(NullWritable.get(),put);
+  &#125;
+</code></pre>
+<p>  }<br>}<br></code></pre>   </li><li> 创建Fruit2FruitMRRunner.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
+</li>
+</ul>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>/***</p>
+<ul>
+<li><p>创建Runner</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class Fruit2FruitMRRunner implements Tool &#123;</p>
+<p>  private Configuration conf;</p>
+<p>  public void setConf(Configuration conf) &#123;</p>
+<pre><code>  //创建hbase的conf
+  this.conf = HBaseConfiguration.create();
+</code></pre>
+<p>  }</p>
+<p>  public Configuration getConf() {</p>
+<pre><code>  return this.conf;
+</code></pre>
+<p>  }</p>
+<p>  public int run(String[] args) throws Exception {</p>
+<pre><code>  //创建Job
+  Job job = Job.getInstance();
+  //设置入口jar
+  job.setJarByClass(Fruit2FruitMRRunner.class);
+  //配置job
+  Scan scan = new Scan();
+  //设置mapper
+  TableMapReduceUtil.initTableMapperJob(&quot;fruit&quot;, 
+          scan, 
+          ReadFruitMapper.class,ImmutableBytesWritable.class, 
+          Put.class, job);
+  //设置reducer
+  TableMapReduceUtil.initTableReducerJob(&quot;fruit_mr&quot;,WriteFruitMRReducer.class, job);
+  job.setNumReduceTasks(1);
+  boolean result = job.waitForCompletion(true);
+  return result?0:1;
+</code></pre>
+<p>  }</p>
+<p>  public static void main(String[] args) {</p>
+<pre><code>  try &#123;
+      int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
+      System.out.println(status);
+  &#125; catch (Exception e) &#123;
+      e.printStackTrace();
+  &#125;
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   </li>1.  打成jar包，上传Linux  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20191001160600622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">1.   在Hbase上创建fruit_mr表  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001160742374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="584">1.   执行jar包  <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20191001160912374.png" width="1200">  <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20191001162033873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1.  效果，数据成功导入  <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20191001162201361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1077"></p>
+<h1 id="七：自定义-HBase-MapReduce2"><a href="#七：自定义-HBase-MapReduce2" class="headerlink" title="七：自定义 HBase-MapReduce2"></a>七：自定义 HBase-MapReduce2</h1><ol>
+<li>需求：实现将 HDFS 中的数据(fruit.tsv)写入到 HBase 表中(先将fruit表数据清空)。 <li>创建ReadFruitFromHDFSMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</li>
+</ol>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
+<p>/**</p>
+<ul>
+<li><p>创建mapper类，因为我们是从HDFS上读取数据，所以我们继承的是普通的mapper,</p>
+</li>
+<li><p>我们读取数据向HBASE中写所以使用ImmutableBytesWritable,Put写出,</p>
+</li>
+<li><p>读取HDFS上的fruit.tsv中的数据</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class ReadFruitFromHDFSMapper extends Mapper&lt;LongWritable, Text, ImmutableBytesWritable,Put&gt; &#123;</p>
+<p>  @Override<br>  protected void map(LongWritable key, Text value,</p>
+<pre><code>      Mapper&amp;lt;LongWritable, Text, ImmutableBytesWritable, Put&amp;gt;.Context context)
+      throws IOException, InterruptedException &#123;
+  //读取一行数据
+  String[] split = value.toString().split(&quot;\t&quot;);
+  byte[] rowkey = Bytes.toBytes(split[0]);
+  byte[] name = Bytes.toBytes(split[1]);
+  byte[] color = Bytes.toBytes(split[2]);
+  //创建Put对象
+  Put put = new Put(rowkey);
+  //为指定的列族，列添加数据
+  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;name&quot;), name);
+  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;color&quot;),color);
+  
+  //写出
+  context.write(new ImmutableBytesWritable(rowkey),put);
+</code></pre>
+<p>  }</p>
+</li>
+</ul>
+<p>}<br></code></pre>   </li><li> 创建Writer2HbaseReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
+<p>import java.io.IOException;</p>
+<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
+<p>public class Writer2HbaseReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
+<pre><code>@Override
+protected void reduce(ImmutableBytesWritable key, Iterable&amp;lt;Put&amp;gt; values,
+        Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
+        throws IOException, InterruptedException &#123;
+    for (Put put : values) &#123;
+        context.write(NullWritable.get(),put);
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li><li>创建HDFS2HbaseRunner.java   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>import com.kgf.mr1.Fruit2FruitMRRunner;</p>
+<p>public class HDFS2HbaseRunner implements Tool &#123;</p>
+<pre><code>private Configuration conf;
+
+public void setConf(Configuration conf) &#123;
+    //创建hbase的conf
+    this.conf = HBaseConfiguration.create();
+&#125;
+
+public Configuration getConf() &#123;
+    return this.conf;
+&#125;
+
+public int run(String[] args) throws Exception &#123;
+    //创建Job
+    Job job = Job.getInstance();
+    //设置入口jar
+    job.setJarByClass(HDFS2HbaseRunner.class);
+    //设置mapper
+    job.setMapperClass(ReadFruitFromHDFSMapper.class);
+    job.setMapOutputKeyClass(ImmutableBytesWritable.class);
+    job.setMapOutputValueClass(Put.class);
+    
+    //设置reducer,OutPutFormat
+    TableMapReduceUtil.initTableReducerJob(&quot;fruit&quot;,Writer2HbaseReducer.class, job);
+    
+    //设置FileInputFormat
+    FileInputFormat.addInputPath(job, new Path(&quot;/input_fruit/&quot;));
+    job.setNumReduceTasks(1);
+    boolean result = job.waitForCompletion(true);
+    return result?0:1;
+&#125;
+
+public static void main(String[] args) &#123;
+    try &#123;
+        int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
+        System.out.println(status);
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre>   </li>1. 打成jar包，上传Linux  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20191006231143621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="732">1. 进入/usr/local/module/hadoop-2.7.2目录下执行jar包  <img alt="" class="has" height="169" src="https://img-blog.csdnimg.cn/2019100623144363.png" width="1110"><img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20191007094918730.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="861"> 1. 查看fruit表信息  <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191007100122765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1028">       </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Hbase入门知识点入门学习三
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">hashCode的作用</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

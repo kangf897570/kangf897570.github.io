@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>Hive整合Hbase详解 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-Hive整合Hbase详解"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  Hive整合Hbase详解
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/Hive%E6%95%B4%E5%90%88Hbase%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.136Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.9k</span>
         </span>
     </span>
 
@@ -79,34 +83,30 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">7 分钟</span>
         </span>
     </span>
 </div>
  
     </div>
       
-    <div class="tocbot"></div>
-
 
 
 
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: Hive整合Hbase详解<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hive整合Hbase详解<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. <strong>简介</strong>     Hive提供了与HBase的集成，使得能够在HBase表上使用HQL语句进行查询 插入操作以及进行Join和Union等复杂查询、 同时也可以将hive表中的数据映射到Hbase中。在工作中很常见。它的应用场景有很多，比如在Hadoop业务的开发流程如下：<img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20191007212421103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 其中在数据存入hbase—&gt;Hive对数据进行统计分析的这个步骤中就涉及到了Hive与Hbase的整合，所以了解Hive与Hbase的整合是很有必要的。 1. <strong>Hive与Hbase整合的必要性 **         Hive是建立在Hadoop之上的数据仓库基础构架、是为了减少MapReduce编写工作的批处理系统， Hive本身不存储和计算数据，它完全依赖于HDFS和MapReduce。Hive可以理解为一个客户端工具， 将我们的sql操作转换为相应的MapReduce jobs，然后在Hadoop上面运行。         Hbase全称为Hadoop Database，即Hbase是Hadoop的数据库，是一个分布式的存储系统。Hbase利用 Hadoop的HDFS作为其文件存储系统，利用Hadoop的MapReduce来处理Hbase中的海量数据。利用zookeeper 作为其协调工具。          Hbase数据库的缺点在于—-语法格式异类，没有类sql的查询方式，因此在实际的业务当中操作和计算数据非 常不方便，但是Hive就不一样了，Hive支持标准的sql语法，于是我们就希望通过Hive这个客户端工具对Hbase中的 数据进行操作与查询，进行相应的数据挖掘，这就是所谓Hive与hbase整合的含义。Hive与Hbase整合的示意图如下：<img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20191007212726676.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="832">1. <strong>hive与hbase版本兼容性</strong>  Hive版本：1.2.1  Hbase版本：1.3.1  ⑴hbase与hive哪些版本兼容？         a：hive0.90与hbase0.92是兼容的，早期的hive版本与hbase0.89/0.90兼容。         b：hive1.x与hbase0.98.x或则更低版本是兼容的。         c：hive2.x与hbase1.x及比hbase1.x更高版本兼容。           Hive 0.6.0推出了storage-handler，用于将数据存储到HDFS以外的其他存储上。并方便的通过hive进行插入、查询等操作。   同时hive提供了针对Hbase的hive-hbase-handler。这使我们在使用hive节省开发M/R代码成本的同时还能获得HBase的特性来快  速响应随机查询。           但是，hive自带的hive-hbase-handler是针对特定版本的Hbase的，比如，0.7.0版本的hive编译时使用的是0.89.0版本的Hbase，0.6.0版本的hive默认使用0.20.3版本的hbase进行编译。如果能够找到对应的版本，可以跳过编译的步骤直接使用。不过，我们现状已经找不到这些版本的Hbase与之配合使用了。所以只好自己来编译这个jar包。           注：使用不匹配的版本，一些功能会发生异常。其原因是由于没有重新编译storage-handler组件，发现在hive中查询HBase表存在问题。hive-hbase-handler.jar的作用在hbase与hive整合的时候发挥了重要作用，有了这个包，hbase与hive才能通信。 如果想hbase1.x与hive1.x整合，需要编译hive1.x 代码本身。1. <strong>下面我们创建项目去编译源码   <strong>⑴首先我们需要去网上下载对应hive版本的源码包         <img alt="" class="has" height="42" src="https://img-blog.csdnimg.cn/20191007220454629.png" width="290">        解压后：        <img alt="" class="has" height="49" src="https://img-blog.csdnimg.cn/2019100722080049.png" width="356">   ⑵在eclipse中创建一个项目。Java project即可。       <img alt="" class="has" height="76" src="https://img-blog.csdnimg.cn/20191007220540543.png" width="314">            ⑶在创建好的项目上点击右键，选择Import，选择General下的FileSystem，       找到源码包apache-hive-1.2.1-src\hbase-handler\src\java目录选择其中的java目录导入         <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20191007221108593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301"><img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/20191007221351985.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="354">   ⑷添加依赖包，导入代码后可以看到很多的错误提示。这时由于没有引入依赖的jar包导致的。        <img alt="" class="has" height="306" src="https://img-blog.csdnimg.cn/20191007221534971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="339">      下面，我们引入,需要hive、hbase下相关的lib包。新建lib目录，把对应的依赖包，导入       a：首先我们进入到hive的lib目录下，下载下来所有的jar,注意：文件夹不要，以及.pom文件不要。             <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20191007221946884.png" width="409">       b：我们再进入hbase的lib目录下，下载下来所有的jar，有相同的就去掉，注意：文件夹不要，以及.pom文件不要。            <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223116271.png" width="377"><img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223124805.png" width="377">            <img alt="" class="has" height="468" src="https://img-blog.csdnimg.cn/20191007223902727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">    ⑸至此可以导出我们需要的jar包了。在项目上点击右键，选择export ，选择JAR file            <img alt="" class="has" height="149" src="https://img-blog.csdnimg.cn/20191007224110155.png" width="653">            我们只编译源码，不要lib，名称就是我们要替换的原本的jar包名称hive-hbase-handler-1.2.1.jar             <img alt="" class="has" height="380" src="https://img-blog.csdnimg.cn/20191007224336482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="326">         到这里我们就生成了符合自己Hbase版本的hive-hbase-handler了。1. <strong>下面我们进入到hive的lib目录下删除原来的hive-hbase-handler-1.2.1.jar，****换成我们自己的</strong>   <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20191007224615174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">1. <strong>hive与hbase整合环境配置  ⑴</strong>进入/usr/local/module/apache-hive-1.2.1/conf目录下修改hive-site.xml文件，添加配置属性（zookeeper的地址）        <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/20191007225110949.png" width="658">1. <strong>引入hbase的依赖包</strong>  ⑴将hbase安装目录下的lib文件夹下的包导入到hive的环境变量中        a：在hive-env.sh 文件中添加             <img alt="" class="has" height="51" src="https://img-blog.csdnimg.cn/20191007225432137.png" width="819">1. 至此、hive与hbase整合环境准备完成<li>实战操作 ⑴</strong>建立 Hive 表，关联 HBase 表，插入数据到 Hive 表的同时能够影响 HBase 表。        a：在 Hive 中创建表同时关联 HBase                   ** <pre class="has"><code class="language-sql">CREATE TABLE hive_hbase_emp_table(<br>     empno int,<br>     ename string,<br>     job string,<br>     mgr int,<br>     hiredate string,<br>     sal double,<br>     comm double,<br>     deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table");    </code></pre> STORED BY ‘org.apache.hadoop.hive.hbase.HBaseStorageHandler’  //指定存储处理器Hbase.table.name属性是可选的，用它来指定此表在hbase中的名字，这就是说，允许同一个表在hive和hbase中有不同的名字。 每个hive的列，都需要在参数hbase.columns.mapping中指定一个对应的条目，多个列之间的条目通过逗号分隔；也就是说，如果某个表有n个列，则参数hbase.columns.mapping的值中就有n个以逗号分隔的条目，比如： <pre>"hbase.columns.mapping" = ":key,a:b,a:c,d:e" 代表有两个列族，一个是a一个是d，a列族中有两列，分别为b和c<br>注意，hbase.columns.mapping的值中是不允许出现空格的<br><strong>    b:效果<br>         </strong></strong>         <strong><strong><br>     c：现在我们需要向hive库中的hive_hbase_emp_table表中添加数据，注意：不能直接load数据到这张表中，<br>         否则数据不会同步到hbase对应的hbase_emp_table表中。 <br>         在 Hive 中创建临时中间表，用于 load 文件中的数据 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE TABLE emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>  deptno int<br>)<br>row format delimited fields terminated by '\t'; </code></pre> <pre></strong> **<br><strong>     d:向 Hive 中间表中 load 数据 <br>          </strong></strong>         <strong><strong>      e：通过 insert 命令将中间表中的数据导入到 Hive 关联 HBase 的那张表中 <br>         </strong><strong>      f：查看 Hive 以及关联的 HBase 表中是否已经成功的同步插入了数据 <br>         </strong></strong>         **<strong><br> <br>⑵在 HBase 中已经存储了某一张表 hbase_emp_table，然后在 Hive 中创建一个外部表来关联 HBase 中的<br>  hbase_emp_table 这张表，使之可以借助 Hive 来分析 HBase 这张表中的数据。<br>   a：在 Hive 中创建外部表 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE EXTERNAL TABLE relevance_hbase_emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>   deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table"); </code></pre> <pre></p>
+<p>b：关联后就可以使用 Hive 函数进行一些分析操作了 ，数据自动填充进来<br> <br> 这里使用外部表映射到HBase中的表，这样，在Hive中删除表，并不会删除HBase中的表，否则，就会删除。<br></pre> </li><br>参考文章：                      </p>
+<p> </p>
  
       <!-- reward -->
       
@@ -159,7 +159,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Hive%E6%95%B4%E5%90%88Hbase%E8%AF%A6%E8%A7%A3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +170,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            Hive知识点入门学习
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">HDFS的数据流以及Namenode工作机制</div>
+      </a>
     
   </nav>
 

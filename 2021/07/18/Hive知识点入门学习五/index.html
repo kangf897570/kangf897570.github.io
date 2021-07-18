@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Hive知识点入门学习五 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Hive知识点入门学习五"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Hive知识点入门学习五
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.169Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.6k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习五<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：函数 </p>
+<p>      <img alt="" class="has" height="257" src="https://img-blog.csdnimg.cn/20190825215121162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="427">       <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190825215231991.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="627">       <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/20190825215259467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="534">       <img alt="" class="has" height="401" src="https://img-blog.csdnimg.cn/20190825215350821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536">       <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190825215423162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">       <img alt="" class="has" height="405" src="https://img-blog.csdnimg.cn/20190825215500629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
+<h1 id="二：行转列"><a href="#二：行转列" class="headerlink" title="二：行转列"></a>二：行转列</h1><ol>
+<li>表结构如下：  <img alt="" class="has" height="190" src="https://img-blog.csdnimg.cn/20190829215916927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647">1. 需求：把星座和血型一样的人归类到一起 ，效果如下  <img alt="" class="has" height="81" src="https://img-blog.csdnimg.cn/20190829220254118.png" width="295">1. sql步骤如下  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190829221220361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="711">           sql:        select              t1.base,              concat_ws(‘|’, collect_set(t1.name)) name         from (                    select                           name,                           concat(constellation,’,’,blood_type) as base                    from  person_info                  ) t1 group by t1.base<img alt="" class="has" height="202" src="https://img-blog.csdnimg.cn/20190829221438842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="507">  <img alt="" class="has" height="418" src="https://img-blog.csdnimg.cn/20190829221644867.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="671">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190829221815775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567"><h1 id="三：列转行"><a href="#三：列转行" class="headerlink" title="三：列转行"></a>三：列转行</h1></li>
+<li>表结构  <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190831215607885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="688">1.  创建表   <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20190831220314536.png" width="520">1. 导入数据   <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190831220512348.png" width="434">  <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/201908312206423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="710">1. 将数组展开  <img alt="" class="has" height="89" src="https://img-blog.csdnimg.cn/20190831220853427.png" width="759">           sql如下：  <strong>select movie,category_name from movie_info lateral view explode(category) table_temp as category_name;</strong>  <img alt="" class="has" height="282" src="https://img-blog.csdnimg.cn/20190831221355527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695">1. 数组等相关简介  <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190831221557350.png" width="889">  <img alt="" class="has" height="412" src="https://img-blog.csdnimg.cn/20190831221629324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="636">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190831222953324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690"> <h1 id="四：youtube项目实战"><a href="#四：youtube项目实战" class="headerlink" title="四：youtube项目实战"></a>四：youtube项目实战</h1></li>
+<li>表结构  a：视频表结构相关字段          <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/2019090109262326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="625">  b：用户表         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190901092523720.png" width="588">1. 相关原始数据脚本  a：视频数据文件          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190901092742237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="651">  b：用户数据文件          <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190901092822641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377"><li>对原始数据进行ETL编码清洗   通过观察原始数据形式，可以发现，视频可以有多个所属分类，每个所属分类用&amp;符号分割， 且分割的两边有空格字符，同时相关视频也是可以有多个元素，多个相关视频又用“\t”进 行分割。为了分析数据时方便对存在多个子元素的数据进行操作，我们首先进行数据重组清 洗操作。即：将所有的类别用“&amp;”分割，同时去掉两边空格，多个相关视频 id 也使用“&amp;” 进行分割。 ⑴项目：       <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901124134443.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="264">  ⑵pom.xml文件          <pre class="has"><code class="language-html">&lt;project xmlns="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0&quot;">http://maven.apache.org/POM/4.0.0&quot;</a> xmlns:xsi="<a target="_blank" rel="noopener" href="http://www.w3.org/2001/XMLSchema-instance&quot;">http://www.w3.org/2001/XMLSchema-instance&quot;</a> xsi:schemaLocation="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a target="_blank" rel="noopener" href="http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;">http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</a>&gt;<br>&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br>&lt;groupId&gt;com.kgf&lt;/groupId&gt;<br>&lt;artifactId&gt;youtube&lt;/artifactId&gt;<br>&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</li>
+</ol>
+<p>  &lt;properties&gt;<br>      &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;<br>  &lt;/properties&gt;</p>
+<p>  &lt;dependencies&gt;<br>      &lt;!–引入hadoop依赖  –&gt;<br>      &lt;dependency&gt;<br>       &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>       &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;<br>       &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>      &lt;dependency&gt;<br>           &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;<br>         &lt;artifactId&gt;hadoop-yarn-server-resourcemanager&lt;/artifactId&gt;<br>         &lt;version&gt;2.7.2&lt;/version&gt;<br>      &lt;/dependency&gt;<br>  &lt;/dependencies&gt;<br>&lt;/project&gt;</code></pre> ⑶ETLUtil工具类 <pre class="has"><code class="language-java">package com.kgf.youtube.utils;</p>
+<p>/**</p>
+<ul>
+<li>对数据文件中的一行数据进行处理</li>
+<li>@author KGF</li>
+<li></li>
+<li>/<br>public class ETLUtil &#123;<br>  //RX24KLBhwMI    lemonette    697    People &amp; Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo<br>  public static String getEtlString(String ori) &#123;<pre><code>  StringBuilder sb = new StringBuilder();
+  //对数据进行切割
+  String[] splitArray = ori.split(&quot;\t&quot;);
+  //一行数据中相关视频可以没有，其它相关数据必须存在，否则该条数据作废
+  if(splitArray.length&amp;lt;9)return null;
+  //因为视频类别是以&amp;amp;连接，我们将中间空格去掉，变成如下效果
+  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE    WZgoejVDZlo
+  splitArray[3] = splitArray[3].replaceAll(&quot; &quot;,&quot;&quot;);
+  //拼接数据
+  for (int i = 0; i &amp;lt; splitArray.length; i++) &#123;
+      sb.append(splitArray[i]);
+      if(i&amp;lt;9) &#123;
+          if(i!=splitArray.length-1) &#123;
+              sb.append(&quot;\t&quot;);
+          &#125;
+      &#125;else &#123;
+          if(i!=splitArray.length-1) &#123;
+              sb.append(&quot;&amp;amp;&quot;);//这里对相关视频进行特殊处理，使用&amp;amp;连接
+          &#125;
+      &#125;
+  &#125;
+  //RX24KLBhwMI    lemonette    697    People&amp;amp;Blogs    512    24149    4.22    315    474    t60tW0WevkE&amp;amp;WZgoejVDZlo
+  return sb.toString();
+</code></pre>
+  }<br>}<br></code></pre> ⑷VideoEtlMapper.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</li>
+</ul>
+<p>import java.io.IOException;</p>
+<p>import org.apache.commons.lang.StringUtils;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import com.kgf.youtube.utils.ETLUtil;<br>/**</p>
+<ul>
+<li><p>读取一行对数据进行处理</p>
+</li>
+<li><p>@author KGF</p>
+</li>
+<li></li>
+<li><p>/<br>public class VideoEtlMapper extends Mapper&lt;Object,Text, NullWritable, Text&gt; &#123;</p>
+<p>  Text k = new Text();</p>
+<p>  @Override<br>  protected void map(Object key, Text value, Mapper&lt;Object, Text, NullWritable, Text&gt;.Context context)</p>
+<pre><code>      throws IOException, InterruptedException &#123;
+  //对读取的一行数据进行处理
+  String etlString = ETLUtil.getEtlString(value.toString());
+  if(StringUtils.isNotBlank(etlString)) &#123;
+      k.set(etlString);
+      context.write(NullWritable.get(),k);
+  &#125;
+</code></pre>
+<p>  }<br>}<br></code></pre> ⑸VideoEtlRunner.java类 <pre class="has"><code class="language-java">package com.kgf.youtube.etl;</p>
+</li>
+</ul>
+<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.FileSystem;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
+<p>public class VideoEtlRunner implements Tool &#123;</p>
+<pre><code>private Configuration conf = null;
+
+@Override
+public void setConf(Configuration conf) &#123;
+    this.conf = conf;//使用集群中的conf赋值
+&#125;
+
+@Override
+public Configuration getConf() &#123;
+    return this.conf;
+&#125;
+
+@Override
+public int run(String[] args) throws Exception &#123;
+    //将路径存入conf中
+    conf.set(&quot;inpath&quot;,args[0]);
+    conf.set(&quot;outpath&quot;,args[1]);
+    //获取job对象
+    Job job = Job.getInstance(conf);
+    //设置jar
+    job.setJarByClass(VideoEtlRunner.class);
+    //设置mapper
+    job.setMapperClass(VideoEtlMapper.class);
+    job.setMapOutputKeyClass(NullWritable.class);
+    job.setMapOutputValueClass(Text.class);
+    //设置reduce
+    job.setNumReduceTasks(0);
+    //设置输入，输出路径
+    initInputJobPath(job);
+    initOutputJobPath(job);
+    boolean result = job.waitForCompletion(true);
+    return result?1:-1;
+&#125;
+
+private void initOutputJobPath(Job job) &#123;
+    try &#123;
+        Configuration conf = job.getConfiguration();
+        String outPath = conf.get(&quot;outpath&quot;);//获取conf中的输出路径
+        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
+        Path path = new Path(outPath);
+        if(fs.exists(path))&#123;
+            fs.delete(path, true);//删除文件夹，包括子目录
+        &#125;
+        FileOutputFormat.setOutputPath(job, path);
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+
+private void initInputJobPath(Job job) &#123;
+    try &#123;
+        Configuration conf = job.getConfiguration();
+        String inPath = conf.get(&quot;inpath&quot;);//获取conf中的输出路径
+        FileSystem fs = FileSystem.get(conf);//获取文件系统对象
+        Path path = new Path(inPath);
+        if(fs.exists(path))&#123;
+            FileInputFormat.setInputPaths(job, path);
+        &#125;else &#123;
+            throw new Exception(&quot;inPath not exists&quot;);
+        &#125;
+    &#125; catch (Exception e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+
+public static void main(String[] args) throws Exception &#123;
+    //调用run方法
+    int resultCode = ToolRunner.run(new VideoEtlRunner(), args);
+    System.out.println(resultCode);
+&#125;
+</code></pre>
+<p>}<br></code></pre> ⑹将代码打成jar上传到集群       <img alt="" class="has" height="208" src="https://img-blog.csdnimg.cn/20190901124457905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">  ⑺将原始数据文件video.txt上传到集群/youtube/video/2008路径下      <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190901124619827.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561"> ⑻执行jar生成文件      a：进入到/opt/module/hadoop-2.7.2目录下      b：执行如下命令           hadoop jar ../jars/youtube-0.0.1-SNAPSHOT.jar com.kgf.youtube.etl.VideoEtlRunner           /youtube/video/2008 /youtube/video/output          <img alt="" class="has" height="305" src="https://img-blog.csdnimg.cn/20190901124850213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="604"> </li>1. 效果  <img alt="" class="has" height="285" src="https://img-blog.csdnimg.cn/20190901124927461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="589">  <img alt="" class="has" height="279" src="https://img-blog.csdnimg.cn/20190901125028770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752"><li>创建表    <img alt="" class="has" height="292" src="https://img-blog.csdnimg.cn/20190901173330821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="364"><img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190901173428254.png" width="427">  <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/2019090117352126.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="450">  <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190901173547731.png" width="432">   <pre class="has"><code class="language-sql">create table youtube_ori(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;<br>)<br>row format delimited<br>fields terminated by "\t"<br>collection items terminated by "&amp;"<br>stored as textfile; </p>
+<p>create table youtube_user_ori(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as textfile;</p>
+<p>create table youtube_orc(<br>    videoId string,<br>    uploader string,<br>    age int,<br>    category array&lt;string&gt;,<br>    length int,<br>    views int,<br>    rate float,<br>    ratings int,<br>    comments int,<br>    relatedId array&lt;string&gt;)<br>clustered by (uploader) into 8 buckets<br>row format delimited fields terminated by “\t”<br>collection items terminated by “&amp;”<br>stored as orc;</p>
+<p>create table youtube_user_orc(<br>    uploader string,<br>    videos int,<br>    friends int)<br>clustered by (uploader) into 24 buckets<br>row format delimited<br>fields terminated by “\t”<br>stored as orc; </code></pre> <img alt="" class="has" height="50" src="https://img-blog.csdnimg.cn/20190901173813131.png" width="829"><img alt="" class="has" height="232" src="https://img-blog.csdnimg.cn/20190901173855528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619"><img alt="" class="has" height="53" src="https://img-blog.csdnimg.cn/20190901173909838.png" width="426"> </li>1. 导入 ETL 后的数据到ori表中  <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190901174937582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="787"><img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190901175123561.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="788">1. 向 ORC 表插入数据  a：insert into table youtube_orc select * from youtube_ori;   b：insert into table youtube_user_orc select * from youtube_user_ori;  1. 需求1：统计视频观看数 Top10   SQL:<strong>select videoId,category,views from  youtube_orc order by views desc limit 10;</strong>  <img alt="" class="has" height="353" src="https://img-blog.csdnimg.cn/20190901181041639.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="768">1. 需求2：统计视频类别热度 Top10   <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/2019090118113433.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="765">  <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190901182646488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="621">  <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190901182737120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">1. 需求3：统计出视频观看数最高的 20 个视频的所属类别以及类别包含 这 Top20 视频的个数 <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/20190901210611997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"><img alt="" class="has" height="283" src="https://img-blog.csdnimg.cn/20190901210707215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1. 统计视频观看数 Top50 所关联视频的所属类别的热度排名   <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190901212411101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="437">  <img alt="" class="has" height="237" src="https://img-blog.csdnimg.cn/20190901212538808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%94/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Hive知识点入门学习一
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E5%9B%9B/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Hive知识点入门学习四</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>
