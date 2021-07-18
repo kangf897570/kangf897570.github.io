@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>docker stack的相关编排指令 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-docker stack的相关编排指令"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  docker stack的相关编排指令
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%20stack%E7%9A%84%E7%9B%B8%E5%85%B3%E7%BC%96%E6%8E%92%E6%8C%87%E4%BB%A4/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.542Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.7k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker stack的相关编排指令<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—### 一、简介</p>
+<p>　　Docker有个编排工具docker-compose，可以将组成某个应该的多个docker容器编排在一起，同时管理。同样在Swarm集群中，可以使用docker stack 将一组相关联的服务进行编排管理。</p>
+<p>　　Docker stack 也是一个yaml文件，和一份docker-compose.yml文件差不多，指令也基本一致。但是与compose相比其不支持build、links和network_mode。Docker stack有一个新的指令deploy。</p>
+<p>　　注：stack不支持的指令</p>
+<p>　　<img alt="" src="https://img-blog.csdnimg.cn/img_convert/27f8fd7935d60d35321c8b34dd5021f6.png" width="600"></p>
+<p> </p>
+<h3 id="二、Deploy"><a href="#二、Deploy" class="headerlink" title="二、Deploy"></a>二、Deploy</h3><p>　　Deploy是用来指定swarm服务部署和运行时的相关配置，并且只有使用docker stack deploy 部署swarm集群时才会生效。如果使用docker-compose up 或者docker-compose run时，该选项会被忽略。要使用deploy选项，compose-file中version版本要在3或3+。　　<br>| 1 2 3 4 5 6 7 8 9 10 11 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``redis:</code> <code>    ``image: redis:alpine</code> <code>    ``deploy:</code> <code>      ``replicas: ``6</code> <code>      ``update_config:</code> <code>        ``parallelism: ``2</code> <code>        ``delay: ``10s</code> <code>      ``restart_policy:</code> <code>        ``condition: on``-``failure</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p><code>version: ``&#39;3&#39;</code></p>
+<p><code>  ``redis:</code></p>
+<p><code>    ``deploy:</code></p>
+<p><code>      ``update_config:</code></p>
+<p><code>        ``delay: ``10s</code></p>
+<p><code>        ``condition: on``-``failure</code></p>
+<p>　　（1）ENDPOINT_MODE</p>
+<p>　　 <strong>指定swarm服务发现的模式</strong></p>
+<ul>
+<li>endpoint_mode: vip - Docker为swarm集群服务分配一个虚拟IP(VIP)，作为客户端到达集群服务的“前端”。Docker 在客户端和可用工作节点之间对服务的请求进行路由。而客户端不用知道有多少节点参与服务或者是这些节点的IP/端口。（这是默认模式）- endpoint_mode: dnsrr -  DNS轮询（DNSRR）服务发现不使用单个虚拟IP。 Docker为服务设置DNS条目，使得服务名称的DNS查询返回一个IP地址列表，并且客户端直接连接到其中的一个。如果您想使用自己的负载平衡器，或者混合Windows和Linux应用程序，则DNS轮询功能非常有用。<br>　　注：version 3.3+<br>| 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 | <code>version: ``&quot;3.3&quot;</code>   <code>services:</code> <code>  ``wordpress:</code> <code>    ``image: wordpress</code> <code>    ``ports:</code> <code>      ``-</code> <code>8080``:``80</code> <code>    ``networks:</code> <code>      ``-</code> <code>overlay</code> <code>    ``deploy:</code> <code>      ``mode: replicated</code> <code>      ``replicas: ``2</code> <code>      ``endpoint_mode: vip</code>   <code>  ``mysql:</code> <code>    ``image: mysql</code> <code>    ``volumes:</code> <code>       ``-</code> <code>db``-``data:``/``var``/``lib``/``mysql``/``data</code> <code>    ``networks:</code> <code>       ``-</code> <code>overlay</code> <code>    ``deploy:</code> <code>      ``mode: replicated</code> <code>      ``replicas: ``2</code> <code>      ``endpoint_mode: dnsrr</code>   <code>volumes:</code> <code>  ``db``-``data:</code>   <code>networks:</code> <code>  ``overlay:</code> </li>
+</ul>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p>12</p>
+<p>14</p>
+<p>16</p>
+<p>18</p>
+<p>20</p>
+<p>22</p>
+<p>24</p>
+<p>26</p>
+<p>28</p>
+<p>30</p>
+<p> </p>
+<p><code>  ``wordpress:</code></p>
+<p><code>    ``ports:</code></p>
+<p><code>    ``networks:</code></p>
+<p><code>    ``deploy:</code></p>
+<p><code>      ``replicas: ``2</code></p>
+<p> </p>
+<p><code>    ``image: mysql</code></p>
+<p><code>       ``-</code> <code>db``-``data:``/``var``/``lib``/``mysql``/``data</code></p>
+<p><code>       ``-</code> <code>overlay</code></p>
+<p><code>      ``mode: replicated</code></p>
+<p><code>      ``endpoint_mode: dnsrr</code></p>
+<p><code>volumes:</code></p>
+<p> </p>
+<p><code>  ``overlay:</code></p>
+<p>　　（2）LABELS　　</p>
+<p>　　指定服务的标签。这些标签仅在服务上设置，而不在服务的任何容器上设置　　<br>| 1 2 3 4 5 6 7 | <code>version: ``&quot;3&quot;</code> <code>services:</code> <code>  ``web:</code> <code>    ``image: web</code> <code>    ``deploy:</code> <code>      ``labels:</code> <code>        ``com.example.description: ``&quot;This label will appear on the web service&quot;</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p><code>version: ``&quot;3&quot;</code></p>
+<p><code>  ``web:</code></p>
+<p><code>    ``deploy:</code></p>
+<p><code>        ``com.example.description: ``&quot;This label will appear on the web service&quot;</code></p>
+<p>　　要改为在容器上设置标签，请在deploy之外使用标签键<br>| 1 2 3 4 5 6 | <code>version: ``&quot;3&quot;</code> <code>services:</code> <code>  ``web:</code> <code>    ``image: web</code> <code>    ``labels:</code> <code>      ``com.example.description: ``&quot;This label will appear on all containers for the web service&quot;</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p><code>services:</code></p>
+<p><code>    ``image: web</code></p>
+<p><code>      ``com.example.description: ``&quot;This label will appear on all containers for the web service&quot;</code></p>
+<p>　　（3）MODE</p>
+<p>　　全局（每个群集节点只有一个容器）或副本（指定容器的数量）。默认值被副本。　<br>| 1 2 3 4 5 6 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``worker:</code> <code>    ``image: dockersamples``/``examplevotingapp_worker</code> <code>    ``deploy:</code> <code>      ``mode: ``global</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p><code>services:</code></p>
+<p><code>    ``image: dockersamples``/``examplevotingapp_worker</code></p>
+<p><code>      ``mode: ``global</code></p>
+<p>　　（4）PLACEMENT</p>
+<p>　　指定约束和偏好设置　<br>| 1 2 3 4 5 6 7 8 9 10 11 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``db:</code> <code>    ``image: postgres</code> <code>    ``deploy:</code> <code>      ``placement:</code> <code>        ``constraints:</code> <code>          ``-</code> <code>node.role ``=``=</code> <code>manager</code> <code>          ``-</code> <code>engine.labels.operatingsystem ``=``=</code> <code>ubuntu ``14.04</code> <code>        ``preferences:</code> <code>          ``-</code> <code>spread: node.labels.zone</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p><code>version: ``&#39;3&#39;</code></p>
+<p><code>  ``db:</code></p>
+<p><code>    ``deploy:</code></p>
+<p><code>        ``constraints:</code></p>
+<p><code>          ``-</code> <code>engine.labels.operatingsystem ``=``=</code> <code>ubuntu ``14.04</code></p>
+<p><code>          ``-</code> <code>spread: node.labels.zone</code></p>
+<p>　　（5）REPLICAS</p>
+<p>　　如果服务是副本模式（默认模式），可以指定该服务运行的容器数量。　<br>| 1 2 3 4 5 6 7 8 9 10 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``worker:</code> <code>    ``image: dockersamples``/``examplevotingapp_worker</code> <code>    ``networks:</code> <code>      ``-</code> <code>frontend</code> <code>      ``-</code> <code>backend</code> <code>    ``deploy:</code> <code>      ``mode: replicated</code> <code>      ``replicas: ``6</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p><code>services:</code></p>
+<p><code>    ``image: dockersamples``/``examplevotingapp_worker</code></p>
+<p><code>      ``-</code> <code>frontend</code></p>
+<p><code>    ``deploy:</code></p>
+<p><code>      ``replicas: ``6</code></p>
+<p>　　（6）RESOURCES</p>
+<p>　　资源限制配置　<br>| 1 2 | <code>注意：这会替换版本``3``之前的Compose文件（cpu_shares，cpu_quota，cpuset，mem_limit，memswap_limit，mem_swappiness）</code> <code>中的非群集模式的旧资源约束选项，如升级``2.x``版至``3.x``中所述。　　</code> </p>
+<p>2</p>
+<p><code>中的非群集模式的旧资源约束选项，如升级``2.x``版至``3.x``中所述。　　</code></p>
+<p>　　在下例中，redis服务限制使用不超过50M的内存和0.50（50％）的可用处理时间（CPU），并且拥有20M的内存和0.25个CPU时间（总是可用）。　　<br>| 1 2 3 4 5 6 7 8 9 10 11 12 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``redis:</code> <code>    ``image: redis:alpine</code> <code>    ``deploy:</code> <code>      ``resources:</code> <code>        ``limits:</code> <code>          ``cpus: ``&#39;0.50&#39;</code> <code>          ``memory: ``50M</code> <code>        ``reservations:</code> <code>          ``cpus: ``&#39;0.25&#39;</code> <code>          ``memory: ``20M</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p>12</p>
+<p><code>services:</code></p>
+<p><code>    ``image: redis:alpine</code></p>
+<p><code>      ``resources:</code></p>
+<p><code>          ``cpus: ``&#39;0.50&#39;</code></p>
+<p><code>        ``reservations:</code></p>
+<p><code>          ``memory: ``20M</code></p>
+<p>　　（7）RESTART_POLICY</p>
+<p>　　配置在容器退出时是否并如何重启容器。取代restart指令。</p>
+<ul>
+<li>condition ：none、on-failure和any（默认any）- delay ：在重启尝试之间等待多久（默认0）- max_attempts ：尝试重启的次数（默认一直重启，直到成功）- window ： 在确实一个重启是否成功前需要等待的窗口时间　| 1 2 3 4 5 6 7 8 9 10 | <code>version: ``&quot;3&quot;</code> <code>services:</code> <code>  ``redis:</code> <code>    ``image: redis:alpine</code> <code>    ``deploy:</code> <code>      ``restart_policy:</code> <code>        ``condition: on``-``failure</code> <code>        ``delay: ``5s</code> <code>        ``max_attempts: ``3</code> <code>        ``window: ``120s</code> </li>
+</ul>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p><code>services:</code></p>
+<p><code>    ``image: redis:alpine</code></p>
+<p><code>      ``restart_policy:</code></p>
+<p><code>        ``delay: ``5s</code></p>
+<p><code>        ``window: ``120s</code></p>
+<p>　　（8）UPDATE_CONFIG</p>
+<p>　　配置服务如何升级</p>
+<ul>
+<li>parallelism：同一时间升级的容器数量- delay：容器升级间隔时间- failure_action：升级失败后的动作（continue、rollback和pause。默认pause）。- monitor：更新完成后确实成功的时间（ns|us|ms|s|m|h）。（默认0s）- max_failure_ratio：更新期间允许的失败率- order： 更新期间的操作顺序。停止优先（旧任务在开始新任务之前停止）或者先启动（首先启动新任务，并且正在运行的任务短暂重叠）（默认停止优先）注意：只支持v3.4及更高版本。　　| 1 2 3 4 5 6 7 8 9 10 11 12 | <code>version: ``&#39;3.4&#39;</code> <code>services:</code> <code>  ``vote:</code> <code>    ``image: dockersamples``/``examplevotingapp_vote:before</code> <code>    ``depends_on:</code> <code>      ``-</code> <code>redis</code> <code>    ``deploy:</code> <code>      ``replicas: ``2</code> <code>      ``update_config:</code> <code>        ``parallelism: ``2</code> <code>        ``delay: ``10s</code> <code>        ``order: stop``-``first</code> </li>
+</ul>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p>12</p>
+<p><code>services:</code></p>
+<p><code>    ``image: dockersamples``/``examplevotingapp_vote:before</code></p>
+<p><code>      ``-</code> <code>redis</code></p>
+<p><code>      ``replicas: ``2</code></p>
+<p><code>        ``parallelism: ``2</code></p>
+<p><code>        ``order: stop``-``first</code></p>
+<p>　　（9）depends_on</p>
+<p>　　表示服务之间的依赖关系　　<br>| 1 2 3 4 5 6 7 8 9 10 11 | <code>version: ``&#39;3&#39;</code> <code>services:</code> <code>  ``web:</code> <code>    ``build: .</code> <code>    ``depends_on:</code> <code>      ``-</code> <code>db</code> <code>      ``-</code> <code>redis</code> <code>  ``redis:</code> <code>    ``image: redis</code> <code>  ``db:</code> <code>    ``image: postgres</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p>10</p>
+<p><code>version: ``&#39;3&#39;</code></p>
+<p><code>  ``web:</code></p>
+<p><code>    ``depends_on:</code></p>
+<p><code>      ``-</code> <code>redis</code></p>
+<p><code>    ``image: redis</code></p>
+<p><code>    ``image: postgres</code></p>
+<p>　　（10）dns　　</p>
+<p>　　自定义DNS服务器。可以是单个值或列表。　<br>| 1 2 3 4 | <code>dns: ``8.8``.``8.8</code> <code>dns:</code> <code>  ``-</code> <code>8.8``.``8.8</code> <code>  ``-</code> <code>9.9``.``9.9</code> </p>
+<p>2</p>
+<p>4</p>
+<p><code>dns:</code></p>
+<p><code>  ``-</code> <code>9.9``.``9.9</code></p>
+<p>　　（11）dns_search　　<br>| 1 2 3 4 | <code>dns_search: example.com</code> <code>dns_search:</code> <code>  ``-</code> <code>dc1.example.com</code> <code>  ``-</code> <code>dc2.example.com</code> </p>
+<p>2</p>
+<p>4</p>
+<p><code>dns_search:</code></p>
+<p><code>  ``-</code> <code>dc2.example.com</code></p>
+<p>　　（12）environment　　</p>
+<p>　　添加环境变量。您可以使用数组或字典。任何布尔值;真/假，是/否，需要用引号括起来以确保它们不被YML解析器转换为True或False。　<br>| 1 2 3 4 5 6 7 8 9 | <code>environment:</code> <code>  ``RACK_ENV: development</code> <code>  ``SHOW: ``&#39;true&#39;</code> <code>  ``SESSION_SECRET:</code>   <code>environment:</code> <code>  ``-</code> <code>RACK_ENV``=``development</code> <code>  ``-</code> <code>SHOW``=``true</code> <code>  ``-</code> <code>SESSION_SECRET</code> </p>
+<p>2</p>
+<p>4</p>
+<p>6</p>
+<p>8</p>
+<p><code>environment:</code></p>
+<p><code>  ``SHOW: ``&#39;true&#39;</code></p>
+<p> </p>
+<p><code>  ``-</code> <code>RACK_ENV``=``development</code></p>
+<p><code>  ``-</code> <code>SESSION_SECRET</code></p>
+<p>　　（13）expose</p>
+<p>　　开放容器的端口而不用在主机上暴露端口，它们只能被相关联的服务获取。只能指定内部端口。**　**<br>| 1 2 3 | <code>expose:</code> <code> ``-</code> <code>&quot;3000&quot;</code> <code> ``-</code> <code>&quot;8000&quot;</code> </p>
+<p>2</p>
+<p><code>expose:</code></p>
+<p><code> ``-</code> <code>&quot;8000&quot;</code></p>
+<p>转载自： </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/docker%20stack%E7%9A%84%E7%9B%B8%E5%85%B3%E7%BC%96%E6%8E%92%E6%8C%87%E4%BB%A4/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/docker%20stack%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            docker stack相关命令
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Docker%20Compose%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6docker-compose.yml%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Docker Compose配置文件docker-compose.yml文件详解</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

@@ -160,7 +160,7 @@
     
     
     <article
-  id="post-CSS背景(background)"
+  id="post-docker网络简介"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -171,8 +171,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/"
-    >CSS背景(background)</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/"
+    >docker网络简介</a> 
 </h2>
  
 
@@ -180,95 +180,104 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.197Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%BD%91%E7%BB%9C%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.582Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS背景(background)<br>categories:</p>
+  <p>title: docker网络简介<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.背景颜色</p>
-<blockquote>
-<p> background-color: 颜色值;   默认的值是 **transparent  **透明的 </p>
-</blockquote>
-<p>2.背景图片(image)</p>
-<blockquote>
-<p> 语法： background-image : none | url (url) ; 例如: background-image: url(images/1.png); </p>
-</blockquote>
-<p>3.背景平铺（repeat）</p>
-<blockquote>
- <pre><code class="language-css">background-repeat : repeat | no-repeat | repeat-x | repeat-y 
-</code></pre> 
- <table><thead>|参数|作用
-</blockquote>
-</thead><tbody>|repeat|背景图像在纵向和横向上平铺（默认的）
-|no-repeat|背景图像不平铺
-|repeat-x|背景图像在横向上平铺
-|repeat-y| 背景图像在纵向平铺   
-</tbody></table> 什么是repeat？
-          
- <img alt="" height="380" src="https://img-blog.csdnimg.cn/20210202210607583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">
-  什么是repeat-x？
-          
- <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210202210750597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="483">
-  什么是repeat-y？
-          
- <img alt="" height="369" src="https://img-blog.csdnimg.cn/20210202210842685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="451">
-
-
-<p>4.背景位置(position)</p>
-<blockquote>
- <pre><code class="language-css">background-position : length || length
-background-position : position || position 
-</code></pre> 
- <table><thead>|参数|值
-</blockquote>
-</thead><tbody>|length|百分数 | 由浮点数字和单位标识符组成的长度值
-|position|top | center | bottom | left | center | right   方位名词
-</tbody></table>
- 注意： 
- -  必须先指定background-image属性 -  position 后面是x坐标和y坐标。可以使用方位名词或者 精确单位。 -  如果指定两个值，两个值都是方位名字，则两个值前后顺序无关，比如left  top和top  left效果一致 -  如果只指定了一个方位名词，另一个值默认居中对齐。 -  如果position 后面是精确坐标， 那么第一个，肯定是 x 第二个一定是y -  如果只指定一个数值,那该数值一定是x坐标，另一个默认垂直居中 -  如果指定的两个值是 精确单位和方位名字混合使用，则第一个值是x坐标，第二个值是y坐标 
- 背景简写： 
- -  background：属性的值的书写顺序官方没有强制的标准。为了可读性，建议如下写： -  background: 背景颜色 背景图片地址 背景平铺 背景滚动 背景位置; 
- <pre><code>/* 有背景图片背景颜色可以不用写*/
-background: transparent url(image.jpg) repeat-y  scroll center top ;</code></pre> 
-
-
-<p>5.背景图像固定background-attachment</p>
-<blockquote>
-<p> 背景是否跟着滚动而滚动<br> <img alt="" height="456" src="https://img-blog.csdnimg.cn/20210202214748899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> </p>
-</blockquote>
-<p>6.背景半透明(CSS3)</p>
-<blockquote>
- <pre><code class="language-css">background: rgba(0, 0, 0, 0.3);
-background: rgba(0, 0, 0, .3);
-</code></pre> 
-</blockquote>
+<p>—title: docker网络简介<br>categories:</p>
 <ul>
-<li>等同于background-color: rgba(0, 0, 0, .3) -  最后一个参数是alpha 透明度  取值范围 0~1之间 -  我们习惯把0.3 的 0 省略掉  这样写 background: rgba(0, 0, 0, .3); -  注意：背景半透明是指盒子背景半透明，盒子里面的内容不受影响 -  低于IE 9的版本不支持<br>盒子半透明 opacity </li>
-<li>设置opacity元素的所有后代元素会随着一起具有透明性，一般用于调整图片或者模块的整体不透明度 <pre>`opacity: .2;`</pre> </li>
+<li>docker</li>
 </ul>
-<p>7.背景总结</p>
-<blockquote>
- <table><thead>|属性|作用|值
-</blockquote>
-</thead><tbody>|background-color|背景颜色|预定义的颜色值/十六进制/RGB代码
-|background-image|背景图片|url(图片路径)
-|background-repeat|是否平铺|repeat/no-repeat/repeat-x/repeat-y
-|background-position|背景位置|length/position    分别是x  和 y坐标， 切记 如果有 精确数值单位，则必须按照先X 后Y 的写法
-|background-attachment|背景固定还是滚动|scroll/fixed
-|背景简写|更简单|背景颜色 背景图片地址 背景平铺 背景滚动 背景位置;  他们没有顺序
-|背景透明|让盒子半透明|background: rgba(0,0,0,0.3);   后面必须是 4个值
-</tbody></table>
+<p>—|Host|容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。<br>|Bridge|此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。<br>|None|该模式关闭了容器的网络功能。<br>|Container|创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。<br>|自定义网络|略</p>
+<h2 id="一、默认网络"><a href="#一、默认网络" class="headerlink" title="一、默认网络"></a>一、默认网络</h2><p><strong>当你安装Docker时，它会自动创建三个网络。你可以使用以下docker network ls命令列出这些网络：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker network ls</span><br><span class="line">NETWORK ID          NAME                DRIVER              SCOPE</span><br><span class="line">0147b8d16c64        bridge              bridge              local</span><br><span class="line">2da931af3f0b        host                host                local</span><br><span class="line">63d31338bcd9        none                null                local</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<p> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223222117.png"></p>
+<p><strong>Docker内置这三个网络，运行容器时，你可以使用该–network标志来指定容器应连接到哪些网络。</strong></p>
+<p><strong>该bridge网络代表docker0所有Docker安装中存在的网络。除非你使用该docker run –network=选项指定，否则Docker守护程序默认将容器连接到此网络。</strong></p>
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702223920623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
+
+<p><strong>我们在使用docker run创建Docker容器时，可以用 –net 选项指定容器的网络模式，Docker可以有以下4种网络模式：</strong></p>
+<ul>
+<li>host模式：使用 –net=host 指定。- none模式：使用 –net=none 指定。- bridge模式：使用 –net=bridge 指定，默认设置。- container模式：使用 –net=container:NAME_or_ID 指定。</li>
+</ul>
+<p><strong>下面分别介绍一下Docker的各个网络模式。</strong></p>
+<p><strong>1.1 Host模式</strong></p>
+<p><strong>相当于Vmware中的桥接模式，与宿主机在同一个网络中，但没有独立IP地址。</strong></p>
+<p><strong>众所周知，Docker使用了Linux的Namespaces技术来进行资源隔离，如PID Namespace隔离进程，Mount Namespace隔离文件系统，Network Namespace隔离网络等。</strong></p>
+<p><strong>一个Network Namespace提供了一份独立的网络环境，包括网卡、路由、Iptable规则等都与其他的Network Namespace隔离。一个Docker容器一般会分配一个独立的Network Namespace。但如果启动容器的时候使用host模式，那么这个容器将不会获得一个独立的Network Namespace，而是和宿主机共用一个Network Namespace。容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。</strong></p>
+<p><strong>例如，我们在172.25.6.1/24的机器上用host模式启动一个ubuntu容器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# docker run -it --network=host ubuntu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>可以看到，容器的网络使用的时宿主机的网络，但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</strong></p>
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702225446117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">
+
+<p><strong>1.2 Container模式</strong></p>
+<p><strong>在理解了host模式后，这个模式也就好理解了。这个模式指定新创建的容器和已经存在的一个容器共享一个Network Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过lo网卡设备通信。</strong></p>
+<p><strong>1.3 None模式</strong></p>
+<p><strong>该模式将容器放置在它自己的网络栈中，但是并不进行任何配置。实际上，该模式关闭了容器的网络功能，在以下两种情况下是有用的：容器并不需要网络（例如只需要写磁盘卷的批处理任务）。</strong></p>
+<p>overlay</p>
+<p><strong>在docker1.7代码进行了重构，单独把网络部分独立出来编写，所以在docker1.8新加入的一个overlay网络模式。Docker对于网络访问的控制也是在逐渐完善的。</strong></p>
+<p><strong>1.4 Bridge模式</strong></p>
+<p><strong>相当于Vmware中的Nat模式，容器使用独立network Namespace，并连接到docker0虚拟网卡（默认模式）。通过docker0网桥以及Iptables nat表配置与宿主机通信；bridge模式是Docker默认的网络设置，此模式会为每一个容器分配Network Namespace、设置IP等，并将一个主机上的Docker容器连接到一个虚拟网桥上。下面着重介绍一下此模式。</strong></p>
+<h2 id="二、Bridge模式"><a href="#二、Bridge模式" class="headerlink" title="二、Bridge模式"></a>二、Bridge模式</h2><p><strong>2.1 Bridge模式的拓扑</strong></p>
+<p><strong>当Docker server启动时，会在主机上创建一个名为docker0的虚拟网桥，此主机上启动的Docker容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配IP了，Docker会从RFC1918所定义的私有IP网段中，选择一个和宿主机不同的IP地址和子网分配给docker0，连接到docker0的容器就从这个子网中选择一个未占用的IP使用。如一般Docker会使用172.17.0.0/16这个网段，并将172.17.0.1/16分配给docker0网桥（在主机上使用ifconfig命令是可以看到docker0的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）。单机环境下的网络拓扑如下，主机地址为10.10.0.186/24。</strong></p>
+<p><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20190702230627173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbHRzbm93,size_16,color_FFFFFF,t_70">  </p>
+<p><strong>2.2 Docker：网络模式详解</strong></p>
+<p><strong>Docker完成以上网络配置的过程大致是这样的：</strong></p>
+<p><strong>（1）在主机上创建一对虚拟网卡veth pair设备。veth设备总是成对出现的，它们组成了一个数据的通道，数据从一个设备进入，就会从另一个设备出来。因此，veth设备常用来连接两个网络设备。</strong></p>
+<p><strong>（2）Docker将veth pair设备的一端放在新创建的容器中，并命名为eth0。另一端放在主机中，以veth65f9这样类似的名字命名，并将这个网络设备加入到docker0网桥中，可以通过brctl show命令查看。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brctl show</span><br><span class="line">bridge name     bridge id               STP enabled     interfaces</span><br><span class="line">docker0         8000.02425f21c208       no</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>（3）从docker0子网中分配一个IP给容器使用，并设置docker0的IP地址为容器的默认网关。</strong></p>
+<p><strong>运行容器：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx        </span><br><span class="line">9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>查看容器：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br><span class="line">CONTAINER ID        IMAGE          COMMAND                  CREATED             STATUS              PORTS                NAMES</span><br><span class="line">9582dbec7981        nginx          &quot;nginx -g &#x27;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:80-&amp;gt;80/tcp   nginx_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># 查看容器网络;</span><br><span class="line">docker inspect 9582dbec7981</span><br><span class="line">&quot;Networks&quot;: &#123;</span><br><span class="line">    &quot;bridge&quot;: &#123;</span><br><span class="line">        &quot;IPAMConfig&quot;: null,</span><br><span class="line">        &quot;Links&quot;: null,</span><br><span class="line">        &quot;Aliases&quot;: null,</span><br><span class="line">        &quot;NetworkID&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">        &quot;Gateway&quot;: &quot;172.17.0.1&quot;,</span><br><span class="line">        &quot;IPAddress&quot;: &quot;172.17.0.2&quot;,</span><br><span class="line">        &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">        &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">        &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">docker network inspect bridge</span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Name&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;Id&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2019-06-09T23:20:28.061678042-04:00&quot;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;EnableIPv6&quot;: false,</span><br><span class="line">        &quot;IPAM&quot;: &#123;</span><br><span class="line">            &quot;Driver&quot;: &quot;default&quot;,</span><br><span class="line">            &quot;Options&quot;: null,</span><br><span class="line">            &quot;Config&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;Subnet&quot;: &quot;172.17.0.0/16&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Internal&quot;: false,</span><br><span class="line">        &quot;Attachable&quot;: false,</span><br><span class="line">        &quot;Ingress&quot;: false,</span><br><span class="line">        &quot;Containers&quot;: &#123;</span><br><span class="line">            &quot;9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a&quot;: &#123;</span><br><span class="line">                &quot;Name&quot;: &quot;nginx_bridge&quot;,</span><br><span class="line">                &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">                &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;,</span><br><span class="line">                &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;,</span><br><span class="line">                &quot;IPv6Address&quot;: &quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Options&quot;: &#123;</span><br><span class="line">            &quot;com.docker.network.bridge.default_bridge&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_icc&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_ip_masquerade&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.host_binding_ipv4&quot;: &quot;0.0.0.0&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.name&quot;: &quot;docker0&quot;,</span><br><span class="line">            &quot;com.docker.network.driver.mtu&quot;: &quot;1500&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>网络拓扑介绍完后，接着介绍一下bridge模式下容器是如何通信的。</p>
+<p><strong>2.3 bridge模式下容器的通信</strong></p>
+<p><strong>在bridge模式下，连在同一网桥上的容器可以相互通信（若出于安全考虑，也可以禁止它们之间通信，方法是在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信）。</strong></p>
+<p><strong>Docker可以开启容器间通信（意味着默认配置–icc=true），也就是说，宿主机上的所有容器可以不受任何限制地相互通信，这可能导致拒绝服务攻击。进一步地，Docker可以通过–ip_forward和–iptables两个选项控制容器间、容器和外部世界的通信。</strong></p>
+<p><strong>容器也可以与外部通信，我们看一下主机上的Iptable规则，可以看到这么一条</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>这条规则会将源地址为172.17.0.0/16的包（也就是从Docker容器产生的包），并且不是从docker0网卡发出的，进行源地址转换，转换成主机网卡的地址。这么说可能不太好理解，举一个例子说明一下。假设主机有一块网卡为eth0，IP地址为10.10.101.105/24，网关为10.10.101.254。从主机上一个IP为172.17.0.1/16的容器中ping百度（180.76.3.151）。IP包首先从容器发往自己的默认网关docker0，包到达docker0后，也就到达了主机上。然后会查询主机的路由表，发现包应该从主机的eth0发往主机的网关10.10.105.254/24。接着包会转发给eth0，并从eth0发出去（主机的ip_forward转发应该已经打开）。这时候，上面的Iptable规则就会起作用，对包做SNAT转换，将源地址换为eth0的地址。这样，在外界看来，这个包就是从10.10.101.105上发出来的，Docker容器对外是不可见的。</strong></p>
+<p><strong>那么，外面的机器是如何访问Docker容器的服务呢？我们首先用下面命令创建一个含有web应用的容器，将容器的80端口映射到主机的80端口。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>然后查看Iptable规则的变化，发现多了这样一条规则：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 80 -j DNAT --to-destination 172.17.0.2:80</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>此条规则就是对主机eth0收到的目的端口为80的tcp流量进行DNAT转换，将流量发往172.17.0.2:80，也就是我们上面创建的Docker容器。所以，外界只需访问10.10.101.105:80就可以访问到容器中的服务。</strong></p>
+<p><strong>除此之外，我们还可以自定义Docker使用的IP地址、DNS等信息，甚至使用自己定义的网桥，但是其工作方式还是一样的。</strong></p>
+<h2 id="三、自定义网络"><a href="#三、自定义网络" class="headerlink" title="三、自定义网络"></a>三、自定义网络</h2><p><strong>建议使用自定义的网桥来控制哪些容器可以相互通信，还可以自动DNS解析容器名称到IP地址。Docker提供了创建这些网络的默认网络驱动程序，你可以创建一个新的Bridge网络，Overlay或Macvlan网络。你还可以创建一个网络插件或远程网络进行完整的自定义和控制。</strong></p>
+<p><strong>你可以根据需要创建任意数量的网络，并且可以在任何给定时间将容器连接到这些网络中的零个或多个网络。此外，您可以连接并断开网络中的运行容器，而无需重新启动容器。当容器连接到多个网络时，其外部连接通过第一个非内部网络以词法顺序提供。</strong></p>
+<p><strong>接下来介绍Docker的内置网络驱动程序。</strong></p>
+<p><strong>3.1 bridge</strong></p>
+<p><strong>一个bridge网络是Docker中最常用的网络类型。桥接网络类似于默认bridge网络，但添加一些新功能并删除一些旧的能力。以下示例创建一些桥接网络，并对这些网络上的容器执行一些实验。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker network create --driver bridge new_bridge</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>创建网络后，可以看到新增加了一个网桥（172.18.0.1）。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line">br-f677ada3003c: flags=4099&amp;lt;UP,BROADCAST,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.18.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        ether 02:42:2f:c1:db:5a  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 4001976  bytes 526995216 (502.5 MiB)</span><br><span class="line">        RX errors 0  dropped 35  overruns 0  frame 0</span><br><span class="line">        TX packets 1424063  bytes 186928741 (178.2 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br><span class="line">docker0: flags=4163&amp;lt;UP,BROADCAST,RUNNING,MULTICAST&amp;gt;  mtu 1500</span><br><span class="line">        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        inet6 fe80::42:5fff:fe21:c208  prefixlen 64  scopeid 0x20&amp;lt;link&amp;gt;</span><br><span class="line">        ether 02:42:5f:21:c2:08  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 12  bytes 2132 (2.0 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 24  bytes 2633 (2.5 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>3.2 Macvlan</strong></p>
+<p><strong>Macvlan是一个新的尝试，是真正的网络虚拟化技术的转折点。Linux实现非常轻量级，因为与传统的Linux Bridge隔离相比，它们只是简单地与一个Linux以太网接口或子接口相关联，以实现网络之间的分离和与物理网络的连接。</strong></p>
+<p><strong>Macvlan提供了许多独特的功能，并有充足的空间进一步创新与各种模式。这些方法的两个高级优点是绕过Linux网桥的正面性能以及移动部件少的简单性。删除传统上驻留在Docker主机NIC和容器接口之间的网桥留下了一个非常简单的设置，包括容器接口，直接连接到Docker主机接口。由于在这些情况下没有端口映射，因此可以轻松访问外部服务。</strong></p>
  
       <!-- reward -->
       
@@ -289,7 +298,7 @@ background: rgba(0, 0, 0, .3);
 
     
     <article
-  id="post-CSS3 新增圆角以及盒子阴影"
+  id="post-Docker数据卷之具名挂载和匿名挂载"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -300,8 +309,8 @@ background: rgba(0, 0, 0, .3);
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/"
-    >CSS3 新增圆角以及盒子阴影</a> 
+  <a class="article-title" href="/2021/07/18/Docker%E6%95%B0%E6%8D%AE%E5%8D%B7%E4%B9%8B%E5%85%B7%E5%90%8D%E6%8C%82%E8%BD%BD%E5%92%8C%E5%8C%BF%E5%90%8D%E6%8C%82%E8%BD%BD/"
+    >Docker数据卷之具名挂载和匿名挂载</a> 
 </h2>
  
 
@@ -309,56 +318,134 @@ background: rgba(0, 0, 0, .3);
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.195Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/Docker%E6%95%B0%E6%8D%AE%E5%8D%B7%E4%B9%8B%E5%85%B7%E5%90%8D%E6%8C%82%E8%BD%BD%E5%92%8C%E5%8C%BF%E5%90%8D%E6%8C%82%E8%BD%BD/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.579Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS3 新增圆角以及盒子阴影<br>categories:</p>
+  <p>title: Docker数据卷之具名挂载和匿名挂载<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.圆角边框</p>
-<blockquote>
- <pre><code class="language-css">border-radius:length;
-</blockquote>
-<p>border-top-left-radius   定义了左上角的弧度<br>border-top-right-radius   定义了右上角的弧度<br>border-bottom-right-radius   定义了右下角的弧度<br>border-bottom-left-radius   定义了左下角的弧度<br></code></pre> </p>
+<p>—### 1、匿名挂载</p>
+<p>(1）启动容器</p>
+<p>docker run -d -P –name nginx01 -v /etc/nginx nginx </p>
+<p>-v 容器内路径</p>
+<img alt="" height="54" src="https://img-blog.csdnimg.cn/20200706160620860.png" width="644">
+
+<p>（2）查看所有卷的情况</p>
+<p>docker volume ls<img alt="" height="71" src="https://img-blog.csdnimg.cn/20200706160710977.png" width="624"></p>
+<p>注：</p>
+<p>由上图可以看到，VOLUME NAME 有的是随机生成的字符串，对于这种就是匿名挂载，因为-v的时候只写了容器内的路径看，而没有写容器外的路径</p>
+<h3 id="2、具名挂载"><a href="#2、具名挂载" class="headerlink" title="2、具名挂载"></a>2、具名挂载</h3><p>(1)  启动容器</p>
+<p>docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx nginx </p>
+<p>语法： -v 卷名：容器内路径</p>
+<img alt="" height="187" src="https://img-blog.csdnimg.cn/20200706160923588.png" width="1053">
+
+<p>（2）查看一下这个卷</p>
+<p>docker volumn inspect juming-nginx</p>
+<img alt="" height="218" src="https://img-blog.csdnimg.cn/20200706161119579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3h5YWppYQ==,size_16,color_FFFFFF,t_70" width="510">
+
+<p>注：</p>
+<p>a、所有docker容器内的卷，没有指定目录的情况下都是在 /var/lib/docker/volumes/XXX</p>
+<img alt="" height="53" src="https://img-blog.csdnimg.cn/20200706161228773.png" width="754">
+
+<p>b、docker volumn ls 查看所有的卷都在这个位置/var/lib/docker/volumns</p>
+<img alt="" height="128" src="https://img-blog.csdnimg.cn/20200706161232907.png" width="764">
+
+<p>c、查看刚才添加的juming-nginx目录</p>
+<img alt="" height="99" src="https://img-blog.csdnimg.cn/20200706161256139.png" width="807">
+
+<h3 id="3、选择"><a href="#3、选择" class="headerlink" title="3、选择"></a>3、选择</h3><p>我们通过具名挂载可以方便的找到我们的一个卷，大多数情况在使用的，不建议大家使用匿名挂载</p>
+<p>如何确定是匿名挂载还是具名挂载呢？</p>
+<p>-v 容器内路径               #匿名挂载 -v 卷名：容器内路径         #具名挂载 -v /宿主机路径：容器内路径    #指定路径挂载</p>
+<h3 id="4、拓展"><a href="#4、拓展" class="headerlink" title="4、拓展"></a>4、拓展</h3><p>（1）通过 -v 容器内路径:ro rw 改变读写权限</p>
+<p>ro readonly  #只读 rw readwrite #可读可写</p>
+<p>（2）一旦这个设定了容器权限，容器对我们挂载出来的内容就有限定了</p>
+<p>docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx:ro  nginx docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx:rw  nginx</p>
+<p>（3）ro</p>
+<p>只要看到ro就说明这个路径只能通过宿主机来改变，容器内部是无法操作的</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Docker容器相关知识点总结"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+    >Docker容器相关知识点总结</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.577Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker容器相关知识点总结<br>categories:</p>
 <ul>
-<li>其中每一个值可以为 数值或百分比的形式。 -  技巧：让一个正方形 变成圆圈 <pre><code class="language-css">border-radius: 50%;
-</code></pre> 
-<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/cd90d25bf757638154c28d92250dac7c.png">如果要在四个角上一一指定，可以使用以下规则👇👇： <pre><code class="language-css">border-radius: 左上角 右上角  右下角  左下角;
-</code></pre> </li>
-<li> 四个值: 第一个值为左上角，第二个值为右上角，第三个值为右下角，第四个值为左下角。 -  三个值: 第一个值为左上角, 第二个值为右上角和左下角，第三个值为右下角 -  两个值: 第一个值为左上角与右下角，第二个值为右上角与左下角 -  一个值：四个圆角值相同 </li>
+<li>docker</li>
 </ul>
-<p>2.盒子阴影(box-shadow)</p>
-<blockquote>
- <pre><code class="language-css">box-shadow: offset-x offset-y [blur [spread]] [color] [inset]
-</code></pre> 
- <table><thead>|值|描述
-</blockquote>
-</thead><tbody>|offset-x|阴影的水平偏移量。正数向右偏移，负数向左偏移。
-|offset-y|阴影的垂直偏移量。正数向下偏移，负数向上偏移。
-|blur|可选。阴影模糊距离，不能取负数。
-|spread|可选。阴影大小
-|color|可选。阴影的颜色
-|inset|可选。表示添加内阴影，默认为外阴影
-</tbody></table>
- <pre><code class="language-css">div &#123;
-   width: 200px;
-   height: 200px;
-   border: 10px solid red;
-   /* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
-   /* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
-   box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);   
-&#125;</code></pre> 
-
-
+<p>—# 一：简介</p>
+<p>       1：什么是docker?                <img alt="" class="has" height="362" src="https://img-blog.csdn.net/20181016204647520?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="625">                <img alt="" class="has" height="235" src="https://img-blog.csdn.net/20181016205211455?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="610">        2：docker解决了什么问题？              <strong>Docker解决了运行环境和配置问题，方便发布，也就方便做持续集成</strong>。        </p>
+<p>       3：docker的生命周期               Docker的生命周期包含三个部分，镜像，容器，仓库，我们可以把镜像，               容器想像成java的类和对象，即容器是由镜像实例化而来的。也就是说我                们想使用装有相关软件的镜像，首先要把镜像创建成容器。</p>
+<p>      4：什么是docker镜像？              <img alt="" class="has" height="295" src="https://img-blog.csdn.net/20181016230820975?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="484"></p>
+<p>      5：什么是docker容器？              <img alt="" class="has" height="298" src="https://img-blog.csdn.net/20181016230900110?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">        6：什么是docker仓库？             <img alt="" class="has" height="239" src="https://img-blog.csdn.net/20181016231010989?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="545">              <img alt="" class="has" height="195" src="https://img-blog.csdn.net/20181017203507706?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="312"></p>
+<h1 id="二：Windows系统上安装Docker"><a href="#二：Windows系统上安装Docker" class="headerlink" title="二：Windows系统上安装Docker"></a>二：Windows系统上安装Docker</h1><p>       1：下载地址                <img alt="" class="has" height="203" src="https://img-blog.csdn.net/20181017203712503?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="595">               我们这里是在国内网站下载的，速度比较快                    Docker Toolbox for Win7下载地址：                                                  <img alt="" class="has" height="347" src="https://img-blog.csdn.net/20181017205207991?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="467">                        <img alt="" class="has" height="108" src="https://img-blog.csdn.net/20181017205256736?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="334">         2：安装                 ⑴下载完成后，双击下载文件                 ⑵ 一路Next，接受所有默认安装 。注意：在安装过程中，会出现几个其他的安装过程，                      如Ocracle Corporation等系列软件，全部选择安装即可。                 ⑶整个安装过程非常简单，安装完成后，可以在桌面得到如下的三个图标：                       <img alt="è¿éåå¾çæè¿°" class="has" src="https://img-blog.csdn.net/20160517175511388">                ⑷点击Docker Quickstart Terminal图标，从而打开一个Docker Toolbox terminal                       <img alt="è¿éåå¾çæè¿°" class="has" height="176" src="https://img-blog.csdn.net/20160517175602919" width="355">                       打开terminal后，terminal会自动进行一些设置，需要点时间，全部完成后，会出现如下的结果                        <img alt="" class="has" height="258" src="https://img-blog.csdn.net/20181017211540464?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="543">                      查看docker的版本信息：docker info                        <img alt="" class="has" height="373" src="https://img-blog.csdn.net/20181017211927234?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="411"></p>
+<h1 id="三：Linux上安装Docker"><a href="#三：Linux上安装Docker" class="headerlink" title="三：Linux上安装Docker"></a>三：Linux上安装Docker</h1><p>        <img alt="" class="has" height="214" src="https://img-blog.csdn.net/20181017214429547?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="373">         就是说必须要是64位的，内核版本要大于3.10，还有就是docker本身是在Ubuntu         系统上开发的，所以它对Ubuntu系统的支持是最好的，所以推荐使用Ubuntu系统         进行学习。        1：查看一下系统的内核版本：命令：uname -r   版本为4.15.0              <img alt="" class="has" height="101" src="https://img-blog.csdn.net/20181019230726238?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="339">        2：保证我们的apt-get是最新版本的：命令：apt-get update                 <img alt="" class="has" height="264" src="https://img-blog.csdn.net/20181019231928292?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="476">       3：安装Docker,最新版本的 Docker 安装包命令：curl -s <a target="_blank" rel="noopener" href="https://get.docker.com|sh/">https://get.docker.com|sh</a>               问题：curl command not found                   <img alt="" class="has" height="139" src="https://img-blog.csdn.net/20181019232709244?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="512">                解决：                   <img alt="" class="has" height="173" src="https://img-blog.csdn.net/20181019232854291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="404">                再次执行安装Docker命令：                    <img alt="" class="has" height="260" src="https://img-blog.csdn.net/20181019233732246?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="488">                安装完成后有个提示：                    <img alt="" class="has" height="77" src="https://img-blog.csdn.net/20181019233931211?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="610">                 当要以非root用户可以直接运行docker时，需要执行 **sudo usermod -aG docker +用户 **命令，                 然后重新登陆，否则会有如下报错：                    <img alt="" class="has" src="http://www.runoob.com/wp-content/uploads/2016/05/docker06.png">           4：使用docker version命令查看是否安装成功                  <img alt="" class="has" height="333" src="https://img-blog.csdn.net/20181019234358577?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="432">           5：启动docker后台服务命令：sudo service docker start，                下面存在Server就说明Docker服务端已经启动                  <img alt="" class="has" height="333" src="https://img-blog.csdn.net/20181019234358577?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="432">                   </p>
+<h1 id="四：Docker镜像"><a href="#四：Docker镜像" class="headerlink" title="四：Docker镜像"></a>四：Docker镜像</h1><p>        1：相关命令               ⑴docker pull [OPTIONS] NAME[:TAG]：                       这条命令是用来拉取镜像的，它会从docker远程仓库拉取一个镜像到我们本地。               ⑵docker images [OPTIONS] [REPOSITORY[:TAG]]                       这条命令是用来查看我们本机都存在哪些镜像，也可以用来验证我们pull镜像是否成功了。         2：操作我们上面安装好的docker               ⑴查看一下我们本地镜像                     <img alt="" class="has" height="153" src="https://img-blog.csdn.net/20181020114442883?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="609">        3：我们使用命令去docker的一个公共img仓库拉取hello world镜像，在官网上可以查到docker有哪些镜像                <img alt="" class="has" height="125" src="https://img-blog.csdn.net/2018102011571711?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="591">                <img alt="" class="has" height="138" src="https://img-blog.csdn.net/20181020115941529?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="640"></p>
+<h1 id="五：Docker容器"><a href="#五：Docker容器" class="headerlink" title="五：Docker容器"></a>五：Docker容器</h1><p>      1：运行镜像               docker run [OPTIONS] IMAGE[:TAG][COMMAND][ARG..]               <img alt="" class="has" height="303" src="https://img-blog.csdn.net/20181020142521906?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="497">               出现上面的效果说明hello-world镜像运行结束。</p>
+<h1 id="六：Docker运行Nginx"><a href="#六：Docker运行Nginx" class="headerlink" title="六：Docker运行Nginx"></a>六：Docker运行Nginx</h1><p>        1：前往网易云蜂巢镜像中心：                 <img alt="" class="has" height="256" src="https://img-blog.csdn.net/2018102014523129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="530">         2:查找到nginx镜像 ，这里使用docker同步的nginx镜像               <img alt="" class="has" height="135" src="https://img-blog.csdn.net/2018102014531188?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="462">        3：进入复制下载地址               <img alt="" class="has" height="78" src="https://img-blog.csdn.net/20181020145358328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="605">       4： 在服务器中粘贴执行该下载镜像               <img alt="" class="has" height="148" src="https://img-blog.csdn.net/20181020145725314?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="582">              <img alt="" class="has" height="155" src="https://img-blog.csdn.net/20181020145917718?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567">       5：后台启动nginx服务,命令是docker run -d +服务名称              <img alt="" class="has" height="176" src="https://img-blog.csdn.net/20181020150337334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="560">               <img alt="" class="has" height="116" src="https://img-blog.csdn.net/20181020150510133?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="557">        6：进入到容器内部，命令：docker exec -it +容器名称 +bash               <img alt="" class="has" height="120" src="https://img-blog.csdn.net/20181020152214946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="563">               可以发现进入容器内部后，就像是进入了一个新的电脑一样                <img alt="" class="has" height="75" src="https://img-blog.csdn.net/20181020152321630?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="523">                 <img alt="" class="has" height="168" src="https://img-blog.csdn.net/201810201525019?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="466">        7：如何让外部访问到容器中的nginx              ⑴首先我们将容器停掉，命令：docker stop +服务名称                   <img alt="" class="has" height="154" src="https://img-blog.csdn.net/20181020161059739?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="542">              ⑵nginx 的默认启动端口是80，8080:80  将外部主机8080端口映射到容器的80端口。                   <img alt="" class="has" height="244" src="https://img-blog.csdn.net/20181020161509916?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="575">                  命令：docker run -d -p 8080:80 +镜像名称                  <img alt="" class="has" height="99" src="https://img-blog.csdn.net/20181020161733514?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="595">                 效果：说明已经OK了。                   <img alt="" class="has" height="236" src="https://img-blog.csdn.net/2018102016194610?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="674">              8：我们也可以随意开辟一个端口去映射nginx的80端口                   <img alt="" class="has" height="243" src="https://img-blog.csdn.net/20181020162508162?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="577">                   命令：docker run -d -P +镜像名称                   从上面可以发现，随机分配了一个32768的端口去映射80端口。                    <img alt="" class="has" height="205" src="https://img-blog.csdn.net/20181020162701144?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="568">                    完美！</p>
+<h1 id="七：简单的java-web应用"><a href="#七：简单的java-web应用" class="headerlink" title="七：简单的java web应用"></a>七：简单的java web应用</h1><p>       1：制作自己的镜像              ⑴什么是Dockerfile？                     Dockerfile就是用来告诉Docker，我们要怎么制作一个镜像，                     我们制作镜像的每一步操作是什么。              ⑵什么是docker build？                     当Dockerfile写好之后，我们使用docker build命令来执行Dockerfile                     里面我们编写的代码，最终把docker镜像给构建出来。        2：开始制作Dockerfile               <img alt="" class="has" height="156" src="https://img-blog.csdn.net/20181020211609396?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="653">                  ⑴那么我们需要如何制作java web端的镜像呢？                    ①我们的镜像是要运行在tomcat中的。一般创建镜像，第一步是要继承一个基础镜像。                        那么我们就去网易蜂巢去找一个tomcat镜像，作为一个基础镜像                       <img alt="" class="has" height="124" src="https://img-blog.csdn.net/20181020212635912?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="640">                        我们将tomcat下载下来，注意：这个tomcat是包含JDK的，所以我们不用担心JDK问题。                      <img alt="" class="has" height="260" src="https://img-blog.csdn.net/20181020213441170?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="553">                      <img alt="" class="has" height="153" src="https://img-blog.csdn.net/20181020213616168?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">                   ②编写Dockerfile，以tomcat作为基础镜像，这个位置是镜像中的位置                        <img alt="" class="has" height="283" src="https://img-blog.csdn.net/20181020215557979?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="599">                        <img alt="" class="has" height="435" src="https://img-blog.csdn.net/20181020220057227?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="525">                        <img alt="" class="has" height="120" src="https://img-blog.csdn.net/20181020220951896?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="469">            3：使用docker build执行Dockerfile文件                    命令：docker build -t +名称:版本 +Dockerfile文件路径，如果是当前目录，                               就是docker build -t +名称:版本 .                         <img alt="" class="has" height="256" src="https://img-blog.csdn.net/20181020221932148?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508">                         <img alt="" class="has" height="244" src="https://img-blog.csdn.net/2018102022222666?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="593">               4：运行自己的容器                      ⑴运行命令                            <img alt="" class="has" height="293" src="https://img-blog.csdn.net/20181020222949107?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="528">                             <img alt="" class="has" height="96" src="https://img-blog.csdn.net/20181020223114385?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="477">                    ⑵访问端口                          <img alt="" class="has" height="259" src="https://img-blog.csdn.net/20181020223243837?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="551">                   ⑶访问我们的应用程序                         <img alt="" class="has" height="208" src="https://img-blog.csdn.net/2018102022355978?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="648"></p>
+<p>                                                         </p>
+<p> </p>
+<p>        </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
 <p> </p>
  
       <!-- reward -->
@@ -380,7 +467,7 @@ background: rgba(0, 0, 0, .3);
 
     
     <article
-  id="post-clickhouse之表和列的TTL规则与实践"
+  id="post-docker镜像原理"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -391,8 +478,8 @@ background: rgba(0, 0, 0, .3);
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/"
-    >clickhouse之表和列的TTL规则与实践</a> 
+  <a class="article-title" href="/2021/07/18/docker%E9%95%9C%E5%83%8F%E5%8E%9F%E7%90%86/"
+    >docker镜像原理</a> 
 </h2>
  
 
@@ -400,115 +487,26 @@ background: rgba(0, 0, 0, .3);
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.359Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E9%95%9C%E5%83%8F%E5%8E%9F%E7%90%86/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.576Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse之表和列的TTL规则与实践<br>categories:</p>
+  <p>title: docker镜像原理<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—### 1.表和列的TTL</p>
-<blockquote>
-<p> 定义值的生命周期<br> 可以为整个表设置，也可以为每个单独的列设置。<br> 表级的TTL也可以指定在磁盘和卷之间自动移动数据的逻辑。<br> 设置TTL的表，必须包含Date或DateTime类型的字段。<br> 定义数据的生命周期，需要在这个日期字段使用操作符：<br> <pre><code>TTL time_column<br>TTL time_column + interval<br></code></pre><br> 示例：<br> <pre><code>TTL date_time + INTERVAL 1 MONTH</p>
-</blockquote>
-<p>TTL date_time + INTERVAL 15 HOUR</code></pre> </p>
-<h3 id="2-列级TTL"><a href="#2-列级TTL" class="headerlink" title="2.列级TTL"></a>2.列级TTL</h3><blockquote>
-<p> 当列中的值过期时，ClickHouse将它们替换为该列对应数据类型的默认值。<br> 如果数据片段中所有列值都过期，则删除该数据片段下的该列的文件。<br> TTL子句不能用于key列。<br> 示例： </p>
-</blockquote>
+<p>—title: docker镜像原理<br>categories:</p>
 <ul>
-<li>创建TTL表- TTL过期验证- 给列增加TTL- 修改列的TTL</li>
+<li>docker</li>
 </ul>
-<h3 id="3-表级TTL"><a href="#3-表级TTL" class="headerlink" title="3.表级TTL"></a>3.表级TTL</h3><blockquote>
- <ol>- 表级的TTL定义了过期行的删除、磁盘和卷之间自动移动数据的逻辑。- 一张表可以定义一个过期行移除的表达式和多个磁盘和卷之间自动移动数据的逻辑的表达式。 TTL expr [DELETE|TO DISK 'aaa'|TO VOLUME 'bbb'], ...- 当表中的数据过期时，ClickHouse删除所有对应的行。- TTL规则的类型跟在每个TTL表达式后面，它表示表达式满足后（达到当前时间）要执行的操作。**DELETE - 删除过期的行（默认操作）； TO DISK ‘aaa’ - 将片段移至磁盘aaa； TO VOLUME ‘bbb’ - 将片段移动至磁盘bbb；**<li>创建表示例： <pre><code class="language-sql">CREATE TABLE example_table
-(
-    d DateTime, 
-    a Int 
-)ENGINE = MergeTree 
-PARTITION BY toYYYYMM(d) 
-ORDER BY d 
-TTL d + INTERVAL 1 MONTH [DELETE], 
-    d + INTERVAL 1 WEEK TO VOLUME 'aaa',
-    d + INTERVAL 2 WEEK TO DISK 'bbb'
-SETTINGS storage_policy = 'moving_from_ssd_to_hdd';
-</code></pre> 注意：当TTL表达式指定了磁盘和卷之间移动数据的逻辑，那么ClickHouse的表必须指定存储策略，且该存储策略中要包含相应的磁盘和卷。 </li>- **使用案例：TTL过期后执行数据删除案例。** 1).当ClickHouse合并数据片段时， 将删除TTL过期的数据。 2).当ClickHouse发现数据过期时， 它将执行一个计划外的合并。 要控制这类合并的频率， 可设置参数 merge_with_ttl_timeout。如果该值设置的过低， 它将导致执行许多的计划外合并，这可能会消耗大量资源。 3).如果在合并的时候执行SELECT查询， 则可能会得到过期的数据。 为了避免这种情况， 可以在SELECT 之前使用OPTIMIZE查询。</ol>
-</blockquote>
-<h3 id="4-列级TTL示例"><a href="#4-列级TTL示例" class="headerlink" title="4.列级TTL示例"></a>4.列级TTL示例</h3><blockquote>
- <ol><li>**创建带TTL的表** <pre><code class="language-sql">DROP TABLE example_table;
-CREATE TABLE example_table 
-(
-    d DateTime,
-    a Int TTL d + INTERVAL 1 MINUTE,
-    b String TTL d + INTERVAL 1 MINUTE,
-    c String
-)
-ENGINE = MergeTree
-ORDER BY d;
-xxxxx :) show create table example_table;
-</blockquote>
-<p>SHOW CREATE TABLE example_table</p>
-<p>┌─statement─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
-<p>1 rows in set. Elapsed: 0.007 sec. </p>
-<p>xxxxx :)<br></code></pre> </li><li><strong>插入数据</strong> <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');<br>insert into example_table values(now(), 2, 'value2', 'ccc2');<br></code></pre> 等待1分钟之后，执行： <pre><code class="language-sql">xxxxx :) select * from example_table;</p>
-<p>SELECT *<br>FROM example_table</p>
-<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:16 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘<br>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:15 │ 1 │ value1 │ ccc1 │<br>└─────────────────────┴───┴────────┴──────┘</p>
-<p>2 rows in set. Elapsed: 0.009 sec. </p>
-<p>xxxxx :) optimize table example_table;</p>
-<p>OPTIMIZE TABLE example_table</p>
-<p>Ok.</p>
-<p>0 rows in set. Elapsed: 0.004 sec. </p>
-<p>xxxxx :) select * from example_table;</p>
-<p>SELECT *<br>FROM example_table</p>
-<p>┌───────────────────d─┬─a─┬─b─┬─c────┐<br>│ 2020-11-26 14:53:15 │ 0 │   │ ccc1 │<br>│ 2020-11-26 14:53:16 │ 0 │   │ ccc2 │<br>└─────────────────────┴───┴───┴──────┘</p>
-<p>2 rows in set. Elapsed: 0.007 sec. </p>
-<p>xxxxx :)<br></code></pre>   </li><li><strong>给表的列添加TTL：</strong> <pre><code class="language-sql">ALTER TABLE example_table<br>MODIFY COLUMN<br>c String TTL d + INTERVAL 1 DAY;<br>xxxxx :) ALTER TABLE example_table<br>:-] MODIFY COLUMN<br>:-] c String TTL d + INTERVAL 1 DAY;</p>
-<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalDay(1)</p>
-<p>Ok.</p>
-<p>0 rows in set. Elapsed: 0.018 sec. </p>
-<p>xxxxx :)<br></code></pre> 修改列的TTL： <pre><code class="language-sql">ALTER TABLE example_table<br>    MODIFY COLUMN<br>    c String TTL d + INTERVAL 1 MONTH;<br>xxxxx :) ALTER TABLE example_table<br>:-]     MODIFY COLUMN<br>:-]     c String TTL d + INTERVAL 1 MONTH;</p>
-<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalMonth(1)</p>
-<p>Ok.</p>
-<p>0 rows in set. Elapsed: 0.015 sec. </p>
-<p>xxxxx :) show create table example_table;</p>
-<p>SHOW CREATE TABLE example_table</p>
-<p>┌─statement────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String TTL d + toIntervalMonth(1)<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
-<p>1 rows in set. Elapsed: 0.004 sec. </p>
-<p>xxxxx :)<br></code></pre>   </li></ol></p>
-<h3 id="5-表级TTL示例"><a href="#5-表级TTL示例" class="headerlink" title="5.表级TTL示例"></a>5.表级TTL示例</h3><blockquote>
- <ol><li>**创建表** <pre><code class="language-sql">drop table example_table ;
-CREATE TABLE example_table 
-(
-    d DateTime,
-    a Int,
-    b String,
-    c String
-)
-ENGINE = MergeTree
-ORDER BY d
-TTL d + INTERVAL 1 MINUTE DELETE;
-</code></pre> </li><li>**插入数据** <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');
-insert into example_table values(now(), 2, 'value2', 'ccc2');
-</code></pre> 然后查询结果： <pre><code class="language-sql">xxxxx :) select * from example_table;
-</blockquote>
-<p>SELECT *<br>FROM example_table</p>
-<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 15:24:53 │ 1 │ value1 │ ccc1 │<br>│ 2020-11-26 15:24:54 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘</p>
-<p>2 rows in set. Elapsed: 0.008 sec. </p>
-<p>xxxxx :)<br></code></pre> 等待1分钟后， 执行optimize操作。 <pre><code class="language-sql">xxxxx :) optimize table example_table;</p>
-<p>OPTIMIZE TABLE example_table</p>
-<p>Ok.</p>
-<p>0 rows in set. Elapsed: 0.006 sec. </p>
-<p>xxxxx :) select * from example_table;</p>
-<p>SELECT *<br>FROM example_table</p>
-<p>Ok.</p>
-<p>0 rows in set. Elapsed: 0.003 sec. </p>
-<p>xxxxx :)<br></code></pre>   </li></ol></p>
+<p>—1. 镜像是什么? 形象说法：镜像就像千层饼，一层套一层 官方：镜像是一种轻量级、可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含运行某个软件所需的所有内容包括代码、运行时、库、环境变量和配置文件。1. 什么是UnionFS（联合文件系统）         UnionFS(联合文件系统): Union文件系统(UnionFS)是一种分层、轻量级并且高性能的文件系统，它支持<strong>对文件系统的修改作为一次提交来一层层的叠加</strong>，同时可以将不同目录挂载到同一个虚拟文件系统下(unite several directories into a single virtual filesystem)。Union文件系统是Docker镜像的基础。镜像可以通过分层来进行继承, 基于基础镜像(没有父镜像)， 可以制作各种具体的应用镜像。 特性: 一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录        我们在下载某个镜像的时候，可能会看到下载了一层一层的多个镜像。    <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820173232156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center">1. docker镜像加载原理 1)docker镜像实际上是由一层层的文件系统组成，这种层级文件系统就是联合文件系统。 2)bootfs（boot file system,用于系统引导的文件系统）主要包含BootLoader和kernel，BootLoader主要负责引导加载kernel，Linux刚启动时会加载bootfs文件系统来引导内核的加载，     Docker镜像的最底层就是bootfs。这一层与我们典 型的unix系统是一样的，包含boot引导器和内核，当boot加载完成后整个内核就在内存中了，此时内存的使用权已经由bootfs转交给内核，     此时系统会卸载bootfs。 3)rootfs（root file system,根文件系统）在bootfs之上，包含的就是典型的unix系统的/dev、 /proc、 /etc等标准目录和文件和一些命令，rootfs就是不同unix系统的发行版，比如Ubuntu、centos等。 4)我们平时安装的虚拟机centos镜像好几个G，Docker安装的才200多m，因为对于一个精简的OS，rootfs可以很小，只需包含最基本的命令，工具和程序库就行了，因为底层直接使用宿主机的内核，    自己只需提供rootfs（相当于操作内核的客户端）就可以，由此可见不同发行版的bootfs基本是一致的，roorfs有差别，因此不同的发行版可以公有bootfs。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820180619143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 第一个图仅仅是bootfs+rootfs，然后如果要制作一个emacs环境的镜像，就在这个基础上新加一层emacs镜像，如图二。如果要在添加一个Apache环境，那就再图二基础上加一个apache镜像。如图三。图中的每一层镜像都能进行复用。 比如：上面的redis镜像。使用docker inspect redis镜像的ID 命令查看镜像的元信息，找到layer信息。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820174106623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 由上图可以看到下载的redis镜像是由6个镜像一层层组成的。<img alt="在这里插入图片描述" height="444" src="https://img-blog.csdnimg.cn/20200820174621185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center" width="462"> 这些镜像都是一个个独立可复用的镜像，如果下载其他镜像是，某一层镜像是已经存在本地的了，就不用在下载，直接复用该镜像，节省空间。比如上面下载redis镜像时，提示某个镜像已经存在。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820174801540.png#pic_center"> 注意： Docker镜像都是只读的，用镜像创建容器启动时，实际上是在原本的镜像上新建了一层可写层到原本镜像的顶部，这一层我们叫作容器层，容器层之下的叫作镜像层。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820181518835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 如上图，使用Tomcat镜像创建容器后，会在Tomcat镜像的基础上新建一个可写层，容器的写入是在可写层进行记录，然后使用commit命令把该容器创建一个新的镜像，实际上新的镜像是tomcat镜像+可写层镜像，以tomcat镜像为基础。通过下面介绍使用容器构建镜像，可以更好地理解。1. 分层理解<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200813125712686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FscGhy,size_16,color_FFFFFF,t_70#pic_center"></p>
  
       <!-- reward -->
       
@@ -529,7 +527,7 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
 
     
     <article
-  id="post-clickhouse之TSKV格式"
+  id="post-docker简介"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -540,8 +538,8 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8BTSKV%E6%A0%BC%E5%BC%8F/"
-    >clickhouse之TSKV格式</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%AE%80%E4%BB%8B/"
+    >docker简介</a> 
 </h2>
  
 
@@ -549,41 +547,26 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E4%B9%8BTSKV%E6%A0%BC%E5%BC%8F/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.352Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.573Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse之TSKV格式<br>categories:</p>
+  <p>title: docker简介<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—# TSKV需要了解的点</p>
+<p>—title: docker简介<br>categories:</p>
 <ul>
-<li>TSKV格式不适合有大量小列的输出.(因为每一行都是需要输出key，value，会比较浪费)- TSKV的效率并不比JSONEachRow差.- TSKV支持数据查询和数据导入。- 不需要保证列的顺序。- 支持忽略某些值，这些列使用默认值，例如0和空白行。复杂类型的值必须指定，无法使用默认值。<h2 id="数据的查询"><a href="#数据的查询" class="headerlink" title="数据的查询"></a>数据的查询</h2></li>
+<li>docker</li>
 </ul>
-<blockquote>
-</blockquote>
-<ul>
-<li>常规的数据查询<img alt="" height="473" src="https://img-blog.csdnimg.cn/20210411120539536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="719">- 使用TSKV格式化之后的查询 命令：<strong>select * from escape_demo format TSKV;</strong><img alt="" height="434" src="https://img-blog.csdnimg.cn/202104111206194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="828"> 可以发现每个数据前面都拼接上了字段名称。</li>
-</ul>
-<h2 id="数据的导出"><a href="#数据的导出" class="headerlink" title="数据的导出"></a>数据的导出</h2><blockquote>
-<p> 命令：clickhouse-client –query “select * from tutorial.escape_demo FORMAT TSKV” &gt; tskv.demo </p>
-</blockquote>
-<h3 id="查看导出数据"><a href="#查看导出数据" class="headerlink" title="查看导出数据"></a>查看导出数据</h3><img alt="" height="269" src="https://img-blog.csdnimg.cn/20210411122533734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="807">
-
-<h2 id="数据的导入"><a href="#数据的导入" class="headerlink" title="数据的导入"></a>数据的导入</h2><blockquote>
-<p> 命令：clickhouse-client –query “insert into tutorial.escape_demo FORMAT TSKV” &lt; tskv.demo </p>
-</blockquote>
-<h3 id="查看数据的导入"><a href="#查看数据的导入" class="headerlink" title="查看数据的导入"></a>查看数据的导入</h3><img alt="" height="631" src="https://img-blog.csdnimg.cn/20210411123055692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="724">
-
-<p>可以发现上面的数据发生了翻倍。</p>
+<p>—1. 什么是docker?  Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中,然后发布到任何流行的机器上,也可以实现虚拟化,  容器是完全使用沙箱机制,相互之间不会有任何接口。  <img alt="" src="https://img-blog.csdn.net/20181016204647520?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">1. docker的基本组成<img alt="" height="423" src="https://img-blog.csdnimg.cn/20201215220208243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="792"> 镜像(Images)：          docker镜像可以理解为一个模板，我们可以来创建容器服务，我们可以通过一个模板创建多个容器。          并且我们的项目服务最终都是运行在容器中的，例如我们springboot项目,mysql,redis等. 容器(Containers)：          <img alt="" src="https://img-blog.csdn.net/20181016230900110?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"> 仓库(Registry)：          <img alt="" src="https://img-blog.csdn.net/20181016231010989?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"></p>
  
       <!-- reward -->
       
@@ -604,7 +587,7 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
 
     
     <article
-  id="post-clickhouse算术函数"
+  id="post-docker的容器数据卷入门简介"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -615,8 +598,8 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/"
-    >clickhouse算术函数</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%9A%84%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%85%A5%E9%97%A8%E7%AE%80%E4%BB%8B/"
+    >docker的容器数据卷入门简介</a> 
 </h2>
  
 
@@ -624,37 +607,28 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.344Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%9A%84%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%85%A5%E9%97%A8%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.571Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse算术函数<br>categories:</p>
+  <p>title: docker的容器数据卷入门简介<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—&gt;<br> <pre><code class="language-sql">--求和<br>SELECT plus(12, 21), plus(10, -10), plus(-10, -10);<br>+------------+-------------+--------------+<br>|plus(12, 21)|plus(10, -10)|plus(-10, -10)|<br>+------------+-------------+--------------+<br>|33          |0            |-20           |<br>+------------+-------------+--------------+</p>
-<p>–差值<br>SELECT minus(10, 5), minus(10, -10), minus(-10, -10);<br>+————+————–+—————+<br>|minus(10, 5)|minus(10, -10)|minus(-10, -10)|<br>+————+————–+—————+<br>|5           |20            |0              |<br>+————+————–+—————+</p>
-<p>–积<br>SELECT multiply(12, 2), multiply(12, -2), multiply(-12, -2);<br>+—————+—————-+—————–+<br>|multiply(12, 2)|multiply(12, -2)|multiply(-12, -2)|<br>+—————+—————-+—————–+<br>|24             |-24             |24               |<br>+—————+—————-+—————–+</p>
-<p>–平均值<br>SELECT divide(12, 4), divide(10, 3), divide(2, 4), divide(-4, -2), divide(-4, 2), divide(-4.5, 3);<br>+————-+——————+————+————–+————-+—————+<br>|divide(12, 4)|divide(10, 3)     |divide(2, 4)|divide(-4, -2)|divide(-4, 2)|divide(-4.5, 3)|<br>+————-+——————+————+————–+————-+—————+<br>|3            |3.3333333333333335|0.5         |2             |-2           |-1.5           |<br>+————-+——————+————+————–+————-+—————+</p>
-<p>SELECT intDiv(10, 3), divide(10, 3);<br>+————-+——————+<br>|intDiv(10, 3)|divide(10, 3)     |<br>+————-+——————+<br>|3            |3.3333333333333335|<br>+————-+——————+</p>
-<p>SELECT divide(10, 0), divide(-10, 0); – 出现无穷大字符“ ∞ ”或“ -∞ ”<br>+————-+————–+<br>|divide(10, 0)|divide(-10, 0)|<br>+————-+————–+<br>|∞            |-∞            |<br>+————-+————–+</p>
-<p>SELECT divide(0, 0); – 特殊字符（类似乱码）<br>+————+<br>|divide(0, 0)|<br>+————+<br>|NaN         |<br>+————+</p>
-<p>SELECT intDivOrZero(10, 0);<br>– 0<br>+——————-+<br>|intDivOrZero(10, 0)|<br>+——————-+<br>|0                  |<br>+——————-+</p>
-<p>–求余数<br>SELECT modulo(10, 3); –1<br>+————-+<br>|modulo(10, 3)|<br>+————-+<br>|1            |<br>+————-+</p>
-<p>SELECT modulo(10.5, 3);<br>+—————+<br>|modulo(10.5, 3)|<br>+—————+<br>|1              |<br>+—————+</p>
-<p>–取反<br>SELECT negate(10), negate(-10);<br>+———-+———–+<br>|negate(10)|negate(-10)|<br>+———-+———–+<br>|-10       |10         |<br>+———-+———–+</p>
-<p>–绝对值<br>SELECT abs(-10), abs(10);<br>+——–+——-+<br>|abs(-10)|abs(10)|<br>+——–+——-+<br>|10      |10     |<br>+——–+——-+</p>
-<p>–最大公约数<br>SELECT gcd(12, 24), gcd(-12, -24), gcd(-12, 24);<br>+———–+————-+————+<br>|gcd(12, 24)|gcd(-12, -24)|gcd(-12, 24)|<br>+———–+————-+————+<br>|12         |12           |12          |<br>+———–+————-+————+</p>
-<p>–最小公倍数<br>SELECT lcm(12, 24), lcm(-12, -24), lcm(-3, 4);<br>+———–+————-+———-+<br>|lcm(12, 24)|lcm(-12, -24)|lcm(-3, 4)|<br>+———–+————-+———-+<br>|24         |24           |12        |<br>+———–+————-+———-+</p>
-<p></code></pre> 
-   </p>
+<p>—title: docker的容器数据卷入门简介<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 什么是容器数据卷? 命名的容器挂载数据卷，其它容器通过挂载这个（父容器）实现数据共享，挂载数据卷的容器，  称之为数据卷容器 。1. 案例1：用命令来挂载，让主机目录与容器目录数据共享 命令：docker run -it -v 主机目录:容器目录 镜像名称 /bin/bash 1)通过命令运行容器       <img alt="" height="28" src="https://img-blog.csdnimg.cn/20201225204926648.png" width="758"> 2)查看主机的/opt/ceshi目录,该目录下暂时没有东西<img alt="" height="141" src="https://img-blog.csdnimg.cn/20201225205012185.png" width="399"> 3)我们向该目录下新增一个文件      <img alt="" height="224" src="https://img-blog.csdnimg.cn/20201225205148936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="452"> 4)进入容器的/home目录下看看,可以发现已经同步完成      <img alt="" height="182" src="https://img-blog.csdnimg.cn/20201225205805152.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="713"> 5)我们在容器内创建一个文件       <img alt="" height="295" src="https://img-blog.csdnimg.cn/20201225205942505.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="751"> 6)退出容器,查看主机的/opt/ceshi目录下,发现已经同步       <img alt="" height="234" src="https://img-blog.csdnimg.cn/20201225210251579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585"> 7)使用inspect命令查看容器属性       命令：docker inspect 容器id    <img alt="" height="208" src="https://img-blog.csdnimg.cn/2020122521040938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="748">      <img alt="" height="212" src="https://img-blog.csdnimg.cn/20201225210516892.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520"><li>案例2：使用Dockerfile创建我们自己的镜像并且完成数据卷挂载 1)首先在/opt目录下创建一个Dockerfile文件      <img alt="" height="233" src="https://img-blog.csdnimg.cn/20201225220922406.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="467">        注意：大小写一定要注意         <pre><code>#表示依赖centos的基础镜像<br>FROM centos</p>
+<p>#表示通过匿名的方式创建两个数据挂载卷volume01和volume02<br>VOLUME [“volume01”,”volume02”]</p>
+<p>CMD echo “======end===============”</code></pre>  2)使用命令运行Dockerfile去生成自己的镜像      命令：docker build -f /opt/Dockerfile -t kgf/centos:v1.0      -f :指定要使用的Dockerfile路径；      -t :指为新的镜像取名为kgf/centos,版本为v1.0      注意最后有个点，默认使用 “上下文目录（Context）下的名为Dockerfile 的文件作为 Dockerfile”      <img alt="" height="361" src="https://img-blog.csdnimg.cn/20201225220957437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="809">         <img alt="" height="149" src="https://img-blog.csdnimg.cn/20201225221117351.png" width="620">      3)运行我们的镜像去创建容器          <img alt="" height="371" src="https://img-blog.csdnimg.cn/20201225221456456.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="809">           可以发现容器内部存在两个容器卷,我们在里面添加一个文件：           <img alt="" height="135" src="https://img-blog.csdnimg.cn/20201225221714241.png" width="559">       4) 我们到主机查看容器对应的挂载主机目录路径           命令：docker inspect 容器id          <img alt="" height="219" src="https://img-blog.csdnimg.cn/20201225222023966.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="875">            <img alt="" height="396" src="https://img-blog.csdnimg.cn/20201225222053380.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1021">            <img alt="" height="216" src="https://img-blog.csdnimg.cn/20201225222152579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1053">            可以发现主机的这个挂载目录也同步了容器中的数据文件</li></p>
  
       <!-- reward -->
       
@@ -675,7 +649,7 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
 
     
     <article
-  id="post-ClickHouse数据查询"
+  id="post-docker常用的命令"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -686,8 +660,8 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/"
-    >ClickHouse数据查询</a> 
+  <a class="article-title" href="/2021/07/18/docker%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4/"
+    >docker常用的命令</a> 
 </h2>
  
 
@@ -695,215 +669,27 @@ insert into example_table values(now(), 2, 'value2', 'ccc2');
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.334Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.569Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: ClickHouse数据查询<br>categories:</p>
+  <p>title: docker常用的命令<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—### 1.查询语法</p>
-<blockquote>
- <pre><code class="language-sql">[WITH expr_list|(subquery)]
-SELECT [DISTINCT] expr_list
-[FROM [db.]table | (subquery) | table_function] [FINAL]
-[SAMPLE sample_coeff]
-[ARRAY JOIN ...]
-[GLOBAL] [ANY|ALL|ASOF] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI] JOIN (subquery)|table (ON &lt;expr_list&gt;)|(USING &lt;column_list&gt;)
-[PREWHERE expr]
-[WHERE expr]
-[GROUP BY expr_list] [WITH TOTALS]
-[HAVING expr]
-[ORDER BY expr_list] [WITH FILL] [FROM expr] [TO expr] [STEP expr]
-[LIMIT [offset_value, ]n BY columns]
-[LIMIT [n, ]m] [WITH TIES]
-[UNION ALL ...]
-[INTO OUTFILE filename]
-[FORMAT format]
-</blockquote>
-<p></code></pre><br> 可以看到ClickHouse的SELECT语句的语法和通用的SQL的SELECT语句非常类似，包括： </p>
+<p>—title: docker常用的命令<br>categories:</p>
 <ul>
-<li>SELECT: 指定返回结果字段- DISTINCT：去重- FROM: 指定要查询的表或子查询- JOIN：表连接，支持内连接和外连接、左连接和右连接- WHERE：筛选条件- GROUP BY：分组，和聚合函数一起使用- HAVING：分组后筛选- ORDER BY：排序- LIMIT：限制返回记录数- UNION ALL：并集；ClickHouse目前只支持UNION ALL，还不支持UNION<br>ClickHouse的SELECT语句中也有一些特殊的用法： </li>
-<li>WITH: 设置查询中要用到的变量- SAMPLE: 数据取样，类似Pandas库的sample()函数- PREWHERE: 预筛选，起到提升性能作用- ARRAY JOIN：数组连接，用来展开数组或嵌套字段，一行变多行- LIMIT BY: 分组，再从每组中取前n条记录- INTO OUTFILE: 导出表数据到文件，再用FORMAT指定文件格式</li>
+<li>docker</li>
 </ul>
-<h3 id="2-WITH子句"><a href="#2-WITH子句" class="headerlink" title="2.WITH子句"></a>2.WITH子句</h3><blockquote>
- <pre><code class="language-sql">-- 在WITH子句中定义一个变量并赋值，然后在SELECT子句中通过别名使用该变量
-with '2014-03-17' as dt \
-select count(1) from hits_v1 where EventDate = dt;
-</blockquote>
-<p>– 在WITH子句中定义一个函数，然后在SELECT子句中通过别名使用该函数<br>with round(Duration / 60)as duration_minutes <br>select StartDate, max(duration_minutes) as max_duration_minutes from visits_v1 <br>group by StartDate, Duration <br>order by max_duration_minutes desc <br>limit 10;</p>
-<p>– 在WITH子句中定义一个子查询，然后在SELECT子句中通过别名使用该子查询<br>– 该子查询只能返回一行数据<br>with ( <br>  select sum(Duration) from visits_v1 <br>) as total_duration <br>select StartDate, sum(Duration) / total_duration as duration_percentage from visits_v1 <br>group by StartDate, Duration <br>limit 10;</p>
-<p></code></pre><br> <h3> </h3> </p>
-<h3 id="3-SAMPLE子句"><a href="#3-SAMPLE子句" class="headerlink" title="3.SAMPLE子句"></a>3.SAMPLE子句</h3><blockquote>
-<p> 对使用了MergeTree表引擎的表，并且设置了SAMPLE BY的表，可以使用SAMPLE子句来对数据进行抽样。<br> 表例子：<br> <pre><code class="language-sql">CREATE TABLE tutorial.hits_v1 \<br>(<br>  ...<br>)<br>ENGINE = MergeTree() \<br>PARTITION BY toYYYYMM(EventDate) \<br>ORDER BY (CounterID, EventDate, intHash32(UserID)) \<br>SAMPLE BY intHash32(UserID) \<br>SETTINGS index_granularity = 8192;</p>
-</blockquote>
-<p></code></pre><br> hits_v1表使用MergeTree表引擎，并且SAMPLE BY为将UserID转换成32位的Hash值。<br> <img alt="" height="276" src="https://img-blog.csdnimg.cn/20210428212535801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> SAMPLE子句示例：<br> <pre><code class="language-sql">-- 按比例采样<br>-- 采样结果记录数<br>select count(1) from hits_v1 sample 0.1<br>-- 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1<br>-- 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 limit 10</p>
-<p>– 按记录数采样<br>– 采样记录数较小时，采样结果数据为0条<br>select count(1) from hits_v1 sample 100<br>– 采样记录数大过索引粒度时，采样结果数据记录数接近采样记录数<br>elect count(1) from hits_v1 sample 10000<br>– 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000<br>– 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000 limit 10</p>
-<p>– 按比例和偏移量采样，类似于按比例采样<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 offset 0.3 limit 10<br></code></pre><br> SAMPLE子句数据采样具有幂等性和近似性的特点： </p>
-<ul>
-<li>幂等性：采样条件不变时，两次采样的结果<strong>可能</strong>一样- 近似性：采样范围和采样结果不保证精确</li>
-</ul>
-<h3 id="4-PREWHERE子句"><a href="#4-PREWHERE子句" class="headerlink" title="4.PREWHERE子句"></a>4.PREWHERE子句</h3><blockquote>
-<p> 只有MergeTree表引擎的表才能使用PREWHERE子句，可以将PREWHERE看作是ClickHouse对WHERE子句的优化。<br> ClickHouse默认将WHERE自动优化为PREWHERE:<br> <pre><code class="language-sql">-- optimize_move_to_prewhere为1时，表示开始PREWHERE自动优化<br>select name, value from system.settings where name like '%prewhere%'<br></code></pre> 
-   </p>
-</blockquote>
-<h3 id="5-ARRAY-JOIN子句"><a href="#5-ARRAY-JOIN子句" class="headerlink" title="5.ARRAY JOIN子句"></a>5.ARRAY JOIN子句</h3><blockquote>
-<p> 可以用ARRAY JOIN子句来对数组（Array）或嵌套（Nested）类型做链接查询，可以将一行数组展成多行。<br> ARRAY JOIN数组示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, RefererCategories from hits_v1 where WatchID = 4944118417295196513</p>
-</blockquote>
-<p>– 结果：<br>┌─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │ [6,98,456,8586]   │<br>└─────────────────────┴───────────────────┘</p>
-<p>– 使用ARRAY JOIN<br>select WatchID, RefererCategories <br>from hits_v1 <br>array join RefererCategories <br>where WatchID = 4944118417295196513;</p>
-<p>– 结果：<br>─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │                 6 │<br>│ 4944118417295196513 │                98 │<br>│ 4944118417295196513 │               456 │<br>│ 4944118417295196513 │              8586 │<br>└─────────────────────┴───────────────────┘</p>
-<p></code></pre><br> ARRAY JOIN嵌套类型示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 from hits_v1 where WatchID = 5024825574842900819</p>
-<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1───────────┬─ParsedParams.Key2───┐<br>│ 5024825574842900819 │ [‘gen_timestamp’,’Toolbar’] │ [‘group’,’true” /‘] │<br>└─────────────────────┴─────────────────────────────┴─────────────────────┘</p>
-<p>– 使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 <br>from hits_v1 <br>array join ParsedParams <br>where WatchID = 5024825574842900819;</p>
-<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1─┬─ParsedParams.Key2─┐<br>│ 5024825574842900819 │ gen_timestamp     │ group             │<br>│ 5024825574842900819 │ Toolbar           │ true” /           │<br>└─────────────────────┴───────────────────┴───────────────────┘</p>
-<p></code></pre><br> ARRAY JOIN也支持左连接接<code>LEFT ARRAY JOIN</code>。 </p>
-<h3 id="6-LIMIT-BY子句"><a href="#6-LIMIT-BY子句" class="headerlink" title="6.LIMIT BY子句"></a>6.LIMIT BY子句</h3><blockquote>
-<p> LIMIT BY子句不同于通用SQL的LIMIT子句。<br> <code>LIMIT n BY expression</code> 对SELECT结果先按expression分组，再在每组里选出前n个，类似分类排行榜的概念。<br> 示例：<br> <pre><code class="language-sql">CREATE TABLE limit_by(id Int, val Int) ENGINE = Memory;<br>INSERT INTO limit_by VALUES (1, 10), (1, 11), (1, 12), (2, 20), (2, 21), (2, 22), (3, 31);<br></code></pre><br> <pre><code class="language-sql">-- 排序<br>SELECT * FROM limit_by ORDER BY id, val</p>
-</blockquote>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  1 │  12 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  2 │  22 │<br>│  3 │  31 │<br>└────┴─────┘</p>
-<p>– 分类排序，再在每个分组内取前2条记录<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2 BY id</p>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  3 │  31 │<br>└────┴─────┘</p>
-<p>– 注意，与LIMIT 2的不同<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2</p>
-<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>└────┴─────┘</p>
-<p></code></pre><br> LIMIT BY子句也支持偏移量：<code>LIMIT n OFFSET m BY exression</code> </p>
-<h3 id="7-INTO-OUTFILE子句"><a href="#7-INTO-OUTFILE子句" class="headerlink" title="7.INTO OUTFILE子句"></a>7.INTO OUTFILE子句</h3><blockquote>
-<p> ClickHouse的INTO OUTFILE子句与MySQL的INTO OUTFILE子句类似。<br> <pre><code class="language-sql">-- 输出到当前目录<br>-- 默认格式为TSV<br>-- 注意文件名必须用单引号来括起来，且不能用双引号括起来，否则会报错：Expected string literal<br>-- 目录下不能存在同名文件，否则会报错<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile 'test.tsv'</p>
-</blockquote>
-<p>– 设置格式为CSV，CSV需要为全大小<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile ‘out.csv’ format CSV<br></code></pre> 
-   </p>
-<h3 id="8-执行计划"><a href="#8-执行计划" class="headerlink" title="8.执行计划"></a>8.执行计划</h3><blockquote>
- <h3>查看执行计划</h3> 
- 可以通过以下方式查看执行计划： 
- <ol>- 直接查看执行计划： ch --send_logs_level=trace &lt;&lt;&lt; 'select * from tutorial.hits_v1' &gt; /dev/null <li>可以将以下内容保持到一个脚本文件，比如`chx.sh`中： <pre><code class="language-bash">#!/bin/bash
-</blockquote>
-<p>clickhouse-client –send_logs_level=trace &lt;&lt;&lt; “$1” &gt; /dev/null<br></code></pre> 再通过<code>bash chi.sh &quot;select * from tutorial.hits_v1&quot;</code> 来查看执行计划。 </li>- 也可以在clickhouse-client执行sql同时，用<code>tail -f clickhouse-server.log</code> 查看clickhouse-server的日志。</ol><br> <h3>执行计划示例</h3><br> <code>select * from tutorial.hits_v1</code>的执行计划日志示例：<br> <pre><code class="language-bash">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0<br>&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete<br>&lt;Information&gt; executeQuery: Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.<br>&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 204.54 MiB.<br></code></pre><br> <strong>说明：</strong> </p>
-<ul>
-<li><strong>Key condition: unknown：没有使用主键索引。</strong>- <strong>MinMax index condition: unknown： 没有使用分区索引。</strong>- <strong>Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges： 共扫描了9个分区，共1094个mark。</strong>- <strong>Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.: 读取了8873898行数据，数据大小为7.88GB，用时47.964秒。</strong>- <strong>Peak memory usage (for query): 204.54 MiB.: 内存峰值（最大内存使用量）为204.54MB。</strong><br>将SQL改为只返回一个字段<code>select WatchID from tutorial.hits_v1</code>，再来看执行计划： <pre><code class="language-sql">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0
-&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
-&lt;Information&gt; executeQuery: Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.
-&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 12.32 MiB.
-</code></pre> 
-几个变化： </li>
-<li>Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.: 数据大小从7.88GB减小到67.70MB，用时从47.964秒减小到0.318秒。- Peak memory usage (for query): 12.32 MiB.: 内存峰值从204.54MB减小到12.32MB。<br>再将SQL改为指定分区查询： <pre><code class="language-sql">select WatchID from tutorial.hits_v1 where EventDate = '2014-03-17'
-</code></pre> 
-执行计划日志：  <pre><code class="language-bash">&lt;Debug&gt; executeQuery: (from 127.0.0.1:48102) SELECT WatchID FROM tutorial.hits_v1 WHERE EventDate = '2014-03-17'
-&lt;Debug&gt; InterpreterSelectQuery: MergeTreeWhereOptimizer: condition "EventDate = '2014-03-17'" moved to PREWHERE
-&lt;Trace&gt; ContextAccess (default): Access granted: SELECT(WatchID, EventDate) ON tutorial.hits_v1
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: (column 1 in [16146, 16146])
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: (column 0 in [16146, 16146])
-&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_1_6_1, approx. 818656, up to 818656 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_7_12_1, approx. 1621472, up to 1621472 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 15 ranges from part 201403_13_18_1, approx. 1349440, up to 1349440 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_19_24_1, approx. 1619776, up to 1619776 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 4 ranges from part 201403_25_25_0, approx. 278528, up to 278528 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_26_26_0, approx. 286720, up to 286720 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 2 ranges from part 201403_27_27_0, approx. 294912, up to 294912 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_28_28_0, approx. 229376, up to 229376 rows starting from 0
-&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_29_29_0, approx. 253952, up to 253952 rows starting from 0
-&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
-&lt;Information&gt; executeQuery: Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.
-&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 16.32 MiB.
-</code></pre> </li>
-</ul>
-<p> <strong>说明：</strong> </p>
-<ul>
-<li>MergeTreeWhereOptimizer: condition “EventDate = ‘2014-03-17’” moved to PREWHERE： 启动了PREWHERE优化。- Key condition: (column 1 in [16146, 16146])： 用了主键索引。- MinMax index condition: (column 0 in [16146, 16146])： 用了分区索引。- Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges：从1094 marks减少到833 marks。- Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.： 数据大小从67.70MB变为61.49MB，用时从0.318秒减少到0.097秒。</li>
-</ul>
-<h3 id="执行计划示例"><a href="#执行计划示例" class="headerlink" title="执行计划示例"></a>执行计划示例</h3> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之不常用数据格式"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/"
-    >clickhouse输入输出格式之不常用数据格式</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.326Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之不常用数据格式<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# 1. Native</p>
-<blockquote>
-<p> 数据以二进制数据块的方式进行读写。 数据的导出： clickhouse-client –query=“SELECT * FROM tsv_demo FORMAT Native” &gt; a.native<br> 数据的导入： clickhouse-client –query=“insert into tsv_demo FORMAT Native” &lt; a.native </p>
-</blockquote>
-<h1 id="2-Null"><a href="#2-Null" class="headerlink" title="2. Null"></a>2. Null</h1><blockquote>
-<p> 主要用于测试性能。 查询会被处理，并且数据会被传送到客户端，但是什么也不输出。 Null格式只能用于查询， 不能用于数据的导入。 </p>
-</blockquote>
-<h1 id="3-Pretty"><a href="#3-Pretty" class="headerlink" title="3. Pretty"></a>3. Pretty</h1><blockquote>
-<p> PrettyCompact：在交互式模式下，默认的数据显示格式。 PrettySpace </p>
-</blockquote>
-<h1 id="4-Values"><a href="#4-Values" class="headerlink" title="4. Values"></a>4. Values</h1><blockquote>
-<p> 每行之间使用逗号分隔，列之间也是使用逗号分隔。在括号中打印每一行。 INSERT INTO XX values<br> INSERT INTO XX FORMAT Values<br> insert into tsv_demo FORMAT Values (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’), (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’); </p>
-</blockquote>
-<h1 id="5-Vertical"><a href="#5-Vertical" class="headerlink" title="5. Vertical"></a>5. Vertical</h1><blockquote>
-<p> 数据以垂直的格式进行展示。 \G </p>
-</blockquote>
-<ul>
-<li>XML 只支持数据的查看。<br>select * from tsv_demo limit 2 FORMAT XML; </li>
-</ul>
+<p>—1. 查看docker版本信息  docker version1. 查看docker的详细信息,包括镜像和配置的阿里云加速器以及容器的数量等  docker info1. 镜像相关的命令 1)查看本地主机所有的镜像         docker images 2)查询镜像并且只显示镜像id         docker images -q 3)命令搜索可以下载的镜像        docker search 镜像名称      例如：docker search mysql      <img alt="" height="224" src="https://img-blog.csdnimg.cn/20201217205701441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1178"> 4)搜索指定条件的镜像(例如：搜索starts在3000以上的)       命令：docker search mysql –filter=STARS=3000      <img alt="" height="117" src="https://img-blog.csdnimg.cn/20201217210110391.png" width="922"> 5)docker下载镜像命令      命令：docker pull 镜像命令 6) 下载指定的镜像版本       命令：docker pull 镜像名称:版本       <img alt="" height="325" src="https://img-blog.csdnimg.cn/20201217211017359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="684">        注意：mysql的版本必须是docker仓库中存在的，我可以在docker hub中查看：        <img alt="" height="408" src="https://img-blog.csdnimg.cn/20201217211131303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"> 7)删除镜像命令      命令：docker rmi  -f 镜像id       -f : 代表强制删除  8)删除所有的镜像      命令：docker rmi -f $( docker images -aq)      -a : 代表全部      -q : 代表只查镜像id1. 容器相关的命令 docker run [可选参数] image 可选参数如下：        –name=”name”: 为容器指定一个名称        -d: 后台运行容器，并返回容器ID        -i: 以交互模式运行容器，通常与 -t 同时使用       -t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用       -P: 为容器指定一个运行的端口，-P 主机端口:容器端口       -p:  为容器随机指定一个运行的端口 1)启动并进入容器命令: docker run -it 镜像  /bin/bash         <img alt="" height="203" src="https://img-blog.csdnimg.cn/20201217220426954.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="676"> 2)查看当前正在运行的容器         docker ps 3)查看正在运行+曾经运行过的容器         docker ps -a 4)只查看容器的编号         docker ps -q 5)退出容器命令         exit : 表示退出并且停止容器         ctrl+p+q : 只退出容器并不停止容器 6)删除容器        docker rm -f 容器id 7)删除所有容器        docker rm -f $( docker ps -aq) 8)启动容器命令        docker start 容器id 9)重启容器        docker restart 容器id  10)停止容器命令        docker stop 容器id 11)杀掉容器命令         docker kill 容器id<li>docker查看日志命令 1)命令格式        <pre><code class="language-bash">$ docker logs [OPTIONS] CONTAINER<br>  Options:<br>        --details        显示更多的信息<br>    -f, --follow         跟踪实时日志<br>        --since string   显示自某个timestamp之后的日志，或相对时间，如42m（即42分钟）<br>        --tail string    从日志末尾显示多少行日志， 默认是all<br>    -t, --timestamps     显示时间戳<br>        --until string   显示自某个timestamp之前的日志，或相对时间，如42m（即42分钟）</code></pre>  2)查看指定时间后的日志，只显示最后100行         <pre><code>$ docker logs -f -t --since=&quot;2018-02-08&quot; --tail=100 CONTAINER_ID</code></pre>  3)查看最近30分钟的日志:      <pre><code>$ docker logs --since 30m CONTAINER_ID</code></pre>  4)查看某时间之后的日志：      <pre><code>$ docker logs -t --since=&quot;2018-02-08T13:23:37&quot; CONTAINER_ID</code></pre>  5) 查看某时间段日志：     <pre><code>$ docker logs -t --since=&quot;2018-02-08T13:23:37&quot; --until &quot;2018-02-09T12:23:37&quot; CONTAINER_ID</code></pre> </li>1. 查看容器中运行的进程信息 语法：    docker top CONTAINER [ps OPTIONS]1. 查看容器内部的细节 命令：docker inspect 容器ID                1. 进入当前正在运行的容器 命令：docker exec -it 容器ID bash  重新进入命令：docker attach 容器ID  区别：          a：attach是直接进入容器启动命令的终端，不会启动新的进程          b：exec是在容器中打开新的终端，并且可以启动新的进程 在容器外面查看容器内的内容：<img alt="" src="https://img-blog.csdnimg.cn/20181028205830489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70">  1. 从容器内拷贝文件到主机上 命令：docker cp 容器ID:容器内路径 目的主机路径 例如：现在我们在centos容器的/tem目录下存在一个test1文件，现在我们需要将            其拷贝到主机的/opt目录下<img alt="" src="https://img-blog.csdnimg.cn/20181028211352419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70"><img alt="" src="https://img-blog.csdnimg.cn/20181028211536307.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70"><br>10、删除状态为exited的容器</p>
+<p>      命令：docker rm $(docker ps -q -f status=exited)</p>
  
       <!-- reward -->
       
@@ -924,7 +710,7 @@ select count(1) from hits_v1 where EventDate = dt;
 
     
     <article
-  id="post-clickhouse输入输出格式之Parquet"
+  id="post-docker案例之制作tomcat镜像"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -935,8 +721,8 @@ select count(1) from hits_v1 where EventDate = dt;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/"
-    >clickhouse输入输出格式之Parquet</a> 
+  <a class="article-title" href="/2021/07/18/docker%E6%A1%88%E4%BE%8B%E4%B9%8B%E5%88%B6%E4%BD%9Ctomcat%E9%95%9C%E5%83%8F/"
+    >docker案例之制作tomcat镜像</a> 
 </h2>
  
 
@@ -944,43 +730,35 @@ select count(1) from hits_v1 where EventDate = dt;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.320Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E6%A1%88%E4%BE%8B%E4%B9%8B%E5%88%B6%E4%BD%9Ctomcat%E9%95%9C%E5%83%8F/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.567Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse输入输出格式之Parquet<br>categories:</p>
+  <p>title: docker案例之制作tomcat镜像<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—# Parquet输入输出格式</p>
-<blockquote>
-<p> 支持Parquet格式的导出和导入。 </p>
-</blockquote>
-<h1 id="Parquet和ClickHouse类型的匹配关系"><a href="#Parquet和ClickHouse类型的匹配关系" class="headerlink" title="Parquet和ClickHouse类型的匹配关系"></a>Parquet和ClickHouse类型的匹配关系</h1><blockquote>
- <img alt="" height="772" src="https://img-blog.csdnimg.cn/20210411161702364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- 不支持的Parquet数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。 
- **注意：** 
-</blockquote>
+<p>—title: docker案例之制作tomcat镜像<br>categories:</p>
 <ul>
-<li>ClickHouse表的列名必须与Parquet表的列名一致。- ClickHouse表的列数据类型可以不同于插入的Parquet数据类型。 在插入数据时， ClickHouse根据上表解释数据类型， 然后将数据类型转换为ClickHouse表的列数据类型。</li>
+<li>docker</li>
 </ul>
-<h1 id="数据的导出："><a href="#数据的导出：" class="headerlink" title="数据的导出："></a>数据的导出：</h1><p>备注：表随便找一张</p>
-<blockquote>
-<p> 命令：clickhouse-client –query=”SELECT * FROM tutorial.tsv_demo FORMAT Parquet” &gt; parquet_demo.parquet<br> <img alt="" height="142" src="https://img-blog.csdnimg.cn/20210411165153551.png" width="1200"> </p>
-</blockquote>
-<h1 id="数据的导入："><a href="#数据的导入：" class="headerlink" title="数据的导入："></a>数据的导入：</h1><blockquote>
-<p> 创建测试表：<br> 命令：create table parquet_demo (srcip String, destip String, time String) ENGINE=TinyLog;<br> 导入命令：<br> cat parquet_demo.parquet | clickhouse-client –query=”INSERT INTO parquet_demo FORMAT Parquet” </p>
-</blockquote>
-<h3 id="导入的数据查询："><a href="#导入的数据查询：" class="headerlink" title="导入的数据查询："></a>导入的数据查询：</h3><blockquote>
- <img alt="" height="311" src="https://img-blog.csdnimg.cn/20210411171838671.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"> 
-</blockquote>
+<p>—1. 进入/opt/tomcat9路径下，上传我们需要的tomcat以及jdk安装包  <img alt="" height="179" src="https://img-blog.csdnimg.cn/20201226174125314.png" width="786"><li>下面我们开始在这个目录下编写Dockerfile文件<img alt="" height="197" src="https://img-blog.csdnimg.cn/20201226175221627.png" width="811"> Dockerfile内容： <pre><code class="language-bash">#基于我们从阿里云下载下来的centos基础镜像<br>FROM centos</p>
+<p>#定义维护者的信息<br>MAINTAINER kgf&lt;<a href="mailto:&#x6b;&#x67;&#x66;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;">&#x6b;&#x67;&#x66;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;</a>&gt;</p>
+<p>#把宿主机当前上下文的test1.txt文件拷贝到容器/usr/local/路径下<br>COPY readme.txt /usr/local/readme.txt</p>
+<p>#把java与tomcat添加到容器中,使用ADD命令会自动帮我们解压<br>ADD jdk-8u191-linux-x64.tar.gz /usr/local/<br>ADD apache-tomcat-9.0.12.tar.gz /usr/local/</p>
+<p>#安装vim编辑器<br>RUN yum -y install vim</p>
+<p>#设置工作访问时候的workdir路径，登录落脚点<br>ENV MY_PATH /usr/local<br>WORKDIR $MY_PATH</p>
+<p>#配置java与tomcat环境变量<br>ENV JAVA_HOME /usr/local/jdk1.8.0_191<br>ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.12<br>ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.12<br>ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin</p>
+<p>#容器运行时监听的端口<br>EXPOSE 8080</p>
+<p>#启动时运行tomcat,下面的三种方式随便一种都可以使用<br>#ENTRYPOINT [“/usr/local/apache-tomcat-9.0.12/bin/startup.sh”]<br>#CMD [“/usr/local/apache-tomcat-9.0.12/bin/catalina.sh”,”run”]<br>CMD /usr/local/apache-tomcat-9.0.12/bin/startup.sh &amp;&amp; tail -F /usr/local/apache-tomcat-9.0.12/bin/logs/catalina.out</code></pre>   </li>1. 执行dockerfile文件 命令：docker build -f /opt/tomcat9/Dockerfile -t mytomcat:v1.0 .<img alt="" height="311" src="https://img-blog.csdnimg.cn/20201226183350361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701"><img alt="" height="253" src="https://img-blog.csdnimg.cn/20201226183426240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="593"><li>运行镜像生成镜像的实例容器 命令：     <pre><code class="language-bash">docker run -d -p 9080:8080 --name myt9 <br>-v /opt/tomcat9/test:/usr/local/apache-tomcat-9.0.12/webapps/test <br>-v /opt/tomcat9/logs:/usr/local/apache-tomcat-9.0.12/logs <br>--privileged=true <br>mytomcat:v1.0</p>
+<p>#注释:<br>     -d：表示后台运行<br>     -p 宿主机端口号:容器内运行的软件程序端口  —&gt;表示将容器内端口映射到宿主机，对外开放<br>     –name +容器名称  —&gt;为运行启动的容器起一个别名<br>     -v +宿主机路径:容器内路径  —&gt;表示为宿主机和容器添加关联数据卷<br>     –privileged=true   —-&gt;这是为了防止数据卷没有读写权限<br>     mytomcat:v1.0   —-&gt;这个是镜像的名称:版本号</code></pre> <img alt="" height="182" src="https://img-blog.csdnimg.cn/20201226184329432.png" width="702"><img alt="" height="151" src="https://img-blog.csdnimg.cn/20201226184346517.png" width="1200"> </li>1. 查看运行效果：<img alt="" height="372" src="https://img-blog.csdnimg.cn/2020122618455694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="944">1. 查看本地主机是否同步了容器的数据卷<img alt="" height="355" src="https://img-blog.csdnimg.cn/20201226184801392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. 下面在自定义的tomcat9上发布web项目演示 ⑴因为我们在容器内创建关联的数据卷目录是test命令，所以我们就将一个     简单的名称为test的web项目部署到容器内。     a：注意          因为宿主机的test目录是和容器类的test关联目录，所以我们只需要将          项目内文件传递到宿主机内即可。     <img alt="" height="193" src="https://img-blog.csdnimg.cn/20201226194142382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="833"> b：查看容器内test目录下文件<img alt="" height="171" src="https://img-blog.csdnimg.cn/20201226194239600.png" width="893"> ⑵重新启动运行的容器<img alt="" height="169" src="https://img-blog.csdnimg.cn/20201226194331187.png" width="788"> 效果（完美）：<img alt="" height="257" src="https://img-blog.csdnimg.cn/20201226194406185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="812"></p>
  
       <!-- reward -->
       
@@ -1001,7 +779,7 @@ select count(1) from hits_v1 where EventDate = dt;
 
     
     <article
-  id="post-clickhouse输入输出格式之ORC"
+  id="post-Docker安装Oracle12c知识点总结"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -1012,8 +790,8 @@ select count(1) from hits_v1 where EventDate = dt;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/"
-    >clickhouse输入输出格式之ORC</a> 
+  <a class="article-title" href="/2021/07/18/Docker%E5%AE%89%E8%A3%85Oracle12c%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+    >Docker安装Oracle12c知识点总结</a> 
 </h2>
  
 
@@ -1021,43 +799,26 @@ select count(1) from hits_v1 where EventDate = dt;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.311Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/Docker%E5%AE%89%E8%A3%85Oracle12c%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.565Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse输入输出格式之ORC<br>categories:</p>
+  <p>title: Docker安装Oracle12c知识点总结<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—# ORC数据的输入输出</p>
-<p>仅支持ORC格式的写入。</p>
-<h1 id="ORC和CH数据类型的匹配关系"><a href="#ORC和CH数据类型的匹配关系" class="headerlink" title="ORC和CH数据类型的匹配关系"></a>ORC和CH数据类型的匹配关系</h1><blockquote>
- <img alt="" height="721" src="https://img-blog.csdnimg.cn/20210411172805489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
- **备注：** 
-</blockquote>
+<p>—title: Docker安装Oracle12c知识点总结<br>categories:</p>
 <ul>
-<li>不支持的ORC数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。- ClickHouse表的列名必须与ORC表的列名一致。</li>
+<li>docker</li>
 </ul>
-<h1 id="使用Spark生成ORC文件"><a href="#使用Spark生成ORC文件" class="headerlink" title="使用Spark生成ORC文件"></a>使用Spark生成ORC文件</h1><blockquote>
-<p> val list = List(   (“113.248.234.232”, “123.212.22.01”, “2018-07-12 14:35:31”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:26:26”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:22:13”),   (“187.248.135.230”, “221.228.112.45”, “2019-08-09 13:17:39”),   (“187.248.234.232”, “221.228.112.24”, “2019-08-09 20:51:16”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 17:22:56”) )<br> val rdd = sc.makeRDD(list) import spark.implicits._ val df = rdd.toDF(“srcip”, “destip”, “time”) df.repartition(1).write.format(“orc”).mode(“append”).save(“/tmp/orc”)   </p>
-</blockquote>
-<h1 id="创建测试表"><a href="#创建测试表" class="headerlink" title="创建测试表"></a>创建测试表</h1><blockquote>
-<p> create table orc_demo (srcip String, destip String, time DateTime) ENGINE=TinyLog; </p>
-</blockquote>
-<h1 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h1><blockquote>
-<p> cat file.orc | clickhouse-client –query=”INSERT INTO test.orc_demo FORMAT ORC” </p>
-</blockquote>
-<h1 id="查询结果"><a href="#查询结果" class="headerlink" title="查询结果"></a>查询结果</h1><blockquote>
-<p> <code>select * from orc_demo</code> </p>
-</blockquote>
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318163404299.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70">
+<p>—1. <strong><strong><strong>拉取指定版本的镜像</strong></strong></strong> docker pull sath89/oracle-12c1. <strong>查看已经下载的镜像</strong><img alt="" height="96" src="https://img-blog.csdnimg.cn/20200820180202495.png" width="554">1. <strong><strong><strong>数据库设置和数据将保存到</strong></strong><strong><strong>/mydata/oracle12c</strong></strong><strong><strong>/ oradata文件夹</strong></strong></strong> 1) 首先需要创建/mydata/oracle12c/oracledata文件夹路径 2)赋予读写等权限(很重要)     chmod -R a+w /mydata/oracle12c/oracledata  3)执行下面的创建实例语句     docker run –shm-size=1024MB -p 1521:1521 \     –privileged \     -e ORACLE_ALLOW_REMOTE=true \     -v /mydata/oracle12c/oracledata:/u01/app/oracle \     –name oracle12c –restart=always -d sath89/oracle-12c 1. **<strong><strong>进入Oracle内部查看  1) **</strong></strong>进入容器内部       docker exec -it 容器ID/bin/bash  2)切换为oracle用户      su oracle  3)进入数据库      $ORACLE_HOME/bin/sqlplus / as sysdba  4)查看数据库状态      <img alt="" height="167" src="https://img-blog.csdnimg.cn/20200820180535952.png" width="370">  5)修改system用户密码       alter user system identified by iamp1234;  6)连接Oracle     hostname: ip地址     port:1521     sid:xe     username:system     password:iamp1234</p>
  
       <!-- reward -->
       
@@ -1078,7 +839,7 @@ select count(1) from hits_v1 where EventDate = dt;
 
     
     <article
-  id="post-clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】"
+  id="post-docker-swarm简介"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -1089,8 +850,8 @@ select count(1) from hits_v1 where EventDate = dt;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/"
-    >clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】</a> 
+  <a class="article-title" href="/2021/07/18/docker-swarm%E7%AE%80%E4%BB%8B/"
+    >docker-swarm简介</a> 
 </h2>
  
 
@@ -1098,94 +859,26 @@ select count(1) from hits_v1 where EventDate = dt;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.304Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker-swarm%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.562Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】<br>categories:</p>
+  <p>title: docker-swarm简介<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>docker</li>
 </ul>
-<p>—# JSON</p>
-<h2 id="JSON格式的输入输出"><a href="#JSON格式的输入输出" class="headerlink" title="JSON格式的输入输出"></a>JSON格式的输入输出</h2><p>JSON格式只支持数据的输出，不支持数据的解析（数据导入）。</p>
-<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><h3 id="建表插数据"><a href="#建表插数据" class="headerlink" title="建表插数据"></a>建表插数据</h3><blockquote>
- <pre><code class="language-sql">create table t_json_demo(id UInt8, prov String) ENGINE=TinyLog;
-insert into t_json_demo values(1, 'jiangsu'),
-(1, 'jiangsu'),
-(2, 'anhui'),
-(2, 'anihu'),
-(3, 'beijing');
-</code></pre> 
-</blockquote>
-<h3 id="查询演示"><a href="#查询演示" class="headerlink" title="查询演示"></a>查询演示</h3><p><strong>以JSON格式查询</strong></p>
-<blockquote>
-<p> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="854" src="https://img-blog.csdnimg.cn/20210411144340734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="532"> </p>
-</blockquote>
-<h3 id="取出value的双引号"><a href="#取出value的双引号" class="headerlink" title="取出value的双引号"></a>取出value的双引号</h3><blockquote>
-<p> 默认情况下， Int64和UInit64的整型使用双引号包裹， 如果要移除双引号，设置配置参数output_format_json_quote_64bit_integers为0。<br> 命令：set output_format_json_quote_64bit_integers=0;<br> 再进行同样的查询<br> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="843" src="https://img-blog.csdnimg.cn/20210411144556516.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528"> </p>
-</blockquote>
-<h3 id="查询时出现rows-before-limit-at-least"><a href="#查询时出现rows-before-limit-at-least" class="headerlink" title="查询时出现rows_before_limit_at_least"></a>查询时出现rows_before_limit_at_least</h3><blockquote>
-<p> 只有查询包含LIMIT时才输出， 只有在包含group by的语句中才有意义。当查询没有LIMIT时， 执行结果的最小行数。 </p>
-</blockquote>
-<h3 id="设置显示极值的参数extremes-1（默认为0）"><a href="#设置显示极值的参数extremes-1（默认为0）" class="headerlink" title="设置显示极值的参数extremes=1（默认为0）"></a>设置显示极值的参数extremes=1（默认为0）</h3><blockquote>
-<p> set extremes=1;<br> 在进行查询<code>select id,count() as cnt from t_json_demo group by id format JSON;</code><br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318151530860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
-</blockquote>
-<p> </p>
-<h1 id="JSONCompact"><a href="#JSONCompact" class="headerlink" title="JSONCompact"></a>JSONCompact</h1><h2 id="JSONCompact的输入输出"><a href="#JSONCompact的输入输出" class="headerlink" title="JSONCompact的输入输出"></a>JSONCompact的输入输出</h2><blockquote>
-</blockquote>
+<p>—title: docker-swarm简介<br>categories:</p>
 <ul>
-<li>JSON格式的数据以对象的方式输出， 而JSONCompact以数组的方式输出。- JSONCompact只支持数据的查看， 不支持数据的导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONCompact;` 
-<img alt="" height="729" src="https://img-blog.csdnimg.cn/20210411145009619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"> </li>
+<li>docker</li>
 </ul>
-<h1 id="JSONEachRow"><a href="#JSONEachRow" class="headerlink" title="JSONEachRow"></a>JSONEachRow</h1><h2 id="JSONEachRow数据输入输出"><a href="#JSONEachRow数据输入输出" class="headerlink" title="JSONEachRow数据输入输出"></a>JSONEachRow数据输入输出</h2><blockquote>
-</blockquote>
-<ul>
-<li>每行数据以换行符分隔的JSON对象。- 支持数据的输出和数据导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONEachRow;` 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318152711341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
-</ul>
-<h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
-</blockquote>
-<ul>
-<li>对象中键值对的顺序可任意排列。- 缺失某些字段。<h3>建表插入数据</h3> 
-<pre><code class="language-sql">#建表
-create table UserActivity (PageViews UInt8, UserID String, Duration UInt64, Sign Int8) ENGINE TinyLog;
-#插入数据
-INSERT INTO UserActivity FORMAT JSONEachRow &#123;"PageViews":5, "UserID":"4324182021466249494", "Duration":146,"Sign":-1&#125; &#123;"UserID":"4324182021466249494","PageViews":6,"Duration":185,"Sign":1&#125;
-</code></pre> 
-<h2>缺失值处理演示</h2> 
-<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS example_table
-(
- x UInt32,
- a DEFAULT x + 2
-) ENGINE = Memory;
-# 第二条数据第二个值没有设置
-insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":4&#125;;
-</code></pre> 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154207105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
-</ul>
-<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><blockquote>
-<p> 参数：input_format_defaults_for_omitted_fields 如果为0， 则x和a的默认值等于0（即UInt32数据类型的默认值）。 如果为1， 则x的默认值等于0， 但a的默认值等于x+2。 input_format_defaults_for_omitted_fields=1 </p>
-</blockquote>
-<h3 id="嵌套数据结构"><a href="#嵌套数据结构" class="headerlink" title="嵌套数据结构"></a>嵌套数据结构</h3><p><strong>案例演示</strong></p>
-<p><strong>建表插入数据</strong></p>
-<blockquote>
-<p> #建表 CREATE TABLE json_each_row_nested (n Nested (s String, i Int32) ) ENGINE = Memory; # 插入数据 INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n.s”: [“abc”, “def”], “n.i”: [1, 23]}; # 查看数据 select * from json_each_row_nested;<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154828387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
-</blockquote>
-<h3 id="要将数据作为分层JSON对象插入"><a href="#要将数据作为分层JSON对象插入" class="headerlink" title="要将数据作为分层JSON对象插入"></a>要将数据作为分层JSON对象插入</h3><blockquote>
-<p> 需要设置input_format_import_nested_json=1。（默认为0） </p>
-</blockquote>
-<h3 id="当参数设置为零时"><a href="#当参数设置为零时" class="headerlink" title="当参数设置为零时"></a>当参数设置为零时</h3><blockquote>
-<p> 当需要设置input_format_import_nested_json=0时： INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n”: {“s”: [“abc”, “def”], “i”: [1, 23]}}<br> Exception on client: Code: 117. DB::Exception: Unknown field found while parsing JSONEachRow format: n<br> Connecting to 192.168.0.200:9000 as user default. Connected to ClickHouse server version 20.1.4 revision 54431. </p>
-</blockquote>
+<p>—1.  什么是Docker Swarm? Swarm是Docker的一个编排工具，在之前我们只是在一台机器来进行docker的管理：<img alt="" src="https://img-blog.csdnimg.cn/img_convert/ab7861100c2cb8903ab02d28b7c8ae18.png"> 但是有时容器并不一定都在一台主机上，如果是分布式的处于多台主机上，这时就可以借助于Swarm，Swarm是Docker自带的编排工具，只要你安装了Docker就会存在Docker Swarm工具。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/db33a0c994117f706f5286619e0fe19e.png"> Swarm中的模式是有两大类节点，一类是manager节点，另一类是worker节点，manager节点相当于对服务的创建和调度，worker节点主要是运行容器服务，当然manager节点也是可以运行的。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/6833ae9814f2ac492420cddd5930f2ea.png"> manager节点状态、信息的同步根据Raft consensus group(Raft一致性算法)的网络进行通信同步的，而worker之间的通信依靠的是Gossip network(<strong>Gossip</strong>协议是电脑之间的通信协议)做到的。 另外一个重要的概念就是service，我们可以在一个manager节点上创建一个服务，但是可以根据这一个服务创建多个容器的任务，这些容器任务运行在不同的节点上。<img alt="" src="https://img-blog.csdnimg.cn/img_convert/25f70b33292dfbfeaa2a3ab246dbd122.png"> 那么如何进行Swarm集群的搭建呢？       1)在swarm模式下初始化一个Swarm集群，并且将当前主机加入到该集群作为manager节点       2)加入其它节点到该集群中       3)部署service到该集群中 1.  Docker Swarm集群搭建，这里我们总共有4台机器，我们准备创建的1主3从  主节点：192.168.56.10(docker01)  从节点：192.168.56.11(docker02)  从节点：192.168.56.12(docker03)  从节点：192.168.56.13(docker04) 1)创建多节点集群        1.1)查看docker-swarm命令              <img alt="" height="389" src="https://img-blog.csdnimg.cn/20210102202358243.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="780">             可以看到其中有一个 init的命令，这就是初始化一个Swarm，我们再看看这个init的参数：             <img alt="" height="412" src="https://img-blog.csdnimg.cn/20210102202500999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1104">              可以看到它有很多的参数，其中第一个就是将本机的地址添加进去，让自己成为一个Manager节点，这样其它的节点都可以知道这个节点的存在。 2)创建一个Manager节点       命令：docker swarm init –advertise-addr=当前机器的ip地址        <img alt="" height="205" src="https://img-blog.csdnimg.cn/20210102203033169.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1112">       可以看到已经创建了一个swarm manager节点–advertise-addr参数的值192.168.56.10是自己的ip，相当于将自己加入到swarm中。它也说明了其它worker加入的方式。       其它work加入的命令是：           docker swarm join –token SWMTKN-1-42k5spdc2goa6lqy2o858uu43x3r6yne03aoaa4267wdxozq1a-9ak1flizh9gckgulxanvjvsqe 192.168.56.10:2377 3)创建一个worker节点 ,另外再开启一台虚拟机，将这台机器加入到swarm中成为worker节点,这一台机器ip为192.168.56.11        命令： docker swarm join –token SWMTKN-1-42k5spdc2goa6lqy2o858uu43x3r6yne03aoaa4267wdxozq1a-9ak1flizh9gckgulxanvjvsqe 192.168.56.10:2377        <img alt="" height="148" src="https://img-blog.csdnimg.cn/20210102204131147.png" width="1200">        可以看到已经成功了。 4)查看节点状态 ,注意的是查看节点状态只能在manager节点那台机器上查看，普通节点无法执行查看命令：     命令：docker node ls      <img alt="" height="126" src="https://img-blog.csdnimg.cn/20210102204249673.png" width="1200">      可以看到有两台机器了。  5)这里我们总共有4台机器，我们将剩余两台机器创建好work节点      <img alt="" height="120" src="https://img-blog.csdnimg.cn/20210102204623906.png" width="1160">      <img alt="" height="127" src="https://img-blog.csdnimg.cn/20210102204639503.png" width="1129"> 6)在docker01主节点上查看节点状态      <img alt="" height="283" src="https://img-blog.csdnimg.cn/20210102204901728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1011">     可以看到有4台机器了。  7)多节点容器创建      上面我们已经将节点创建好了，现在可以在这些节点上创建容器了，那么就需要看看docker service 的帮助信息：      <img alt="" height="419" src="https://img-blog.csdnimg.cn/20210102205215457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="851">     可以看到有create这个命令，可以这样理解，docker server create 相当于docker run 就是创建容器，只不过在swarm中是不同的表现方式。     7.1)manager节点上创建容器服务，这里我们以nginx为例            命令：docker service create -p 8888:80 –name my-nginx nginx            <img alt="" height="138" src="https://img-blog.csdnimg.cn/20210102210024130.png" width="823">           可以查看是否创建成功：           <img alt="" height="91" src="https://img-blog.csdnimg.cn/2021010221010672.png" width="906">           可以具体看这个service的内容：          <img alt="" height="76" src="https://img-blog.csdnimg.cn/20210102210206529.png" width="1177">     7.2)水平扩展容器服务,使用scale对容器服务的数量进行水平扩展，它可以帮助我们创建多个service            命令：docker service scale 服务名=数量           <img alt="" height="208" src="https://img-blog.csdnimg.cn/20210102210716663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="618">            通过命令docker service ls查看            <img alt="" height="96" src="https://img-blog.csdnimg.cn/20210102210842456.png" width="849">           再看看具体的容器数量：           命令：docker service ps 服务命令：           <img alt="" height="106" src="https://img-blog.csdnimg.cn/20210102210959533.png" width="991">           我们可以通过docker ps命令在4台服务器上查看我们创建的4个服务分别运行在哪个服务器上           <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210102211302898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1120">            如上可以发现4台服务器一台机器运行了一个容器服务     7.3)scale在swarm中除了水平扩展外，还有一个作用，那就是修复作用，比如将某一个节点中的容器删除掉，那么很快swarm中发觉并进行修复，数量保持原先的样子         假如现在删除worker中的一个容器，我们就删除docker02中的容器：         <img alt="" height="138" src="https://img-blog.csdnimg.cn/20210102211638906.png" width="1191">         我们在manager节点中查看容器情况：         <img alt="" height="127" src="https://img-blog.csdnimg.cn/20210102211803643.png" width="1158">        可以看到红色就是我们删掉的容器，但是后面它又马上补充了一个，保持了整个系统的稳定性。 8)我们在浏览器上访问4台服务器的nginx试试      <img alt="" height="244" src="https://img-blog.csdnimg.cn/20210102211940503.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1049"><img alt="" height="278" src="https://img-blog.csdnimg.cn/20210102212003689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1087"><img alt="" height="293" src="https://img-blog.csdnimg.cn/20210102212028823.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1098"><img alt="" height="278" src="https://img-blog.csdnimg.cn/20210102212048178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> 1.  将我们部署的service移除命令：<img alt="" height="403" src="https://img-blog.csdnimg.cn/20210102212452219.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="772">  <img alt="" height="120" src="https://img-blog.csdnimg.cn/20210102212536429.png" width="1110"> 转载自： </p>
  
       <!-- reward -->
       
@@ -1211,7 +904,7 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
   </nav>
   
 </section>

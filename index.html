@@ -160,7 +160,7 @@
     
     
     <article
-  id="post-CSS字体样式"
+  id="post-docker知识点相关笔记一"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -171,8 +171,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E5%AD%97%E4%BD%93%E6%A0%B7%E5%BC%8F/"
-    >CSS字体样式</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%80/"
+    >docker知识点相关笔记一</a> 
 </h2>
  
 
@@ -180,357 +180,39 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E5%AD%97%E4%BD%93%E6%A0%B7%E5%BC%8F/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.218Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%80/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.606Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS字体样式<br>categories:</p>
+  <p>title: docker知识点相关笔记一<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.font-size</p>
-<blockquote>
-</blockquote>
-<ul>
-<li>font-size属性用于设置字号(字体大小) -  <code>谷歌浏览器</code>默认的文字大小为16px -  不同浏览器可能默认显示的字号大小不一致，我们尽量给一个明确值大小，不要默认大小。一般给body指定整个页面文字的大小。 <pre><code class="language-css">p &#123; font-size:20px; &#125;
-</code></pre> 
-单位 </li>
-<li>相对长度单位、绝对长度单位 <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/c85ad388913be4f7e4118a073317d213.png"> </li>
-</ul>
-<p>2.font-family</p>
-<blockquote>
-</blockquote>
-<ul>
-<li>font-family属性用于设置哪一种字体。 <pre><code class="language-css">p &#123; font-family:"微软雅黑";&#125;
-</code></pre> </li>
-<li>指定多个字体，如果浏览器不支持第一个字体就会尝试下一个直到找到合适的字体，如果都没有，以电脑默认字体为准。 <pre><code class="language-css">p &#123;font-family: Arial,"Microsoft Yahei", "微软雅黑";&#125;
-</code></pre> 
-<ul><li> CSS Unicode字体 </li>
-<li>在 CSS 中设置字体名称，直接写中文是可以的。但是在文件编码（GB2312、UTF-8 等）不匹配时会产生乱码的错误。 -  xp 系统不支持 类似微软雅黑的中文。 -  解决方案：英文来替代。比如<code>font-family:&quot;Microsoft Yahei&quot;</code>。在 CSS 直接使用 Unicode 编码来写字体名称可以避免这些错误。使用 Unicode 写中文字体名称，浏览器是可以正确的解析的。 </li></ul><pre>`font-family: "\5FAE\8F6F\96C5\9ED1";   表示设置字体为“微软雅黑”。`</pre> </li>
-</ul>
-<p>3.font-weight</p>
-<blockquote>
- <table><thead>|属性值|描述
-</blockquote>
-</thead><tbody>|normal|默认值（不加粗的）
-|bold|定义粗体（加粗的）
-|100~900|400 等同于 normal，而 700 等同于 bold  (数字表示粗细用的多)
-</tbody></table>
-
-
-<p>4.font-style</p>
-<blockquote>
-<p> font-style属性用于定义字体风格，如设置斜体、倾斜或正常字体，其可用属性值如下：<br> <table><thead>|属性|作用</p>
-</blockquote>
-</thead><tbody>|normal|默认值，浏览器会显示标准的字体样式  font-style: normal;
-|italic|浏览器会显示斜体的字体样式。
-</tbody></table>
-
-
-<p>5.font:综合设置字体样式</p>
-<blockquote>
- <pre><code>选择器 &#123; font: font-style  font-weight  font-size/line-height  font-family;&#125;
-</code></pre> 
- <ul><li> 注意：使用font属性时，必须按上面语法格式中的顺序书写，不能更换顺序，各个属性以`空格`隔开 
-</blockquote>
-<ul>
-<li>其中不需要设置的属性可以省略(取默认值),但必须保留<code>font-size</code>和<code>font-family</code>属性，否则font属性将不起作用。 </li></ul><img alt="" height="464" src="https://img-blog.csdnimg.cn/20210129212733617.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1071"> </li>
-</ul>
-<p>6.font总结</p>
-<blockquote>
- <table><thead>|属性|表示|注意点
-</blockquote>
-</thead><tbody>|font-size|字号|我们通常用的单位是px 像素，一定要跟上单位
-|font-family|字体|实际工作中按照团队约定来写字体
-|font-weight|字体粗细|记住加粗是 700 或者 bold  不加粗 是 normal 或者  400  记住数字不要跟单位
-|font-style|字体样式|记住倾斜是 italic     不倾斜 是 normal  工作中我们最常用 normal
-|font|字体连写|1. 字体连写是有顺序的  不能随意换位置 2. 其中字号 和 字体 必须同时出现
-</tbody></table>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-css之盒子模型"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/css%E4%B9%8B%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/"
-    >css之盒子模型</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/css%E4%B9%8B%E7%9B%92%E5%AD%90%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.216Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: css之盒子模型<br>categories:</p>
-<ul>
-<li>css</li>
-</ul>
-<p>—1.简介</p>
-<blockquote>
-</blockquote>
-<ul>
-<li> 盒子模型就是把HTML页面中的布局元素看作是一个矩形的盒子，也就是一个盛装内容的容器。 -  盒子模型由元素的内容、边框（border）、内边距（padding）、和外边距（margin）组成。 -  盒子里面的文字和图片等元素是 内容区域 -  盒子的厚度 我们称为为盒子的边框 -  盒子内容与边框的距离是内边距 -  盒子与盒子之间的距离是外边距 </li>
-</ul>
-<p> <strong>W3c标准盒子模型</strong><br> 标准 w3c 盒子模型的范围包括 margin、border、padding、content<br> 当设置为box-sizing: content-box;时，将采用标准模式解析计算，也是默认模式；<br> <code>内盒尺寸计算(元素实际大小)</code> </p>
-<ul>
-<li>宽度：Element Height = content height + padding + border （Height为内容高度） -  高度：Element  Width = content width + padding + border （Width为内容宽度） -  盒子的实际大小：**内容的宽度和高度 +  内边距   +  边框  **<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/bf54c2dc5e1b1168c841434a540ac30c.png"><strong>IE盒子模型</strong><br>IE 盒子模型的 content 部分包含了 border 和 pading<br>当设置为box-sizing: border-box时，将采用怪异模式解析计算； </li>
-</ul>
-<p>2.盒子边框(border)</p>
-<blockquote>
- <table><thead>|属性|作用
-</blockquote>
-</thead><tbody>|border-width|定义边框粗细，单位是px
-|border-style|边框的样式
-|border-color|边框颜色
-</tbody></table>
- **边框的样式：** 
- -  none：没有边框即忽略所有边框的宽度（默认值） -  solid：边框为单实线(最为常用的) -  dashed：边框为虚线 -  dotted：边框为点线 
- <pre><code>边框综合设置
-border : border-width || border-style || border-color 
-
-<p>border: 1px solid red;  没有顺序要求  <br></code></pre><br> <strong>盒子边框写法总结表：</strong><br> 很多情况下，我们不需要指定4个边框，我们是可以单独给4个边框分别指定的。<br> <table><thead>|上边框|下边框|左边框|右边框</p>
-</thead><tbody>|border-top-style:样式;|border-bottom-style:样式;|border-left-style:样式;|border-right-style:样式;
-|border-top-width:宽度;|border- bottom-width:宽度;|border-left-width:宽度;|border-right-width:宽度;
-|border-top-color:颜色;|border- bottom-color:颜色;|border-left-color:颜色;|border-right-color:颜色;
-|border-top:宽度 样式 颜色;|border-bottom:宽度 样式 颜色;|border-left:宽度 样式 颜色;|border-right:宽度 样式 颜色;
-</tbody></table>
- **表格的细线边框：** 
- <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/23f51af60551a3684fcb8aee07b48a7a.png"> 
- <ul>-  通过表格的`cellspacing="0"`,将单元格与单元格之间的距离设置为0， -  但是两个单元格之间的边框会出现重叠，从而使边框变粗 <li> 通过css属性：table{ border-collapse:collapse; }   
-   -  `collapse` 单词是合并的意思,`border-collapse: collapse;`表示相邻边框合并在一起。 </li></ul>
- <pre><code class="language-html">&lt;style&gt;
- table &#123;
-  width: 500px;
-  height: 300px;
-  border: 1px solid red;
- &#125;
- td &#123;
-  border: 1px solid red;
-  text-align: center;
- &#125;
- table, td &#123;
-  border-collapse: collapse; 
- &#125;
-&lt;/style&gt;</code></pre> 
-
-
-<p>3.内边距(padding)</p>
-<blockquote>
-<p> padding属性用于设置内边距。是指边框与内容之间的距离。<br> <strong>设置</strong><br> <table><thead>|属性|作用</p>
-</blockquote>
-</thead><tbody>|padding-left|左内边距
-|padding-right|右内边距
-|padding-top|上内边距
-|padding-bottom|下内边距
-</tbody></table>
- **padding简写** 
- <table><thead>|值的个数|表达意思
-</thead><tbody>|1个值|padding：上下左右内边距;
-|2个值|padding: 上下内边距    左右内边距 ；
-|3个值|padding：上内边距   左右内边距   下内边距；
-|4个值|padding: 上内边距 右内边距 下内边距 左内边距 ；
-</tbody></table>
- 当我们给盒子指定padding值之后， 发生了2件事情： 
- -  内容和边框 有了距离，添加了内边距。 -  盒子会变大 
- **解决措施：**通过给设置了宽高的盒子，减去相应的内边距的值，维持盒子原有的大小。 
- **padding不影响盒子大小情况：👉**如果没有给一个盒子指定宽度， 此时，如果给这个盒子指定padding， 则不会撑开盒子。 
-
-
-<p>4.外边距（margin）</p>
-<blockquote>
-<p> margin属性用于设置外边距。margin就是控制<code>盒子和盒子之间的距离</code><br> <strong>设置</strong><br> <table><thead>|属性|作用</p>
-</blockquote>
-</thead><tbody>|margin-left|左外边距
-|margin-right|右外边距
-|margin-top|上外边距
-|margin-bottom|下外边距
-</tbody></table>
- margin值的简写 （复合写法）代表意思  跟 padding 完全相同。 
- **块级盒子水平居中** 
- -  盒子必须指定宽度（width） -  然后就给左右的外边距都设置为auto 
- 实际工作中常用这种方式进行网页布局，示例代码如下： 
- <pre><code class="language-css">.header  &#123; width: 960px; margin: 0 auto;&#125;
-</code></pre> 
- 常见的写法，以下下三种都可以👇👇。 
- -  margin-left: auto;   margin-right: auto; -  margin: auto; -  margin: 0 auto; 
- **文字居中和盒子居中区别👇👇** 
- -  盒子内的文字水平居中是 text-align: center; 而且还可以让 行内元素和行内块居中对齐 -  块级盒子水平居中  左右margin 改为 auto 
- **插入图片和背景图片区别👇👇** 
- -  `插入图片`我们用的最多 比如产品展示类  移动位置只能靠盒模型 padding margin -  `背景图片`我们一般用于小图标背景或者超大背景图片、背景图片，移动位置只能通过  background-position 
- **清除元素的默认内外边距👇👇** 
- -  行内元素为了照顾兼容性,尽量只设置左右内外边距，不要设置上下内外边距。 
- <pre><code class="language-css">* &#123;
-   padding:0;         /* 清除内边距 */
-   margin:0;          /* 清除外边距 */
-&#125;</code></pre> 
-
-
-<p>5.外边距合并</p>
-<blockquote>
-<p> 使用margin定义块元素的<strong>「垂直外边距」</strong>时，可能会出现外边距的合并。<br> (1). 相邻块元素垂直外边距的合并 </p>
-</blockquote>
-<ul>
-<li>当上下相邻的两个块元素相遇时，如果上面的元素有下外边距margin-bottom -  下面的元素有上外边距margin-top，则他们之间的垂直间距不是margin-bottom与margin-top之和 -  <strong>「取两个值中的较大者」</strong>这种现象被称为相邻块元素垂直外边距的合并（也称外边距塌陷）。<br><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/5801d248713b0b007278d83da53fe65b.png"><strong>「解决方案：尽量给只给一个盒子添加margin值」</strong>。<br>(2). 嵌套块元素垂直外边距的合并（塌陷） </li>
-<li>对于两个嵌套关系的块元素，如果父元素没有上内边距及边框 -  父元素的上外边距会与子元素的上外边距发生合并 -  合并后的外边距为两者中的较大者<br><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/d3bafd9c994eb54f101ad55ce9983fba.png"><strong>「解决方案：」</strong> </li>
-<li>可以为父元素定义上边框。 -  可以为父元素定义上内边距 -  可以为父元素添加overflow: hidden。<br>还有其他方法，比如浮动、固定、绝对定位的盒子不会有问题，后面咱们再总结。。。 </li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-CSS元素显示模式的存在(块级元素，行内元素，行内块元素）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E5%85%83%E7%B4%A0%E6%98%BE%E7%A4%BA%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AD%98%E5%9C%A8(%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%EF%BC%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%EF%BC%8C%E8%A1%8C%E5%86%85%E5%9D%97%E5%85%83%E7%B4%A0%EF%BC%89/"
-    >CSS元素显示模式的存在(块级元素，行内元素，行内块元素）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/CSS%E5%85%83%E7%B4%A0%E6%98%BE%E7%A4%BA%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AD%98%E5%9C%A8(%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%EF%BC%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0%EF%BC%8C%E8%A1%8C%E5%86%85%E5%9D%97%E5%85%83%E7%B4%A0%EF%BC%89/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.214Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: CSS元素显示模式的存在(块级元素，行内元素，行内块元素）<br>categories:</p>
-<ul>
-<li>css</li>
-</ul>
-<p>—### CSS元素显示模式</p>
-<li> 
-  <ul>- - - - 
- 
-
-<h2 id="元素显示模式的存在"><a href="#元素显示模式的存在" class="headerlink" title="元素显示模式的存在"></a>元素显示模式的存在</h2><p>HTML中有各种各样的标签，如 &lt; img/&gt; &lt; h1&gt;~&lt; h6&gt;,&lt; span&gt;及 &lt; div&gt;等等。这些标签代表不同的HTML元素，有各自的含义和特定使用环境。同时，这些标签在其“本质”上就有着不同的分类。<strong>即元素可被分作 block(块级元素），inline(行内元素或内联元素）和inline-block(行内块元素）</strong></p>
-<h2 id="block-块级元素"><a href="#block-块级元素" class="headerlink" title="block 块级元素"></a>block 块级元素</h2><p>首先，了解block元素，需要知道常见的block块级元素有哪些：**&lt; h1&gt;~&lt; h6&gt;，&lt; p&gt;,&lt; ul&gt;，&lt; li&gt;, &lt; ol&gt;,和&lt; div&gt;标签。**<strong>最常见的是 &lt; div&gt;标签</strong>，也是写代码中经常用到的。 再者，需要了解block元素的特点：</p>
+<p>— </p>
 <ol>
-<li>独占一行，排斥其它元素与其在同一行1. 可以定义宽度width,高度height，但默认宽度就是100%1. 可以定义四个方向上的margin及padding1. 内部可容纳其它块元素或行内元素<br>关于独占一行，有以下简单demo来体现：</li>
+<li>  docker images  查询docker下面所有的镜像信息   <img alt="" class="has" height="215" src="https://img-blog.csdn.net/20181021174740132?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="509">        1. docker rmi &lt;image id&gt;     删除镜像信息   <img alt="" class="has" height="272" src="https://img-blog.csdn.net/20181021174953119?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="473">   <img alt="" class="has" height="189" src="https://img-blog.csdn.net/20181021175118660?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="469">1. 当非root用户要运行docker时，需要执行 **sudo usermod -aG docker +用户 **命令  <img alt="" class="has" height="48" src="https://img-blog.csdn.net/20181021181639116?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="496">  其实就是修改用户的组，将这个用户添加到docker的组里面，只要这个用户在docker  组里面，那么我们就不需要root用户，就可以直接运行docker命令。  <img alt="" class="has" height="152" src="https://img-blog.csdn.net/20181021182007275?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="594">1. 如何启动docker，启动的时候出现这个问题：  <img alt="" class="has" height="180" src="https://img-blog.csdn.net/20181021230958758?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="647">  <img alt="" class="has" height="339" src="https://img-blog.csdn.net/20181021232007724?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="651">  解决办法：       查看文件系统 /etc/docker/daemon.json 删除里面内容用空的花括号代替。       {}   保存退出。输入  service docker restart         <img alt="" class="has" height="278" src="https://img-blog.csdn.net/20181021235544697?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="415">1. 搜索相关镜像的版本信息，docker search +镜像名称<img alt="" class="has" height="309" src="https://img-blog.csdn.net/20181022103342178?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567">  1. ubuntu 下重启网络    命令：sudo service network-manager restart1. 运行nginx，命令：docker run -p 8080:80 -d nginx  -p：是做端口映射的，将docker中nginx本身的80端口映射成本地HOST的8080端口 -d：表示程序时后台运行的 nginx：表示的是启动的程序nginx的名称<img alt="" class="has" height="192" src="https://img-blog.csdn.net/20181023222032634?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="512"> <img alt="" class="has" height="190" src="https://img-blog.csdn.net/20181023222126737?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="581"> 使用我们自定义的index.html，将nginx的index.html页面替换掉命令:docker cp index.html +nginx容器名称://usr/share/nginx/html<img alt="" class="has" height="201" src="https://img-blog.csdn.net/20181023224218558?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="496"> index.html内容如下<img alt="" class="has" height="86" src="https://img-blog.csdn.net/20181023224302281?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="355"> 效果：    <img alt="" class="has" height="132" src="https://img-blog.csdn.net/20181023224402243?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="435"> 但是，我们发现如果我们将nginx重启之后页面的效果又恢复原样了，这是为什么呢？<img alt="" class="has" height="190" src="https://img-blog.csdn.net/20181023222126737?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="581"> 这是因为docker在容器内部所做的改动都是暂时的，如果要永久保存就需要做commit操作。命令：docker commit -m ‘备注信息’ +容器ID或者容器名称<img alt="" class="has" height="85" src="https://img-blog.csdn.net/20181023225814446?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567"> 查看images发现多了一个，但是没有名字<img alt="" class="has" height="183" src="https://img-blog.csdn.net/20181023230307230?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="549"> 那么我们就将它添加上：docker commit -m ‘备注信息’ +容器ID或者容器名称 +名称:版本<img alt="" class="has" height="245" src="https://img-blog.csdn.net/20181023230508754?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="579">1. 停止容器的命令  命令：docker stop 容器ID或者容器名称  <img alt="" class="has" height="192" src="https://img-blog.csdn.net/20181023225028334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="544">1. 进入容器内部的命令：  docker exec -it +容器名称/容器ID bash<img alt="" class="has" height="97" src="https://img-blog.csdn.net/20181023230012707?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="530">1. 查询所有的容器信息，不管是当前正在运行的，还是之前运行过并且已经停止了的命令：docker ps -a<img alt="" class="has" height="305" src="https://img-blog.csdn.net/20181023230935475?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="566"><img alt="" class="has" height="246" src="https://img-blog.csdn.net/20181023230956609?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="457"> 如果想要删掉这些信息，使用下面命令：docker rm +容器ID或者容器名称<img alt="" class="has" height="63" src="https://img-blog.csdn.net/20181023231304273?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="510">1. docker的相关网站 docker官网：<a href="http://www.docker.com，注意：这个网站特别慢，因为是国外的网站，有防火墙">http://www.docker.com，注意：这个网站特别慢，因为是国外的网站，有防火墙</a> docker中文网站：<a target="_blank" rel="noopener" href="https://www.docker-cn.com1/">https://www.docker-cn.com1</a>. CentOS下Docker的安装  Docker支持以下CentOS版本  <img alt="" class="has" height="178" src="https://img-blog.csdn.net/20181024215249289?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="606"> 案例：Centos7下安装Docker      ⑴查看linux版本          <img alt="" class="has" height="90" src="https://img-blog.csdnimg.cn/20181025211536601.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="416">      ⑵安装gcc，命令：yum -y install gcc           <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20181025212247887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="479">      ⑶安装gcc- c++，命令：yum -y install gcc- c++         <img alt="" class="has" height="183" src="https://img-blog.csdnimg.cn/20181025212414462.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="348">      ⑷效果：                 <img alt="" class="has" height="252" src="https://img-blog.csdnimg.cn/20181025212521571.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="488">     ⑸如果虚机上存在旧的Docker版本，那么需要先卸载旧版本         <img alt="" class="has" height="315" src="https://img-blog.csdnimg.cn/2018102521374278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="706">     ⑹安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的          命令：sudo yum install -y yum-utils device-mapper-persistent-data lvm2                     <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20181025224623607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="490">         ⑺设置yum源,设置stable镜像仓库               命令：sudo yum-config-manager –add-repo <a target="_blank" rel="noopener" href="https://download.docker.com/linux/centos/docker-ce.repo">https://download.docker.com/linux/centos/docker-ce.repo</a>               注意：如果我们执行上面的命令可能会出现下面的错误，不是命令的问题，是因为这个命令是需要从官网                          上下载东西，而我们清楚的是官网是国外的，特别慢，所以会时好时坏，出错。                          <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20181025225211858.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="503">              所以我们一般使用下面阿里云的地址：                     命令：sudo yum-config-manager –add-repo <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo">http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a>                          <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20181025225603461.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="571">             ⑻更新yum软件包索引                    命令：sudo yum makecache fast                        <img alt="" class="has" height="232" src="https://img-blog.csdnimg.cn/20181025230001583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="532">            ⑼安装Docker CE                 命令：yum -y install docker-ce                     <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/2018102523062872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="550">                     <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/2018102523070298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="565">            ⑽启动docker                 命令：systemctl start docker                     <img alt="" class="has" height="363" src="https://img-blog.csdnimg.cn/20181025230844666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="414">           ⑾测试                   命令：下载hello-world镜像                     <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20181025231309981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="562">                运行helllo-world镜像                     命令：docker run hello-world                    <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20181025231400915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="531">           ⑿配置镜像加速                 ①在etc下面建立docker目录                        <img alt="" class="has" height="64" src="https://img-blog.csdnimg.cn/2018102523153685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="306">                ②创建daemon.json文件                      命令：vi /etc/docker/daemon.json                       文件里面可以配置阿里云或者是网易云的链接地址                       <img alt="" class="has" height="227" src="https://img-blog.csdnimg.cn/20181025231842330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="517">                     下面就是阿里云的，自己注册一个即可：                     <img alt="" class="has" height="498" src="https://img-blog.csdn.net/20181021135224261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="540">                    这里面我们使用网易云的。                        <img alt="" class="has" height="103" src="https://img-blog.csdnimg.cn/20181025232233333.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="394">                  ③重新加载daemon                       命令:systemctl daemon-reload                       <img alt="" class="has" height="65" src="https://img-blog.csdnimg.cn/20181025232410234.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="306">               ④重新启动一下docker                      命令:systemctl restart docker                          <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20181025232557329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="377">           ⒀卸载docker命令：                 a：systemctl stop docker                 b：yum -y remove docker-ce                 c：rm -rf /var/lib/docker 1. docker仓库，镜像，容器等相关概念<img alt="" class="has" height="170" src="https://img-blog.csdn.net/20181024224356787?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="735"><img alt="" class="has" height="267" src="https://img-blog.csdn.net/20181024224650568?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="735"></li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;div class=&quot;div1&quot;&amp;gt;aaaa&amp;lt;/div&amp;gt;&amp;lt;div class=&quot;div2&quot;&amp;gt;bbbb&amp;lt;/div&amp;gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.div1&#123;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">.div2&#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>将两个div标签即块级元素写在同一行，并设置一定的背景颜色。 最终结果<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814101853819.png#pic_center"> 可见两个块级元素并没有办法在同一行，都是各占一行 可以尝试换成别的元素，也会发现，块级元素都会排斥其它元素与其在同一行，是<strong>独占一行</strong>的。‘ 这是块级元素的第一个特点：<strong>独占一行</strong></p>
-<p>由上我们也可发现，若不指定width宽度，那么块级元素的宽度属性是100%（与浏览器同宽）。即默认宽度为100%。我们可以设置对其设置宽度，高度。如将CSS代码修改成：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.div1&#123;</span><br><span class="line">    background-color: red;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">&#125;</span><br><span class="line">.div2&#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>效果：<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814102314382.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 可见，块级元素block的第二个特点：<strong>可以设置宽度和高度，并且默认宽度为100%。</strong></p>
-<p>关于四个方向的margin和padding值设置： 我们从以上代码继续添加属性如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.div1&#123;</span><br><span class="line">    background-color: red;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    margin: 50px 50px 50px 50px;</span><br><span class="line">&#125;</span><br><span class="line">.div2&#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>效果<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814102912675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 设置padding也是一样的，四个方向都可以设置 即块级元素的第三个特点，不仅可以设置宽度和高度，<strong>还可以设置四个方向上的margin和padding值</strong>。</p>
-<p>关于第四点，内部可容纳其它块元素和行内元素，修改一下html</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;div class=&quot;div1&quot;&amp;gt;aaaa</span><br><span class="line">    &amp;lt;div class=&quot;inside&quot;&amp;gt;ccc&amp;lt;/div&amp;gt;</span><br><span class="line">&amp;lt;/div&amp;gt;  </span><br><span class="line">&amp;lt;div class=&quot;div2&quot;&amp;gt;bbbb&amp;lt;/div&amp;gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">.div1&#123;</span><br><span class="line">    background-color: red;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    margin: 50px 50px 50px 50px;</span><br><span class="line">&#125;</span><br><span class="line">.div2&#123;</span><br><span class="line">    background-color: yellow;</span><br><span class="line">&#125;</span><br><span class="line">.inside&#123;</span><br><span class="line">    background-color: green;</span><br><span class="line">    width: 30px;</span><br><span class="line">    height: 30px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>效果<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814103428153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 也可以尝试在块级元素中插入行内元素。最后一个特点：<strong>块级元素内可以容纳其它块级元素或行内元素</strong></p>
-<h2 id="inline-行内元素"><a href="#inline-行内元素" class="headerlink" title="inline 行内元素"></a>inline 行内元素</h2><p>按照同样的思路，了解学习行内元素，也是先了解行内元素有什么，再了解其特点。 首先，常见的inline元素有，&lt; a&gt; ，&lt; strong&gt; ， &lt; b&gt;，&lt; em&gt;，&lt; i&gt;，&lt; del&gt;，&lt; s&gt;，&lt; ins&gt;，&lt; u&gt;，&lt; span&gt;。<strong>其中a标签是超链接标签，span标签是最典型常见的行内元素。</strong> 再者，inline行内元素的特点有：</p>
-<ol>
-<li>可以与其它相邻行内元素在同一行1. 无法定义width，height，默认宽度为content内容本身宽度1. 只有margin-left,margin-right,padding-left,padding-right有效1. 行内元素内只能容纳文本或其它行内元素<br>关于第一点，可以与其它行内元素在第一行，可看</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;span class=&#x27;span1&#x27;&amp;gt;aaaa&amp;lt;/span&amp;gt;&amp;lt;span class=&#x27;span2&#x27;&amp;gt;bbbb&amp;lt;/span&amp;gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.span1&#123;</span><br><span class="line">    background-color: pink;</span><br><span class="line">&#125;</span><br><span class="line">.span2&#123;</span><br><span class="line">    background-color:green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814104801992.png#pic_center"> 可以看到，<strong>一行确实可容纳多个行内元素，不独占一行</strong>。并且，<strong>默认宽度确实是content内容本身宽度</strong>。 对于宽度和高度的设置：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.span1&#123;</span><br><span class="line">    background-color: pink;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;  </span><br><span class="line">&#125;</span><br><span class="line">.span2&#123;</span><br><span class="line">    background-color:green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>添加了宽度和高度属性<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814105111926.png?x-oss-process=image/watermark,ype_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 发现并没有像块级元素一样可以设置宽度和高度，<strong>即行内元素设置宽度高度是无效的</strong></p>
-<p>关于margin值和padding值的设置，<strong>只有设置left和right是有效的，top和button是无效的</strong>。 可以从以下片段看出:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;span class=&#x27;span1&#x27;&amp;gt;aaaa&amp;lt;/span&amp;gt;&amp;lt;span class=&#x27;span2&#x27;&amp;gt;bbbb&amp;lt;/span&amp;gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.span1&#123;</span><br><span class="line">    background-color: pink;</span><br><span class="line">    margin-top: 50px;</span><br><span class="line">    margin-left: 50px;</span><br><span class="line">&#125;</span><br><span class="line">.span2&#123;</span><br><span class="line">    background-color:green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>为第一个span元素添加了margin-top和margin-left，效果如下图：<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814105520304.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"><strong>margin-top并没有出效果，但margin-left有效果，同理，margin-button也没有效果，margin-right有效果。****padding值也是一样的特点</strong>，只是展示效果会略有不同，这是由于padding和margin属性内涵的区别导致。<strong>详情可看关于盒子模型属性的详细介绍。****第四点，行内元素内可容纳其它文本内容和行内元素</strong>，可自行佐证测试。</p>
-<h2 id="inline-block-行内块元素"><a href="#inline-block-行内块元素" class="headerlink" title="inline-block 行内块元素"></a>inline-block 行内块元素</h2><p>行内块元素有 &lt; img/&gt; &lt; input/&gt; &lt; td&gt; 。 行内块元素的特点：</p>
-<ol>
-<li>可与相邻多个行内元素/行内块元素，在同一行 （行内元素的特点）1. 可以设置宽度和高度，但默认宽度为content内容本身1. 可以设置四个方向的margin,padding<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;span class=&#x27;span1&#x27;&amp;gt;aaaa&amp;lt;/span&amp;gt;&amp;lt;span class=&#x27;span2&#x27;&amp;gt;bbbb&amp;lt;/span&amp;gt;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.span1&#123;</span><br><span class="line">    display:inline-block;</span><br><span class="line">    background-color: pink;</span><br><span class="line">&#125;</span><br><span class="line">.span2&#123;</span><br><span class="line">    display:inline-block;</span><br><span class="line">    background-color:green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>可以加 display: inline-block，将元素转化为行内块元素。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814110544582.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 可见，行内块元素，<strong>一行能同时占有多个，不独占一行</strong> <strong>并且默认宽度为内容本身</strong></p>
-<p>稍作修改，添加宽度高度和margin</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.span1&#123;</span><br><span class="line">    display:inline-block;</span><br><span class="line">    background-color: pink;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    margin: 100px;</span><br><span class="line">&#125;</span><br><span class="line">.span2&#123;</span><br><span class="line">    display:inline-block;</span><br><span class="line">    background-color:green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200814110825641.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjYzMzIw,size_16,color_FFFFFF,t_70#pic_center"> 可见，可以设置margin，也可以设置宽度高度，同样也可设置padding。</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>       </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
  
       <!-- reward -->
       
@@ -551,7 +233,7 @@ border : border-width || border-style || border-color 
 
     
     <article
-  id="post-CSS学习之小米的侧边栏"
+  id="post-docker知识点相关笔记五"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -562,8 +244,8 @@ border : border-width || border-style || border-color 
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%B0%8F%E7%B1%B3%E7%9A%84%E4%BE%A7%E8%BE%B9%E6%A0%8F/"
-    >CSS学习之小米的侧边栏</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%BA%94/"
+    >docker知识点相关笔记五</a> 
 </h2>
  
 
@@ -571,26 +253,36 @@ border : border-width || border-style || border-color 
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%B0%8F%E7%B1%B3%E7%9A%84%E4%BE%A7%E8%BE%B9%E6%A0%8F/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.212Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%BA%94/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.603Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS学习之小米的侧边栏<br>categories:</p>
+  <p>title: docker知识点相关笔记五<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—title: CSS学习之小米的侧边栏<br>categories:</p>
+<p>—title: docker知识点相关笔记五<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—<li>代码 <pre><code class="language-html">&lt;!DOCTYPE html&gt;<br>&lt;html lang="en"&gt;<br>&lt;head&gt;<br>    &lt;meta charset="UTF-8"&gt;<br>    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>    &lt;title&gt;小米侧边栏&lt;/title&gt;<br>    &lt;style&gt;<br>        a &#123;<br>            /* 将行级元素变为块级元素 <em>/<br>            display: block;<br>            background-color: rgb(83, 87, 88);<br>            width: 278px;<br>            height: 45px;<br>            /</em> 首行缩进两格 <em>/<br>            text-indent: 2em;<br>            font-size: 14px;<br>            color: #fff;<br>            /</em> 链接的底部下划线去掉 <em>/<br>            text-decoration: none;<br>            /</em> 设置文字垂直居中 <em>/<br>            line-height: 45px;<br>        &#125;<br>        /</em> 将鼠标浮上去的时候背景颜色 */<br>        a:hover &#123;<br>           background-color: rgb(254, 103, 0);<br>        &#125;<br>    &lt;/style&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>    &lt;a href="#"&gt;手机 电话卡&lt;/a&gt;<br>    &lt;a href="#"&gt;电视 盒子&lt;/a&gt;<br>    &lt;a href="#"&gt;笔记本 平板&lt;/a&gt;<br>    &lt;a href="#"&gt;出行 穿戴&lt;/a&gt;<br>    &lt;a href="#"&gt;智能 路由器&lt;/a&gt;<br>    &lt;a href="#"&gt;健康 儿童&lt;/a&gt;<br>    &lt;a href="#"&gt;耳机 音响&lt;/a&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;</code></pre>   </li>1. 效果<img alt="" height="344" src="https://img-blog.csdnimg.cn/20210201221154919.png" width="284">1. 单行文字垂直居中的原理<img alt="" height="326" src="https://img-blog.csdnimg.cn/20210201221258269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686"></p>
+<p>—<li>创建一个自定义的tomcat9镜像  ⑴创建一个存放dockerfile的目录       <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/2018110316462743.png" width="365">  ⑵在这个目录下创建一个test1.txt文件（这个文件是用来演示cp命令的，      完成宿主机到容器的拷贝）      <img alt="" class="has" height="91" src="https://img-blog.csdnimg.cn/20181103164831288.png" width="314">      并且我们在这个目录下准备好jdk和tomcat的压缩包，后面有用     <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20181103172001716.png" width="462"> ⑶下面我们开始在这个目录下编写Dockerfile文件     <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20181103175215340.png" width="467">     dockerfile文件内容：      <pre class="has"><code>#基于我们从阿里云下载下来的centos基础镜像<br>FROM centos</p>
+<p>#定义维护者的信息<br>MAINTAINER kgf&lt;<a href="mailto:&#x6b;&#x67;&#102;&#64;&#x31;&#54;&#51;&#x2e;&#99;&#111;&#x6d;">&#x6b;&#x67;&#102;&#64;&#x31;&#54;&#51;&#x2e;&#99;&#111;&#x6d;</a>&gt;</p>
+<p>#把宿主机当前上下文的test1.txt文件拷贝到容器/usr/local/路径下<br>COPY test1.txt /usr/local/test1Copytocontainer.txt</p>
+<p>#把java与tomcat添加到容器中<br>ADD jdk-8u191-linux-x64.tar.gz /usr/local/<br>ADD apache-tomcat-9.0.12.tar.gz /usr/local/</p>
+<p>#安装vim编辑器<br>RUN yum -y install vim</p>
+<p>#设置工作访问时候的workdir路径，登录落脚点<br>ENV MY_PATH /usr/local<br>WORKDIR $MY_PATH</p>
+<p>#配置java与tomcat环境变量<br>ENV JAVA_HOME /usr/local/jdk1.8.0_191<br>ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar<br>ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.12<br>ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.12<br>ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin</p>
+<p>#容器运行时监听的端口<br>EXPOSE 8080</p>
+<p>#启动时运行tomcat,下面的三种方式随便一种都可以使用<br>#ENTRYPOINT [“/usr/local/apache-tomcat-9.0.12/bin/startup.sh”]<br>#CMD [“/usr/local/apache-tomcat-9.0.12/bin/catalina.sh”,”run”]<br>CMD /usr/local/apache-tomcat-9.0.12/bin/startup.sh &amp;&amp; tail -F /usr/local/apache-tomcat-9.0.12/bin/logs/catalina.out<br></code></pre>  ⑷执行dockerfile文件      命令：docker build -f /tmp/kgf/tomcat9/Dockerfile -t kgftomcat9:1.1 .      <img alt="" class="has" height="299" src="https://img-blog.csdnimg.cn/20181103180408356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536">      <img alt="" class="has" height="158" src="https://img-blog.csdnimg.cn/20181103180456939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542"> ⑸运行镜像生成镜像的实例容器     命令如下： <pre class="has"><code class="language-java">docker run -d -p 9080:8080 --name myt9<br>-v /tmp/kgf/tomcat9/test:/usr/local/apache-tomcat-9.0.12/webapps/test<br>-v /tmp/kgf/tomcat9/tomcat9logs:/usr/local/apache-tomcat-9.0.12/logs<br>--privileged=true<br>kgftomcat9:1.1</p>
+<p>#注释:<br>     -d：表示后台运行<br>     -p 宿主机端口号:容器内运行的软件程序端口  —&gt;表示将容器内端口映射到宿主机，对外开放<br>     –name +容器名称  —&gt;为运行启动的容器起一个别名<br>     -v +宿主机路径:容器内路径  —&gt;表示为宿主机和容器添加关联数据卷<br>     –privileged=true   —-&gt;这是为了防止数据卷没有读写权限<br>     kgftomcat9   —-&gt;这个是镜像的名称<br>       </code></pre> <img alt="" class="has" height="160" src="https://img-blog.csdnimg.cn/20181103210630651.png" width="800"> 查看运行效果：    <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20181103210825440.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="838">  我们可以在外面查看容器类的目录：   <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20181103211230721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="856">   <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20181103211552558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="664">   <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20181103211744927.png" width="586">   </li>1.  下面在自定义的tomcat9上发布web项目演示 ⑴因为我们在容器内创建关联的数据卷目录是test命令，所以我们就将一个     简单的名称为test的web项目部署到容器内。     a：注意          因为宿主机的test目录是和容器类的test关联目录，所以我们只需要将          项目内文件传递到宿主机内即可。          <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20181103214844512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="646">   b：查看容器内test目录下文件        <img alt="" class="has" height="177" src="https://img-blog.csdnimg.cn/20181103215334189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="655"> ⑵重新启动运行的容器     <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20181103215653600.png" width="630">   效果（完美）：      <img alt="" class="has" height="213" src="https://img-blog.csdnimg.cn/20181103215714154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="648"> <li> docker上安装mysql   ⑴从阿里云上拉取5.6版本mysql         命令：docker pull mysql:5.6         <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20181104090814422.png" width="622">    ⑵使用镜像运行容器         命令： <pre class="has"><code class="language-java">docker run -p 12345:3306 --name mysql<br>-v /tmp/mysql/conf:/etc/mysql/conf.d<br>-v /tmp/mysql/logs:/logs<br>-v /tmp/mysql/data:/var/lib/mysql<br>-e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.6</p>
+<p>命令说明：<br>-p 12345:3306 ：  将主机的12345端口映射到docker容器的3306端口<br>–name mysql ：自定义运行服务的名字<br>-v /tmp/mysql/conf:/etc/mysql/conf.d ：将主机/tmp/mysql/conf目录挂载到容器的/etc/mysql/conf.d<br>-v /tmp/mysql/logs:/logs ：将主机/tmp/mysql/logs目录挂载到容器的/logs<br>-v /tmp/mysql/data:/var/lib/mysql ：将主机/tmp/mysql/data目录挂载到容器的/var/lib/mysql<br>-e MYSQL_ROOT_PASSWORD=123456 ：初始化root用户的密码<br>-d mysql:5.6 后台运行mysql5.6程序</code></pre>   ⑶执行效果:      <img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20181104092326376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="698">    ⑷进入容器         <img alt="" class="has" height="303" src="https://img-blog.csdnimg.cn/2018110409272143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">    ⑸下面我们同宿主机上的工具链接一下试试        <img alt="" class="has" height="389" src="https://img-blog.csdnimg.cn/20181104093117859.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="372"> </li>1.  将我们的镜像提交到阿里云上  ⑴查看镜像      <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20181104094851343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585"> ⑵首先运行mycentos镜像容器，并且提交一个新的版本       <img alt="" class="has" height="308" src="https://img-blog.csdnimg.cn/20181104100419368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="613"> ⑶首先登陆到阿里云服务器上        <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20181104101854763.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="674"> ⑷创建镜像仓库       <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20181104103732446.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="589">      <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/20181104103916572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="550">     <img alt="" class="has" height="238" src="https://img-blog.csdnimg.cn/20181104104057629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">    <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/2018110410412917.png" width="596"> ⑸下面我们需要将镜像推送到阿里云      <img alt="" class="has" height="128" src="https://img-blog.csdnimg.cn/20181104104238801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567">      <img alt="" class="has" height="241" src="https://img-blog.csdnimg.cn/20181104104325780.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="617">      a：首先我们链接登陆阿里云          <img alt="" class="has" height="274" src="https://img-blog.csdnimg.cn/2018110411242920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="541">      b：对上传到阿里云上标签的处理            <img alt="" class="has" height="153" src="https://img-blog.csdnimg.cn/20181104112900369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536">     c：下面就是向阿里云上push了            <img alt="" class="has" height="164" src="https://img-blog.csdnimg.cn/20181104113841958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="497">     d：下面我们可以到阿里云上去搜索一下            <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20181104114100444.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="539">    e：可以到阿里云官网直接搜索，因为是公开的,这里我们就不演示了,可以直接搜索kgfbuy/mycebtos     1.  那么我们再演示一下如何从阿里云下载下来  a：首先我们先把本地的删除        <img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20181104115137229.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="682">              b：下载下来        命令：docker pull registry.cn-qingdao.aliyuncs.com/kgfbuy/mycentos:1.2.1          <img alt="" class="has" height="241" src="https://img-blog.csdnimg.cn/20181104115504240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="661">           </p>
  
       <!-- reward -->
       
@@ -611,7 +303,7 @@ border : border-width || border-style || border-color 
 
     
     <article
-  id="post-css选择器的使用"
+  id="post-docker知识点相关笔记四"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -622,8 +314,8 @@ border : border-width || border-style || border-color 
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/"
-    >css选择器的使用</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E5%9B%9B/"
+    >docker知识点相关笔记四</a> 
 </h2>
  
 
@@ -631,76 +323,26 @@ border : border-width || border-style || border-color 
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.209Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E5%9B%9B/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.601Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: css选择器的使用<br>categories:</p>
+  <p>title: docker知识点相关笔记四<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.CSS选择器作用</p>
-<blockquote>
-<p> 找到指定的HTML页面元素，选择标签。 </p>
-</blockquote>
-<p>2.标签选择器</p>
-<blockquote>
-</blockquote>
+<p>—title: docker知识点相关笔记四<br>categories:</p>
 <ul>
-<li>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。 -  作用：可以把某一类标签全部选择出来。 -  优点：快速为网页中同类型的标签统一样式 -  缺点：不能设计差异化样式。 <pre>`标签名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; } `</pre> </li>
+<li>docker</li>
 </ul>
-<p>3.类选择器</p>
-<blockquote>
-</blockquote>
-<ul>
-<li>类选择器使用”.”(英文点号)进行标识，后面紧跟类名。 -  语法：类名选择器 <pre><code>.类名  &#123;   
-    属性1:属性值1; 
-    属性2:属性值2; 
-    属性3:属性值3;     
-&#125;
-</code></pre> 
-<pre><code class="language-html">&lt;p class='类名'&gt;&lt;/p&gt;
-</code></pre> 
-<ul>-  `优点`：可以为元素对象定义单独或相同的样式。可以选择一个或者多个标签。 <li> `注意`：类选择器使用“.”（英文点号）进行标识，后面紧跟类名(自定义，我们自己命名的) </li>
-<li> 长名称或词组可以使用中横线来为选择器命名。 -  不要纯数字、中文等命名， 尽量使用英文字母来表示。 -  多类名选择器：各个类名中间用空格隔开。 </li></ul></li>
-</ul>
-<p>4.<strong>id选择器」</strong>id选择器使用<code>#</code>进行标识，后面紧跟id名</p>
-<blockquote>
-</blockquote>
-<ul>
-<li>元素的id值是唯一的，只能对应于文档中某一个具体的元素。 <pre><code>#id名 &#123;属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
-</code></pre> 
-<pre>`&lt;p id="id名"&gt;&lt;/p&gt;`</pre> </li>
-</ul>
-<p>5.通配符选择器</p>
-<blockquote>
-<p> 通配符选择器用<code>*</code>号表示，<code>*</code> 就是选择所有的标签。它是所有选择器中作用范围最广的，能匹配页面中所有的元素。 </p>
-</blockquote>
-<ul>
-<li><code>注意</code>：会匹配页面所有的元素，降低页面响应速度，不建议随便使用 <pre><code>* &#123; 属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
-</code></pre> 
-例如下面代码，使用通配符选择器定义CSS样式，清除所有HTML标记的默认边距。 <pre><code class="language-css">* &#123;
-  margin: 0;                    /* 定义外边距*/
-  padding: 0;                   /* 定义内边距*/
-&#125;</code></pre> </li>
-</ul>
-<p>6.基础选择器总结</p>
-<blockquote>
- <table><thead>|选择器|作用|缺点|使用情况|用法
-</blockquote>
-</thead><tbody>|标签选择器|可以选出所有相同的标签，比如p|不能差异化选择|较多|p { color：red;}
-|类选择器|可以选出1个或者多个标签|可以根据需求选择|非常多|.nav { color: red; }
-|id选择器|一次只能选择器1个标签|只能使用一次|不推荐使用|#nav {color: red;}
-|通配符选择器|选择所有的标签|选择的太多，有部分不需要|不推荐使用|* {color: red;}
-</tbody></table>
-
+<p>—1. 什么叫做数据卷容器？  命名的容器挂载数据卷，其它容器通过挂载这个（父容器）实现数据共享，挂载数据卷的容器，  称之为数据卷容器 。1. 下面我们基于之前创建的镜像kgf/centos去创建3个容器，名称分别为dc01,dc02和dc03，这三个  容器的关系是dc02和dc03都继承与dc01，下面我们通过实例操作试一下。   ⑴创建dc01的容器，命令：docker run -it –name dc01 kgf/centos       <img alt="" class="has" height="244" src="https://img-blog.csdnimg.cn/20181101215806230.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571">       上面的dataVolumeContainer2和dataVolumeContainer目录是之前创建kgf/centos镜像        时建立的据数卷。那么现在我们在dataVolumeContainer2中创建一个文件。        <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20181101220127190.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="628">   ⑵创建dc01的容器，继承dc01容器       命令：docker run -it –name dc02 –volumes-from dc01 kgf/centos       <img alt="" class="has" height="197" src="https://img-blog.csdnimg.cn/20181101220646727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="638">    ⑶创建dc03的容器，继承dc01容器       命令：docker run -it –name dc03 –volumes-from dc01 kgf/centos       <img alt="" class="has" height="223" src="https://img-blog.csdnimg.cn/20181101221236249.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="601">  ⑷下面我们分别查看dc01，dc02中的数据卷情况。       <img alt="" class="has" height="299" src="https://img-blog.csdnimg.cn/20181101221455562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">       通过上面我们可以发现，我们创建的dc01,dc02和dc03它们之间的关联数据卷中的       数据是可以数据共享的，不管是哪个容器的数据发成了变化，那么其它的两个容器       的数据也将会发生同样的改变。1. 那么基于上面我们创建的dc01，dc02和dc033个容器，如果我们将dc01删除掉，再去 修改dc02，那么dc03会不会发生数据同步呢？能不能获取到dc02修改后的数据呢？ ⑴首先删除掉dc01容器     <img alt="" class="has" height="99" src="https://img-blog.csdnimg.cn/20181101222244856.png" width="598">       <img alt="" class="has" height="301" src="https://img-blog.csdnimg.cn/20181101222921658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="522">     由上图可以发现我们删除了dc01这个父容器后，对dc02和dc03的文件没有产生     影响，文件都还存在。 ⑵我们在dc02上新增一个文件试试      <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/2018110122400323.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"> ⑶结论：      容器之间的配置信息的传递，数据卷的生命周期一直会持续到没有容器为止。       这就叫做容器卷传递共享（–volumes-from）       1. 什么是Dockerfile？  Dockerfile是用来构建docker镜像的构建文件，是由一系列命令和参数构成的脚本。1. 构建Dockerfile的三步骤：  a：编写Dockerfile文件  b：docker build去执行文件  c：docker run去运行生产的镜像1. Dockerfile的构建过程解析  ⑴DockerFile内容基础知识       a：每条保留字指令都必须为大写字母且后面要跟随至少一个参数       b：指令按照从上到下，顺序执行       c：#表示注释       d：每条指令都会创建一个新的镜像层，并对镜像进行提交  ⑵Docker执行Dockerfile的大致流程       a：dcoker从基础镜像运行一个容器       b：执行一条指令并对容器做出修改       c：执行类似docker commit的操作提交一个新的镜像层       d：docker再基于刚提交的镜像运行一个新容器       e：执行dockerfile中的下一条指令直到所有指令都执行完成  ⑶dockerfile的体系结构（保留字指令）       ①FROM：表示基础镜像，当前新镜像是基于哪个镜像的。              例如：FROM tomcat  —–》就是基于tomcat作为基础镜像的       ②MAINTAINER：表示镜像维护者的姓名和邮箱地址                  例如：MAINTAINER The Centos Project &lt;<a href="mailto:&#99;&#108;&#111;&#x75;&#x64;&#x2d;&#111;&#112;&#115;&#x40;&#99;&#x65;&#110;&#116;&#x6f;&#x73;&#46;&#111;&#114;&#103;">&#99;&#108;&#111;&#x75;&#x64;&#x2d;&#111;&#112;&#115;&#x40;&#99;&#x65;&#110;&#116;&#x6f;&#x73;&#46;&#111;&#114;&#103;</a>&gt;       ③RUN：表示容器构建时需要运行的命令       ④EXPOSE：表示构建的容器启动后对外暴露的端口号              例如：EXPOSE 6379       ⑤WORKDIR：表示指定在容器创建后，终端默认登录进来的工作目录，一个落脚点                    例如：WORKDIR /data   表示当我们进入容器后默认就在/data这个目录下       ⑥ENV：用来在构建镜像过程中设置环境变量              例如：ENV MY_PATH /usr/mytest   表示我们设置一个环境变量名称为MY_PATH，                         值为/usr/mytest，那么我们后面就可以引用这个环境变量。比如我们在设置                         落脚点的时候，WORKDIR $MY_PATH，那么登录进来后直接就是在/usr/mytest                         目录下。       ⑦ADD： 将宿主机目录下的文件拷贝进镜像并且ADD命令会自动处理URL和解压tar压缩包                   例如：ADD centos-7-docker.tar.xz /       ⑧COPY：类似ADD，拷贝文件和目录到镜像中。将从构建上下文目录中&lt;源路径&gt;的文件/目录                        复制到新的一层镜像内的&lt;目标路径&gt;位置。              例如：COPY src dest 或者 COPY [“src”,”dest”]       ⑨VOLUME：容器数据卷，用于数据保存和持久化工作       ⑩CMD：               a：表示指定一个容器启动时要运行的命令                     <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/20181103103647354.png" width="572">               b：Dockerfile中可以有多个CMD指令，但只有最后一个生效，CMD会被docker run 之后                     的参数替代。       ENTRYPOINT：表示指定一个容器启动时要运行的命令，ENTRYPOINT的目的和CMD一样，                                  都是在指定容器启动程序及参数。       ONBUILD：表示当构建一个被继承的Dockerfile时运行命令，父镜像在被子继承后父镜像的                           onbuild被触发。1. 基于上面保留字的案例  ⑴Base镜像（scratch）        Docker Hub中99%的镜像都是通过在base镜像中安装和配置需要的软件构建出来的。  ⑵自定义镜像mycentos        ①我们现在可以看看我们从网上下载下载的centos镜像原本是什么样子的              <img alt="" class="has" height="323" src="https://img-blog.csdnimg.cn/20181103134447707.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547">        ②下面我们编写我们的Dockerfile文件              a：在/tmp/mydocker目录下创建Dockerfile文件                   <img alt="" class="has" height="146" src="https://img-blog.csdnimg.cn/20181103140755811.png" width="394">             b：编写文件内容                  <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/2018110314090794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="381">            c：使用dockerfile文件构建新的镜像                 命令：docker build -f /tmp/mydocker/Dockerfile -t mycentos:1.1 .                 <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20181103141819974.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="436">                 <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/2018110314192873.png" width="522">           d：下面我们运行新建的镜像                  命令：docker run -it mycentos:1.1                  <img alt="" class="has" height="132" src="https://img-blog.csdnimg.cn/20181103142152857.png" width="451">                  <img alt="" class="has" height="248" src="https://img-blog.csdnimg.cn/20181103142350154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="429">                  <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/20181103142447753.png" width="426">             e：使用docker history +镜像ID 查看镜像详细信息                 <img alt="" class="has" height="296" src="https://img-blog.csdnimg.cn/20181103142826822.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610">1. ONBUILD命令案例   ⑴简介        当构建一个被继承的Dockerfile时运行命令，父镜像在被子继承后，父镜像的onbuild被触发。    ⑵简单案例：        <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20181103161931606.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="654">           <img alt="" class="has" height="547" src="https://img-blog.csdnimg.cn/20181103162024270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642">     </p>
  
       <!-- reward -->
       
@@ -721,7 +363,7 @@ border : border-width || border-style || border-color 
 
     
     <article
-  id="post-css相关属性"
+  id="post-docker知识点相关笔记三"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -732,8 +374,8 @@ border : border-width || border-style || border-color 
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/"
-    >css相关属性</a> 
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%89/"
+    >docker知识点相关笔记三</a> 
 </h2>
  
 
@@ -741,27 +383,104 @@ border : border-width || border-style || border-color 
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.207Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%B8%89/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.598Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: css相关属性<br>categories:</p>
+  <p>title: docker知识点相关笔记三<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—title: css相关属性<br>categories:</p>
+<p>—# 一：镜像原理</p>
+<p>          1：什么是镜像？                  镜像是一种轻量级，可执行的独立软件包，用来打包软件环境和基于运行环境开发的软件，                  它包含运行某个软件所需的所有内容，包括代码，运行时，库，环境变量和配置文件。            2：什么是UnionFS（联合文件系统）：                   <img alt="" class="has" height="69" src="https://img-blog.csdnimg.cn/20181029202242341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="629">                        特性：一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载                              会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录。            3：docker镜像加载原理                   kernel：表示内核                   <img alt="" class="has" height="159" src="https://img-blog.csdnimg.cn/2018102920290350.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">                   <img alt="" class="has" height="120" src="https://img-blog.csdnimg.cn/20181029204145968.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="694">                   <img alt="" class="has" height="150" src="https://img-blog.csdnimg.cn/20181029203215528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="735">           4：为什么docker镜像要采用这种分层结构呢？                   <img alt="" class="has" height="97" src="https://img-blog.csdnimg.cn/20181029204727527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="627">          5：特点                Docker镜像都是只读的，当容器启动时，一个新的可写层被加载到镜像的顶部。                这一层通常被称作容器层，容器层之下的都叫做镜像层。          6：docker commit操作                ⑴docker commit提交容器副本使之成为一个新的镜像                ⑵docker commit -m “提交的描述信息” -a=”作者” +容器ID +要创建的目标镜像名:[标签名]</p>
+<h1 id="二：Docker容器数据卷介绍"><a href="#二：Docker容器数据卷介绍" class="headerlink" title="二：Docker容器数据卷介绍"></a>二：Docker容器数据卷介绍</h1><p>         1：什么是Docker容器数据卷                <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20181030212830897.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">               <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20181030213128900.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="653">        2：如何添加数据卷             ⑴直接命令添加                   创建或运行容器的时候，使用<code>-v</code>创建一个数据卷，就是宿主机绝对路径目录                   和容器内目录形成链接。                   命令：docker run -it -v /宿主机绝对路径目录:/容器内目录 +镜像名                  a：例如，我们直接执行下面的命令                        docker run -it -v /myDataVolume:/dataVolumeContainer centos                        注意： myDataVolume是宿主机的目录，可以不创建好，因为执行命令时                                    会自动创建                                    dataVolumeContainer 是镜像centos容器内部的目录，同上可以不先创建。                        <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20181030220152584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567">                        <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20181030220121123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">                        通过上图可以发现创建执行命令后，容器内部和主机里都生成了对应的目录。                    b：下面我们查看数据卷是否挂载成功                         我们通过docker inspect +容器ID查看                          <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20181030221104912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="499">                          <img alt="" class="has" height="129" src="https://img-blog.csdnimg.cn/20181030221550318.png" width="507">                   c：容器和宿主机直接数据共享                          ①首先我们进入到宿主机的数据卷目录下创建一个文件                              <img alt="" class="has" height="187" src="https://img-blog.csdnimg.cn/20181030221933984.png" width="443">                          ②下面我们直接查看容器内的数据卷关联文件                                <img alt="" class="has" height="95" src="https://img-blog.csdnimg.cn/20181030222139909.png" width="422">                           ③同理，如果我们在容器内修改数据卷关联目录下的文件，宿主机下的文件                               也会同步改变，这个数据卷就实现了宿主机关联目录的数据同步问题。</p>
+<p>                          ④注意：如果我们容器被停止了，我们对主机上的同步文件进行了修改，                                          那么当容器重新启动之后，容器的管理目录是会自动和宿主机                                          上的关联目录数据同步一次的。                      d：命令（带权限）                              docker run -it -v /myDataVolume2:/dataVolumeContainer2:ro centos                              效果：创建出来的数据卷，宿主机上的关联文件目录是存在读写的权限                                          的，而容器内部的文件目录是没有写的权限的，我们在宿主机上                                          进行写的操作生成的文件数据等都是可以同步到容器内关联的目录                                          下的，而容器内我们是没有写的权限的，无法进行创建文件，修改                                           文件等操作。                              ro：表示read only的含义。              ⑵DockerFile方式添加数据卷                    a：首先我们在根目录下创建mydocker文件夹并且进入                          <img alt="" class="has" height="103" src="https://img-blog.csdnimg.cn/20181031204646552.png" width="293">                    b：可在Dockerfile中使用VOLUME指令来给镜像添加一个或多个数据卷                          <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20181031205041891.png" width="509">                          注释：比如我们在一个主机上创建了一个容器目录，那么当我们需要打包                                     容器到其他机器上时，无法保证其他机器上也有这个与容器关联的                                     宿主机目录，所以可移植行不好，我们无使用上面那种命令方式。                     c：file构建，创建Dockerfile文件                            <img alt="" class="has" height="251" src="https://img-blog.csdnimg.cn/20181031210427252.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="471">                     d：build后生成镜像                             命令：docker build -f +Dockerfile文件路径  -t +名称:版本，如果是当前目录，                                        就是docker build -t +名称:版本 .                                         <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20181031211718117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">                                         <img alt="" class="has" height="94" src="https://img-blog.csdnimg.cn/20181031212027506.png" width="512">                                          那么只要我们运行刚创建的容器，它就会自动给我们创建两个数据卷                                         dataVolumeContainer和dataVolumeContainer2                        e：运行生成的容器卷                                <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20181031212535511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="540">                                我们在容器内的文件夹中创建一个文件test.txt                                 <img alt="" class="has" height="117" src="https://img-blog.csdnimg.cn/20181031212953494.png" width="498">                             那么现在容器内部已经生成了容器卷，宿主机会不会自动生成呢？                            <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20181031213207296.png" width="539">                             <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20181031213447416.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">                                 我们查看一下刚刚在容器内dataVolumeContainer目录中创建的test1.txt在宿主机对应的                             目录中有没有：                              <img alt="" class="has" height="136" src="https://img-blog.csdnimg.cn/20181031213655159.png" width="548"></p>
+<p> </p>
+<p>                                                            </p>
+<p>     </p>
+<p>                                                      </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker知识点相关笔记二"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%BA%8C/"
+    >docker知识点相关笔记二</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E7%9F%A5%E8%AF%86%E7%82%B9%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.596Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker知识点相关笔记二<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1. css3中opacity属性   指定透明度的属性是opacity,属性值从 0.0 到 1.0。值越小，越透明。   从 0.0 （完全透明）到 1.0（完全不透明）。<li>transition属性   过渡transition是一个复合属性，包括transition-property、transition-duration、transition-timing-function、   transition-delay这四个子  属性。通过这四个子属性的配合来完成一个完整的过渡效果。    transition: opacity 3s  —&gt;过渡：不透明度3s <pre><code class="language-html hljs">transition-property: 过渡属性(默认值为all)<br>transition-duration: 过渡持续时间(默认值为0s)<br>transiton-timing-function: 过渡函数(默认值为ease函数)<br>transition-delay: 过渡延迟时间(默认值为0s)</code></pre> </li>1.  CSS3 @keyframes 规则  a：简介        @keyframes 规则是创建动画。        @keyframes 规则内指定一个 CSS 样式和动画将逐步从目前的样式更改为新的样式   1.  transform属性   Transform属性应用于元素的2D或3D转换。这个属性允许你将元素旋转，缩放，移动，倾斜等。 1.  scale,  <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20191214095833437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">  <img alt="" class="has" height="462" src="https://img-blog.csdnimg.cn/20191214095851711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="586">  <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019121409591750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">  <img alt="" class="has" height="409" src="https://img-blog.csdnimg.cn/20191214095937591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">  <img alt="" class="has" height="504" src="https://img-blog.csdnimg.cn/20191214100042785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590"> 1.  CSS3 Animation,CSS3 Animation 是由三部分组成    a：关键帧(keyframes) - 定义动画在不同阶段的状态           关键帧主要分为3个阶段，0%、50%、100%   b：动画属性(properties) - 决定动画的播放时长，播放次数，以及用何种函数式去播放动画等。（可以类比音视频播放器）   c：css属性 - 就是css元素不同关键帧下的状态。 1.  border-top 属性  CSS属性 <strong>border-top</strong>是属性 border-top-width, border-top-style, and border-top-color的三者的缩写  例如：border-top: 10px solid #409EFF;  <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/20191214145118918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"> 
+<p>—title: docker知识点相关笔记二<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 命令：docker info查看docker的详细信息       <img alt="" class="has" height="337" src="https://img-blog.csdnimg.cn/20181028103526197.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="555">1. 命令docker images      <img alt="" class="has" height="153" src="https://img-blog.csdnimg.cn/20181028104939259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="534">      <img alt="" class="has" height="175" src="https://img-blog.csdnimg.cn/20181028105014801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="620">1. 命令：docker images -a，这个命令是列出本地所有的镜像（含中间镜像层）1. 命令：docker images -q，这个命令是只显示镜像ID  <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20181028105953733.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="527">1. 命令：docker images –digests，显示镜像的备注信息1. docker images –no-trunc，显示镜像的完整信息  <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20181028110337464.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="692">1. 命令：docker search -s 30 tomcat，表示查询点赞数超出30的版本  <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/20181028141906326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="702">1. 命令：docker rmi -f 镜像ID，删除单个镜像  <img alt="" class="has" height="369" src="https://img-blog.csdnimg.cn/20181028143421943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="560">1. 命令：docker rmi -f 镜像名1:TAG 镜像名2:TAG，删除多个镜像<img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20181028143625893.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="483">1. 命令：docker rmi -f $(docker images -qa)，删除本地所有的镜像  <img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/2018102814424654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="569">1. 命令：docker pull centos，下载一个centos镜像   <img alt="" class="has" height="129" src="https://img-blog.csdnimg.cn/20181028171210164.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="528">1. 容器相关命令 ⑴：新建并启动容器        命令：docker run [OPTIONS] IMAGE[:TAG][COMMAND][ARG..]        OPTIONS：说明                <img alt="" class="has" height="310" src="https://img-blog.csdnimg.cn/2018102817160756.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="437">        a：下面我们以交互式模式运行容器，并起一个别名，可以发现我们进入到另外一个终端               命令： docker run -it –name=”mycentos01” 75835a67d134               <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20181028172149498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="520">              出现上面的情况就说明我们进入了docker中centos容器运行的环境了              <img alt="" class="has" height="92" src="https://img-blog.csdnimg.cn/20181028172522668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="491">         b：列出当前正在运行所有正在运行的容器               命令：docker ps [OPTIONS]               <img alt="" class="has" height="236" src="https://img-blog.csdnimg.cn/20181028173505876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="438">               <img alt="" class="has" height="180" src="https://img-blog.csdnimg.cn/20181028174700661.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="548">               <img alt="" class="has" height="98" src="https://img-blog.csdnimg.cn/20181028174720318.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="553">              <img alt="" class="has" height="143" src="https://img-blog.csdnimg.cn/20181028174751869.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="560">               docker ps -lq表示展示最近创建的容器编号               <img alt="" class="has" height="65" src="https://img-blog.csdnimg.cn/20181028174902700.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="388">                     c：退出容器             命令：exit，容器停止并且退出             ctrl+P+Q，容器不停止退出             <img alt="" class="has" height="237" src="https://img-blog.csdnimg.cn/20181028175529696.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="558">     d：启动容器            命令：docker start +容器名称/ID                  e：重启容器           命令:docker restart +容器名称/ID     f：停止容器           命令：docker stop +容器名称/ID           强制停止命令 ：docker kill +容器名称/ID         g：删除容器          删除已经停止容器命令：docker rm +容器名称/ID          强制删除命令（不管容器是否停止） ：docker rm -f +容器名称/ID         h：删除当前运行的或者历史上运行过的所有容器         命令：docker rm -f $(docker ps -a -q)          <img alt="" class="has" height="74" src="https://img-blog.csdnimg.cn/20181028180849376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="356">1. 命令：docker run -d –name=”mycentos01” centos  <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20181028201018988.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="523"> 这是为什么呢？  <img alt="" class="has" height="218" src="https://img-blog.csdnimg.cn/2018102820131465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="548">1. 查看容器日志 命令：docker logs -f -t –tail 容器ID -f：跟随最新的日志打印 -t：是加入时间戳 –tail 数字：显示最后多少条  <img alt="" class="has" height="308" src="https://img-blog.csdnimg.cn/20181028202308569.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="570">   从上面可以发现，当我们启动docker中centos容器的时候，设置每隔2秒钟打印   hello,这样进程就不会自动停止，最后我们使用查看日志的命令查看最后的几行日志。1. 查看容器内运行的进程  命令：docker top 容器ID  <img alt="" class="has" height="244" src="https://img-blog.csdnimg.cn/20181028203738152.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="569">1. 查看容器内部的细节 命令：docker inspect 容器ID                  1. 进入运行的容器并且以命令交互  命令：docker exec -it 容器ID bash  重新进入命令：docker attach 容器ID  区别：          a：attach是直接进入容器启动命令的终端，不会启动新的进程          b：exec是在容器中打开新的终端，并且可以启动新的进程 在容器外面查看容器内的内容：  <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20181028205830489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="554"> 进入容器后查看，发现确实是一样的：<img alt="" class="has" height="415" src="https://img-blog.csdnimg.cn/20181028205924204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="533">1. 从容器内拷贝文件到主机上 命令：docker cp 容器ID:容器内路径 目的主机路径 例如：现在我们在centos容器的/tem目录下存在一个test1文件，现在我们需要将            其拷贝到主机的/opt目录下            <img alt="" class="has" height="116" src="https://img-blog.csdnimg.cn/20181028211352419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="372">            <img alt="" class="has" height="128" src="https://img-blog.csdnimg.cn/20181028211536307.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="466">  
  </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
  
       <!-- reward -->
       
@@ -782,7 +501,7 @@ border : border-width || border-style || border-color 
 
     
     <article
-  id="post-CSS外观属性"
+  id="post-docker之自定义网络"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -793,8 +512,8 @@ border : border-width || border-style || border-color 
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/"
-    >CSS外观属性</a> 
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/"
+    >docker之自定义网络</a> 
 </h2>
  
 
@@ -802,97 +521,26 @@ border : border-width || border-style || border-color 
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.205Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E4%B9%8B%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.595Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS外观属性<br>categories:</p>
+  <p>title: docker之自定义网络<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.color</p>
-<blockquote>
-<p> color属性用于定义文本的颜色 其取值方式有以下3种： </p>
-</blockquote>
+<p>—title: docker之自定义网络<br>categories:</p>
 <ul>
-<li>实际工作中，用16进制的写法是最多的，且我们更喜欢简写方式比如#f0代表红色。 <table><thead>|表示表示|属性值
-</thead><tbody>|预定义的颜色值|red，green，blue，pink
-|十六进制|#FF0000，#FF6600，#29D794
-|RGB代码|rgb(255,0,0)或rgb(100%,0%,0%)
-</tbody></table></li>
+<li>docker</li>
 </ul>
-<p>2.text-align</p>
-<blockquote>
-<p> text-align属性用于设置文本内容的水平对齐方式，相当于html中的align对齐属性。 </p>
-</blockquote>
-<ul>
-<li>注意：是让盒子里面的文本内容水平居中， 而不是让盒子居中对齐<br>其可用属性值如下： <table><thead>|属性|解释
-</thead><tbody>|left|左对齐（默认值）
-|right|右对齐
-|center|居中对齐
-</tbody></table></li>
-</ul>
-<p>3.text-decoration</p>
-<blockquote>
-<p> text-decoration,通常我们用于给链接修改装饰效果<br> <table><thead>|值|描述</p>
-</blockquote>
-</thead><tbody>|none|默认。定义标准的文本。取消下划线（最常用）
-|underline|定义文本下的一条线。下划线 也是我们链接自带的（常用）
-|overline|定义文本上的一条线。（不用）
-|line-through|定义穿过文本下的一条线。（不常用）
-</tbody></table>
-
-
-<p>4.text-indent</p>
-<blockquote>
-<p> text-indent属性用于设置首行文本的缩进 </p>
-</blockquote>
-<ul>
-<li>其属性值可为不同单位的数值、em字符宽度的倍数、或相对于浏览器窗口宽度的百分比%，允许使用负值。 -  建议使用em作为设置单位。 -  1em 就是一个字的宽度。如果是汉字的段落，1em 就是一个汉字的宽度 <pre><code class="language-css">p &#123;
-      /*行间距*/
-      line-height: 25px;
-      /*首行缩进2个字  em  1个em 就是1个字的大小*/
-      text-indent: 2em;  
- &#125;</code></pre> </li>
-</ul>
-<p>5.line-height</p>
-<blockquote>
-<p> line-height属性用于设置行间距，就是行与行之间的距离，即字符的垂直间距，一般称为行高。 </p>
-</blockquote>
-<ul>
-<li>line-height常用的属性值单位有三种，分别为像素px，相对值em和百分比%，实际工作中使用最多的是像素px <pre><code>一般情况下，行距比字号大7--8像素左右就可以了。
-line-height: 24px;
-</code></pre> 
-行高测量<br>行高测量方法：<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/8031634f470e114b1bae4f21548e4354.png"><br><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/3a214e8842ac7786729909abd1b5d5d2.png"><code>行高测量方法</code>行高我们利用最多的一个地方是：可以让单行文本在盒子中垂直居中对齐。 <blockquote> </li>
-</ul>
-<p>  <strong>文字的行高等于盒子的高度。</strong>行高   =  上距离 +  内容高度  + 下距离 上距离和下距离总是相等的，因此文字看上去是垂直居中的。 </p>
-<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/4cd41b5c8794db770924ea51b88bb32f.png">
-
-<p>行高与高度的三种关系</p>
-<ul>
-<li> 如果 行高 等 高度  文字会 垂直居中 -  如果行高 大于 高度   文字会 偏下 -  如果行高小于高度   文字会  偏上 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  /*line-height 要设置在font属性下面，否则无效，例如：*/</span><br><span class="line">  height: 80px;</span><br><span class="line">  text-align: center;</span><br><span class="line">  font: normal bold 30px &quot;宋体&quot;;</span><br><span class="line">  line-height: 80px;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>可以使用display:flex;布局方式让文字水平垂直居中</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  display: flex;</span><br><span class="line">  align-items: center;     /* 侧轴对齐方式*/</span><br><span class="line">  justify-content: center; /* 主轴对齐方式 */</span><br></pre></td></tr></table></figure>
-
-<p>6.CSS外观属性总结</p>
-<blockquote>
- <table><thead>|属性|表示|注意点
-</blockquote>
-</thead><tbody>|color|颜色|我们通常用  十六进制   比如 而且是简写形式 #fff
-|line-height|行高|控制行与行之间的距离
-|text-align|水平对齐|可以设定文字水平的对齐方式
-|text-indent|首行缩进|通常我们用于段落首行缩进2个字的距离   text-indent: 2em;
-|text-decoration|文本修饰|记住 添加 下划线  underline  取消下划线  none
-</tbody></table>
-
+<p>—1. 简介 建议使用用户定义的网桥来控制哪些容器可以相互通信，以及启用容器名称到IP地址的自动DNS解析。1. 查看所有的Docker网络 命令：docker network ls<img alt="" height="179" src="https://img-blog.csdnimg.cn/20201227130109653.png" width="492">1. 网络模式解释 1)bridge ：桥接 docker（默认）,一般我们创建网络也使用桥接模式 2)host ：和宿主机共享网络 3)none ：不配置网络 4)container：容器网络连通（用的少！局限很大!） 1. 启动容器命令解释 1)我们直接启动命令，有默认的参数，只是省略掉了 –net bridge,而这个就是我们的docker0       docker run -d -P –name tomcat01 tomcat        上面的命令等同于下面的启动容器命令       docker run -d -P –name tomcat01 –net bridge tomcat1. 自定义创建一个网络 1)命令：        docker network create –driver bridge –subnet 192.168.0.0/16 –gateway 192.168.0.1 mynet        解释：            –driver bridge 表示使用桥接模式            –subnet 192.168.0.0/16 表示子网ip 可以分配 192.168.0.2 到 192.168.255.255            –gateway 192.168.0.1 表示网关,就是路由器            mynet- 网络名         注意：                 192.168.0.0/16：表示网络码占16位，也就是说该网络上只可以有65534个主机(2^16-2)IP范围：192.168.0.1~192.168.255.254 192.168.255.255是广播地址，          不能被主机使用。设置IP地址的时候：192.168.x.y 子网掩码：255.255.0.0 2)执行上面的命令       <img alt="" height="201" src="https://img-blog.csdnimg.cn/20201227140833230.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="927"> 3)查看我们刚刚自定义的网络       命令：docker network inspect mynet        <img alt="" height="486" src="https://img-blog.csdnimg.cn/20201227141022782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="647"> 4)下面我们启动容器并且指定使用我们刚刚创建的网络        <img alt="" height="347" src="https://img-blog.csdnimg.cn/20201227141259664.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 5)我们再次查看网络信息       命令：docker network inspect mynet        <img alt="" height="389" src="https://img-blog.csdnimg.cn/2020122714151580.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="767"> 6)下面我们直接使用两个容器进行ping一下，测试是否能够连接       <img alt="" height="271" src="https://img-blog.csdnimg.cn/20201227141907294.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1029">        我们再次使用mytomcat01去连接mytomcat02         <img alt="" height="230" src="https://img-blog.csdnimg.cn/20201227142012483.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1000">        可以发现我们使用自定义的网络，容器直接网络都是可以互通的(可以使用容器名称，也可以使用ip地址)，它修复了docker0所不完善的地方，我们不需要再使用–link了。 7)小节：       a：不同集群可以使用不同网络，保证集群的健康和安全，比如我们搭建一个mysql集群和一个redis集群，那么我们就自定义两个网络即可       b:  自定义网络已经维护好了对应的关系，方便使用服务名通讯1. 网络连通  1)简介         上面我们创建了两个容器mytomcat01和mytomcat02，它们指定的都是我们自定义的网络mynet，那么我们如何让它们和不同网络的容器链接呢？      比如我们先又创建两个容器mytomcat03和mytomcat04，我们指定这两个容器属于默认的docker0网络，那么我们如何让mytomcat03可以ping通mytomcat01呢？   2）首先创建mytomcat03和mytomcat04容器         <img alt="" height="190" src="https://img-blog.csdnimg.cn/20201227143732368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="932">        <img alt="" height="202" src="https://img-blog.csdnimg.cn/20201227144024547.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="828">        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227144042615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="905">       可以发现它们的网段都不一样：          mytomcat01和mytomcat03属于：192.168.0.x           mytomcat01和mytomcat03属于：172.17.0.x  3)下面我们测试使用mytomcat01去ping通mytomcat03        <img alt="" height="175" src="https://img-blog.csdnimg.cn/20201227143933144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="976">  4)解决的办法(我们要做的其实是将容器和网络(比如我们自定义的mynet)链接，不是docker0和网络链接)：         命令：docker network connect 网络名词 容器id         例如打通mytomcat03和mynet的网络          <img alt="" height="211" src="https://img-blog.csdnimg.cn/20201227144743908.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1087">            我们在通过docker network inspect mynet查看一下网络情况：          <img alt="" height="330" src="https://img-blog.csdnimg.cn/20201227144902325.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738">         我们发现mytomcat03在mynet网络中也出现了一个新的ip地址，说明mytomcat03在docker0中有一个ip，在mynet中也有一个ip地址，         这就是一个容器两个ip地址。类似于我们的阿里云服务器有一个公网ip和一个私网ip   5)那么我们再使用mytomcat01去链接一下mytomcat03试一下        <img alt="" height="312" src="https://img-blog.csdnimg.cn/20201227145345110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="848"></p>
  
       <!-- reward -->
       
@@ -913,7 +561,7 @@ line-height: 24px;
 
     
     <article
-  id="post-CSS三大特性：继承性,层叠性,优先级"
+  id="post-docker之容器互联link"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -924,8 +572,8 @@ line-height: 24px;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/"
-    >CSS三大特性：继承性,层叠性,优先级</a> 
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/"
+    >docker之容器互联link</a> 
 </h2>
  
 
@@ -933,79 +581,26 @@ line-height: 24px;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.203Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E4%B9%8B%E5%AE%B9%E5%99%A8%E4%BA%92%E8%81%94link/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.593Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS三大特性：继承性,层叠性,优先级<br>categories:</p>
+  <p>title: docker之容器互联link<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.CSS 层叠性</p>
-<blockquote>
- <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/b344df10be0a874a08eb3facfe676d9f.png"> 
- -`概念`： 
-</blockquote>
+<p>—title: docker之容器互联link<br>categories:</p>
 <ul>
-<li> 所谓层叠性是指多种CSS样式的叠加 -  是浏览器处理冲突的一个能力,如果一个属性通过两个相同选择器设置到同一个元素上，那么这个时候一个属性就会将另一个属性层叠掉 </li>
-<li><code>原则</code>： </li>
-<li> 样式冲突，遵循的原则是就近原则。 那个样式离着结构近，就执行那个样式。 -  样式不冲突，不会层叠。 </li>
+<li>docker</li>
 </ul>
-<p>2.CSS 继承性</p>
-<blockquote>
- <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/9d2cc036b8878879f807166ec03fb36f.png"> 
- -`概念`： 
-</blockquote>
-<ul>
-<li> 子标签会继承父标签的某些样式，如文本颜色和字号。 -  想要设置一个可继承的属性，只需将它应用于父元素即可。 </li>
-<li><code>注意</code>： </li>
-<li>恰当地使用继承可以简化代码，降低CSS样式的复杂性。比如有很多子级孩子都需要某个样式，可以给父级指定一个，这些孩子继承过来就好了。 -  子元素可以继承父元素的样式（<strong>text-，font-，line-这些元素开头的可以继承，以及color属性</strong>）<br>行高的继承： <pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
- &lt;meta charset="UTF-8"&gt;
- &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
- &lt;title&gt;CSS行高的继承&lt;/title&gt;
-&lt;style&gt;
-body&#123;
-color:cyan;
-font:12px/1.5 bold;
-&#125;</li>
-</ul>
-<p>div&#123;<br>  font-size:40px;//有指定文字大小，则为40x1.5px;<br>&#125;</p>
-<p>  &lt;/style&gt;<br>&lt;/head&gt;</p>
-<p>&lt;body&gt;<br>  &lt;div&gt;zzf1&lt;/div&gt;<br>  &lt;p&gt;我没有指定文字大小&lt;/p&gt;//没有指定文字大小，则为12px;<br>&lt;/body&gt;<br>&lt;/html&gt;</p>
-<p></code></pre><br>  <img alt="在这里插入图片描述" height="337" src="https://img-blog.csdnimg.cn/20200815161259653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2NzQ0NjM1,size_16,color_FFFFFF,t_70#pic_center" width="885"> 
-   </p>
-<p>3.优先级</p>
-<blockquote>
-<p>        <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/58c1cbcf6ab954ad9b8d66e766f1c7d1.png"><br> -<code>概念</code>：定义CSS样式时，经常出现两个或更多规则应用在同一元素上，此时， </p>
-</blockquote>
-<ul>
-<li> 选择器相同，则执行层叠性 -  选择器不同，就会出现优先级的问题。 </li>
-<li><code>权重计算公式</code>： <table><thead>|标签选择器|计算权重公式
-</thead><tbody>|继承或者 *|0,0,0,0
-|每个元素（标签选择器）|0,0,0,1
-|每个类，伪类|0,0,1,0
-|每个ID|0,1,0,0
-|每个行内样式 style=""|1,0,0,0
-|每个!important  最重要的|∞ 无穷大
-</tbody></table></li>
-<li> 值从左到右，左面的最大，一级大于一级，数位之间没有进制，级别之间不可超越。 -  关于CSS权重，我们需要一套计算公式来去计算，这个就是 CSS Specificity（特殊性） -  div { color: pink !important; } </li>
-<li><code>权重叠加</code>： <pre><code class="language-css"> div ul  li   ------&gt;      0,0,0,3
- .nav ul li   ------&gt;      0,0,1,2
- a:hover      -----—&gt;      0,0,1,1
- .nav a       ------&gt;      0,0,1,1
-</code></pre> </li>
-<li><code>继承的权重是0</code>： </li>
-<li> 我们修改样式，一定要看该标签有没有被选中 -  如果选中了，那么以上面的公式来计权重。谁大听谁的。 -  如果没有选中，那么权重是0，因为继承的权重为0. </li>
-</ul>
+<p>—1. 简介     –link 用于容器直接的互通。1. 我们准备好自己创建的镜像<img alt="" height="145" src="https://img-blog.csdnimg.cn/20201227102350258.png" width="726">1. 使用mytomcat镜像创建两个容器<img alt="" height="299" src="https://img-blog.csdnimg.cn/20201227102622151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1141">1. 下面我们使用myt1容器去链接myt2容器<img alt="" height="82" src="https://img-blog.csdnimg.cn/20201227103400216.png" width="614">1. 如何解决呢？ 1)我们创建一个myt3容器，使用–link命令          命令：docker run -d -p 9092:8080 –name myt3 –link myt2  mytomcat:v1.0     <img alt="" height="70" src="https://img-blog.csdnimg.cn/20201227104205919.png" width="767"> 2)下面我们使用myt3容器链接myt2     <img alt="" height="237" src="https://img-blog.csdnimg.cn/20201227104445980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="695"> 3)下面我们再使用myt2容器ping一下myt3试试       <img alt="" height="137" src="https://img-blog.csdnimg.cn/20201227105912403.png" width="617">     发现反向是无法ping通的 4)为什么myt3能够ping通myt2呢？我们查看一下myt3中的/etc/hosts文件       <img alt="" height="264" src="https://img-blog.csdnimg.cn/20201227110827542.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="943">       从以上就可以得出：      –link 就是在我们myt3容器的hosts中增加一个172.17.0.3 myt2 cd1f8468844e       那么我们再查看一下myt2容器的hosts文件        <img alt="" height="186" src="https://img-blog.csdnimg.cn/20201227111118207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">1. 注意：    现在docker中不建议使用–link，一般使用自定义网络，因为docker0是一个官方的网桥，它的很多功能是有局限性的。比如它不支持容器名连接访问</p>
  
       <!-- reward -->
       
@@ -1026,7 +621,7 @@ font:12px/1.5 bold;
 
     
     <article
-  id="post-css简介以及引入规范"
+  id="post-Docker之阿里云镜像加速器配置"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -1037,8 +632,8 @@ font:12px/1.5 bold;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/"
-    >css简介以及引入规范</a> 
+  <a class="article-title" href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/"
+    >Docker之阿里云镜像加速器配置</a> 
 </h2>
  
 
@@ -1046,54 +641,35 @@ font:12px/1.5 bold;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.201Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/Docker%E4%B9%8B%E9%98%BF%E9%87%8C%E4%BA%91%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F%E5%99%A8%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.590Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: css简介以及引入规范<br>categories:</p>
+  <p>title: Docker之阿里云镜像加速器配置<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—## CSS构造块</p>
-<p><strong>「1. HTML的局限性」</strong></p>
-<ul>
-<li> HTML满足不了设计者的需求，可以将网页结构与样式相分离，这样就可以在不更改网页结构的前提下，更换网站的样式。 -  操作html属性不方便 -  HTML里面添加样式带来的是无尽的臃肿和繁琐 </li>
-</ul>
-<p><strong>「2. CSS网页的美容师」</strong></p>
-<ul>
-<li> 让我们的网页更加丰富多彩，布局更加灵活自如。 -  CSS最大的贡献：让HTML从样式中脱离，实现了HTML专注去做结构呈现，样式交给CSS </li>
-</ul>
-<p><strong>「3. CSS」</strong>CSS(Cascading Style Sheets)通常称为CSS样式表或层叠样式表(级联样式表)。</p>
-<li> **作用** 
-  <ul>-  主要用于设置HTML页面中的文本内容(字体、大小、对齐方式等)\图片的外形(宽高、边框样式、边距等)以及版面的布局和外观显示样式。 -  CSS以HTML为基础，提供了丰富的功能，如字体、样式、背景的控制及整体排版等，而且可以针对不同的浏览器设置不同的样式。 
-**「4. CSS注释」**
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* 这是注释 */</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="引入CSS样式表"><a href="#引入CSS样式表" class="headerlink" title="引入CSS样式表"></a>引入CSS样式表</h3><p><strong>「1.行内式(内联样式)」</strong></p>
-<p>通过标签的style属性来设置元素的样式</p>
-<ul>
-<li> style其实就是标签的属性 -  样式属性和值中间是: -  多组属性值直接用;隔开 -  只能控制当前的标签和以及嵌套在其中的字标签，造成代码冗余。 -  **缺点:**没有实现样式和结构相分离。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;标签名 style=&quot;属性1:属性值1; 属性2:属性值2; 属性3:属性值3;&quot;&amp;gt; 内容 &amp;lt;/标签名&amp;gt;</span><br><span class="line">例如：</span><br><span class="line">&amp;lt;div style=&quot;color: red; font-size: 12px;&quot;&amp;gt;青春不常在，抓紧谈恋爱&amp;lt;/div&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>「2.内部样式表(内嵌样式表)」</strong></p>
-<p>也称为内嵌式，将CSS代码集中写在HTML文档的head头部标签中，并且用style标签定义。</p>
-<ul>
-<li> style标签一般位于head标签中，当然理论上他可以放在HTML文档的任何地方。 -  type=”text/css”  在html5中可以省略。 -  只能控制当前的页面 -  **缺点:**没有彻底分离结构与样式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;head&amp;gt;</span><br><span class="line">&amp;lt;style type=&quot;text/CSS&quot;&amp;gt;</span><br><span class="line">    选择器（选择的标签） &#123; </span><br><span class="line">      属性1: 属性值1;</span><br><span class="line">      属性2: 属性值2; </span><br><span class="line">      属性3: 属性值3;</span><br><span class="line">    &#125;</span><br><span class="line">&amp;lt;/style&amp;gt;</span><br><span class="line">&amp;lt;/head&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>「3.外部样式表(外链式)」</strong></p>
-<p>也称链入式，是将所有的样式放在一个或多个以.css为扩展名的外部样式表文件中，通过link标签将外部样式表文件链接到HTML文档中。</p>
-<ul>
-<li> <code>rel</code>:定义当前文档与被链接文档之间的关系，在这里需要指定为“stylesheet”，表示被链接的文档是一个样式表文件。 -  <code>href</code>:定义所链接外部样式表文件的URL，可以是相对路径，也可以是绝对路径。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;index.css&quot;&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p><strong>「4.团队约定-代码风格」</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/*1.紧凑格式 (Compact)*/</span><br><span class="line">h3 &#123; color: deeppink;font-size: 20px;&#125;</span><br><span class="line">// 2.一种是展开格式（推荐）</span><br><span class="line">h3 &#123;</span><br><span class="line"> color: deeppink;</span><br><span class="line">    font-size: 20px;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 团队约定-代码大小写*/</span><br><span class="line">/* 样式选择器，属性名，属性值关键字全部使用小写字母书写，属性字符串允许使用大小写。*/</span><br><span class="line">/* 推荐 */</span><br><span class="line">h3&#123;</span><br><span class="line"> color: pink;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">/* 不推荐 */</span><br><span class="line">H3&#123;</span><br><span class="line"> COLOR: PINK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>—# 一：简介</p>
+<p>         1：为什么使用阿里云镜像加速器?</p>
+<p>               一般而言，我们使用Docker，是需要从Docker官网去拉取镜像的，但是官网是在国外的，                所以下载非常慢，或者都下载不了，总是报timeout连接失败错误，因此需要配置镜像的下载，               这个是docker操作首先要做的事情，通常使用以下两种方式。</p>
+<h1 id="二：直接使用镜像仓库地址进行下载："><a href="#二：直接使用镜像仓库地址进行下载：" class="headerlink" title="二：直接使用镜像仓库地址进行下载："></a>二：直接使用镜像仓库地址进行下载：</h1><p>           比如：前往网易云蜂巢镜像中心：<img alt="" class="has" height="233" src="https://img-blog.csdn.net/2018102014523129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="482">                        <img alt="" class="has" height="73" src="https://img-blog.csdn.net/20181020212635912?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="478">                       可以直接使用具体的镜像地址进行下载，docker pull hub.c.163.com/public/tomcat:latest                       不过这种方式就是每次都需要去指定具体的镜像地址，这个比较纠结，很多时候没记得具体的地址。</p>
+<h1 id="三：使用加速器下载"><a href="#三：使用加速器下载" class="headerlink" title="三：使用加速器下载"></a>三：使用加速器下载</h1><p>         1：简介                第二种方式稍微就简单一些，不需要去记具体的镜像下载地址，                可以使用镜像加速器来实现，常用的加速有很多，比如阿里云、DaoCloud、、                以使用阿里云的为例：进入官网 <img alt="" class="has" height="294" src="https://img-blog.csdn.net/20181021134351291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="615">:</p>
+<p>        3：注册之后可以看到加速器地址               <img alt="" class="has" height="504" src="https://img-blog.csdn.net/20181021135224261?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">               根据上面的操作文档，选择对应的操作系统，进行相应的操作即可。               如下：                      <img alt="" class="has" height="132" src="https://img-blog.csdn.net/20181022095528915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="528">                     后面执行下面两个命令：                            sudo systemctl daemon-reload，udo systemctl restart docker                最后使用docker info查看详细信息：                        <img alt="" class="has" height="178" src="https://img-blog.csdnimg.cn/20181028103116750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_27,color_FFFFFF,t_70" width="350">         4：网上看到的相关问题               <img alt="" class="has" height="410" src="https://img-blog.csdn.net/20181021140024471?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="639">    </p>
+<p>               </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>  </p>
  
       <!-- reward -->
       
@@ -1114,7 +690,7 @@ font:12px/1.5 bold;
 
     
     <article
-  id="post-CSS复合选择器"
+  id="post-docker之mongo数据库忘记用户名密码"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -1125,8 +701,8 @@ font:12px/1.5 bold;
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/"
-    >CSS复合选择器</a> 
+  <a class="article-title" href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/"
+    >docker之mongo数据库忘记用户名密码</a> 
 </h2>
  
 
@@ -1134,83 +710,92 @@ font:12px/1.5 bold;
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" class="article-date">
-  <time datetime="2021-07-18T14:19:55.199Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/docker%E4%B9%8Bmongo%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BF%98%E8%AE%B0%E7%94%A8%E6%88%B7%E5%90%8D%E5%AF%86%E7%A0%81/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.586Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Css/">Css</a>
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: CSS复合选择器<br>categories:</p>
+  <p>title: docker之mongo数据库忘记用户名密码<br>categories:</p>
 <ul>
-<li>css</li>
+<li>docker</li>
 </ul>
-<p>—1.简介</p>
-<blockquote>
-<p> 复合选择器是由两个或多个基础选择器，通过不同的方式组合而成的 </p>
-</blockquote>
-<p>2.后代选择器<strong>，</strong>又称为包含选择器</p>
-<blockquote>
-</blockquote>
+<p>—title: docker之mongo数据库忘记用户名密码<br>categories:</p>
 <ul>
-<li>用来选择元素或元素组的子孙后代 -  其写法就是把外层标签写在前面，内层标签写在后面，中间用<strong>「空格」</strong>分隔，先写父亲爷爷，再写儿子孙子。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内 的标签。 <pre><code class="language-css">父级 子级&#123;属性:属性值;属性:属性值;&#125;</li>
+<li>docker</li>
 </ul>
-<p>.class h3 &#123;color:red;font-size:16px;&#125;</code></pre><br>  <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"> </p>
-<ul>
-<li> 当标签发生嵌套时，内层标签就成为外层标签的后代。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内的标签。 </li>
-</ul>
-<p>3.子元素选择器</p>
-<blockquote>
-</blockquote>
-<ul>
-<li>子元素选择器只能选择作为某元素子元素(亲儿子)的元素。 -  其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 <code>&amp;gt;</code> 进行连接 -  这里的子,指的是亲儿子。不包含孙子 重孙子之类。 <pre>`.class&gt;h3 {color:red;font-size:14px;}`</pre> </li>
-</ul>
-<p>4.并集选择器</p>
-<blockquote>
-<p> 如果某些选择器定义的相同样式，就可以利用并集选择器，可以让代码更简洁。并集选择器（CSS选择器分组）是各个选择器通过<code>,</code>连接而成的，通常用于集体声明。 </p>
-</blockquote>
-<ul>
-<li>任何形式的选择器（包括标签选择器、class类选择器 id选择器等），都可以作为并集选择器的一部分。 -  并集选择器通常用于集体声明  ，逗号隔开的，所有选择器都会执行后面样式，逗号可以理解为和的意思。 <pre><code class="language-css">比如  
-.one, 
-p , 
-#test &#123;color: #F00;&#125;  
-表示   .one 和 p  和 #test 这三个选择器都会执行颜色为红色。 
-通常用于集体声明。  </code></pre> </li>
-</ul>
-<p>5.链接伪类选择器</p>
-<blockquote>
-<p> 用于向某些选择器添加特殊的效果。写的时候，他们的顺序尽量不要颠倒,按照lvha的顺序。否则可能引起错误。<br> 链接伪类，是利用交集选择器. </p>
-</blockquote>
-<ul>
-<li><code>a:link</code>  未访问的链接 -  <code>a:visited</code>  已访问的链接 -  <code>a:hover</code>  鼠标移动到链接上 -  <code>a:active</code>  选定的链接<br>实际工作中，很少写全四个状态，一般写法如下： <pre><code class="language-css">a &#123;   /* a是标签选择器  所有的链接 */
-   font-weight: 700;
-   font-size: 16px;
-   color: gray;
-      text-decoration: none; /* 清除链接默认的下划线*/
-&#125;
-a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
-   color: red; /*  鼠标经过的时候，由原来的 灰色 变成了红色 */
-&#125;</code></pre> </li>
-</ul>
-<p>6.focus伪类选择器</p>
-<blockquote>
-<p>  :focus 伪类选择器用于选取获得焦点的表单元素。<br> 焦点就是光标，一般情况下是&lt;input&gt;类表单元素才能获取，因此这个选择器也主要针对于表单元素来使用<br> <strong>W3C定义：接收键盘事件或其他用户输入的元素都允许 :focus 选择器。</strong><br> 简单来说就是支持input标签。可以在CSS中采用input:focus{}进行操作。<br> 如下是简单例子<br> &lt;div class=”outer”&gt;&lt;input type=”text” name=”” id=”” value=”” /&gt;&lt;/div&gt;<br> &lt;style&gt;    .outer{<!-- -->     width: 200px;     height: 200px;     background-color: red;    }    input:focus{<!-- -->     background-color: green;    } &lt;/style&gt;<br> <img alt="" src="https://img-blog.csdn.net/20180705113102315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><img alt="" src="https://img-blog.csdn.net/2018070511311843?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><br>                 点击前                                    选中后 </p>
-</blockquote>
-<p>7.复合选择器总结</p>
-<blockquote>
- <table><thead>|选择器|作用|特征|使用情况|隔开符号及用法
-</blockquote>
-</thead><tbody>|后代选择器|用来选择元素后代|是选择所有的子孙后代|较多|符号是`空格` .nav a
-|子代选择器|选择 最近一级元素|只选亲儿子|较少|符号是`&gt;`   .nav&gt;p
-|交集选择器|选择两个标签交集的部分|既是 又是|较少|`没有符号`  p.one
-|并集选择器|选择某些相同样式的选择器|可以用于集体声明|较多|符号是`逗号` .nav, .header
-|链接伪类选择器|给链接更改状态| |较多|重点记住 a{} 和 a:hover  实际开发的写法
-</tbody></table>
+<p>—1. 首先通过docker命令停止容器 docker stop 容器id1. 修改主机上与容器同步的mongod.conf文件,将认证注释掉<img alt="" height="288" src="https://img-blog.csdnimg.cn/20201231150258250.png" width="290">1. 重新启动容器 docker start 容器id1. 进入容器内部 命令：docker exec -it 容器id mongo admin<img alt="" height="359" src="https://img-blog.csdnimg.cn/20201231152709320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="803">1. 通过命令查询用户信息 命令：show users<img alt="" height="309" src="https://img-blog.csdnimg.cn/20201231152834540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">1. 修改指定用户的密码 命令：db.changeUserPassword(‘用户名’,’新密码’)<img alt="" height="304" src="https://img-blog.csdnimg.cn/20201231153328484.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="560">1. 最后退出容器，并且重新将mongod.conf文件中的认证打开，并且重新启动容器<img alt="" height="234" src="https://img-blog.csdnimg.cn/20201231153816737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="792"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
 
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Docker网络详解之Overlay"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/"
+    >Docker网络详解之Overlay</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3%E4%B9%8BOverlay/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.584Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker网络详解之Overlay<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—我们在上篇文章说了Docker在单个Docker daemon(即是单主机)模式下面的时候网络默认为Bridge，既然提到了单个Docker daemon，那么多主机即是集群的模式的情况下呢？在这种模式下Docker默认使用Overlay网络来进行容器间的通信。</p>
+<p>接下来我们看看我们在加入一个集群或者初始化一个集群的时候会发生什么事情，下面这段话来自官方文档：</p>
+<ol>
+<li>首先一个名<code>ingress</code>的overlay网络被创建，这样在你没有指定网络的情况下你的集群中的services（你可以理解为一个container，实际上它为多个重复的container，是集群中的一个概念）会自动连接到这个网络。这样集群中的services通过这个网络进行通信。1. 然后一个名叫<code>docker_gwbridge</code>的网桥被建立，这个网桥用来连接在这个网络中的Docker daemon<br>所以由以上可知，逻辑上我们都处于一个叫ingress的overlay网络上，实际上Docker daemon之间的通信还是通过一个叫docker_gwbridge的网桥进行的。每个services或者container同时能够加入很多个网络，但是它们只能和连接在同一个网络上的其他service或者container进行通信。</li>
+</ol>
+<h2 id="建立一个Overlay网络"><a href="#建立一个Overlay网络" class="headerlink" title="建立一个Overlay网络"></a>建立一个Overlay网络</h2><p>当我们要建立一个overlay网络的时候有几个前提：</p>
+<ol>
+<li>必须要打开必要的端口让网络能进行通信，比如必须打开2377端口的TCP、7946端口的TCP和UDP以及4789端口UDP，这都是进行通信必要的1. 在你创建你自己的overlay网络之前，你必须加入一个集群或者是初始化一个集群<br>准备工作做好后，我们用<code>$ docker network create -d overlay your-overlaynetwork-name</code>来创建你的overlay网络，如果你想自己配置关于网络的IP地址范围、子网、网关或者其他选项，你能通过添加<code>--attachable</code>来进行配置</li>
+</ol>
+<h2 id="Overlay网络的安全性"><a href="#Overlay网络的安全性" class="headerlink" title="Overlay网络的安全性"></a>Overlay网络的安全性</h2><p>在默认的情况，overlay网络中的services进行通信是通过<code>AES加密算法</code>过的，并且集群中的管理节点会<code>每12小时</code>对这个加密秘钥进行更改。当你想在你自己的overlay网络中应用加密算法，你能通过<code>--opt encrypted</code>命令来开启加密，但是注意，<code>windows上的Docker daemon不支持加密</code></p>
+<p><code>转载自：</code></p>
  
       <!-- reward -->
       
@@ -1236,7 +821,7 @@ a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
   
   <nav class="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
   </nav>
   
 </section>

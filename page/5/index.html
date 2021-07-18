@@ -160,7 +160,7 @@
     
     
     <article
-  id="post-Hive知识点入门学习三"
+  id="post-CSS复合选择器"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -171,8 +171,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/"
-    >Hive知识点入门学习三</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/"
+    >CSS复合选择器</a> 
 </h2>
  
 
@@ -180,27 +180,83 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.156Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.199Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hive知识点入门学习三<br>categories:</p>
+  <p>title: CSS复合选择器<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>css</li>
 </ul>
-<p>—# 一：Hive 常见属性配置 </p>
-<ol>
-<li>  Hive 数据仓库位置配置     ⑴Default 数据仓库的最原始位置是在 hdfs 上的：/user/hive/warehouse 路径下 。    ⑵在仓库目录下，没有对默认的数据库 default 创建文件夹。如果某张表属于 default        数据库，直接在数据仓库目录下创建一个文件夹。        <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190819223122673.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">    ⑶修改 default 数据仓库原始位置（将 hive-default.xml.template 如下配置信息拷贝到        hive-site.xml 文件中）         <img alt="" class="has" height="147" src="https://img-blog.csdnimg.cn/20190819223236422.png" width="665">         配置同组用户有执行权限 ：        bin/hdfs dfs -chmod g+w /user/hive/warehouse 1.  显示当前数据库，以及查询表的头信息配置  ⑴在 hive-site.xml 文件中添加如下配置信息         <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190819223610457.png" width="437">  ⑵效果：        <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190819223716280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="466"> 1.  Hive 运行日志信息配置     ⑴Hive 的 log 默认存放在/tmp/kgf/hive.log 目录下（当前用户名下）。     ⑵修改 hive 的 log 存放日志到/opt/module/hive/logs           a：修改/opt/module/hive/conf/hive-log4j.properties.template 文件名称为hive-log4j.properties                   <img alt="" class="has" height="287" src="https://img-blog.csdnimg.cn/20190819224138274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">                b：在 hive-log4j.properties 文件中修改 log 存放位置                  <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/2019081922430168.png" width="447">          c：重新启动hive,查看日志                <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190819224456124.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">               <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190819224522341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610">        <h1 id="二：Hive-数据类型"><a href="#二：Hive-数据类型" class="headerlink" title="二：Hive 数据类型"></a>二：Hive 数据类型</h1></li>
-<li> 基本数据类型   <img alt="" class="has" height="526" src="https://img-blog.csdnimg.cn/20190820220115405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="623">1. 集合数据类型   <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/2019082022021964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">  <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/2019082022030196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">1. 案例实操  ⑴需求：         <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190820220418141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="599">  ⑵基于上述数据结构，我们在 Hive 里创建对应的表，并导入数据。          a：创建本地测试文件 test.txt                <img alt="" class="has" height="86" src="https://img-blog.csdnimg.cn/20190820220903466.png" width="672">               <img alt="" class="has" height="197" src="https://img-blog.csdnimg.cn/20190820223457971.png" width="714">         b：Hive 上创建测试表 test                <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190820222540748.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="693">               <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190820223114431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">               <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190820223229937.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">       c：导入数据             <img alt="" class="has" height="139" src="https://img-blog.csdnimg.cn/20190820223714627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619">    ⑶访问三种集合列里的数据，以下分别是 ARRAY，MAP，STRUCT 的访问方式           <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20190820224559347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="664">1.  类型转化   <img alt="" class="has" height="459" src="https://img-blog.csdnimg.cn/2019082022464613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">      <h1 id="三：DDL数据定义"><a href="#三：DDL数据定义" class="headerlink" title="三：DDL数据定义"></a>三：DDL数据定义</h1></li>
-<li>创建数据库  <img alt="" class="has" height="281" src="https://img-blog.csdnimg.cn/2019082121445173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="457">  注意：避免要创建的数据库已经存在错误，增加 if not exists 判断。（标准写法）   <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190821214719765.png" width="525">    <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190821214826855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 创建一个数据库，指定数据库在 HDFS 上存放的位置   <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/2019082121542295.png" width="727">  <img alt="" class="has" height="280" src="https://img-blog.csdnimg.cn/20190821215432560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">1. 修改数据库  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190821220003912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="648">1.  查询数据库   <img alt="" class="has" height="509" src="https://img-blog.csdnimg.cn/20190821220237936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">1.   删除数据库   <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190821221230754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="606">  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190821221244886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597">1. 管理表   ⑴简介         <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190821223046384.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">  ⑵案例实操         a：普通创建表                 <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190821223705196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">                <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019082122372787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553">         b：根据查询结果创建表（查询的结果会添加到新创建的表中）                <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190821224316559.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="481">         c：根据已经存在的表结构创建表                <img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20190821224448961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">         d：查询表的类型               <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190821224556752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="503">1.  外部表   ⑴简介         <img alt="" class="has" height="73" src="https://img-blog.csdnimg.cn/20190822221648101.png" width="625">  ⑵使用场景         <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/20190822221740240.png" width="651">  ⑶案例实操：分别创建部门和员工外部表，并向表中导入数据。          a：创建部门表               <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190822222033545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="581">        b：创建员工表               <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190822222211120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">        c：<strong>我们向表中导入数据后，数据存储在hdfs上，删除表后，数据不会删除，重新建立表后，数据会重新              关联起来</strong>。</li>
-</ol>
+<p>—1.简介</p>
+<blockquote>
+<p> 复合选择器是由两个或多个基础选择器，通过不同的方式组合而成的 </p>
+</blockquote>
+<p>2.后代选择器<strong>，</strong>又称为包含选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>用来选择元素或元素组的子孙后代 -  其写法就是把外层标签写在前面，内层标签写在后面，中间用<strong>「空格」</strong>分隔，先写父亲爷爷，再写儿子孙子。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内 的标签。 <pre><code class="language-css">父级 子级&#123;属性:属性值;属性:属性值;&#125;</li>
+</ul>
+<p>.class h3 &#123;color:red;font-size:16px;&#125;</code></pre><br>  <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"> </p>
+<ul>
+<li> 当标签发生嵌套时，内层标签就成为外层标签的后代。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内的标签。 </li>
+</ul>
+<p>3.子元素选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>子元素选择器只能选择作为某元素子元素(亲儿子)的元素。 -  其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 <code>&amp;gt;</code> 进行连接 -  这里的子,指的是亲儿子。不包含孙子 重孙子之类。 <pre>`.class&gt;h3 {color:red;font-size:14px;}`</pre> </li>
+</ul>
+<p>4.并集选择器</p>
+<blockquote>
+<p> 如果某些选择器定义的相同样式，就可以利用并集选择器，可以让代码更简洁。并集选择器（CSS选择器分组）是各个选择器通过<code>,</code>连接而成的，通常用于集体声明。 </p>
+</blockquote>
+<ul>
+<li>任何形式的选择器（包括标签选择器、class类选择器 id选择器等），都可以作为并集选择器的一部分。 -  并集选择器通常用于集体声明  ，逗号隔开的，所有选择器都会执行后面样式，逗号可以理解为和的意思。 <pre><code class="language-css">比如  
+.one, 
+p , 
+#test &#123;color: #F00;&#125;  
+表示   .one 和 p  和 #test 这三个选择器都会执行颜色为红色。 
+通常用于集体声明。  </code></pre> </li>
+</ul>
+<p>5.链接伪类选择器</p>
+<blockquote>
+<p> 用于向某些选择器添加特殊的效果。写的时候，他们的顺序尽量不要颠倒,按照lvha的顺序。否则可能引起错误。<br> 链接伪类，是利用交集选择器. </p>
+</blockquote>
+<ul>
+<li><code>a:link</code>  未访问的链接 -  <code>a:visited</code>  已访问的链接 -  <code>a:hover</code>  鼠标移动到链接上 -  <code>a:active</code>  选定的链接<br>实际工作中，很少写全四个状态，一般写法如下： <pre><code class="language-css">a &#123;   /* a是标签选择器  所有的链接 */
+   font-weight: 700;
+   font-size: 16px;
+   color: gray;
+      text-decoration: none; /* 清除链接默认的下划线*/
+&#125;
+a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
+   color: red; /*  鼠标经过的时候，由原来的 灰色 变成了红色 */
+&#125;</code></pre> </li>
+</ul>
+<p>6.focus伪类选择器</p>
+<blockquote>
+<p>  :focus 伪类选择器用于选取获得焦点的表单元素。<br> 焦点就是光标，一般情况下是&lt;input&gt;类表单元素才能获取，因此这个选择器也主要针对于表单元素来使用<br> <strong>W3C定义：接收键盘事件或其他用户输入的元素都允许 :focus 选择器。</strong><br> 简单来说就是支持input标签。可以在CSS中采用input:focus{}进行操作。<br> 如下是简单例子<br> &lt;div class=”outer”&gt;&lt;input type=”text” name=”” id=”” value=”” /&gt;&lt;/div&gt;<br> &lt;style&gt;    .outer{<!-- -->     width: 200px;     height: 200px;     background-color: red;    }    input:focus{<!-- -->     background-color: green;    } &lt;/style&gt;<br> <img alt="" src="https://img-blog.csdn.net/20180705113102315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><img alt="" src="https://img-blog.csdn.net/2018070511311843?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><br>                 点击前                                    选中后 </p>
+</blockquote>
+<p>7.复合选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|特征|使用情况|隔开符号及用法
+</blockquote>
+</thead><tbody>|后代选择器|用来选择元素后代|是选择所有的子孙后代|较多|符号是`空格` .nav a
+|子代选择器|选择 最近一级元素|只选亲儿子|较少|符号是`&gt;`   .nav&gt;p
+|交集选择器|选择两个标签交集的部分|既是 又是|较少|`没有符号`  p.one
+|并集选择器|选择某些相同样式的选择器|可以用于集体声明|较多|符号是`逗号` .nav, .header
+|链接伪类选择器|给链接更改状态| |较多|重点记住 a{} 和 a:hover  实际开发的写法
+</tbody></table>
+
  
       <!-- reward -->
       
@@ -221,7 +277,7 @@
 
     
     <article
-  id="post-Hive知识点入门学习二"
+  id="post-CSS背景(background)"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -232,8 +288,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
-    >Hive知识点入门学习二</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/"
+    >CSS背景(background)</a> 
 </h2>
  
 
@@ -241,53 +297,95 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.149Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.197Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hive知识点入门学习二<br>categories:</p>
+  <p>title: CSS背景(background)<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>css</li>
 </ul>
-<p>—# 一：将本地文件导入Hive案例</p>
-<ol>
-<li>需求：  将本地/opt/module/datas/student.txt这个目录下的数据导入到hive的student(id int, name string)表中。1. 数据准备：  ⑴在/opt/module/datas/student.txt 这个目录下准备数据        <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190818155847518.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">1. 启动hive，在数据库中创建的student表，并声明文件分隔符’\t’   sql为：create table student(id int,name string) row format delimited fields terminated by ‘\t’;<img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20190818161243241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="885">1.  加载/opt/module/datas/student.txt 文件到 student 数据库表中。   sql：load data local inpath ‘/opt/module/datas/student.txt’ into table student;   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190818162112793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="766">1.   遇到的问题   ⑴现在我们使用的是一个102连接窗口启动hive数据库，如果我们再打开一个102连接窗口去启动hive,就会报错        <img alt="" class="has" height="290" src="https://img-blog.csdnimg.cn/20190818162627607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">        我们在第二个窗口也启动hive试试：        <img alt="" class="has" height="278" src="https://img-blog.csdnimg.cn/20190818162737579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">    ⑵原因：        Metastore（元数据） 默认存储在自带的 derby 数据库中，只支持一个hive客户端连接。        推荐使用 MySQL 存储 Metastore;       <h1 id="二：Mysql安装"><a href="#二：Mysql安装" class="headerlink" title="二：Mysql安装"></a>二：Mysql安装</h1></li>
-<li>查看mysql是否安装，如果安装了，可以先卸载掉  <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190818163504163.png" width="639">1.  版本：  <img alt="" class="has" height="36" src="https://img-blog.csdnimg.cn/20190818164417782.png" width="395">1. 上传到Linux上  <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/2019081816460563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="681">1. 将文件解压到/usr/local/目录下  <img alt="" class="has" height="262" src="https://img-blog.csdnimg.cn/20190818174205322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="698">   <img alt="" class="has" height="291" src="https://img-blog.csdnimg.cn/20190818174236815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="625">1. 修改文件夹的名称  <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/20190818174306725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="735">1.  检查并创建用户和用户组  <img alt="" class="has" height="181" src="https://img-blog.csdnimg.cn/20190818165556903.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="529"> 1.  创建data文件夹<img alt="" class="has" height="130" src="https://img-blog.csdnimg.cn/20190818174340602.png" width="481"> 1.  授权授权目录和用户  <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190818174438487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568"> 1.  安装并初始化  命令如下：datadir就是安装路径，basedir就是根目录  /usr/local/mysql/bin/mysqld –initialize –user=mysql –datadir=/usr/local/mysql/data –basedir=/usr/local/mysql  <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190818174556621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683"> 1.  复制启动脚本到资源目录  <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/20190818174655432.png" width="806"> 1.  增加mysqld服务控制脚本执行权限  <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/20190818173327480.png" width="523"> 1.  将mysqld服务加入到系统服务  <img alt="" class="has" height="74" src="https://img-blog.csdnimg.cn/20190818173349521.png" width="475"> 1.  检查mysqld服务是否已经生效  <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/20190818173412493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730"> 1.  启动mysql（注意：安装目录一定要在/usr/local下）  <img alt="" class="has" height="203" src="https://img-blog.csdnimg.cn/20190818174808466.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="653"> 1.  登录mysql（提示找不到mysql命令）  <img alt="" class="has" height="150" src="https://img-blog.csdnimg.cn/2019081817500748.png" width="477"> 1.  解决  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190818175110764.png" width="660"> 1.  再次登录  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190818175148527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662"> 1.  修改密码  <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190818175332282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614"> 1.  最后退出使用修改后的密码登录  <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190818175419923.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597"> 1.  连接出现如下  <img alt="" class="has" height="212" src="https://img-blog.csdnimg.cn/2019081817592794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587"> 1.  解决  <img alt="" class="has" height="177" src="https://img-blog.csdnimg.cn/20190818180225818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690"> 1.  连接成功  <img alt="" class="has" height="503" src="https://img-blog.csdnimg.cn/20190818180303108.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576"> <h1 id="三：将Hive元数据拷贝到mysql"><a href="#三：将Hive元数据拷贝到mysql" class="headerlink" title="三：将Hive元数据拷贝到mysql"></a>三：将Hive元数据拷贝到mysql</h1></li>
-<li>驱动拷贝，将mysql-connector-java-5.1.38.jar拷贝到/opt/module/hive/lib/   <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190818183931789.png" width="727">1.  在/opt/module/hive/conf 目录下创建一个 hive-site.xml   <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20190818184128415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="709"><li> 根据官方文档配置mysql参数，拷贝数据到 hive-site.xml 文件中。    <pre class="has"><code class="language-html">&lt;?xml version="1.0"?&gt;<br>&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;<br>&lt;configuration&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionURL&amp;lt;/name&amp;gt;    
- &amp;lt;value&amp;gt;jdbc:mysql://hadoop102:3306/metastore?createDatabaseIfNotExist=true&amp;amp;amp;useSSL=false&amp;lt;/value&amp;gt;    
- &amp;lt;description&amp;gt;JDBC connect string for a JDBC metastore&amp;lt;/description&amp;gt;  
-</code></pre>
- &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionDriverName&amp;lt;/name&amp;gt;    
- &amp;lt;value&amp;gt;com.mysql.jdbc.Driver&amp;lt;/value&amp;gt;    
- &amp;lt;description&amp;gt;Driver class name for a JDBC metastore&amp;lt;/description&amp;gt;  
-</code></pre>
- &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionUserName&amp;lt;/name&amp;gt;    
- &amp;lt;value&amp;gt;root&amp;lt;/value&amp;gt;    
- &amp;lt;description&amp;gt;username to use against metastore database&amp;lt;/description&amp;gt;  
-</code></pre>
- &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionPassword&amp;lt;/name&amp;gt;    
- &amp;lt;value&amp;gt;897570&amp;lt;/value&amp;gt;    
- &amp;lt;description&amp;gt;password to use against metastore database&amp;lt;/description&amp;gt;  
-</code></pre>
- &lt;/property&gt;<br> &lt;property&gt;         <pre><code> &amp;lt;name&amp;gt;hive.cli.print.current.db&amp;lt;/name&amp;gt;         
- &amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;         
- &amp;lt;description&amp;gt;Whether to include the current database in the Hive prompt.&amp;lt;/description&amp;gt;      
-</code></pre>
- &lt;/property&gt;<br> &lt;property&gt;     <pre><code> &amp;lt;name&amp;gt;hive.cli.print.header&amp;lt;/name&amp;gt;     
- &amp;lt;value&amp;gt;false&amp;lt;/value&amp;gt;     
- &amp;lt;description&amp;gt;Whether to print the names of the columns in query output.&amp;lt;/description&amp;gt;   
-</code></pre>
- &lt;/property&gt;<br>&lt;/configuration&gt; </code></pre>   </li>1. 配置完毕后，如果启动 hive 异常，可以重新启动虚拟机。（重启后，别忘了启动 hadoop 集群）,启动hive后可以发现我们之前的student表不见了，我们看看mysql数据库变化  <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190818185323958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="428">1.  mysql数据库变化，多了一个元数据库，之前是没有的  <img alt="" class="has" height="303" src="https://img-blog.csdnimg.cn/20190818185545416.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">1.   多窗口启动测试，可以的  <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190818185724384.png" width="688"><h1 id="四：Hive中常用的交互命令"><a href="#四：Hive中常用的交互命令" class="headerlink" title="四：Hive中常用的交互命令"></a>四：Hive中常用的交互命令</h1></li>
-<li> 首先在hive中新建一张表，并且导入一些数据   <img alt="" class="has" height="312" src="https://img-blog.csdnimg.cn/20190819213852186.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">1. “-e”不进入 hive 的交互窗口执行 sql 语句     <img alt="" class="has" height="284" src="https://img-blog.csdnimg.cn/20190819214253808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="794">1.  “-f”执行脚本中 sql 语句    ⑴新建一个sql脚本         <img alt="" class="has" height="182" src="https://img-blog.csdnimg.cn/20190819214823235.png" width="496">  ⑵执行sql脚本         <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190819214939544.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="552">1.   执行文件中的 sql 语句并将结果写入文件中     <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190819215111211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="755"><h1 id="五：-Hive-其他命令操作"><a href="#五：-Hive-其他命令操作" class="headerlink" title="五： Hive 其他命令操作"></a>五： Hive 其他命令操作</h1></li>
-<li> 在 hive cli 命令窗口中如何查看 hdfs 文件系统   <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190819220124828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="739">1. 在 hive cli 命令窗口中如何查看 hdfs 本地系统   <img alt="" class="has" height="187" src="https://img-blog.csdnimg.cn/20190819220235303.png" width="548">1. 查看在 hive 中输入的所有历史命令   a：进入到当前用户的根目录         <img alt="" class="has" height="29" src="https://img-blog.csdnimg.cn/20190819220435242.png" width="291">  b：查看. hivehistory 文件         <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/20190819220505938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="376">      </li>
-</ol>
+<p>—1.背景颜色</p>
+<blockquote>
+<p> background-color: 颜色值;   默认的值是 **transparent  **透明的 </p>
+</blockquote>
+<p>2.背景图片(image)</p>
+<blockquote>
+<p> 语法： background-image : none | url (url) ; 例如: background-image: url(images/1.png); </p>
+</blockquote>
+<p>3.背景平铺（repeat）</p>
+<blockquote>
+ <pre><code class="language-css">background-repeat : repeat | no-repeat | repeat-x | repeat-y 
+</code></pre> 
+ <table><thead>|参数|作用
+</blockquote>
+</thead><tbody>|repeat|背景图像在纵向和横向上平铺（默认的）
+|no-repeat|背景图像不平铺
+|repeat-x|背景图像在横向上平铺
+|repeat-y| 背景图像在纵向平铺   
+</tbody></table> 什么是repeat？
+          
+ <img alt="" height="380" src="https://img-blog.csdnimg.cn/20210202210607583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">
+  什么是repeat-x？
+          
+ <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210202210750597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="483">
+  什么是repeat-y？
+          
+ <img alt="" height="369" src="https://img-blog.csdnimg.cn/20210202210842685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="451">
+
+
+<p>4.背景位置(position)</p>
+<blockquote>
+ <pre><code class="language-css">background-position : length || length
+background-position : position || position 
+</code></pre> 
+ <table><thead>|参数|值
+</blockquote>
+</thead><tbody>|length|百分数 | 由浮点数字和单位标识符组成的长度值
+|position|top | center | bottom | left | center | right   方位名词
+</tbody></table>
+ 注意： 
+ -  必须先指定background-image属性 -  position 后面是x坐标和y坐标。可以使用方位名词或者 精确单位。 -  如果指定两个值，两个值都是方位名字，则两个值前后顺序无关，比如left  top和top  left效果一致 -  如果只指定了一个方位名词，另一个值默认居中对齐。 -  如果position 后面是精确坐标， 那么第一个，肯定是 x 第二个一定是y -  如果只指定一个数值,那该数值一定是x坐标，另一个默认垂直居中 -  如果指定的两个值是 精确单位和方位名字混合使用，则第一个值是x坐标，第二个值是y坐标 
+ 背景简写： 
+ -  background：属性的值的书写顺序官方没有强制的标准。为了可读性，建议如下写： -  background: 背景颜色 背景图片地址 背景平铺 背景滚动 背景位置; 
+ <pre><code>/* 有背景图片背景颜色可以不用写*/
+background: transparent url(image.jpg) repeat-y  scroll center top ;</code></pre> 
+
+
+<p>5.背景图像固定background-attachment</p>
+<blockquote>
+<p> 背景是否跟着滚动而滚动<br> <img alt="" height="456" src="https://img-blog.csdnimg.cn/20210202214748899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> </p>
+</blockquote>
+<p>6.背景半透明(CSS3)</p>
+<blockquote>
+ <pre><code class="language-css">background: rgba(0, 0, 0, 0.3);
+background: rgba(0, 0, 0, .3);
+</code></pre> 
+</blockquote>
+<ul>
+<li>等同于background-color: rgba(0, 0, 0, .3) -  最后一个参数是alpha 透明度  取值范围 0~1之间 -  我们习惯把0.3 的 0 省略掉  这样写 background: rgba(0, 0, 0, .3); -  注意：背景半透明是指盒子背景半透明，盒子里面的内容不受影响 -  低于IE 9的版本不支持<br>盒子半透明 opacity </li>
+<li>设置opacity元素的所有后代元素会随着一起具有透明性，一般用于调整图片或者模块的整体不透明度 <pre>`opacity: .2;`</pre> </li>
+</ul>
+<p>7.背景总结</p>
+<blockquote>
+ <table><thead>|属性|作用|值
+</blockquote>
+</thead><tbody>|background-color|背景颜色|预定义的颜色值/十六进制/RGB代码
+|background-image|背景图片|url(图片路径)
+|background-repeat|是否平铺|repeat/no-repeat/repeat-x/repeat-y
+|background-position|背景位置|length/position    分别是x  和 y坐标， 切记 如果有 精确数值单位，则必须按照先X 后Y 的写法
+|background-attachment|背景固定还是滚动|scroll/fixed
+|背景简写|更简单|背景颜色 背景图片地址 背景平铺 背景滚动 背景位置;  他们没有顺序
+|背景透明|让盒子半透明|background: rgba(0,0,0,0.3);   后面必须是 4个值
+</tbody></table>
+
  
       <!-- reward -->
       
@@ -308,7 +406,7 @@
 
     
     <article
-  id="post-Hive知识点入门学习"
+  id="post-CSS3 新增圆角以及盒子阴影"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -319,8 +417,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/"
-    >Hive知识点入门学习</a> 
+  <a class="article-title" href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/"
+    >CSS3 新增圆角以及盒子阴影</a> 
 </h2>
  
 
@@ -328,87 +426,56 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.142Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.195Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hive知识点入门学习<br>categories:</p>
+  <p>title: CSS3 新增圆角以及盒子阴影<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>css</li>
 </ul>
-<p>—title: Hive知识点入门学习<br>categories:</p>
+<p>—1.圆角边框</p>
+<blockquote>
+ <pre><code class="language-css">border-radius:length;
+</blockquote>
+<p>border-top-left-radius   定义了左上角的弧度<br>border-top-right-radius   定义了右上角的弧度<br>border-bottom-right-radius   定义了右下角的弧度<br>border-bottom-left-radius   定义了左下角的弧度<br></code></pre> </p>
 <ul>
-<li>BigData</li>
+<li>其中每一个值可以为 数值或百分比的形式。 -  技巧：让一个正方形 变成圆圈 <pre><code class="language-css">border-radius: 50%;
+</code></pre> 
+<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/cd90d25bf757638154c28d92250dac7c.png">如果要在四个角上一一指定，可以使用以下规则👇👇： <pre><code class="language-css">border-radius: 左上角 右上角  右下角  左下角;
+</code></pre> </li>
+<li> 四个值: 第一个值为左上角，第二个值为右上角，第三个值为右下角，第四个值为左下角。 -  三个值: 第一个值为左上角, 第二个值为右上角和左下角，第三个值为右下角 -  两个值: 第一个值为左上角与右下角，第二个值为右上角与左下角 -  一个值：四个圆角值相同 </li>
 </ul>
-<p>—1. 1. 1. 1. 1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
+<p>2.盒子阴影(box-shadow)</p>
+<blockquote>
+ <pre><code class="language-css">box-shadow: offset-x offset-y [blur [spread]] [color] [inset]
+</code></pre> 
+ <table><thead>|值|描述
+</blockquote>
+</thead><tbody>|offset-x|阴影的水平偏移量。正数向右偏移，负数向左偏移。
+|offset-y|阴影的垂直偏移量。正数向下偏移，负数向上偏移。
+|blur|可选。阴影模糊距离，不能取负数。
+|spread|可选。阴影大小
+|color|可选。阴影的颜色
+|inset|可选。表示添加内阴影，默认为外阴影
+</tbody></table>
+ <pre><code class="language-css">div &#123;
+   width: 200px;
+   height: 200px;
+   border: 10px solid red;
+   /* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
+   /* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
+   box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);   
+&#125;</code></pre> 
 
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
 
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hive整合Hbase详解"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hive%E6%95%B4%E5%90%88Hbase%E8%AF%A6%E8%A7%A3/"
-    >Hive整合Hbase详解</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hive%E6%95%B4%E5%90%88Hbase%E8%AF%A6%E8%A7%A3/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.136Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hive整合Hbase详解<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Hive整合Hbase详解<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. <strong>简介</strong>     Hive提供了与HBase的集成，使得能够在HBase表上使用HQL语句进行查询 插入操作以及进行Join和Union等复杂查询、 同时也可以将hive表中的数据映射到Hbase中。在工作中很常见。它的应用场景有很多，比如在Hadoop业务的开发流程如下：<img alt="" class="has" height="300" src="https://img-blog.csdnimg.cn/20191007212421103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 其中在数据存入hbase—&gt;Hive对数据进行统计分析的这个步骤中就涉及到了Hive与Hbase的整合，所以了解Hive与Hbase的整合是很有必要的。 1. <strong>Hive与Hbase整合的必要性 **         Hive是建立在Hadoop之上的数据仓库基础构架、是为了减少MapReduce编写工作的批处理系统， Hive本身不存储和计算数据，它完全依赖于HDFS和MapReduce。Hive可以理解为一个客户端工具， 将我们的sql操作转换为相应的MapReduce jobs，然后在Hadoop上面运行。         Hbase全称为Hadoop Database，即Hbase是Hadoop的数据库，是一个分布式的存储系统。Hbase利用 Hadoop的HDFS作为其文件存储系统，利用Hadoop的MapReduce来处理Hbase中的海量数据。利用zookeeper 作为其协调工具。          Hbase数据库的缺点在于—-语法格式异类，没有类sql的查询方式，因此在实际的业务当中操作和计算数据非 常不方便，但是Hive就不一样了，Hive支持标准的sql语法，于是我们就希望通过Hive这个客户端工具对Hbase中的 数据进行操作与查询，进行相应的数据挖掘，这就是所谓Hive与hbase整合的含义。Hive与Hbase整合的示意图如下：<img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20191007212726676.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="832">1. <strong>hive与hbase版本兼容性</strong>  Hive版本：1.2.1  Hbase版本：1.3.1  ⑴hbase与hive哪些版本兼容？         a：hive0.90与hbase0.92是兼容的，早期的hive版本与hbase0.89/0.90兼容。         b：hive1.x与hbase0.98.x或则更低版本是兼容的。         c：hive2.x与hbase1.x及比hbase1.x更高版本兼容。           Hive 0.6.0推出了storage-handler，用于将数据存储到HDFS以外的其他存储上。并方便的通过hive进行插入、查询等操作。   同时hive提供了针对Hbase的hive-hbase-handler。这使我们在使用hive节省开发M/R代码成本的同时还能获得HBase的特性来快  速响应随机查询。           但是，hive自带的hive-hbase-handler是针对特定版本的Hbase的，比如，0.7.0版本的hive编译时使用的是0.89.0版本的Hbase，0.6.0版本的hive默认使用0.20.3版本的hbase进行编译。如果能够找到对应的版本，可以跳过编译的步骤直接使用。不过，我们现状已经找不到这些版本的Hbase与之配合使用了。所以只好自己来编译这个jar包。           注：使用不匹配的版本，一些功能会发生异常。其原因是由于没有重新编译storage-handler组件，发现在hive中查询HBase表存在问题。hive-hbase-handler.jar的作用在hbase与hive整合的时候发挥了重要作用，有了这个包，hbase与hive才能通信。 如果想hbase1.x与hive1.x整合，需要编译hive1.x 代码本身。1. <strong>下面我们创建项目去编译源码   <strong>⑴首先我们需要去网上下载对应hive版本的源码包         <img alt="" class="has" height="42" src="https://img-blog.csdnimg.cn/20191007220454629.png" width="290">        解压后：        <img alt="" class="has" height="49" src="https://img-blog.csdnimg.cn/2019100722080049.png" width="356">   ⑵在eclipse中创建一个项目。Java project即可。       <img alt="" class="has" height="76" src="https://img-blog.csdnimg.cn/20191007220540543.png" width="314">            ⑶在创建好的项目上点击右键，选择Import，选择General下的FileSystem，       找到源码包apache-hive-1.2.1-src\hbase-handler\src\java目录选择其中的java目录导入         <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20191007221108593.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="301"><img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/20191007221351985.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="354">   ⑷添加依赖包，导入代码后可以看到很多的错误提示。这时由于没有引入依赖的jar包导致的。        <img alt="" class="has" height="306" src="https://img-blog.csdnimg.cn/20191007221534971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="339">      下面，我们引入,需要hive、hbase下相关的lib包。新建lib目录，把对应的依赖包，导入       a：首先我们进入到hive的lib目录下，下载下来所有的jar,注意：文件夹不要，以及.pom文件不要。             <img alt="" class="has" height="125" src="https://img-blog.csdnimg.cn/20191007221946884.png" width="409">       b：我们再进入hbase的lib目录下，下载下来所有的jar，有相同的就去掉，注意：文件夹不要，以及.pom文件不要。            <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223116271.png" width="377"><img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/20191007223124805.png" width="377">            <img alt="" class="has" height="468" src="https://img-blog.csdnimg.cn/20191007223902727.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">    ⑸至此可以导出我们需要的jar包了。在项目上点击右键，选择export ，选择JAR file            <img alt="" class="has" height="149" src="https://img-blog.csdnimg.cn/20191007224110155.png" width="653">            我们只编译源码，不要lib，名称就是我们要替换的原本的jar包名称hive-hbase-handler-1.2.1.jar             <img alt="" class="has" height="380" src="https://img-blog.csdnimg.cn/20191007224336482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="326">         到这里我们就生成了符合自己Hbase版本的hive-hbase-handler了。1. <strong>下面我们进入到hive的lib目录下删除原来的hive-hbase-handler-1.2.1.jar，****换成我们自己的</strong>   <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20191007224615174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">1. <strong>hive与hbase整合环境配置  ⑴</strong>进入/usr/local/module/apache-hive-1.2.1/conf目录下修改hive-site.xml文件，添加配置属性（zookeeper的地址）        <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/20191007225110949.png" width="658">1. <strong>引入hbase的依赖包</strong>  ⑴将hbase安装目录下的lib文件夹下的包导入到hive的环境变量中        a：在hive-env.sh 文件中添加             <img alt="" class="has" height="51" src="https://img-blog.csdnimg.cn/20191007225432137.png" width="819">1. 至此、hive与hbase整合环境准备完成<li>实战操作 ⑴</strong>建立 Hive 表，关联 HBase 表，插入数据到 Hive 表的同时能够影响 HBase 表。        a：在 Hive 中创建表同时关联 HBase                   ** <pre class="has"><code class="language-sql">CREATE TABLE hive_hbase_emp_table(<br>     empno int,<br>     ename string,<br>     job string,<br>     mgr int,<br>     hiredate string,<br>     sal double,<br>     comm double,<br>     deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table");    </code></pre> STORED BY ‘org.apache.hadoop.hive.hbase.HBaseStorageHandler’  //指定存储处理器Hbase.table.name属性是可选的，用它来指定此表在hbase中的名字，这就是说，允许同一个表在hive和hbase中有不同的名字。 每个hive的列，都需要在参数hbase.columns.mapping中指定一个对应的条目，多个列之间的条目通过逗号分隔；也就是说，如果某个表有n个列，则参数hbase.columns.mapping的值中就有n个以逗号分隔的条目，比如： <pre>"hbase.columns.mapping" = ":key,a:b,a:c,d:e" 代表有两个列族，一个是a一个是d，a列族中有两列，分别为b和c<br>注意，hbase.columns.mapping的值中是不允许出现空格的<br><strong>    b:效果<br>         </strong></strong>         <strong><strong><br>     c：现在我们需要向hive库中的hive_hbase_emp_table表中添加数据，注意：不能直接load数据到这张表中，<br>         否则数据不会同步到hbase对应的hbase_emp_table表中。 <br>         在 Hive 中创建临时中间表，用于 load 文件中的数据 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE TABLE emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>  deptno int<br>)<br>row format delimited fields terminated by '\t'; </code></pre> <pre></strong> **<br><strong>     d:向 Hive 中间表中 load 数据 <br>          </strong></strong>         <strong><strong>      e：通过 insert 命令将中间表中的数据导入到 Hive 关联 HBase 的那张表中 <br>         </strong><strong>      f：查看 Hive 以及关联的 HBase 表中是否已经成功的同步插入了数据 <br>         </strong></strong>         **<strong><br> <br>⑵在 HBase 中已经存储了某一张表 hbase_emp_table，然后在 Hive 中创建一个外部表来关联 HBase 中的<br>  hbase_emp_table 这张表，使之可以借助 Hive 来分析 HBase 这张表中的数据。<br>   a：在 Hive 中创建外部表 </strong><br></pre> <pre class="has"><code class="language-sql">CREATE EXTERNAL TABLE relevance_hbase_emp(<br>   empno int,<br>   ename string,<br>   job string,<br>   mgr int,<br>   hiredate string,<br>   sal double,<br>   comm double,<br>   deptno int<br>)<br>STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'<br>WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,info:ename,info:job,info:mgr,info:hiredate,info:sal,info:comm,info:deptno")<br>TBLPROPERTIES ("hbase.table.name" = "hbase_emp_table"); </code></pre> <pre></p>
-<p>b：关联后就可以使用 Hive 函数进行一些分析操作了 ，数据自动填充进来<br> <br> 这里使用外部表映射到HBase中的表，这样，在Hive中删除表，并不会删除HBase中的表，否则，就会删除。<br></pre> </li><br>参考文章：                      </p>
 <p> </p>
  
       <!-- reward -->
@@ -430,7 +497,7 @@
 
     
     <article
-  id="post-HDFS的数据流以及Namenode工作机制"
+  id="post-clickhouse之表和列的TTL规则与实践"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -441,8 +508,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/"
-    >HDFS的数据流以及Namenode工作机制</a> 
+  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/"
+    >clickhouse之表和列的TTL规则与实践</a> 
 </h2>
  
 
@@ -450,37 +517,115 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/HDFS%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BB%A5%E5%8F%8ANamenode%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.129Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.359Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: HDFS的数据流以及Namenode工作机制<br>categories:</p>
+  <p>title: clickhouse之表和列的TTL规则与实践<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—# 一：通过IO流操作HDFS</p>
-<ol>
-<li>HDFS文件上传      <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190720090731704.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547">     效果：     <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20190720090802700.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">1. HDFS文件下载  <img alt="" class="has" height="317" src="https://img-blog.csdnimg.cn/20190720093258845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="514">1. 定位文件读取       ⑴下面的文件总共有188.5M，它是分在两块Block存储的，我们如何分块读取呢      <img alt="" class="has" height="164" src="https://img-blog.csdnimg.cn/20190720094556179.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="629">      <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190720094627331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="313">   ⑵我们指定每次读取的文件大小即可，第一次读取128M，后面再读取60.5M就读取完整了       <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190720095202534.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555">      效果：      <img alt="" class="has" height="108" src="https://img-blog.csdnimg.cn/20190720095233507.png" width="315">     下面我们再读取第二块：      <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720095709972.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">      效果：      <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/20190720095852842.png" width="512">     我们可以将第二块的文件通过cmd上命令内容追加到第一块文件上，验证是否正确      <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190720100126750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="617">      <img alt="" class="has" height="112" src="https://img-blog.csdnimg.cn/20190720100236590.png" width="632"><h1 id="二：HDFS写数据流程"><a href="#二：HDFS写数据流程" class="headerlink" title="二：HDFS写数据流程"></a>二：HDFS写数据流程</h1></li>
-<li>剖析文件写入   <img alt="" class="has" height="497" src="https://img-blog.csdnimg.cn/20190720125256764.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="609">1.  网络拓扑的概念  <img alt="" class="has" height="191" src="https://img-blog.csdnimg.cn/20190720125829474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="518">  <img alt="" class="has" height="465" src="https://img-blog.csdnimg.cn/20190720130440345.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">1.  机架感知<img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20190720144503947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="571"><img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20190720144709457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="519"><img alt="" class="has" height="90" src="https://img-blog.csdnimg.cn/20190720145500612.png" width="504">      <h1 id="三：HDFS读数据流程"><a href="#三：HDFS读数据流程" class="headerlink" title="三：HDFS读数据流程"></a>三：HDFS读数据流程</h1></li>
-</ol>
-<p>         <img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720145850721.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="554"></p>
-<h1 id="四：NameNode工作机制"><a href="#四：NameNode工作机制" class="headerlink" title="四：NameNode工作机制"></a>四：NameNode工作机制</h1><ol>
-<li>如下图<img alt="" class="has" height="430" src="https://img-blog.csdnimg.cn/20190720153511862.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 详情如下  ⑴第一阶段：namenode启动             a：第一次启动 namenode 格式化后，创建 fsimage 和 edits 文件。如果不是第一次启                   动，直接加载编辑日志和镜像文件到内存。             b：当客户端对元数据进行增删改的请求的时候，namenode 记录操作日志，更新滚动日志                   namenode 在内存中对数据进行增删改查  ⑵第二阶段：Secondary NameNode 工作            a：Secondary NameNode 询问 namenode 是否需要 checkpoint。直接带回 namenode 是                  否检查结果            b：Secondary NameNode 请求执行 checkpoint           c：namenode 滚动正在写的 edits 日志。           d：将滚动前的编辑日志和镜像文件拷贝到 Secondary NameNode           e：Secondary NameNode 加载编辑日志和镜像文件到内存，并合并           f：生成新的镜像文件 fsimage.chkpoint           g：拷贝 fsimage.chkpoint 到 namenode，namenode 将 fsimage.chkpoint 重新命名成 fsimage1. namenode简介  ⑴namenode主要负责三个功能：          a：管理元数据          b：维护目录树          c：响应客户请求  ⑵详情如下          <img alt="" class="has" height="324" src="https://img-blog.csdnimg.cn/20190720160107465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">          <img alt="" class="has" height="339" src="https://img-blog.csdnimg.cn/20190720160248837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="608">         <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190720160406633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="697">            <h1 id="五：镜像文件和编辑日志文件"><a href="#五：镜像文件和编辑日志文件" class="headerlink" title="五：镜像文件和编辑日志文件"></a>五：镜像文件和编辑日志文件</h1></li>
-<li> 简介        namenode被格式化之后，将在/opt/module/hadoop-2.7.2/data/tmp/dfs/name/current目录中产生如下文件        <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/2019072016440785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="504">       <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190720165933192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="549">  ⑴Fsimage 文件：HDFS 文件系统元数据的一个永久性的检查点，其中包含 HDFS文件系统的所有目录和     文件 idnode 的序列化信息。 ⑵Edits 文件：存放 HDFS 文件系统的所有更新操作的路径，文件系统客户端执行     的所有写操作首先会被记录到 edits 文件中。 ⑶seen_txid 文件保存的是一个数字，就是最后一个 edits_的数字 ⑷每次次 Namenode 启动的时候都会将 fsimage 文件读入内存，并从 00001 开始     到 seen_txid 中记录的数字依次执行每个 edits 里面的更新操作，保证内存中的元数据信息    是最新的、同步的，可以看成 Namenode 启动的时候就将 fsimage 和 edits 文件进行了合    并。1. 使用oiv查看Fsimage文件  ⑴基本语法：        hdfs oiv -p 文件类型 -i 镜像文件 -o 转换后文件输出路径  ⑵案例：        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190720170724543.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="574">      将文件下载到本地格式化看一下：        <img alt="" class="has" height="439" src="https://img-blog.csdnimg.cn/20190720171144829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">1.  使用oev命令查看edits文件   ⑴基本语法         hdfs oev -p 文件类型 -i 编辑日志 -o 转换后文件输出路径           ⑵案例        <img alt="" class="has" height="336" src="https://img-blog.csdnimg.cn/20190720212156658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">         将文件下载到本地格式化看一下：        <img alt="" class="has" height="193" src="https://img-blog.csdnimg.cn/20190720212830715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="374">       发现这个日志中没有什么东西，那么我们上传一个文件，试试：       <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/20190720213618676.png" width="516">       <img alt="" class="has" height="58" src="https://img-blog.csdnimg.cn/20190720213718300.png" width="724">      查看xml内容：     <img alt="" class="has" height="359" src="https://img-blog.csdnimg.cn/20190720213854379.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="407"><h1 id="六：滚动编辑日志"><a href="#六：滚动编辑日志" class="headerlink" title="六：滚动编辑日志"></a>六：滚动编辑日志</h1></li>
-<li>简介       正常情况 HDFS 文件系统有更新操作时，就会滚动编辑日志。也可以用命令强制滚动编辑日志。1.  滚动编辑日志（前提必须启动集群）  命令：hdfs dfsadmin -rollEdits       <h1 id="七：chkpoint-检查-时间-参数"><a href="#七：chkpoint-检查-时间-参数" class="headerlink" title="七：chkpoint  检查 时间 参数"></a>七：chkpoint  检查 时间 参数</h1></li>
-<li>通常情况下，SecondaryNameNode 每隔一小时执行一次。配置是在hdfs-site.xml中添加<img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190720222713915.png" width="558">         1. 一分钟检查一次操作次数，当操作次数达到 1 百万时，SecondaryNameNode 执行一次。<img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190720222746874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488">     <h1 id="八：SecondaryNameNode-目录结构"><a href="#八：SecondaryNameNode-目录结构" class="headerlink" title="八：SecondaryNameNode  目录结构"></a>八：SecondaryNameNode  目录结构</h1></li>
-<li> 进入SecondaryNameNode服务器的目录，/opt/module/hadoop-2.7.2/data/tmp/dfs/namesecondary/current  <img alt="" class="has" height="361" src="https://img-blog.csdnimg.cn/20190721102534154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="523">  SecondaryNameNode 的 namesecondary/current 目录和主 namenode 的 current 目录的布局相同。 好 处 ： 在 主 namenode 发 生 故 障 时 （ 假 设 没 有 及 时 备 份 数 据 ） ， 可 以 从SecondaryNameNode 恢复数据。     <h1 id="九：NameNode故障处理方法"><a href="#九：NameNode故障处理方法" class="headerlink" title="九：NameNode故障处理方法"></a>九：NameNode故障处理方法</h1></li>
-<li>Namenode 故障后，可以采用如下两种方法恢复数据。   方法一：将 SecondaryNameNode 中数据拷贝到 namenode 存储数据的目录；   方 法 二 ：使 用 -importCheckpoint 选 项 启 动 namenode 守 护 进 程 ， 从 而 将SecondaryNameNode 中                     数据拷贝到 namenode 目录中。1.  案例一：使用手动拷贝 SecondaryNameNode  数据解决问题   ⑴kill -9 namenode 进程           <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190721104854927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489">   ⑵删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）            <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190721105154463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">   ⑶拷贝104服务器 SecondaryNameNode 中数据到102服务器的原 namenode 存储数据目录        <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/20190721110541295.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520">    ⑷单独重新启动 namenode，这个我们最好使用单节点启动         <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20190721110910948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">     ⑸效果，发现数据回来了         <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/20190721111541274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="494">1.   案例二：采用 importCheckpoint  命令贝 拷贝 SecondaryNameNode   ⑴修改 hdfs-site.xml 中的配置         <img alt="" class="has" height="342" src="https://img-blog.csdnimg.cn/20190721115756609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="676">  ⑵kill -9 namenode 进程          <img alt="" class="has" height="225" src="https://img-blog.csdnimg.cn/20190721120200675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="390">  ⑶删除 namenode 存储的数据（/opt/module/hadoop-2.7.2/data/tmp/dfs/name）         <img alt="" class="has" height="145" src="https://img-blog.csdnimg.cn/20190721120404664.png" width="469">  ⑷ 如 果 SecondaryNameNode 不 和 Namenode 在 一 个 主 机 节 点 上 ， 需 要 将SecondaryNameNode      存储数据的目录拷贝到 Namenode 存储数据的平级目录，并删除in_use.lock 文件      a：拷贝到下面这个目录下：           <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190721120620362.png" width="541">     b：拷贝文件，并删除lock文件           <img alt="" class="has" height="118" src="https://img-blog.csdnimg.cn/20190721120926592.png" width="701">           <img alt="" class="has" height="252" src="https://img-blog.csdnimg.cn/20190721121040805.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="476">   ⑸导入检查点数据（等待一会 ctrl+c 结束掉，时间有点长，需要等一下），到指定的目录下：       <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190721140843982.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="490">             查看namenode的目录：发现数据已经同步回来了：      <img alt="" class="has" height="175" src="https://img-blog.csdnimg.cn/20190721141014184.png" width="589">  ⑹启动 namenode      <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190721141117690.png" width="634">  ⑺效果：数据回来了      <img alt="" class="has" height="385" src="https://img-blog.csdnimg.cn/20190721141149205.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="561">     <h1 id="十：集群安全-模式-操作"><a href="#十：集群安全-模式-操作" class="headerlink" title="十：集群安全 模式 操作"></a>十：集群安全 模式 操作</h1></li>
-<li> 简介      Namenode 启动时，首先将映像文件（fsimage）载入内存，并执行编辑日志（edits）中 的各项操作。一旦在内存中成功建立文件系统元数据的映像，则创建一个新的 fsimage 文件 和一个空的编辑日志。此时，namenode 开始监听 datanode 请求。但是此刻，namenode 运行 在安全模式，即 namenode 的文件系统对于客户端来说是只读的。系统中的数据块的位置并不是 由 namenode 维护的，而是以块列表的形式存储在datanode 中。在系统的正常操作期间， namenode 会在内存中保留所有块位置的映射信息。在安全模式下，各个 datanode 会向 namenode 发送最新的块列表信息，namenode 了解到足够多的块位置信息之后，即可高效运行文件系统。          如果满足“最小副本条件”，namenode 会在 30 秒钟之后就退出安全模式。所谓的最小副 本 条 件 指 的 是 在 整 个 文 件 系 统 中 99.9% 的 块 满 足 最 小 副 本 级 别 （ 默 认 值 ： dfs.replication.min=1）。在启动一个刚刚格式化的 HDFS 集群时，因为系统中还没有任何块， 所以 namenode 不会进入安全模式。           总之一句话，就是需要等待namenode和datanode完全建立链接之后，才会退出安全模式， 我们才能对集群进行操作。           集群处于安全模式，不能执行重要操作（写操作）。集群启动完成后，自动退出安全模式。1. 基本语法 （1）bin/hdfs dfsadmin -safemode get （功能描述：查看安全模式状态） （2）bin/hdfs dfsadmin -safemode enter （功能描述：进入安全模式状态） （3）bin/hdfs dfsadmin -safemode leave  （功能描述：离开安全模式状态） （4）bin/hdfs dfsadmin -safemode wait  （功能描述：等待安全模式状态）1.  案例    ⑴查看安全模式状态            <img alt="" class="has" height="121" src="https://img-blog.csdnimg.cn/20190721163354661.png" width="472">    ⑵进入安全模式           <img alt="" class="has" height="99" src="https://img-blog.csdnimg.cn/20190721163453808.png" width="604">    ⑶在安全模式在我们上传一个文件试试           <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20190721163815488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="510">    ⑷离开安全模式          <img alt="" class="has" height="170" src="https://img-blog.csdnimg.cn/20190721163935781.png" width="637">  1.  等待安全模式状态案例   a：需求           大数据中一般我们都是在晚上进行跑批的操作，跑批的时候系统是不能进行其他任何操作的，需要         进入安全模式，那么有些操作就要等待，等待系统一旦离开安全模式就会立即进行其他的操作，这里         我们可以通过脚本实现。   ⑴首先进入安全模式             <img alt="" class="has" height="132" src="https://img-blog.csdnimg.cn/20190721164757555.png" width="510">      ⑵创建一个脚本wait.sh,就是等待安全模式一结束就上传文件             <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/2019072116514518.png" width="478">    ⑶执行脚本              <img alt="" class="has" height="329" src="https://img-blog.csdnimg.cn/20190721165648182.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="352">            ⑷重新打开一个窗口，将安全模式退出              <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190721165953353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="489"><h1 id="十一：Namenode-多目录配置"><a href="#十一：Namenode-多目录配置" class="headerlink" title="十一：Namenode 多目录配置"></a>十一：Namenode 多目录配置</h1></li>
-<li> 简介        众所周知，namenode很重要，它一旦挂掉，将会很麻烦，虽然有SecondaryNameNode进行数据  恢复，但也比较麻烦。所以namenode 的本地目录可以配置成多个，且每个目录存放内容相同，增加了可靠性。1.  具体配置如下    ⑴首先格式化集群，删除数据，回到初始状态           a：103服务器执行sbin/stop-yarn.sh           b：102服务器执行sbin/stop-dfs.sh           c：102，103，104服务器执行删除数据操作：rm -rf data/ logs/           d：格式化102服务器的namenode                  bin/hdfs namenode -format                  后面出现的data再次删除掉。    ⑵配置 hdfs-site.xml，进行多目录配置         <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20190721173830229.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="498">         注意：这个${hadoop.tmp.dir}是在core-site.xml中配置的指定hadoop运行时产生文件的存储目录        <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/20190721174053149.png" width="507">  ⑶将 hdfs-site.xml同步到集群的各个服务器上       <img alt="" class="has" height="45" src="https://img-blog.csdnimg.cn/20190721174736248.png" width="457">   ⑷需要对102服务器再次格式化一下：bin/hdfs namenode -format   ⑸最后启动集群   ⑹效果：          <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190721190001501.png" width="579">       发现name1和name2中数据一致：       <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20190721190214655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668">       也就是说当我们进行数据操作的时候，信息会同时保存到这两个namenode当中。增强了保护性。         </li>
-</ol>
+<p>—### 1.表和列的TTL</p>
+<blockquote>
+<p> 定义值的生命周期<br> 可以为整个表设置，也可以为每个单独的列设置。<br> 表级的TTL也可以指定在磁盘和卷之间自动移动数据的逻辑。<br> 设置TTL的表，必须包含Date或DateTime类型的字段。<br> 定义数据的生命周期，需要在这个日期字段使用操作符：<br> <pre><code>TTL time_column<br>TTL time_column + interval<br></code></pre><br> 示例：<br> <pre><code>TTL date_time + INTERVAL 1 MONTH</p>
+</blockquote>
+<p>TTL date_time + INTERVAL 15 HOUR</code></pre> </p>
+<h3 id="2-列级TTL"><a href="#2-列级TTL" class="headerlink" title="2.列级TTL"></a>2.列级TTL</h3><blockquote>
+<p> 当列中的值过期时，ClickHouse将它们替换为该列对应数据类型的默认值。<br> 如果数据片段中所有列值都过期，则删除该数据片段下的该列的文件。<br> TTL子句不能用于key列。<br> 示例： </p>
+</blockquote>
+<ul>
+<li>创建TTL表- TTL过期验证- 给列增加TTL- 修改列的TTL</li>
+</ul>
+<h3 id="3-表级TTL"><a href="#3-表级TTL" class="headerlink" title="3.表级TTL"></a>3.表级TTL</h3><blockquote>
+ <ol>- 表级的TTL定义了过期行的删除、磁盘和卷之间自动移动数据的逻辑。- 一张表可以定义一个过期行移除的表达式和多个磁盘和卷之间自动移动数据的逻辑的表达式。 TTL expr [DELETE|TO DISK 'aaa'|TO VOLUME 'bbb'], ...- 当表中的数据过期时，ClickHouse删除所有对应的行。- TTL规则的类型跟在每个TTL表达式后面，它表示表达式满足后（达到当前时间）要执行的操作。**DELETE - 删除过期的行（默认操作）； TO DISK ‘aaa’ - 将片段移至磁盘aaa； TO VOLUME ‘bbb’ - 将片段移动至磁盘bbb；**<li>创建表示例： <pre><code class="language-sql">CREATE TABLE example_table
+(
+    d DateTime, 
+    a Int 
+)ENGINE = MergeTree 
+PARTITION BY toYYYYMM(d) 
+ORDER BY d 
+TTL d + INTERVAL 1 MONTH [DELETE], 
+    d + INTERVAL 1 WEEK TO VOLUME 'aaa',
+    d + INTERVAL 2 WEEK TO DISK 'bbb'
+SETTINGS storage_policy = 'moving_from_ssd_to_hdd';
+</code></pre> 注意：当TTL表达式指定了磁盘和卷之间移动数据的逻辑，那么ClickHouse的表必须指定存储策略，且该存储策略中要包含相应的磁盘和卷。 </li>- **使用案例：TTL过期后执行数据删除案例。** 1).当ClickHouse合并数据片段时， 将删除TTL过期的数据。 2).当ClickHouse发现数据过期时， 它将执行一个计划外的合并。 要控制这类合并的频率， 可设置参数 merge_with_ttl_timeout。如果该值设置的过低， 它将导致执行许多的计划外合并，这可能会消耗大量资源。 3).如果在合并的时候执行SELECT查询， 则可能会得到过期的数据。 为了避免这种情况， 可以在SELECT 之前使用OPTIMIZE查询。</ol>
+</blockquote>
+<h3 id="4-列级TTL示例"><a href="#4-列级TTL示例" class="headerlink" title="4.列级TTL示例"></a>4.列级TTL示例</h3><blockquote>
+ <ol><li>**创建带TTL的表** <pre><code class="language-sql">DROP TABLE example_table;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int TTL d + INTERVAL 1 MINUTE,
+    b String TTL d + INTERVAL 1 MINUTE,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d;
+xxxxx :) show create table example_table;
+</blockquote>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre> </li><li><strong>插入数据</strong> <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');<br>insert into example_table values(now(), 2, 'value2', 'ccc2');<br></code></pre> 等待1分钟之后，执行： <pre><code class="language-sql">xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:16 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘<br>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:15 │ 1 │ value1 │ ccc1 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.009 sec. </p>
+<p>xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b─┬─c────┐<br>│ 2020-11-26 14:53:15 │ 0 │   │ ccc1 │<br>│ 2020-11-26 14:53:16 │ 0 │   │ ccc2 │<br>└─────────────────────┴───┴───┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li><li><strong>给表的列添加TTL：</strong> <pre><code class="language-sql">ALTER TABLE example_table<br>MODIFY COLUMN<br>c String TTL d + INTERVAL 1 DAY;<br>xxxxx :) ALTER TABLE example_table<br>:-] MODIFY COLUMN<br>:-] c String TTL d + INTERVAL 1 DAY;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalDay(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.018 sec. </p>
+<p>xxxxx :)<br></code></pre> 修改列的TTL： <pre><code class="language-sql">ALTER TABLE example_table<br>    MODIFY COLUMN<br>    c String TTL d + INTERVAL 1 MONTH;<br>xxxxx :) ALTER TABLE example_table<br>:-]     MODIFY COLUMN<br>:-]     c String TTL d + INTERVAL 1 MONTH;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalMonth(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.015 sec. </p>
+<p>xxxxx :) show create table example_table;</p>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String TTL d + toIntervalMonth(1)<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
+<h3 id="5-表级TTL示例"><a href="#5-表级TTL示例" class="headerlink" title="5.表级TTL示例"></a>5.表级TTL示例</h3><blockquote>
+ <ol><li>**创建表** <pre><code class="language-sql">drop table example_table ;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int,
+    b String,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d
+TTL d + INTERVAL 1 MINUTE DELETE;
+</code></pre> </li><li>**插入数据** <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');
+insert into example_table values(now(), 2, 'value2', 'ccc2');
+</code></pre> 然后查询结果： <pre><code class="language-sql">xxxxx :) select * from example_table;
+</blockquote>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 15:24:53 │ 1 │ value1 │ ccc1 │<br>│ 2020-11-26 15:24:54 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.008 sec. </p>
+<p>xxxxx :)<br></code></pre> 等待1分钟后， 执行optimize操作。 <pre><code class="language-sql">xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.006 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.003 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
  
       <!-- reward -->
       
@@ -501,7 +646,7 @@
 
     
     <article
-  id="post-Hbase知识点学习"
+  id="post-clickhouse之TSKV格式"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -512,8 +657,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >Hbase知识点学习</a> 
+  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8BTSKV%E6%A0%BC%E5%BC%8F/"
+    >clickhouse之TSKV格式</a> 
 </h2>
  
 
@@ -521,26 +666,41 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.121Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E4%B9%8BTSKV%E6%A0%BC%E5%BC%8F/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.352Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hbase知识点学习<br>categories:</p>
+  <p>title: clickhouse之TSKV格式<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—title: Hbase知识点学习<br>categories:</p>
+<p>—# TSKV需要了解的点</p>
 <ul>
-<li>BigData</li>
+<li>TSKV格式不适合有大量小列的输出.(因为每一行都是需要输出key，value，会比较浪费)- TSKV的效率并不比JSONEachRow差.- TSKV支持数据查询和数据导入。- 不需要保证列的顺序。- 支持忽略某些值，这些列使用默认值，例如0和空白行。复杂类型的值必须指定，无法使用默认值。<h2 id="数据的查询"><a href="#数据的查询" class="headerlink" title="数据的查询"></a>数据的查询</h2></li>
 </ul>
-<p>—1. 1. 1. 1. 1. </p>
+<blockquote>
+</blockquote>
+<ul>
+<li>常规的数据查询<img alt="" height="473" src="https://img-blog.csdnimg.cn/20210411120539536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="719">- 使用TSKV格式化之后的查询 命令：<strong>select * from escape_demo format TSKV;</strong><img alt="" height="434" src="https://img-blog.csdnimg.cn/202104111206194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="828"> 可以发现每个数据前面都拼接上了字段名称。</li>
+</ul>
+<h2 id="数据的导出"><a href="#数据的导出" class="headerlink" title="数据的导出"></a>数据的导出</h2><blockquote>
+<p> 命令：clickhouse-client –query “select * from tutorial.escape_demo FORMAT TSKV” &gt; tskv.demo </p>
+</blockquote>
+<h3 id="查看导出数据"><a href="#查看导出数据" class="headerlink" title="查看导出数据"></a>查看导出数据</h3><img alt="" height="269" src="https://img-blog.csdnimg.cn/20210411122533734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="807">
+
+<h2 id="数据的导入"><a href="#数据的导入" class="headerlink" title="数据的导入"></a>数据的导入</h2><blockquote>
+<p> 命令：clickhouse-client –query “insert into tutorial.escape_demo FORMAT TSKV” &lt; tskv.demo </p>
+</blockquote>
+<h3 id="查看数据的导入"><a href="#查看数据的导入" class="headerlink" title="查看数据的导入"></a>查看数据的导入</h3><img alt="" height="631" src="https://img-blog.csdnimg.cn/20210411123055692.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="724">
+
+<p>可以发现上面的数据发生了翻倍。</p>
  
       <!-- reward -->
       
@@ -561,7 +721,7 @@
 
     
     <article
-  id="post-Hbase与 Sqoop 的集成"
+  id="post-clickhouse算术函数"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -572,8 +732,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E4%B8%8E%20Sqoop%20%E7%9A%84%E9%9B%86%E6%88%90/"
-    >Hbase与 Sqoop 的集成</a> 
+  <a class="article-title" href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/"
+    >clickhouse算术函数</a> 
 </h2>
  
 
@@ -581,26 +741,37 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E4%B8%8E%20Sqoop%20%E7%9A%84%E9%9B%86%E6%88%90/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.116Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.344Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hbase与 Sqoop 的集成<br>categories:</p>
+  <p>title: clickhouse算术函数<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—title: Hbase与 Sqoop 的集成<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 需求：         将 RDBMS(关系型数据库) 中的数据抽取到 HBase 中 。1. 修改/usr/local/module/sqoop-1.4.6.bin__hadoop-2.0.4-alpha/conf/目录下配置 文件sqoop-env.sh  <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/2019100821594772.png" width="618">1. 在 Mysql 中新建一个数据库 db_library，一张表 book   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191008220410503.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="246">  <img alt="" class="has" height="398" src="https://img-blog.csdnimg.cn/20191008220524952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569">1. 向表中插入一些数据   <img alt="" class="has" height="422" src="https://img-blog.csdnimg.cn/20191008220650498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="857"><li> 执行 Sqoop 导入数据的操作    <pre class="has"><code class="language-bash">bin/sqoop import \<br>--connect jdbc:mysql://hadoop111:3306/db_library \<br>--username root \<br>--password 897570 \<br>--table book \<br>--columns "id,name,price" \<br>--column-family "info" \<br>--hbase-create-table \<br>--hbase-row-key "id" \<br>--hbase-table "hbase_book" \<br>--num-mappers 1 \<br>--split-by id</code></pre> –num-mappers 1 \    表示1个mapper –split-by id                表示按照ID分割，一个id一条数据<img alt="" class="has" height="290" src="https://img-blog.csdnimg.cn/20191008221348362.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="744">  出错：  <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20191008221956830.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="740"> </li>1. 原因以及解决办法  原因：：sqoop1.4.6 只支持 HBase1.0.1 之前的版本的自动创建 HBase 表的功能 。  解决方案：手动创建 HBase 表     <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20191008222134693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="507">1. 再次执行  <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20191008222242933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555">  <img alt="" class="has" height="243" src="https://img-blog.csdnimg.cn/20191008222313120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="855"></p>
+<p>—&gt;<br> <pre><code class="language-sql">--求和<br>SELECT plus(12, 21), plus(10, -10), plus(-10, -10);<br>+------------+-------------+--------------+<br>|plus(12, 21)|plus(10, -10)|plus(-10, -10)|<br>+------------+-------------+--------------+<br>|33          |0            |-20           |<br>+------------+-------------+--------------+</p>
+<p>–差值<br>SELECT minus(10, 5), minus(10, -10), minus(-10, -10);<br>+————+————–+—————+<br>|minus(10, 5)|minus(10, -10)|minus(-10, -10)|<br>+————+————–+—————+<br>|5           |20            |0              |<br>+————+————–+—————+</p>
+<p>–积<br>SELECT multiply(12, 2), multiply(12, -2), multiply(-12, -2);<br>+—————+—————-+—————–+<br>|multiply(12, 2)|multiply(12, -2)|multiply(-12, -2)|<br>+—————+—————-+—————–+<br>|24             |-24             |24               |<br>+—————+—————-+—————–+</p>
+<p>–平均值<br>SELECT divide(12, 4), divide(10, 3), divide(2, 4), divide(-4, -2), divide(-4, 2), divide(-4.5, 3);<br>+————-+——————+————+————–+————-+—————+<br>|divide(12, 4)|divide(10, 3)     |divide(2, 4)|divide(-4, -2)|divide(-4, 2)|divide(-4.5, 3)|<br>+————-+——————+————+————–+————-+—————+<br>|3            |3.3333333333333335|0.5         |2             |-2           |-1.5           |<br>+————-+——————+————+————–+————-+—————+</p>
+<p>SELECT intDiv(10, 3), divide(10, 3);<br>+————-+——————+<br>|intDiv(10, 3)|divide(10, 3)     |<br>+————-+——————+<br>|3            |3.3333333333333335|<br>+————-+——————+</p>
+<p>SELECT divide(10, 0), divide(-10, 0); – 出现无穷大字符“ ∞ ”或“ -∞ ”<br>+————-+————–+<br>|divide(10, 0)|divide(-10, 0)|<br>+————-+————–+<br>|∞            |-∞            |<br>+————-+————–+</p>
+<p>SELECT divide(0, 0); – 特殊字符（类似乱码）<br>+————+<br>|divide(0, 0)|<br>+————+<br>|NaN         |<br>+————+</p>
+<p>SELECT intDivOrZero(10, 0);<br>– 0<br>+——————-+<br>|intDivOrZero(10, 0)|<br>+——————-+<br>|0                  |<br>+——————-+</p>
+<p>–求余数<br>SELECT modulo(10, 3); –1<br>+————-+<br>|modulo(10, 3)|<br>+————-+<br>|1            |<br>+————-+</p>
+<p>SELECT modulo(10.5, 3);<br>+—————+<br>|modulo(10.5, 3)|<br>+—————+<br>|1              |<br>+—————+</p>
+<p>–取反<br>SELECT negate(10), negate(-10);<br>+———-+———–+<br>|negate(10)|negate(-10)|<br>+———-+———–+<br>|-10       |10         |<br>+———-+———–+</p>
+<p>–绝对值<br>SELECT abs(-10), abs(10);<br>+——–+——-+<br>|abs(-10)|abs(10)|<br>+——–+——-+<br>|10      |10     |<br>+——–+——-+</p>
+<p>–最大公约数<br>SELECT gcd(12, 24), gcd(-12, -24), gcd(-12, 24);<br>+———–+————-+————+<br>|gcd(12, 24)|gcd(-12, -24)|gcd(-12, 24)|<br>+———–+————-+————+<br>|12         |12           |12          |<br>+———–+————-+————+</p>
+<p>–最小公倍数<br>SELECT lcm(12, 24), lcm(-12, -24), lcm(-3, 4);<br>+———–+————-+———-+<br>|lcm(12, 24)|lcm(-12, -24)|lcm(-3, 4)|<br>+———–+————-+———-+<br>|24         |24           |12        |<br>+———–+————-+———-+</p>
+<p></code></pre> 
+   </p>
  
       <!-- reward -->
       
@@ -621,7 +792,7 @@
 
     
     <article
-  id="post-Hbase入门知识点入门学习一"
+  id="post-ClickHouse数据查询"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -632,8 +803,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
-    >Hbase入门知识点入门学习一</a> 
+  <a class="article-title" href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/"
+    >ClickHouse数据查询</a> 
 </h2>
  
 
@@ -641,55 +812,215 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.109Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.334Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hbase入门知识点入门学习一<br>categories:</p>
+  <p>title: ClickHouse数据查询<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—# 一：简介</p>
-<ol>
-<li>Hbase角色   Hbase一共存在两个角色，一个HMaster(主节点) ，一个RegionServer (从节点)1. HMaster功能  ⑴监控 RegionServer   ⑵处理 RegionServer 故障转移   ⑶处理元数据的变更   ⑷处理 region 的分配或移除   ⑸在空闲时间进行数据的负载均衡   ⑹通过 Zookeeper 发布自己的位置给客户端 1. RegionServer 功能  ⑴负责存储 HBase 的实际数据   ⑵处理分配给它的 Region(可以理解为table，用来存储数据)   ⑶刷新缓存到 HDFS  ⑷维护 HLog   ⑸执行压缩   ⑹负责处理 Region 分片 1.          <h1 id="二：Hbase架构"><a href="#二：Hbase架构" class="headerlink" title="二：Hbase架构"></a>二：Hbase架构</h1></li>
-<li> 架构图如下：  <img alt="" class="has" height="476" src="https://img-blog.csdnimg.cn/20190921111927883.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="679">  ⑴客户端client:           Client 访问用户数据前需要首先访问 ZooKeeper，因为ZooKeeper中存放着数据的元数据地址信息，      ZooKeeper负责维护元数据信息。  ⑵HRegionServer：           client通过ZooKeeper找到了元数据信息，那么就找到了这个数据的地址，这个数据又是存放在       HRegionServer中的，那么现在需要通过HRegionServer去访问数据本身了。       HRegionServer中又分为如下几个模块：       a：HLog               存在本地磁盘中用来做灾难恢复使用，HLog记录数据的所有变更，一旦region server 宕机，就可以从log中进行恢复。       b：HRegion（一个HRegionServer可以维护和管理多个HRegion）                  table在行的方向上分隔为多个Region。Region是HBase中分布式存储和负载均衡的最小单元，             即不同的region可以分别在不同的Region Server上，但同一个Region是不会拆分到多个server上。                  Region按大小分隔，每个表一般是只有一个region。随着数据不断插入表，region不断增大，             当region的某个列族达到一个阈值时就会分成两个新的region。       c：Store（一个HRegion中包含多个store）                   每一个region由一个或多个store组成，至少是一个store，hbase会把一起访问的数据放在一个store里面，             即为每个 ColumnFamily建一个store，如果有几个ColumnFamily，也就有几个Store。一个Store由一个             memStore和0或者 多个StoreFile组成。 HBase以store的大小来判断是否需要切分region。             HFile 存储在 Store 中，一个 Store 对应 HBase 表中的一个列族。        d：MemStore（一个Store对应一个MemStore）                    memStore 是放在内存里的。保存修改的数据即keyValues。当memStore的大小达到一个             阀值（默认128MB）时，memStore会被flush到文 件，即生成一个快照。目前hbase 会有一个            线程来负责memStore的flush操作。        e：StoreFile                    memStore内存中的数据写到文件后就是StoreFile，StoreFile底层是以HFile的格式保存。             当storefile文件的数量增长到一定阈值后，系统会进行合并（minor、major compaction），              在合并过程中会进行版本合并和删除工作（majar），形成更大的storefile。            f：HFile                   HBase中KeyValue数据的存储格式，HFile是Hadoop的 二进制格式文件，实际上StoreFile就是              对Hfile做了轻量级包装，即StoreFile底层就是HFile。这是在磁盘上保存原始数据的实际的物理文件，             是实际的存储文件。    <h1 id="三：HBase-部署与使用"><a href="#三：HBase-部署与使用" class="headerlink" title="三：HBase 部署与使用"></a>三：HBase 部署与使用</h1></li>
-<li> 解压 HBase 到指定目录  <img alt="" class="has" height="223" src="https://img-blog.csdnimg.cn/20190921205105140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">1.  修改hbase-env.sh 配置文件，在/opt/module/hbase-1.3.1/conf/目录下  <img alt="" class="has" height="216" src="https://img-blog.csdnimg.cn/20190921205813426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">   <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20190921205944145.png" width="682">   注意：如果使用的是 JDK8 以 上 版 本 ， 则 应 在 hbase-evn.sh 中 移除“HBASE_MASTER_OPTS”和“HBASE_REGIONSERVER_OPTS”配置。   <img alt="" class="has" height="146" src="https://img-blog.csdnimg.cn/2019092122161818.png" width="767"><li>修改hbase-site.xml 配置文件，在/opt/module/hbase-1.3.1/conf/目录下    <pre class="has"><code class="language-html">&lt;configuration&gt;<br>   &lt;!--设置HBase将数据写到哪个目录下--&gt;<pre><code> &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.rootdir&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;hdfs://hadoop102:9000/hbase&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-  &amp;lt;!--设置集群模式，完全分布式模式--&amp;gt;
-</code></pre>
- &lt;property&gt;<pre><code>         &amp;lt;name&amp;gt;hbase.cluster.distributed&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
-&lt;!– 0.98 后的新变动，之前版本没有.port,默认端口为 60000 –&gt;<br>&lt;property&gt;<pre><code>         &amp;lt;name&amp;gt;hbase.master.port&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;16000&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
- &amp;lt;!--设置zookeeper集群 --&amp;gt;
- &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.zookeeper.quorum&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;hadoop102:2181,hadoop103:2181,hadoop104:2181&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
- &lt;!–配置hbase中的元数据信息存放在zookeeper中的位置 –&gt;<pre><code> &amp;lt;property&amp;gt;
-         &amp;lt;name&amp;gt;hbase.zookeeper.property.dataDir&amp;lt;/name&amp;gt;
-         &amp;lt;value&amp;gt;/opt/module/zookeeper-3.4.10/zkData&amp;lt;/value&amp;gt;
- &amp;lt;/property&amp;gt;
-</code></pre>
-&lt;/configuration&gt;<br></code></pre>   </li>1. 修改regionservers配置文件，在/opt/module/hbase-1.3.1/conf/目录下  <img alt="" class="has" height="371" src="https://img-blog.csdnimg.cn/20190921212321348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="799">1. HBase 需要依赖的 Jar 包  a：简介       由于 HBase 需要依赖 Hadoop，所以替换 HBase 的 lib 目录下的 jar 包，以解决兼容问题。 b：删除原有的 jar，zookeeper默认jar也删掉       <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190921214043277.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="595">       <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/2019092121420143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="599">1. 拷贝新 jar，涉及的 jar 有：    <img alt="" class="has" height="346" src="https://img-blog.csdnimg.cn/20190921214846224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="508">     1. HBase 软连接 Hadoop 配置 (软链接文件有类似于Windows的快捷方式)   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190921215538868.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="652">1. HBase 远程 scp 到其他集群节点  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190921215728703.png" width="755">  <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/20190921215846729.png" width="732"> 1. 启动zookeeper和hadoop  <img alt="" class="has" height="223" src="https://img-blog.csdnimg.cn/20190921220543107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="469">1. HBase 服务的启动   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190921222209840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="705">  <img alt="" class="has" height="272" src="https://img-blog.csdnimg.cn/20190921222254952.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="653">   <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190921222311207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">1. 效果，通过Hbase提供的页面查看  <img alt="" class="has" height="422" src="https://img-blog.csdnimg.cn/2019092122250398.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="562">
- </li>
-</ol>
-<h1 id="四：Hbase基本操作"><a href="#四：Hbase基本操作" class="headerlink" title="四：Hbase基本操作"></a>四：Hbase基本操作</h1><ol>
-<li> 进入 HBase 客户端命令行   命令：bin/hbase shell  <img alt="" class="has" height="263" src="https://img-blog.csdnimg.cn/20190923210239122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="569">1. 查看当前数据库中有哪些表   <img alt="" class="has" height="234" src="https://img-blog.csdnimg.cn/20190923210745340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528">1.  创建表 ，表名：student,列簇：info  <img alt="" class="has" height="264" src="https://img-blog.csdnimg.cn/20190923212010264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="383">  <img alt="" class="has" height="418" src="https://img-blog.csdnimg.cn/2019092321222874.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="449">1.  向表中插入数据(Hbase擅长存储非结构化数据)  语法：put ‘表名’,’rowkey(不用在创建表时候指定)’,’列簇:列名(这个列名不用在创建表时候指定)’,’数据’   <img alt="" class="has" height="183" src="https://img-blog.csdnimg.cn/20190923213227652.png" width="649">1. 扫描查看表数据   语法：scan ‘表名’  <img alt="" class="has" height="238" src="https://img-blog.csdnimg.cn/20190923213333224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="790">  <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190923213511452.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="766">1.   将之前的name覆盖掉  <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190923213643557.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="718">1. 可以指定不同的rowkey  <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/20190923213825286.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="837">1. 查看表结构 <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190923214405355.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">1.   查看“指定行”或“指定列族:列”的数据 (会扫描整张表，性能很低)  <img alt="" class="has" height="187" src="https://img-blog.csdnimg.cn/20190923214547336.png" width="829">  <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/20190923214639676.png" width="787">1.  删除数据   a：删除某 rowkey 的全部数据：         <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190923215109964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">  b：删除某 rowkey 的某一列数据：         <img alt="" class="has" height="207" src="https://img-blog.csdnimg.cn/20190923215158162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1.  清空表数据  <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190923215248408.png" width="609"> 1. 删除表  a：首先需要先让该表为 disable 状态        <img alt="" class="has" height="158" src="https://img-blog.csdnimg.cn/20190923215411519.png" width="424">   b：然后才能 drop 这个表：         <img alt="" class="has" height="217" src="https://img-blog.csdnimg.cn/20190923215449943.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="482">1. 统计表数据行数 （这里统计的是rowkey的数量，因为Hbase是按列存储的）  <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190923215918117.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="536"></li>
-</ol>
+<p>—### 1.查询语法</p>
+<blockquote>
+ <pre><code class="language-sql">[WITH expr_list|(subquery)]
+SELECT [DISTINCT] expr_list
+[FROM [db.]table | (subquery) | table_function] [FINAL]
+[SAMPLE sample_coeff]
+[ARRAY JOIN ...]
+[GLOBAL] [ANY|ALL|ASOF] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI] JOIN (subquery)|table (ON &lt;expr_list&gt;)|(USING &lt;column_list&gt;)
+[PREWHERE expr]
+[WHERE expr]
+[GROUP BY expr_list] [WITH TOTALS]
+[HAVING expr]
+[ORDER BY expr_list] [WITH FILL] [FROM expr] [TO expr] [STEP expr]
+[LIMIT [offset_value, ]n BY columns]
+[LIMIT [n, ]m] [WITH TIES]
+[UNION ALL ...]
+[INTO OUTFILE filename]
+[FORMAT format]
+</blockquote>
+<p></code></pre><br> 可以看到ClickHouse的SELECT语句的语法和通用的SQL的SELECT语句非常类似，包括： </p>
+<ul>
+<li>SELECT: 指定返回结果字段- DISTINCT：去重- FROM: 指定要查询的表或子查询- JOIN：表连接，支持内连接和外连接、左连接和右连接- WHERE：筛选条件- GROUP BY：分组，和聚合函数一起使用- HAVING：分组后筛选- ORDER BY：排序- LIMIT：限制返回记录数- UNION ALL：并集；ClickHouse目前只支持UNION ALL，还不支持UNION<br>ClickHouse的SELECT语句中也有一些特殊的用法： </li>
+<li>WITH: 设置查询中要用到的变量- SAMPLE: 数据取样，类似Pandas库的sample()函数- PREWHERE: 预筛选，起到提升性能作用- ARRAY JOIN：数组连接，用来展开数组或嵌套字段，一行变多行- LIMIT BY: 分组，再从每组中取前n条记录- INTO OUTFILE: 导出表数据到文件，再用FORMAT指定文件格式</li>
+</ul>
+<h3 id="2-WITH子句"><a href="#2-WITH子句" class="headerlink" title="2.WITH子句"></a>2.WITH子句</h3><blockquote>
+ <pre><code class="language-sql">-- 在WITH子句中定义一个变量并赋值，然后在SELECT子句中通过别名使用该变量
+with '2014-03-17' as dt \
+select count(1) from hits_v1 where EventDate = dt;
+</blockquote>
+<p>– 在WITH子句中定义一个函数，然后在SELECT子句中通过别名使用该函数<br>with round(Duration / 60)as duration_minutes <br>select StartDate, max(duration_minutes) as max_duration_minutes from visits_v1 <br>group by StartDate, Duration <br>order by max_duration_minutes desc <br>limit 10;</p>
+<p>– 在WITH子句中定义一个子查询，然后在SELECT子句中通过别名使用该子查询<br>– 该子查询只能返回一行数据<br>with ( <br>  select sum(Duration) from visits_v1 <br>) as total_duration <br>select StartDate, sum(Duration) / total_duration as duration_percentage from visits_v1 <br>group by StartDate, Duration <br>limit 10;</p>
+<p></code></pre><br> <h3> </h3> </p>
+<h3 id="3-SAMPLE子句"><a href="#3-SAMPLE子句" class="headerlink" title="3.SAMPLE子句"></a>3.SAMPLE子句</h3><blockquote>
+<p> 对使用了MergeTree表引擎的表，并且设置了SAMPLE BY的表，可以使用SAMPLE子句来对数据进行抽样。<br> 表例子：<br> <pre><code class="language-sql">CREATE TABLE tutorial.hits_v1 \<br>(<br>  ...<br>)<br>ENGINE = MergeTree() \<br>PARTITION BY toYYYYMM(EventDate) \<br>ORDER BY (CounterID, EventDate, intHash32(UserID)) \<br>SAMPLE BY intHash32(UserID) \<br>SETTINGS index_granularity = 8192;</p>
+</blockquote>
+<p></code></pre><br> hits_v1表使用MergeTree表引擎，并且SAMPLE BY为将UserID转换成32位的Hash值。<br> <img alt="" height="276" src="https://img-blog.csdnimg.cn/20210428212535801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> SAMPLE子句示例：<br> <pre><code class="language-sql">-- 按比例采样<br>-- 采样结果记录数<br>select count(1) from hits_v1 sample 0.1<br>-- 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1<br>-- 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 limit 10</p>
+<p>– 按记录数采样<br>– 采样记录数较小时，采样结果数据为0条<br>select count(1) from hits_v1 sample 100<br>– 采样记录数大过索引粒度时，采样结果数据记录数接近采样记录数<br>elect count(1) from hits_v1 sample 10000<br>– 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000<br>– 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000 limit 10</p>
+<p>– 按比例和偏移量采样，类似于按比例采样<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 offset 0.3 limit 10<br></code></pre><br> SAMPLE子句数据采样具有幂等性和近似性的特点： </p>
+<ul>
+<li>幂等性：采样条件不变时，两次采样的结果<strong>可能</strong>一样- 近似性：采样范围和采样结果不保证精确</li>
+</ul>
+<h3 id="4-PREWHERE子句"><a href="#4-PREWHERE子句" class="headerlink" title="4.PREWHERE子句"></a>4.PREWHERE子句</h3><blockquote>
+<p> 只有MergeTree表引擎的表才能使用PREWHERE子句，可以将PREWHERE看作是ClickHouse对WHERE子句的优化。<br> ClickHouse默认将WHERE自动优化为PREWHERE:<br> <pre><code class="language-sql">-- optimize_move_to_prewhere为1时，表示开始PREWHERE自动优化<br>select name, value from system.settings where name like '%prewhere%'<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="5-ARRAY-JOIN子句"><a href="#5-ARRAY-JOIN子句" class="headerlink" title="5.ARRAY JOIN子句"></a>5.ARRAY JOIN子句</h3><blockquote>
+<p> 可以用ARRAY JOIN子句来对数组（Array）或嵌套（Nested）类型做链接查询，可以将一行数组展成多行。<br> ARRAY JOIN数组示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, RefererCategories from hits_v1 where WatchID = 4944118417295196513</p>
+</blockquote>
+<p>– 结果：<br>┌─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │ [6,98,456,8586]   │<br>└─────────────────────┴───────────────────┘</p>
+<p>– 使用ARRAY JOIN<br>select WatchID, RefererCategories <br>from hits_v1 <br>array join RefererCategories <br>where WatchID = 4944118417295196513;</p>
+<p>– 结果：<br>─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │                 6 │<br>│ 4944118417295196513 │                98 │<br>│ 4944118417295196513 │               456 │<br>│ 4944118417295196513 │              8586 │<br>└─────────────────────┴───────────────────┘</p>
+<p></code></pre><br> ARRAY JOIN嵌套类型示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 from hits_v1 where WatchID = 5024825574842900819</p>
+<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1───────────┬─ParsedParams.Key2───┐<br>│ 5024825574842900819 │ [‘gen_timestamp’,’Toolbar’] │ [‘group’,’true” /‘] │<br>└─────────────────────┴─────────────────────────────┴─────────────────────┘</p>
+<p>– 使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 <br>from hits_v1 <br>array join ParsedParams <br>where WatchID = 5024825574842900819;</p>
+<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1─┬─ParsedParams.Key2─┐<br>│ 5024825574842900819 │ gen_timestamp     │ group             │<br>│ 5024825574842900819 │ Toolbar           │ true” /           │<br>└─────────────────────┴───────────────────┴───────────────────┘</p>
+<p></code></pre><br> ARRAY JOIN也支持左连接接<code>LEFT ARRAY JOIN</code>。 </p>
+<h3 id="6-LIMIT-BY子句"><a href="#6-LIMIT-BY子句" class="headerlink" title="6.LIMIT BY子句"></a>6.LIMIT BY子句</h3><blockquote>
+<p> LIMIT BY子句不同于通用SQL的LIMIT子句。<br> <code>LIMIT n BY expression</code> 对SELECT结果先按expression分组，再在每组里选出前n个，类似分类排行榜的概念。<br> 示例：<br> <pre><code class="language-sql">CREATE TABLE limit_by(id Int, val Int) ENGINE = Memory;<br>INSERT INTO limit_by VALUES (1, 10), (1, 11), (1, 12), (2, 20), (2, 21), (2, 22), (3, 31);<br></code></pre><br> <pre><code class="language-sql">-- 排序<br>SELECT * FROM limit_by ORDER BY id, val</p>
+</blockquote>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  1 │  12 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  2 │  22 │<br>│  3 │  31 │<br>└────┴─────┘</p>
+<p>– 分类排序，再在每个分组内取前2条记录<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2 BY id</p>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  3 │  31 │<br>└────┴─────┘</p>
+<p>– 注意，与LIMIT 2的不同<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2</p>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>└────┴─────┘</p>
+<p></code></pre><br> LIMIT BY子句也支持偏移量：<code>LIMIT n OFFSET m BY exression</code> </p>
+<h3 id="7-INTO-OUTFILE子句"><a href="#7-INTO-OUTFILE子句" class="headerlink" title="7.INTO OUTFILE子句"></a>7.INTO OUTFILE子句</h3><blockquote>
+<p> ClickHouse的INTO OUTFILE子句与MySQL的INTO OUTFILE子句类似。<br> <pre><code class="language-sql">-- 输出到当前目录<br>-- 默认格式为TSV<br>-- 注意文件名必须用单引号来括起来，且不能用双引号括起来，否则会报错：Expected string literal<br>-- 目录下不能存在同名文件，否则会报错<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile 'test.tsv'</p>
+</blockquote>
+<p>– 设置格式为CSV，CSV需要为全大小<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile ‘out.csv’ format CSV<br></code></pre> 
+   </p>
+<h3 id="8-执行计划"><a href="#8-执行计划" class="headerlink" title="8.执行计划"></a>8.执行计划</h3><blockquote>
+ <h3>查看执行计划</h3> 
+ 可以通过以下方式查看执行计划： 
+ <ol>- 直接查看执行计划： ch --send_logs_level=trace &lt;&lt;&lt; 'select * from tutorial.hits_v1' &gt; /dev/null <li>可以将以下内容保持到一个脚本文件，比如`chx.sh`中： <pre><code class="language-bash">#!/bin/bash
+</blockquote>
+<p>clickhouse-client –send_logs_level=trace &lt;&lt;&lt; “$1” &gt; /dev/null<br></code></pre> 再通过<code>bash chi.sh &quot;select * from tutorial.hits_v1&quot;</code> 来查看执行计划。 </li>- 也可以在clickhouse-client执行sql同时，用<code>tail -f clickhouse-server.log</code> 查看clickhouse-server的日志。</ol><br> <h3>执行计划示例</h3><br> <code>select * from tutorial.hits_v1</code>的执行计划日志示例：<br> <pre><code class="language-bash">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0<br>&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete<br>&lt;Information&gt; executeQuery: Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.<br>&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 204.54 MiB.<br></code></pre><br> <strong>说明：</strong> </p>
+<ul>
+<li><strong>Key condition: unknown：没有使用主键索引。</strong>- <strong>MinMax index condition: unknown： 没有使用分区索引。</strong>- <strong>Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges： 共扫描了9个分区，共1094个mark。</strong>- <strong>Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.: 读取了8873898行数据，数据大小为7.88GB，用时47.964秒。</strong>- <strong>Peak memory usage (for query): 204.54 MiB.: 内存峰值（最大内存使用量）为204.54MB。</strong><br>将SQL改为只返回一个字段<code>select WatchID from tutorial.hits_v1</code>，再来看执行计划： <pre><code class="language-sql">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0
+&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
+&lt;Information&gt; executeQuery: Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.
+&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 12.32 MiB.
+</code></pre> 
+几个变化： </li>
+<li>Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.: 数据大小从7.88GB减小到67.70MB，用时从47.964秒减小到0.318秒。- Peak memory usage (for query): 12.32 MiB.: 内存峰值从204.54MB减小到12.32MB。<br>再将SQL改为指定分区查询： <pre><code class="language-sql">select WatchID from tutorial.hits_v1 where EventDate = '2014-03-17'
+</code></pre> 
+执行计划日志：  <pre><code class="language-bash">&lt;Debug&gt; executeQuery: (from 127.0.0.1:48102) SELECT WatchID FROM tutorial.hits_v1 WHERE EventDate = '2014-03-17'
+&lt;Debug&gt; InterpreterSelectQuery: MergeTreeWhereOptimizer: condition "EventDate = '2014-03-17'" moved to PREWHERE
+&lt;Trace&gt; ContextAccess (default): Access granted: SELECT(WatchID, EventDate) ON tutorial.hits_v1
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: (column 1 in [16146, 16146])
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: (column 0 in [16146, 16146])
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_1_6_1, approx. 818656, up to 818656 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_7_12_1, approx. 1621472, up to 1621472 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 15 ranges from part 201403_13_18_1, approx. 1349440, up to 1349440 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_19_24_1, approx. 1619776, up to 1619776 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 4 ranges from part 201403_25_25_0, approx. 278528, up to 278528 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_26_26_0, approx. 286720, up to 286720 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 2 ranges from part 201403_27_27_0, approx. 294912, up to 294912 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_28_28_0, approx. 229376, up to 229376 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_29_29_0, approx. 253952, up to 253952 rows starting from 0
+&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
+&lt;Information&gt; executeQuery: Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.
+&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 16.32 MiB.
+</code></pre> </li>
+</ul>
+<p> <strong>说明：</strong> </p>
+<ul>
+<li>MergeTreeWhereOptimizer: condition “EventDate = ‘2014-03-17’” moved to PREWHERE： 启动了PREWHERE优化。- Key condition: (column 1 in [16146, 16146])： 用了主键索引。- MinMax index condition: (column 0 in [16146, 16146])： 用了分区索引。- Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges：从1094 marks减少到833 marks。- Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.： 数据大小从67.70MB变为61.49MB，用时从0.318秒减少到0.097秒。</li>
+</ul>
+<h3 id="执行计划示例"><a href="#执行计划示例" class="headerlink" title="执行计划示例"></a>执行计划示例</h3> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse输入输出格式之不常用数据格式"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/"
+    >clickhouse输入输出格式之不常用数据格式</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.326Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse输入输出格式之不常用数据格式<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—# 1. Native</p>
+<blockquote>
+<p> 数据以二进制数据块的方式进行读写。 数据的导出： clickhouse-client –query=“SELECT * FROM tsv_demo FORMAT Native” &gt; a.native<br> 数据的导入： clickhouse-client –query=“insert into tsv_demo FORMAT Native” &lt; a.native </p>
+</blockquote>
+<h1 id="2-Null"><a href="#2-Null" class="headerlink" title="2. Null"></a>2. Null</h1><blockquote>
+<p> 主要用于测试性能。 查询会被处理，并且数据会被传送到客户端，但是什么也不输出。 Null格式只能用于查询， 不能用于数据的导入。 </p>
+</blockquote>
+<h1 id="3-Pretty"><a href="#3-Pretty" class="headerlink" title="3. Pretty"></a>3. Pretty</h1><blockquote>
+<p> PrettyCompact：在交互式模式下，默认的数据显示格式。 PrettySpace </p>
+</blockquote>
+<h1 id="4-Values"><a href="#4-Values" class="headerlink" title="4. Values"></a>4. Values</h1><blockquote>
+<p> 每行之间使用逗号分隔，列之间也是使用逗号分隔。在括号中打印每一行。 INSERT INTO XX values<br> INSERT INTO XX FORMAT Values<br> insert into tsv_demo FORMAT Values (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’), (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’); </p>
+</blockquote>
+<h1 id="5-Vertical"><a href="#5-Vertical" class="headerlink" title="5. Vertical"></a>5. Vertical</h1><blockquote>
+<p> 数据以垂直的格式进行展示。 \G </p>
+</blockquote>
+<ul>
+<li>XML 只支持数据的查看。<br>select * from tsv_demo limit 2 FORMAT XML; </li>
+</ul>
  
       <!-- reward -->
       
@@ -710,7 +1041,7 @@
 
     
     <article
-  id="post-Hbase入门知识点入门学习三"
+  id="post-clickhouse输入输出格式之Parquet"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -721,8 +1052,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/"
-    >Hbase入门知识点入门学习三</a> 
+  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/"
+    >clickhouse输入输出格式之Parquet</a> 
 </h2>
  
 
@@ -730,30 +1061,43 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.102Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.320Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hbase入门知识点入门学习三<br>categories:</p>
+  <p>title: clickhouse输入输出格式之Parquet<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—# 一：Hbase和Hive对比</p>
-<ol>
-<li>Hive简介         <strong>Hive</strong>是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的sql查询功能， 可以将sql语句转换为MapReduce任务进行运行。         <strong>Hive <strong>是建立在 Hadoop 之上为了</strong>降低 MapReduce 编程复杂度</strong>的 ETL 工具。         <strong>Hive</strong>的本质其实就相当于将HDFS中已经存储的文件在Mysql中做了一个双射关系，以方便使用HQL去管理查询。         <strong>Hive</strong>适用于离线的数据分析和清洗，延迟较高。         <strong>Hive</strong>存储的数据依旧在DataNode上，编写的HQL语句终将是转换为MapReduce代码执行。         <strong>Hive</strong> 表是<strong>纯逻辑表</strong>，因为 Hive 的本身并不能做数据存储和计算，而是完全依赖 Hadoop        ** Hive <strong>是</strong>数据仓库工具，需要全表扫描<strong>，就用 Hive，因为 Hive 是</strong>文件存储，<strong>运行Hive查询会花费很长时间， 因为它会默认遍历表中所有的数据。1.  Hbase简介         <strong>HBase</strong>是Hadoop的数据库，一个分布式、可扩展、大数据的存储。         <strong>Hbase</strong>是一种面向列存储的非关系型数据库。          <strong>Hbase</strong>用于存储结构化和非结构化的数据,适用于单表非关系型数据的存储，不适合做关联查询，类似JOIN等操作.         <strong>Hbase</strong>基于HDFS,数据持久化存储的体现形式是Hfile，存放于DataNode中，被ResionServer以region的形式进行管理。         <strong>Hbase</strong>延迟较低，接入在线业务使用.面对大量的企业数据，HBase可以直线单表大量数据的存储，同时提供了高效的数据访问速度。         <strong>HBase</strong>通过存储key/value来工作。         <strong>HBase</strong> 是</strong>数据库，需要索引访问<strong>，则用 HBase，因为 HBase 是面向列的 NoSQL 数据库.         <strong>HBase</strong> 是</strong>物理表<strong>，提供了一张</strong>超大的内存 Hash 表来存储索引<strong>，方便查询.         <strong>HBase</strong> 是为了</strong>弥补 Hadoop 对实时操作的缺陷**         <h1 id="二：Hbase常用的-Shell-操作"><a href="#二：Hbase常用的-Shell-操作" class="headerlink" title="二：Hbase常用的 Shell 操作"></a>二：Hbase常用的 Shell 操作</h1></li>
-</ol>
-<p>         <img alt="" class="has" height="719" src="https://img-blog.csdnimg.cn/20191008223627732.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="768">         <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20191008223646373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="408">         <img alt="" class="has" height="839" src="https://img-blog.csdnimg.cn/2019100822370882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="749"></p>
-<h1 id="三：Hbase数据的备份与恢复"><a href="#三：Hbase数据的备份与恢复" class="headerlink" title="三：Hbase数据的备份与恢复"></a>三：Hbase数据的备份与恢复</h1><ol>
-<li>简介        停止 HBase 服务后，使用 distcp 命令运行 MapReduce 任务进行备份，将数据备份到另一个 地方，可以是同一个集群，也可以是专用的备份集群。1. 下面我们操作即，把数据转移到当前集群的其他目录下（也可以不在同一个集群中）:   a：我们将下面hdfs上的/hbase备份到另外一个目录下       <img alt="" class="has" height="492" src="https://img-blog.csdnimg.cn/20191008224456659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="566">1. 命令如下：  <img alt="" class="has" height="224" src="https://img-blog.csdnimg.cn/2019100822480886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="754">1.  效果  <img alt="" class="has" height="489" src="https://img-blog.csdnimg.cn/20191008225258202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="687">       <h1 id="四：Hbase高可用"><a href="#四：Hbase高可用" class="headerlink" title="四：Hbase高可用"></a>四：Hbase高可用</h1></li>
-<li>简介       在 HBase 中 Hmaster 负责监控 RegionServer 的生命周期，均衡 RegionServer 的负载，如果 Hmaster 挂掉了，那么整个 HBase 集群将陷入不健康的状态，并且此时的工作状态并不会维持太久。 所以 HBase 支持对 Hmaster 的高可用配置。1. 在hadoop111机器的 /usr/local/module/hbase-1.3.1/conf 目录下创建 backup-masters 文件      <img alt="" class="has" height="227" src="https://img-blog.csdnimg.cn/20191011215946527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="661">  hadoop111是之前的master节点，现在是让hadoop112成为备用的master节点1.  分发到其他的两台机器  <img alt="" class="has" height="106" src="https://img-blog.csdnimg.cn/20191011220348823.png" width="782">1.  在hadoop111机器上执行启动脚本      <img alt="" class="has" height="404" src="https://img-blog.csdnimg.cn/201910112205116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 1. 效果  <img alt="" class="has" height="435" src="https://img-blog.csdnimg.cn/20191011220635680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="444"><img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/20191011220654648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484"><h1 id=""><a href="#" class="headerlink" title=""></a></h1>                        </li>
-</ol>
+<p>—# Parquet输入输出格式</p>
+<blockquote>
+<p> 支持Parquet格式的导出和导入。 </p>
+</blockquote>
+<h1 id="Parquet和ClickHouse类型的匹配关系"><a href="#Parquet和ClickHouse类型的匹配关系" class="headerlink" title="Parquet和ClickHouse类型的匹配关系"></a>Parquet和ClickHouse类型的匹配关系</h1><blockquote>
+ <img alt="" height="772" src="https://img-blog.csdnimg.cn/20210411161702364.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
+ 不支持的Parquet数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。 
+ **注意：** 
+</blockquote>
+<ul>
+<li>ClickHouse表的列名必须与Parquet表的列名一致。- ClickHouse表的列数据类型可以不同于插入的Parquet数据类型。 在插入数据时， ClickHouse根据上表解释数据类型， 然后将数据类型转换为ClickHouse表的列数据类型。</li>
+</ul>
+<h1 id="数据的导出："><a href="#数据的导出：" class="headerlink" title="数据的导出："></a>数据的导出：</h1><p>备注：表随便找一张</p>
+<blockquote>
+<p> 命令：clickhouse-client –query=”SELECT * FROM tutorial.tsv_demo FORMAT Parquet” &gt; parquet_demo.parquet<br> <img alt="" height="142" src="https://img-blog.csdnimg.cn/20210411165153551.png" width="1200"> </p>
+</blockquote>
+<h1 id="数据的导入："><a href="#数据的导入：" class="headerlink" title="数据的导入："></a>数据的导入：</h1><blockquote>
+<p> 创建测试表：<br> 命令：create table parquet_demo (srcip String, destip String, time String) ENGINE=TinyLog;<br> 导入命令：<br> cat parquet_demo.parquet | clickhouse-client –query=”INSERT INTO parquet_demo FORMAT Parquet” </p>
+</blockquote>
+<h3 id="导入的数据查询："><a href="#导入的数据查询：" class="headerlink" title="导入的数据查询："></a>导入的数据查询：</h3><blockquote>
+ <img alt="" height="311" src="https://img-blog.csdnimg.cn/20210411171838671.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="716"> 
+</blockquote>
  
       <!-- reward -->
       
@@ -774,7 +1118,7 @@
 
     
     <article
-  id="post-Hbase入门知识点入门学习二"
+  id="post-clickhouse输入输出格式之ORC"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -785,8 +1129,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
-    >Hbase入门知识点入门学习二</a> 
+  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/"
+    >clickhouse输入输出格式之ORC</a> 
 </h2>
  
 
@@ -794,226 +1138,43 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Hbase%E5%85%A5%E9%97%A8%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.095Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.311Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Hbase入门知识点入门学习二<br>categories:</p>
+  <p>title: clickhouse输入输出格式之ORC<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—# 一：Hbase读写流程</p>
-<ol>
-<li>读流程       ⑴client访问Zookeeper中，找到ROOT表的Region所在的RegionServer信息；       ⑵client连接RegionServer访问ROOT表查询.meta表的region位置信息       ⑶再去连接.meta表的region所在的regionserver然后访问meta表，找到目标数据在哪个region上           及region所在的regionserver位置信息       ⑷然后去访问目标数据所在的regionserver中的region,先在memstore中查询数据，memstore中不存在则在           BlockCache中读数据，           BlockCache中还是不存在的话就最后在storefile中读数据，并且将读取到的数据先写入到BlockCache中，然后再返回给客户端      <img alt="" class="has" height="413" src="https://img-blog.csdnimg.cn/20190925225120501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="811">1. 写流程               ⑴Client访问Zookeeper集群，查询ROOT表region所在的regionserver地址信息，比如rs1      ⑵client连接rs1，访问ROOT表，根据写入信息查询.meta表的region位于哪些regionserver上，将得到的结果返回给client；      ⑶client去连接相应的rs，访问.meta表，根据写入的namespace、表名和rowkey找到对应的region信息         ⑷client连接最终的rs，为了持久化和恢复，将数据先写到Hlog（write ahead log）中;      ⑸再将数据写入到memstore中，当memstore达到预设阈值后，就会创建一个新的memstore，而老的memstore就会加入flush队         列，由单独的线程flush到磁盘上，形成一个storefile；      ⑹与此同时，系统会在Zookeeper记录一个checkpoint，表示这个时刻之前的数据变更已经持久化了，当系统出现意外可能导致           memstore中的数据丢失，就可以通过hlog来恢复checkpoint之后的数据；      ⑺每次flush就会形成一个storefile文件，而storefile文件是只读的，一旦创建之后就不可修改，因此hbase的更新就是不断追加的            操作；      ⑻随着storefile的数量不断增多，当达到设定阈值后就会触发compact合并操作，将多个storefile合并成一个大的storefile，同时进           行版本合并和数据删除；      ⑼当store中的单个storefile文件的大小超过阈值的时候，触发split操作，regionserver把当前的region split成2个新的region      ⑽父region就会下线，新split出的2个region就会被hmaster分配到两个regionserver上，实现负载均衡，使得原先一个region的压           力分流到两个region上。<img alt="" class="has" height="432" src="https://img-blog.csdnimg.cn/20190925225942751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1131">1.  <h1 id="二：Hbase中-meta简介"><a href="#二：Hbase中-meta简介" class="headerlink" title="二：Hbase中.meta简介"></a>二：Hbase中.meta简介</h1></li>
-<li> 简介        当我们在对HBase的读写操作时，都需要提前知道我们需要操作的region的所在位置，即是存在于哪个HRegionServer上，  因此在HBase中存在一张表元数据表.meta表（属于Hbase的内置表）专门存储了表的元数据信息，以及region位于哪个  regionserver上。.meta表的结构类似于下图：  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20190925224043792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="759">  .meta表的RowKey由三部分组成：TableName（表名）、StartKey（起始键）、TimeStamp(时间戳)，rowkey存储的内容又称为  region的Name（扩展：用来存放Region的文件夹的名字为RegionName的hash值，因为某些RegionName包含某些非法字符，而 RegionName为什么会包含非法字符是因为startkey是允许包含任何值的）。将组成rowkey的三个部分用逗号隔开组成了整个完整的 rowkey。TimeStamp使用十进制的数字字符串来表示。 .meta表的info为表中最主要的列簇，含有三个column：regioninfo、server、serverstartcode。regioninfo存储的是region的详细信  息，包括startkey、endkey、以及每个family信息。server存储的是管理这个region的regionserver地址。 由于.meta存储的是region的信息，如果当hbase中表的数据非常大会被分成很多个region，那么此时在.meta中所占的空间也会变大，而.meta本身也是一张表，在存储数据非常大的情况下，也会被分割成多个region存储于不同的regionserver上，此时要是想把.meta表的region位置信息存储在zookeeper集群中就不太现实，.meta表region的位置信息是会发生变化的。因此，此时我们可以通过另外一张表来存储.meta表的元数据信息，即-ROOT-(根数据表)，hbase认为这张表不会太大，因此-ROOT-只会有一个region，这个region的信息存在于hbase中，而管理-ROOT-表的位置信息（regionserver地址）存储在Zookeeper中。 所以综上所述要想对HBase进行读写首先去访问Zookeeper集群，获得ROOT表的所在regionserver地址信息。          <h1 id="三：JAVA-api操作Hbase"><a href="#三：JAVA-api操作Hbase" class="headerlink" title="三：JAVA api操作Hbase"></a>三：JAVA api操作Hbase</h1></li>
-<li>在maven项目中添加依赖  <img alt="" class="has" height="485" src="https://img-blog.csdnimg.cn/20190928215702389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="355">  配置文件：  <img alt="" class="has" height="126" src="https://img-blog.csdnimg.cn/20190928220100582.png" width="273">1. HbaseDemo.java类       ⑴判断表是否存在       <img alt="" class="has" height="433" src="https://img-blog.csdnimg.cn/20190928220535888.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">   ⑵创建表        <img alt="" class="has" height="345" src="https://img-blog.csdnimg.cn/20190928220620412.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="727">       <img alt="" class="has" height="134" src="https://img-blog.csdnimg.cn/20190928220853511.png" width="613">    ⑶删除表        <img alt="" class="has" height="373" src="https://img-blog.csdnimg.cn/20190928221359776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="596">  ⑷添加一行数据        <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/2019092822232898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="645">    ⑸删除一行数据       <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190928223800513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">  ⑹删除多行数据        <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190928224100873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">  ⑺扫描数据         <img alt="" class="has" height="332" src="https://img-blog.csdnimg.cn/20190928225338999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="696">           ⑻获取一个列簇的数据         <img alt="" class="has" height="344" src="https://img-blog.csdnimg.cn/20190928230225808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686">
- </li>
-</ol>
-<h1 id="四：MapReduce"><a href="#四：MapReduce" class="headerlink" title="四：MapReduce"></a>四：MapReduce</h1><ol>
-<li> 简介        通过 HBase 的相关 JavaAPI，我们可以实现伴随 HBase 操作的 MapReduce 过程，比如使用 MapReduce 将数据从本地文件系统导入到 HBase 的表中，比如我们从 HBase 中读取一些原始数 据后使用 MapReduce 做数据分析。   1.  查看 HBase 的 MapReduce 任务所需的依赖  <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20191001113529507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="644">1. 执行环境变量的导入   <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20191001113933475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="820">1. 运行官方的 MapReduce 任务 ，统计 Student 表中有多少行数据   <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20191001115537753.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779">   <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001115607426.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="526">1.  让环境变量永久生效，修改**/etc/profile**配置文件  <img alt="" class="has" height="72" src="https://img-blog.csdnimg.cn/20191001145150761.png" width="784"><h1 id="五：-案例一：使用-MapReduce-将本地数据导入到-HBase"><a href="#五：-案例一：使用-MapReduce-将本地数据导入到-HBase" class="headerlink" title="五： 案例一：使用 MapReduce 将本地数据导入到 HBase"></a>五： 案例一：使用 MapReduce 将本地数据导入到 HBase</h1></li>
-<li>在本地创建一个 tsv 格式的文件：fruit.tsv   <img alt="" class="has" height="286" src="https://img-blog.csdnimg.cn/20191001123400511.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="949">  <img alt="" class="has" height="293" src="https://img-blog.csdnimg.cn/20191001123430916.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="551">1.   在 HDFS 中创建 input_fruit 文件夹并上传 fruit.tsv 文件   <img alt="" class="has" height="271" src="https://img-blog.csdnimg.cn/20191001140033849.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662">  <img alt="" class="has" height="256" src="https://img-blog.csdnimg.cn/20191001140415572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="717">1. 创建 HBase 的fruit表  <img alt="" class="has" height="335" src="https://img-blog.csdnimg.cn/20191001140746465.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="522">1. 执行 MapReduce 到 HBase 的 fruit 表中    <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20191001141233513.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1022">  <img alt="" class="has" height="333" src="https://img-blog.csdnimg.cn/20191001145023335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="900">1.   进入hbase,查看fruit表  <img alt="" class="has" height="403" src="https://img-blog.csdnimg.cn/20191001145335178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="701">  <h1 id="六：自定义-HBase-MapReduce1"><a href="#六：自定义-HBase-MapReduce1" class="headerlink" title="六：自定义 HBase-MapReduce1"></a>六：自定义 HBase-MapReduce1</h1></li>
-<li>需求  目标：将 fruit 表中的一部分数据，通过 MR 迁入到 fruit_mr 表中。 1.  创建MAVEN项目  <img alt="" class="has" height="391" src="https://img-blog.csdnimg.cn/20191001160346800.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="342">  <img alt="" class="has" height="590" src="https://img-blog.csdnimg.cn/20191001160359509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"><li>创建ReadFruitMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.Cell;<br>import org.apache.hadoop.hbase.CellUtil;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Result;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapper;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/***</p>
+<p>—# ORC数据的输入输出</p>
+<p>仅支持ORC格式的写入。</p>
+<h1 id="ORC和CH数据类型的匹配关系"><a href="#ORC和CH数据类型的匹配关系" class="headerlink" title="ORC和CH数据类型的匹配关系"></a>ORC和CH数据类型的匹配关系</h1><blockquote>
+ <img alt="" height="721" src="https://img-blog.csdnimg.cn/20210411172805489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
+ **备注：** 
+</blockquote>
 <ul>
-<li>创建mapper类，读数据</li>
-<li>ImmutableBytesWritable：可以看做是rowkey,代表一行数据</li>
-<li>Put:这里面封装了一条一条数据</li>
-<li>@author KGF</li>
-<li></li>
-<li>/<br>public class ReadFruitMapper extends TableMapper&lt;ImmutableBytesWritable,Put&gt; &#123;  /***<ul>
-<li>map方法处理数据</li>
-<li>/<br>@Override<br>protected void map(ImmutableBytesWritable key, Result value,<pre><code>  Mapper&amp;lt;ImmutableBytesWritable, Result, ImmutableBytesWritable, Put&amp;gt;.Context context)
-  throws IOException, InterruptedException &#123;
-</code></pre>
-  //读取数据，使用Put封装数据<br>  Put put = new Put(key.get());<br>  //遍历column<br>  for (Cell cell : value.rawCells()) {<pre><code>  //筛选，我们只需要info列簇的数据
-  if(&quot;info&quot;.equals(Bytes.toString(CellUtil.cloneFamily(cell)))) &#123;
-      //我们只要列名为name的数据
-      if(&quot;name&quot;.equals(Bytes.toString(CellUtil.cloneQualifier(cell)))) &#123;
-          //将数据添加到put中
-          put.add(cell);
-      &#125;
-  &#125;
-</code></pre>
-  }<br>  //将数据写出<br>  context.write(key, put);<br>}</li>
+<li>不支持的ORC数据类型：DATE32, TIME32, FIXED_SIZE_BINARY, JSON, UUID, ENUM。- ClickHouse表的列名必须与ORC表的列名一致。</li>
 </ul>
-</li>
-</ul>
-<p>}<br></code></pre>   </li><li> 创建WriteFruitMRReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>/***</p>
-<ul>
-<li><p>创建reducer类</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class WriteFruitMRReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
-<p>  @Override<br>  protected void reduce(ImmutableBytesWritable key, Iterable&lt;Put&gt; values,</p>
-<pre><code>      Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
-      throws IOException, InterruptedException &#123;
-  for (Put put : values) &#123;
-      context.write(NullWritable.get(),put);
-  &#125;
-</code></pre>
-<p>  }<br>}<br></code></pre>   </li><li> 创建Fruit2FruitMRRunner.java类   <pre class="has"><code class="language-java">package com.kgf.mr1;</p>
-</li>
-</ul>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
-<p>/***</p>
-<ul>
-<li><p>创建Runner</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class Fruit2FruitMRRunner implements Tool &#123;</p>
-<p>  private Configuration conf;</p>
-<p>  public void setConf(Configuration conf) &#123;</p>
-<pre><code>  //创建hbase的conf
-  this.conf = HBaseConfiguration.create();
-</code></pre>
-<p>  }</p>
-<p>  public Configuration getConf() {</p>
-<pre><code>  return this.conf;
-</code></pre>
-<p>  }</p>
-<p>  public int run(String[] args) throws Exception {</p>
-<pre><code>  //创建Job
-  Job job = Job.getInstance();
-  //设置入口jar
-  job.setJarByClass(Fruit2FruitMRRunner.class);
-  //配置job
-  Scan scan = new Scan();
-  //设置mapper
-  TableMapReduceUtil.initTableMapperJob(&quot;fruit&quot;, 
-          scan, 
-          ReadFruitMapper.class,ImmutableBytesWritable.class, 
-          Put.class, job);
-  //设置reducer
-  TableMapReduceUtil.initTableReducerJob(&quot;fruit_mr&quot;,WriteFruitMRReducer.class, job);
-  job.setNumReduceTasks(1);
-  boolean result = job.waitForCompletion(true);
-  return result?0:1;
-</code></pre>
-<p>  }</p>
-<p>  public static void main(String[] args) {</p>
-<pre><code>  try &#123;
-      int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
-      System.out.println(status);
-  &#125; catch (Exception e) &#123;
-      e.printStackTrace();
-  &#125;
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   </li>1.  打成jar包，上传Linux  <img alt="" class="has" height="226" src="https://img-blog.csdnimg.cn/20191001160600622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="347">1.   在Hbase上创建fruit_mr表  <img alt="" class="has" height="355" src="https://img-blog.csdnimg.cn/20191001160742374.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="584">1.   执行jar包  <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20191001160912374.png" width="1200">  <img alt="" class="has" height="378" src="https://img-blog.csdnimg.cn/20191001162033873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="649">1.  效果，数据成功导入  <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20191001162201361.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1077"></p>
-<h1 id="七：自定义-HBase-MapReduce2"><a href="#七：自定义-HBase-MapReduce2" class="headerlink" title="七：自定义 HBase-MapReduce2"></a>七：自定义 HBase-MapReduce2</h1><ol>
-<li>需求：实现将 HDFS 中的数据(fruit.tsv)写入到 HBase 表中(先将fruit表数据清空)。 <li>创建ReadFruitFromHDFSMapper.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.util.Bytes;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/**</p>
-<ul>
-<li><p>创建mapper类，因为我们是从HDFS上读取数据，所以我们继承的是普通的mapper,</p>
-</li>
-<li><p>我们读取数据向HBASE中写所以使用ImmutableBytesWritable,Put写出,</p>
-</li>
-<li><p>读取HDFS上的fruit.tsv中的数据</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class ReadFruitFromHDFSMapper extends Mapper&lt;LongWritable, Text, ImmutableBytesWritable,Put&gt; &#123;</p>
-<p>  @Override<br>  protected void map(LongWritable key, Text value,</p>
-<pre><code>      Mapper&amp;lt;LongWritable, Text, ImmutableBytesWritable, Put&amp;gt;.Context context)
-      throws IOException, InterruptedException &#123;
-  //读取一行数据
-  String[] split = value.toString().split(&quot;\t&quot;);
-  byte[] rowkey = Bytes.toBytes(split[0]);
-  byte[] name = Bytes.toBytes(split[1]);
-  byte[] color = Bytes.toBytes(split[2]);
-  //创建Put对象
-  Put put = new Put(rowkey);
-  //为指定的列族，列添加数据
-  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;name&quot;), name);
-  put.addColumn(Bytes.toBytes(&quot;info&quot;), Bytes.toBytes(&quot;color&quot;),color);
-  
-  //写出
-  context.write(new ImmutableBytesWritable(rowkey),put);
-</code></pre>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre>   </li><li> 创建Writer2HbaseReducer.java类   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.hbase.client.Mutation;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableReducer;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>public class Writer2HbaseReducer extends TableReducer&lt;ImmutableBytesWritable, Put,NullWritable&gt;&#123;</p>
-<pre><code>@Override
-protected void reduce(ImmutableBytesWritable key, Iterable&amp;lt;Put&amp;gt; values,
-        Reducer&amp;lt;ImmutableBytesWritable, Put, NullWritable, Mutation&amp;gt;.Context context)
-        throws IOException, InterruptedException &#123;
-    for (Put put : values) &#123;
-        context.write(NullWritable.get(),put);
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li><li>创建HDFS2HbaseRunner.java   <pre class="has"><code class="language-java">package com.kgf.mr2;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.hbase.HBaseConfiguration;<br>import org.apache.hadoop.hbase.client.Put;<br>import org.apache.hadoop.hbase.client.Scan;<br>import org.apache.hadoop.hbase.io.ImmutableBytesWritable;<br>import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.util.Tool;<br>import org.apache.hadoop.util.ToolRunner;</p>
-<p>import com.kgf.mr1.Fruit2FruitMRRunner;</p>
-<p>public class HDFS2HbaseRunner implements Tool &#123;</p>
-<pre><code>private Configuration conf;
-
-public void setConf(Configuration conf) &#123;
-    //创建hbase的conf
-    this.conf = HBaseConfiguration.create();
-&#125;
-
-public Configuration getConf() &#123;
-    return this.conf;
-&#125;
-
-public int run(String[] args) throws Exception &#123;
-    //创建Job
-    Job job = Job.getInstance();
-    //设置入口jar
-    job.setJarByClass(HDFS2HbaseRunner.class);
-    //设置mapper
-    job.setMapperClass(ReadFruitFromHDFSMapper.class);
-    job.setMapOutputKeyClass(ImmutableBytesWritable.class);
-    job.setMapOutputValueClass(Put.class);
-    
-    //设置reducer,OutPutFormat
-    TableMapReduceUtil.initTableReducerJob(&quot;fruit&quot;,Writer2HbaseReducer.class, job);
-    
-    //设置FileInputFormat
-    FileInputFormat.addInputPath(job, new Path(&quot;/input_fruit/&quot;));
-    job.setNumReduceTasks(1);
-    boolean result = job.waitForCompletion(true);
-    return result?0:1;
-&#125;
-
-public static void main(String[] args) &#123;
-    try &#123;
-        int status = ToolRunner.run(new Fruit2FruitMRRunner(), args);
-        System.out.println(status);
-    &#125; catch (Exception e) &#123;
-        e.printStackTrace();
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li>1. 打成jar包，上传Linux  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20191006231143621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="732">1. 进入/usr/local/module/hadoop-2.7.2目录下执行jar包  <img alt="" class="has" height="169" src="https://img-blog.csdnimg.cn/2019100623144363.png" width="1110"><img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20191007094918730.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="861"> 1. 查看fruit表信息  <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191007100122765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1028">       </p>
+<h1 id="使用Spark生成ORC文件"><a href="#使用Spark生成ORC文件" class="headerlink" title="使用Spark生成ORC文件"></a>使用Spark生成ORC文件</h1><blockquote>
+<p> val list = List(   (“113.248.234.232”, “123.212.22.01”, “2018-07-12 14:35:31”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:26:26”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 13:22:13”),   (“187.248.135.230”, “221.228.112.45”, “2019-08-09 13:17:39”),   (“187.248.234.232”, “221.228.112.24”, “2019-08-09 20:51:16”),   (“115.248.158.231”, “154.245.56.23”, “2020-07-12 17:22:56”) )<br> val rdd = sc.makeRDD(list) import spark.implicits._ val df = rdd.toDF(“srcip”, “destip”, “time”) df.repartition(1).write.format(“orc”).mode(“append”).save(“/tmp/orc”)   </p>
+</blockquote>
+<h1 id="创建测试表"><a href="#创建测试表" class="headerlink" title="创建测试表"></a>创建测试表</h1><blockquote>
+<p> create table orc_demo (srcip String, destip String, time DateTime) ENGINE=TinyLog; </p>
+</blockquote>
+<h1 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h1><blockquote>
+<p> cat file.orc | clickhouse-client –query=”INSERT INTO test.orc_demo FORMAT ORC” </p>
+</blockquote>
+<h1 id="查询结果"><a href="#查询结果" class="headerlink" title="查询结果"></a>查询结果</h1><blockquote>
+<p> <code>select * from orc_demo</code> </p>
+</blockquote>
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318163404299.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70">
  
       <!-- reward -->
       
@@ -1039,7 +1200,7 @@ public static void main(String[] args) &#123;
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
   </nav>
   
 </section>
