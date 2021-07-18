@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>归档: 2021 |  爱上口袋的天空</title>
+      <title>CSS复合选择器 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -42,262 +42,259 @@
       
     <main class="content on">
       <section class="outer">
+  <article
+  id="post-CSS复合选择器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  CSS复合选择器
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.199Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
   
-  <ul class="ads">
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_1.jpg" width="300" alt="云服务器限时秒杀">
-            </a>
-        </li>
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png" width="300" alt="vultr优惠vps">
-            </a>
-        </li>
-    
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">3 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS复合选择器<br>categories:</p>
+<ul>
+<li>css</li>
 </ul>
-  
-  
-  <article class="articles">
-    
-    
-    <h1 class="page-type-title">2021</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2021" class="archive-year">2021</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.087Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/"
-    >hashCode的作用</a> 
-</h2>
- 
+<p>—1.简介</p>
+<blockquote>
+<p> 复合选择器是由两个或多个基础选择器，通过不同的方式组合而成的 </p>
+</blockquote>
+<p>2.后代选择器<strong>，</strong>又称为包含选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>用来选择元素或元素组的子孙后代 -  其写法就是把外层标签写在前面，内层标签写在后面，中间用<strong>「空格」</strong>分隔，先写父亲爷爷，再写儿子孙子。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内 的标签。 <pre><code class="language-css">父级 子级&#123;属性:属性值;属性:属性值;&#125;</li>
+</ul>
+<p>.class h3 &#123;color:red;font-size:16px;&#125;</code></pre><br>  <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"> </p>
+<ul>
+<li> 当标签发生嵌套时，内层标签就成为外层标签的后代。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内的标签。 </li>
+</ul>
+<p>3.子元素选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>子元素选择器只能选择作为某元素子元素(亲儿子)的元素。 -  其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 <code>&amp;gt;</code> 进行连接 -  这里的子,指的是亲儿子。不包含孙子 重孙子之类。 <pre>`.class&gt;h3 {color:red;font-size:14px;}`</pre> </li>
+</ul>
+<p>4.并集选择器</p>
+<blockquote>
+<p> 如果某些选择器定义的相同样式，就可以利用并集选择器，可以让代码更简洁。并集选择器（CSS选择器分组）是各个选择器通过<code>,</code>连接而成的，通常用于集体声明。 </p>
+</blockquote>
+<ul>
+<li>任何形式的选择器（包括标签选择器、class类选择器 id选择器等），都可以作为并集选择器的一部分。 -  并集选择器通常用于集体声明  ，逗号隔开的，所有选择器都会执行后面样式，逗号可以理解为和的意思。 <pre><code class="language-css">比如  
+.one, 
+p , 
+#test &#123;color: #F00;&#125;  
+表示   .one 和 p  和 #test 这三个选择器都会执行颜色为红色。 
+通常用于集体声明。  </code></pre> </li>
+</ul>
+<p>5.链接伪类选择器</p>
+<blockquote>
+<p> 用于向某些选择器添加特殊的效果。写的时候，他们的顺序尽量不要颠倒,按照lvha的顺序。否则可能引起错误。<br> 链接伪类，是利用交集选择器. </p>
+</blockquote>
+<ul>
+<li><code>a:link</code>  未访问的链接 -  <code>a:visited</code>  已访问的链接 -  <code>a:hover</code>  鼠标移动到链接上 -  <code>a:active</code>  选定的链接<br>实际工作中，很少写全四个状态，一般写法如下： <pre><code class="language-css">a &#123;   /* a是标签选择器  所有的链接 */
+   font-weight: 700;
+   font-size: 16px;
+   color: gray;
+      text-decoration: none; /* 清除链接默认的下划线*/
+&#125;
+a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
+   color: red; /*  鼠标经过的时候，由原来的 灰色 变成了红色 */
+&#125;</code></pre> </li>
+</ul>
+<p>6.focus伪类选择器</p>
+<blockquote>
+<p>  :focus 伪类选择器用于选取获得焦点的表单元素。<br> 焦点就是光标，一般情况下是&lt;input&gt;类表单元素才能获取，因此这个选择器也主要针对于表单元素来使用<br> <strong>W3C定义：接收键盘事件或其他用户输入的元素都允许 :focus 选择器。</strong><br> 简单来说就是支持input标签。可以在CSS中采用input:focus{}进行操作。<br> 如下是简单例子<br> &lt;div class=”outer”&gt;&lt;input type=”text” name=”” id=”” value=”” /&gt;&lt;/div&gt;<br> &lt;style&gt;    .outer{<!-- -->     width: 200px;     height: 200px;     background-color: red;    }    input:focus{<!-- -->     background-color: green;    } &lt;/style&gt;<br> <img alt="" src="https://img-blog.csdn.net/20180705113102315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><img alt="" src="https://img-blog.csdn.net/2018070511311843?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><br>                 点击前                                    选中后 </p>
+</blockquote>
+<p>7.复合选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|特征|使用情况|隔开符号及用法
+</blockquote>
+</thead><tbody>|后代选择器|用来选择元素后代|是选择所有的子孙后代|较多|符号是`空格` .nav a
+|子代选择器|选择 最近一级元素|只选亲儿子|较少|符号是`&gt;`   .nav&gt;p
+|交集选择器|选择两个标签交集的部分|既是 又是|较少|`没有符号`  p.one
+|并集选择器|选择某些相同样式的选择器|可以用于集体声明|较多|符号是`逗号` .nav, .header
+|链接伪类选择器|给链接更改状态| |较多|重点记住 a{} 和 a:hover  实际开发的写法
+</tbody></table>
 
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.080Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >Hadoop知识点学习</a> 
-</h2>
  
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.073Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
-    >Hadoop之完全分布式模式环境搭建</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/hadoop%E4%B9%8B%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86,%E5%9B%9E%E6%94%B6%E7%AB%99/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.066Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/hadoop%E4%B9%8B%E5%BF%AB%E7%85%A7%E7%AE%A1%E7%90%86,%E5%9B%9E%E6%94%B6%E7%AB%99/"
-    >hadoop之快照管理,回收站</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hadoop%E4%B9%8B%E7%BC%96%E8%AF%91%E6%BA%90%E7%A0%81/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.060Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E7%BC%96%E8%AF%91%E6%BA%90%E7%A0%81/"
-    >Hadoop之编译源码</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.053Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Hadoop%E4%B9%8BHDFS%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"
-    >Hadoop之HDFS文件系统</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.037Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/hadoop%E5%85%A5%E9%97%A8%E4%B9%8B%E6%A6%82%E8%BF%B0/"
-    >hadoop入门之概述</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.026Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%80/"
-    >Flume知识点入门学习一</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.019Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
-    >Flume知识点入门学习二</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.011Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Flume%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/"
-    >Flume知识点入门学习</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/archives/2021/page/5/">上一页</a><a class="page-number" href="/archives/2021/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2021/page/4/">4</a><a class="page-number" href="/archives/2021/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/archives/2021/page/7/">7</a><a class="extend next" rel="next" href="/archives/2021/page/7/">下一页</a>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            css简介以及引入规范
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">CSS背景(background)</div>
+      </a>
+    
   </nav>
-  
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -440,6 +437,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link
