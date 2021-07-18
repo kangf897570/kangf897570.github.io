@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>azkaban的安装 |  爱上口袋的天空</title>
+      <title>ClickHouse函数整理（详细） |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-azkaban的安装"
+  id="post-ClickHouse函数整理（详细）"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  azkaban的安装
+  ClickHouse函数整理（详细）
 </h1>
  
 
@@ -62,11 +62,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-date">
-  <time datetime="2021-07-18T14:10:34.889Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.276Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
   
 <div class="word_count">
@@ -74,7 +74,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">703</span>
+            <span class="post-count">542</span>
         </span>
     </span>
 
@@ -83,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">3 分钟</span>
+            <span class="post-count">2 分钟</span>
         </span>
     </span>
 </div>
@@ -98,33 +98,68 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: azkaban的安装<br>categories:</p>
+  <p>title: ClickHouse函数整理（详细）<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—title: azkaban的安装<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 上传安装包  机器：hadoop112  <img alt="" class="has" height="348" src="https://img-blog.csdnimg.cn/20191112221358405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752">1. 解压安装包   <img alt="" class="has" height="319" src="https://img-blog.csdnimg.cn/20191112221732490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">1. 创建一个azkaban文件夹，讲安装包都放入  <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20191112222008392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. azkaban脚本导入，进入mysql，创建azkaban数据库，并将解压的脚本导入到azkaban数据库。  <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20191112223412370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="369">  因为我们的sql文件在hadoop112,mysql在hadoop111,那么我们需要将文件移到hadoop111上  <img alt="" class="has" height="415" src="https://img-blog.csdnimg.cn/20191112223751905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="646">  在mysql上执行移动过来的脚本  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20191112223929718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">  执行后相关表  <img alt="" class="has" height="410" src="https://img-blog.csdnimg.cn/20191112224041285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="341">1. 生成密钥对和证书  a：进入/usr/local/module/azkaban/azkaban-web-2.5.0目录下          <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20191112224817159.png" width="683">  b：生成 keystore的密码及相应信息的密钥库        命令：keytool -keystore keystore -alias jetty -genkey -keyalg RSA        <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20191112224858272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">       <img alt="" class="has" height="473" src="https://img-blog.csdnimg.cn/20191112225112551.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="666">      <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191112225143399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">1. 配置时间的同步，（集群之间服务器需要同步，之前通过ntp配置过了）<li>开始配置文件/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban.properties   <pre class="has"><code class="language-bash">#Azkaban Personalization Settings<br>#服务器UI名称,用于服务器上方显示的名字<br>azkaban.name=Test<br>#描述<br>azkaban.label=My Local Azkaban<br>#UI颜色<br>azkaban.color=#FF3601<br>azkaban.default.servlet.path=/index<br>#默认web server存放web文件的目录<br>web.resource.dir=/usr/local/module/azkaban/azkaban-web-2.5.0/web/<br>#默认时区,已改为亚洲/上海 默认为美国<br>default.timezone.id=Asia/Shanghai</p>
-<p>#Azkaban UserManager class<br>user.manager.class=azkaban.user.XmlUserManager<br>#用户权限管理默认类（绝对路径）<br>user.manager.xml.file=/usr/local/module/azkaban/azkaban-web-2.5.0/conf/azkaban-users.xml</p>
-<p>#Loader for projects<br>#global配置文件所在位置（绝对路径）<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>#mysql链接<br>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>#最大连接数<br>mysql.numconnections=100</p>
-<h1 id="Velocity-dev-mode"><a href="#Velocity-dev-mode" class="headerlink" title="Velocity dev mode"></a>Velocity dev mode</h1><p>velocity.dev.mode=false</p>
-<h1 id="Azkaban-Jetty-server-properties"><a href="#Azkaban-Jetty-server-properties" class="headerlink" title="Azkaban Jetty server properties."></a>Azkaban Jetty server properties.</h1><p>jetty.maxThreads=25<br>jetty.ssl.port=8443<br>jetty.port=8081<br>#SSL文件名（绝对路径）<br>jetty.keystore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.password=897570<br>#Jetty主密码与keystore文件相同<br>jetty.keypassword=897570<br>#SSL文件名（绝对路径）<br>jetty.truststore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.trustpassword=897570</p>
-<h1 id="Azkaban-Executor-settings"><a href="#Azkaban-Executor-settings" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.port=12321</p>
-<h1 id="mail-settings"><a href="#mail-settings" class="headerlink" title="mail settings"></a>mail settings</h1><p>mail.sender=<br>mail.host=<br>job.failure.email=<br>job.success.email=</p>
-<p>lockdown.create.projects=false</p>
-<p>cache.directory=cache<br></code></pre>   </li><li>/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban-users.xml   <pre class="has"><code class="language-html">&lt;azkaban-users&gt;<br>    &lt;user username="azkaban" password="azkaban" roles="admin" groups="azkaban" /&gt;<br>    &lt;user username="metrics" password="metrics" roles="metrics"/&gt;<br>    &lt;!--添加自己的用户--&gt;<br>    &lt;user username="kgf" password="897570" roles="admin"/&gt;</p>
-<pre><code>&amp;lt;role name=&quot;admin&quot; permissions=&quot;ADMIN&quot; /&amp;gt;
-&amp;lt;role name=&quot;metrics&quot; permissions=&quot;METRICS&quot;/&amp;gt;
-</code></pre>
-<p>&lt;/azkaban-users&gt;<br></code></pre>   </li><li>修改/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/目录下的azkaban.properties文件   <pre class="has"><code class="language-bash">#Azkaban<br>#修改时区<br>default.timezone.id=Asia/Shanghai</p>
-<h1 id="Azkaban-JobTypes-Plugins"><a href="#Azkaban-JobTypes-Plugins" class="headerlink" title="Azkaban JobTypes Plugins"></a>Azkaban JobTypes Plugins</h1><p>azkaban.jobtype.plugin.dir=plugins/jobtypes</p>
-<p>#Loader for projects<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>mysql.numconnections=100</p>
-<h1 id="Azkaban-Executor-settings-1"><a href="#Azkaban-Executor-settings-1" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.maxThreads=50<br>executor.port=12321<br>executor.flow.threads=30</p>
-<p></code></pre>   </li>1. 进入/usr/local/module/azkaban目录下启动  a：先启动executor        <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20191113222540471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686"> b：再启动web        <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20191113222655646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="612">        <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20191113222740327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">1. 效果,用户名就是刚配置的kgf/897570  <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/2019111322292215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="665"></p>
+<p>—<strong>1、日期类函数</strong></p>
+<p>1.1 时间或日期截取函数（to）—— 返回非日期</p>
+<img alt="" height="712" src="https://img-blog.csdnimg.cn/20210428220216155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="1-2-时间或日期截取函数（toStartOf）——-返回日期"><a href="#1-2-时间或日期截取函数（toStartOf）——-返回日期" class="headerlink" title="1.2 时间或日期截取函数（toStartOf）—— 返回日期"></a>1.2 时间或日期截取函数（toStartOf）—— 返回日期</h3><img alt="" height="819" src="https://img-blog.csdnimg.cn/2021042822051175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="1-3-日期或时间日期生成函数"><a href="#1-3-日期或时间日期生成函数" class="headerlink" title="1.3 日期或时间日期生成函数"></a>1.3 日期或时间日期生成函数</h3><img alt="" height="215" src="https://img-blog.csdnimg.cn/20210428220633454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h2 id="2、类型转化类函数"><a href="#2、类型转化类函数" class="headerlink" title="2、类型转化类函数"></a><strong>2、类型转化类函数</strong></h2><p>2.1 精度保留（非四舍五入）</p>
+<img alt="" height="303" src="https://img-blog.csdnimg.cn/20210428220711501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="2-2-字符串转化为整数（非整数的字符串返回0）"><a href="#2-2-字符串转化为整数（非整数的字符串返回0）" class="headerlink" title="2.2 字符串转化为整数（非整数的字符串返回0）"></a>2.2 字符串转化为整数（非整数的字符串返回0）</h3><img alt="" height="424" src="https://img-blog.csdnimg.cn/20210428221013726.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="2-3-日期与时间日期转化"><a href="#2-3-日期与时间日期转化" class="headerlink" title="2.3 日期与时间日期转化"></a>2.3 日期与时间日期转化</h3><img alt="" height="168" src="https://img-blog.csdnimg.cn/20210428221149986.png" width="1200">
+
+<h3 id="2-4-转化为字符型"><a href="#2-4-转化为字符型" class="headerlink" title="2.4 转化为字符型"></a>2.4 转化为字符型</h3><img alt="" height="110" src="https://img-blog.csdnimg.cn/2021042822121547.png" width="1200">
+
+<h3 id="2-5-查看数据类型"><a href="#2-5-查看数据类型" class="headerlink" title="2.5 查看数据类型"></a>2.5 查看数据类型</h3><img alt="" height="122" src="https://img-blog.csdnimg.cn/2021042822123799.png" width="1200">
+
+<h2 id="3、字符串操作"><a href="#3、字符串操作" class="headerlink" title="3、字符串操作"></a><strong>3、字符串操作</strong></h2><h3 id="3-1-基本字符串操作"><a href="#3-1-基本字符串操作" class="headerlink" title="3.1 基本字符串操作"></a>3.1 基本字符串操作</h3><img alt="" height="512" src="https://img-blog.csdnimg.cn/20210428221303145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="3-2-字符串查找"><a href="#3-2-字符串查找" class="headerlink" title="3.2 字符串查找"></a>3.2 字符串查找</h3><img alt="" height="323" src="https://img-blog.csdnimg.cn/20210428221405249.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="3-3-字符串替换"><a href="#3-3-字符串替换" class="headerlink" title="3.3 字符串替换"></a>3.3 字符串替换</h3><img alt="" height="390" src="https://img-blog.csdnimg.cn/20210428221552835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="3-4-字符串分割"><a href="#3-4-字符串分割" class="headerlink" title="3.4 字符串分割"></a>3.4 字符串分割</h3><img alt="" height="223" src="https://img-blog.csdnimg.cn/20210428221802201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="3-5-字符串拼接"><a href="#3-5-字符串拼接" class="headerlink" title="3.5 字符串拼接"></a>3.5 字符串拼接</h3><img alt="" height="117" src="https://img-blog.csdnimg.cn/20210428221914613.png" width="1200">
+
+<h2 id="4、条件语句"><a href="#4、条件语句" class="headerlink" title="4、条件语句"></a><strong>4、条件语句</strong></h2><img alt="" height="168" src="https://img-blog.csdnimg.cn/2021042822200846.png" width="1200">
+
+<h2 id="5、数学函数"><a href="#5、数学函数" class="headerlink" title="5、数学函数"></a><strong>5、数学函数</strong></h2><img alt="" height="642" src="https://img-blog.csdnimg.cn/20210428222026911.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h2 id="6、舍入函数"><a href="#6、舍入函数" class="headerlink" title="6、舍入函数"></a><strong>6、舍入函数</strong></h2><img alt="" height="222" src="https://img-blog.csdnimg.cn/20210428222128986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="7、URL操作函数"><a href="#7、URL操作函数" class="headerlink" title="7、URL操作函数"></a><strong>7、URL操作函数</strong></h3><blockquote>
+ <table align="left" cellspacing="0" style="width:448pt;"><tbody><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**函数**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**用途**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**举例**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**结果**</td>
+</blockquote>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">protocol()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的协议类型</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">protocol(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 http</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 www.baidu.com.cn</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domainWithoutWWW()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL不带www的域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domainWithoutWWW(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu.com.cn</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">topLevelDomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回顶级域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">topLevelDomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 cn</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">firstSignificantSubdomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">Returns the “first significant subdomain”.</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">firstSignificantSubdomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutToFirstSignificantSubdomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">Returns the part of the domain that includes top-level subdomains up to the “first significant subdomain” (see the explanation above).</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutToFirstSignificantSubdomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu.com.cn</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">path()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的路径</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">path(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 /s</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">pathFull()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的完整路径</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">pathFull(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 /s?wd=SQL%E4%B8%AD%E7%9A%84split</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">queryString()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的参数（查询字符串）</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">queryString(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 wd=SQL%E4%B8%AD%E7%9A%84split</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameters()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">以列表的形式返回URL的参数</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameters(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 [‘wd=SQL%E4%B8%AD%E7%9A%84split’,‘ur=qwguq’]</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameterNames()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">以列表的形式返回URL的参数名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameterNames(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 [‘wd’,‘ur’]</td>
+<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutQueryString()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL？（参数）前面的内容</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutQueryString(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 https://www.baidu.com/s</td>
+</tbody></table>
+
+
+<h3 id="8、IP操作函数"><a href="#8、IP操作函数" class="headerlink" title="8、IP操作函数"></a><strong>8、IP操作函数</strong></h3><img alt="" height="304" src="https://img-blog.csdnimg.cn/20210428222623141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h2 id="9、表操作"><a href="#9、表操作" class="headerlink" title="9、表操作"></a><strong>9、表操作</strong></h2><h3 id="9-1-表连接操作"><a href="#9-1-表连接操作" class="headerlink" title="9.1 表连接操作"></a>9.1 表连接操作</h3><img alt="" height="251" src="https://img-blog.csdnimg.cn/20210428222707498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+
+<h3 id="9-2-LIMIT操作"><a href="#9-2-LIMIT操作" class="headerlink" title="9.2 LIMIT操作"></a>9.2 LIMIT操作</h3><img alt="" height="233" src="https://img-blog.csdnimg.cn/20210428222743597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
  
       <!-- reward -->
       
@@ -177,7 +212,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -188,15 +223,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban知识点学习
+            clickHouse基本介绍
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例</div>
+      </a>
     
   </nav>
 

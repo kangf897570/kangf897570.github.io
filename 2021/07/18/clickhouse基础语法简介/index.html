@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  爱上口袋的天空</title>
+      <title>clickhouse基础语法简介 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-clickhouse基础语法简介"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  clickhouse基础语法简介
 </h1>
  
 
@@ -62,15 +62,19 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/hello-world/" class="article-date">
-  <time datetime="2021-07-18T09:48:52.343Z" itemprop="datePublished">2021-07-18</time>
-</a>   
+      <a href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.290Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+  
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.5k</span>
         </span>
     </span>
 
@@ -79,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">5 分钟</span>
         </span>
     </span>
 </div>
@@ -94,19 +98,61 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <p>title: clickhouse基础语法简介<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—## 1.常用SQL语法</p>
+<blockquote>
+ <pre><code class="language-sql">-- 列出数据库列表
+show databases;
+</blockquote>
+<p>– 列出数据库中表列表<br>show tables;</p>
+<p>– 创建数据库<br>create database test;</p>
+<p>–选中数据库<br>use test;</p>
+<p>– 删除一个表<br>drop table if exists test.t1;</p>
+<p>– 创建第一个表<br>create /<em>temporary</em>/ table /<em>if not exists</em>/ test.m1 (<br> id UInt16<br>,name String<br>) ENGINE = Memory<br>;<br>– 插入测试数据<br>insert into test.m1 (id, name) values (1, ‘abc’), (2, ‘bbbb’);</p>
+<p>– 查询<br>select * from test.m1;</p>
+<p></code></pre> 
+   </p>
+<h2 id="2-默认值"><a href="#2-默认值" class="headerlink" title="2.默认值"></a>2.默认值</h2><blockquote>
+<p> 默认值 的处理方面， ClickHouse 中，默认值总是有的，如果没有显示式指定的话，会按字段类型处理： </p>
+</blockquote>
+<ul>
+<li>数字类型， 0- 字符串，空字符串- 数组，空数组- 日期， 0000-00-00- 时间， 0000-00-00 00:00:00- 注：NULLs 是不支持的</li>
+</ul>
+<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3.数据类型"></a>3.数据类型</h3><blockquote>
+ <ul>- 整型：UInt8,UInt16,UInt32,UInt64,Int8,Int16,Int32,Int64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184612320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x1eGlhbmd5MTMxNA==,size_16,color_FFFFFF,t_70">- 枚举类型：Enum8,Enum16 存储为Int8或Int16的一组枚举字符串值。例： Enum8（'hello'= 1，'world'= 2）， 这个数据类型有两个值  'hello'和'world'。 该数值必须在-128..127为Enum8和-32768..32767为Enum16。枚举的每个成员也必须有不同的数字。空字符串是一个有效的值。数字不需要是连续的，可以以任何顺序。是顺序无关的。 在内存中，数据的存储方式与数字类型Int8和Int16相同。以文本格式读取时，读取字符串并查找相应的数值。如果找不到，则会抛出异常。当以文本格式写入时，查找存储的数字并写出相应的字符串。 如果数字不对应已知的值，则会抛出异常。以二进制格式，信息以与Int8和Int16相同的方式保存。Enum的隐式默认值是具有最小数值的值 -  字符串(String、FixedString 和 UUID) 1)String         String 不限制长度，相当于Varchar、Text、Clob 和 Blob 等字符类型 2)FixedString(N)        FixedString(N)相当于Char，长度固定，数据长度不够时，添加空字节（null）；长度过长返回错误消息 3)UUID        32位，格式8-4-4-4-12，如果未被赋值，则用0填充 -  日期时间类型 1)Date: 2020-02-02 精确到天 2)DateTime: 2020-02-02 20:20:20 精确到秒 3)DateTime64: 2020-02-02 20:20:20.335 精确到亚秒，可以设置精度均支持字符串写入 -  数组类型 Array(T) T 类型的数组。T型可以是任何类型，包括数组。我们不推荐使用多维数组，因为它们不被很好的支持（例如，除了内存表之外，你不能在多维数组中存储多维数组） -  元组：Tuple 由多个元素组成，允许不同类型 创建数据：(T1, T2, …)，Tuple(T1, T2, …) <li> 嵌套（Nested(Name1 Type1, Name2 Type2, ...)） 嵌套数据结构类似于嵌套表。嵌套数据结构的参数（列名和类型）与 CREATE 查询类似。每个表可以包含任意多行嵌套数据结构。 只支持一级嵌套。嵌套结构的列中，若列的类型是数组类型，那么该列其实和多维数组是相同的，所以目前嵌套层级的支持很局限（MergeTree 引擎中不支持存储这样的列） 大多数情况下，处理嵌套数据结构时，会指定一个单独的列。为了这样实现，列的名称会与点号连接起来。这些列构成了一组匹配类型。在同一条嵌套数据中，所有的列都具有相同的长度。 不能对整个嵌套数据结构执行 SELECT。只能明确列出属于它一部分列。 <pre><code class="language-sql">CREATE TABLE test.visits
+(
+    CounterID UInt32,
+    StartDate Date,
+    Sign Int8,
+    IsNew UInt8,
+    VisitID UInt64,
+    UserID UInt64,
+    ...
+    Goals Nested
+    (
+        ID UInt32,
+        Serial UInt32,
+        EventTime DateTime,
+        Price Int64,
+        OrderID String,
+        CurrencyID UInt32
+    ),
+    ...
+) ENGINE = CollapsingMergeTree(StartDate, intHash32(UserID), (CounterID, StartDate, intHash32(UserID), VisitID), 8192, Sign)</code></pre>  作者：盗梦者_56f2 链接：https://www.jianshu.com/p/39e675ccbf3b 来源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 </li>-  浮点数 Float32 和 Float64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184649655.png"> float精度是：7~8位有效数字 double精度是：16~17位有效数字 -  定点数 Decimal32、Decimal64 和Decimal128 Decimal(P, S)：P代表精度，决定总位数（整数部分+小数部分），取值范围是1~38; S代表规模，决定小数位数，取值范围是0～P。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127185044682.png#pic_center"> <li> 缺失值（Nullable(TypeName)） 允许用特殊标记NULL表示"缺失值"，可以与 `TypeName` 的正常值存放一起。例如，`Nullable(Int8)` 类型的列可以存储 `Int8` 类型值，而没有值的行将存储 `NULL`。 对于 `TypeName`，不能使用复合数据类型 Array和 Tuple。复合数据类型可以包含 `Nullable` 类型值，例如`Array(Nullable(Int8))`。`Nullable` 类型字段不能包含在表索引中。 除非在 ClickHouse 服务器配置中另有说明，否则 `NULL` 是任何 `Nullable` 类型的默认值。 使用 Nullable 几乎总是对性能产生负面影响。 <pre><code class="language-sql"> CREATE TABLE t_null(x Int8, y Nullable(Int8)) ENGINE TinyLog
+#
+INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
+</blockquote>
+<h3 id="4-物化列"><a href="#4-物化列" class="headerlink" title="4.物化列"></a>4.物化列</h3><blockquote>
+<p> 指定 MATERIALIZED 表达式，即将一个列作为<code>物化列</code>处理了，这意味着这个列的值不能从<code>insert</code> 语句获取，只能是自己计算出来的。同时，物化列也不会出现在 <code>select *</code> 的结果中：<br> <pre><code class="language-sql">drop table if exists test.m2;<br>create table test.m2 (<br> a MATERIALIZED (b+1)<br>,b UInt16<br>) ENGINE = Memory;<br>insert into test.m2 (b) values (1);<br>select * from test.m2;<br>select a, b from test.m2; --这个可以查出来</code></pre> 
+   </p>
+</blockquote>
+<h3 id="5-表达式列"><a href="#5-表达式列" class="headerlink" title="5.表达式列"></a>5.表达式列</h3><blockquote>
+<p> ALIAS 表达式列某方面跟物化列相同，就是它的值不能从 insert 语句获取。不同的是， 物化列 是会真正保存数据（这样查询时不需要再计算），<br> 而表达式列不会保存数据（这样查询时总是需要计算），只是在查询时返回表达式的结果。<br> <pre><code class="language-sql">create table test.m3 (a ALIAS (b+1), b UInt16) ENGINE = Memory;<br>insert into test.m3(b) values (1);<br>select * from test.m3;<br>select a, b from test.m3;</code></pre> 
+   </p>
+</blockquote>
  
       <!-- reward -->
       
@@ -159,7 +205,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -170,15 +216,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-nav-link">
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban的安装
+            clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickHouse基本介绍</div>
+      </a>
     
   </nav>
 

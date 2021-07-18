@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.246Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">7.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">31 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.运维管理与优化</p>
+<blockquote>
+<p> <strong>1.1)硬件管理与优化</strong><br>       1.1.1)CPU<br>                ClickHouse的并行数据处理机制，使得其能利用所有可用的硬件资源。在选择CPU处理器时，应选择更多核心数而不是更高频率的处理器。<br>                例如：频率为2600MHz的16核心处理器比3600MHz的8核心的处理器的效率更高。                           建议使用Turbo Boost和超线程技术，在高工作负载情况下能显著提高性能。<br>       1.1.2)内存<br>                ClickHouse的服务本身需要的RAM很少，但是ClickHouse需要内存来处理查询，建议至少使用4GB内存。                RAM的容量取决于：<br>                 a.查询的复杂性。<br>                 b.查询处理的数据量。<br>                 c.根据GROUP BY、DISTINCT、JOIN和其他操作产生的临时数据大小估算所需的RAM容量。<br>                对于少量数据，例如压缩后在200GB以下，使用数据量一样多的内存。                对于大量数据，以及交互式查询，热数据集缓存在操作系统的cache中，建议配置尽可能大的内存，例如128GB的内存性能明显比64GB高很多。<br>                如果内存不足， ClickHouse支持使用外部存储器处理数据，如外部聚合和外部排序等，当数据超过设置的阈值时使用外部存储器处理数据。<br>       1.1.3)网络<br>                推荐使用10GB或更高带宽的网络。<br>                ClickHouse在数据处理过程（数据导入、中间数据存储等）中会充分利用网络带宽。网络带宽对于处理具有大量中间数据的分布式查询至关重要。<br>                网络带宽会影响复制的过程。<br>       1.1.4)存储综合考虑安全性、性能和预算。                  如果使用RAID0，则需考虑使用副本机制。                  预算足够，使用SSD，然后HDD。                  RAID10的性能最佳，兼顾了安全性和性能，但是成本高，50%的磁盘利用率。                 主机的磁盘超过4块，可以考虑使用RAID6、RAID50、RAID5等。<br>                 优先使用具有多个本地磁盘的服务器，而不是具有附加磁盘架的服务器。<br>                 考虑压缩率、副本、磁盘存储容量、未来的数据增长估算存储资源。                 数据量：对数据进行采样，计算每行的平均大小，根据总行数估算数据量。                数据压缩系数：ClickHouse的数据通常被压缩5倍左右，根据原始数据大小和ClickHouse存储的表的数据目录占用空间进行比较。                副本：每份副本存储完整的数据。<br> <strong>1.2)操作系统的配置</strong><br>        1.2.1)CPU频率调整策略<br>              建议将CPU的电源管理策略调整为performance，即将CPU频率固定工作在其支持的最高运行频率上， 不动态调节，可以获取到最大的性能。              查看系统支持的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors<br>performance powersave<br></code></pre><br>              查看生效的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor<br>powersave<br></code></pre><br>               设置：<br> <pre><code>echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor<br></code></pre><br>  <br>        1.2.2) 关闭透明大页                开启透明大页，操作系统的内存分配活动需要各种内存锁，直接影响程序的内存访问性能，对于ClickHouse而言，透明大页会严重干扰内存分配器的工作，从而导致性能显著下降。<br> <pre><code class="language-bash">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag<br>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</p>
+</blockquote>
+<p>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag’&gt;&gt; /etc/rc.local<br>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled’&gt;&gt; /etc/rc.local<br></code></pre><br>        1.2.3)禁用swap文件<br>              避免将数据调度到swap上，影响性能。<br> <pre><code class="language-bash">dd if=/dev/zero of=/home/swap bs=1024 count=1048576<br>swapon /dev/dm-1</p>
+<h1 id="swapon"><a href="#swapon" class="headerlink" title="swapon"></a>swapon</h1><p>NAME TYPE SIZE USED PRIO<br>/dev/dm-1 partition 16G 0B -3</p>
+<p>swapoff   /dev/dm-1<br></code></pre><br>        1.2.4)内核分配策略<br>             overcommit_memory是一个内核对内存分配的一种策略。具体可见/proc/sys/vm/overcommit_memory下的值。             overcommit_memory取值有三种分别为0,1,2<br>             overcommit_memory=0，表示内核将检查是否有足够的可用内存供应用进程使用；如果有足够的可用内存，内存申请允许；否则，内存申请失败，并把错误返回给应用进程。             overcommit_memory=1，表示内核允许分配所有的物理内存，而不管当前的内存状态如何。             overcommit_memory=2，表示内核允许分配超过所有物理内存和交换空间总和的内存。<br>        1.2.5)彻底理解ClickHouse的配置文件<br>             ClickHouse支持多文件的配置管理，主配置文件为/etc/clickhouse-server/config.xml，其他的配置文件必须位于/etc/clickhouse-server/config.d目录中。<br>             所有配置文件必须为XML格式，每个文件具有相同的根元素，通常为.<br>            配置替换                  配置的元素可以指定incl属性，这个属性指定了一个”substitutions (替换)”。默认情况下，这个”替换”来自配置文件/etc/metrika.xml的元素，可以通过服务器的配置选项include_from修改”替换”文              件的路径。当指定了”替换”，将使用替换文件中相应元素的内容作为值。“替换”的值是引用”替换”文件的根节点（yarndex）下的子元素。如果incl中指定的”替换”不存在，则在服务器中记录日志，           如果不想记录日志，则为元素指定optional=”true”属性即可。            例如，”替换”文件/etc/metrika.xml中的部分内容：<br> <pre><code class="language-XML">&lt;yandex&gt;<br>...<br>&lt;zookeeper-servers&gt;<br>    &lt;host&gt;192.168.9.100&lt;/host&gt;<br>    &lt;port&gt;2181&lt;/port&gt;<br>&lt;/zookeeper-servers&gt;<br>...<br>&lt;/yandex&gt;<br></code></pre><br> ClickHouse的config.xml配置文件默认引用了这个文件的”替换”：zookeeper-servers，它是/etc/metrika.xml中根节点yandex下的子元素。如下： <br> <pre><code class="language-XML">&lt;zookeeper incl="zookeeper-servers" optional="true" /&gt;<br></code></pre><br> <strong>1.3)用户设置</strong><br>          在config.xml文件默认指定了一个单独的用户管理相关的配置文件，用于管理用户的权限、profiles、quotas等。这个配置文件由users_config元素指定文件路径，默认为users.xml。如果省略users_config元素，则直接在config.xml中指定用户管理相关的配置。<br> <pre><code class="language-XML">&lt;users_config&gt;users.xml&lt;/users_config&gt;<br></code></pre><br>      可以将用户配置拆分为多个配置文件，类似config.xml和config.d。用户配置的目录默认为users.d，目录名称的规则为：user_config设置的文件名去掉.xml后缀，并拼接上.d后缀。例如，如果user_config设置为abc.xml，则用户配置目录为：abc.d。 如下示例，为用户创建了一个单独的配置文件：<br> <pre><code class="language-XML">$ cat /etc/clickhouse-server/users.d/alice.xml<br>&lt;yandex&gt;<br>    &lt;users&gt;<br>      &lt;alice&gt;<br>          &lt;profile&gt;default&lt;/profile&gt;<br>          &lt;networks&gt;<br>              &lt;ip&gt;::/0&lt;/ip&gt;<br>          &lt;/networks&gt;<br>          &lt;password&gt;123&lt;/password&gt;<br>          &lt;quota&gt;default&lt;/quota&gt;<br>      &lt;/alice&gt;<br>    &lt;/users&gt;<br>&lt;/yandex&gt;<br></code></pre><br> <strong>1.4)重复设置项的处理</strong><br> **     **主配置文件的有些设置会被其他配置文件中的设置覆盖。      可以为这些配置文件的元素指定replace和remove属性。      如果replace和remove属性都不指定， ClickHouse将以递归的方式合并元素的内容，替换掉重复子元素的值。      如果指定了replace属性， 则使用当前的元素配置替换从其他配置文件引用的元素内容。      如果指定了remove属性， 则表示删除该元素。      例如下面的配置，它会替换networks元素（由incl指定）的整个配置，而保留当前定义的设置：<br> <pre><code class="language-XML">&lt;networks incl="networks" replace="replace"&gt;<br>    &lt;ip&gt;::/0&lt;/ip&gt;<br>&lt;/networks&gt;<br></code></pre><br>  <br> 1.5)预处理文件<br>      ClickHouse服务在启动时，会生成每类配置文件的预处理文件，这些文件包含了所有已完成的替换和重写，是ClickHouse最终应用的配置。<br>      ClickHouse会跟踪配置文件的更改，能动态加载变更的用户和集群设置。这意味着用户可以在线动态修改集群、用户等相关配置，而无需重新启动服务。<br>       预处理文件路径为/var/lib/clickhouse/preprocessed_configs，使用/etc/clickhouse-server/preprocessed软链接指向这个目录。<br> <pre><code class="language-bash"># ll /etc/clickhouse-server/preprocessed<br>lrwxrwxrwx 1 root root 41 3月   4 09:44 /etc/clickhouse-server/preprocessed -&gt; /var/lib/clickhouse//preprocessed_configs</p>
+<h1 id="ls-etc-clickhouse-server-preprocessed"><a href="#ls-etc-clickhouse-server-preprocessed" class="headerlink" title="ls /etc/clickhouse-server/preprocessed/"></a>ls /etc/clickhouse-server/preprocessed/</h1><p>abc_dictionary.xml  config.xml  users.xml<br></code></pre> 
+   </p>
+<h3 id="2-ZooKeeper的关键优化点"><a href="#2-ZooKeeper的关键优化点" class="headerlink" title="2.ZooKeeper的关键优化点"></a>2.ZooKeeper的关键优化点</h3><blockquote>
+ <ol>- **ZooKeeper节点数3个以上，奇数台。**- **与ClickHouse集群独立部署  **ZooKeeper对延迟非常敏感，ClickHouse可能会利用所有可用的系统资源。<li>**配置snapshot文件清理策略** <pre><code class="language-bash">autopurge.purgeInterval=1
+</blockquote>
+<p>autopurge.snapRetainCount=10<br></code></pre> autopurge.purgeInterval：开启清理事务日志和快照文件的功能，单位是小时。默认是0，表示不开启自动清理功能。 autopurge.snapRetainCount ： 指定了需要保留的文件数目。默认是保留3个。</li>- <strong>限制snapshot数量</strong> snapCount=3000000 每snapCount次事务日志输出后，触发一次快照(snapshot)。 ZooKeeper会生成一个snapshot文件和事务日志文件。 默认是100000。- <strong>log和data数据分磁盘存储</strong> dataDir：存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。 dataLogDir：事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。- <strong>ZooKeeper的磁盘建议使用SSD</strong> 如果数据在TB级别以上，且复制表的数量比较多，超过100个，建议使用SSD磁盘。提升ZooKeeper的响应速度，避免ClickHouse副本间数据同步的延迟。<li>**调整JVM大小  *<em>ZooKeeper的JVM内存默认是根据操作系统本身内存大小的一个百分比预先分配的，所以这不是我们所需要的。 在./bin/zkEnv.sh文件中，有如下配置项： <pre><code class="language-bash">if [ -f "$ZOOCFGDIR/java.env" ]<br>then<br>    . "$ZOOCFGDIR/java.env"<br>fi<br></code></pre> 我们在./conf/java.env文件中配置JVM的内存，增加如下配置： <pre><code class="language-bash">export JAVA_HOME=/usr/local/java/jdk1.8.0_151<br>export JVMFLAGS="-Xms1024m -Xmx2048m $JVMFLAGS"<br></code></pre> 修改完成使用jmap -heap $pid来验证内存修改情况。 </li><li><strong>其它配置</strong> <strong>tickTime=2000</strong> ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2</em>tickTime。 默认值2000，单位毫秒。 <strong>initLimit=10</strong> Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在 initLimit 时间内完成这个工作。通常情况下，我们不用太在意这个参数的设置。如果ZK集群的数据量确实很大了，F在启动的时候，从Leader上同步数据的时间也会相应变长，因此在这种情况下，有必要适当调大这个参数了。 initLimit=30000 <strong>syncLimit=5</strong> 在运行过程中，Leader负责与ZK集群中所有机器进行通信，例如通过一些心跳检测机制，来检测机器的存活状态。如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。注意：不要把这个参数设置得过大，否则可能会掩盖一些问题。 建议设置为10。 <strong>maxClientCnxns ：</strong> 单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。请注意这个限制的使用范围，仅仅是单台客户端机器与单台ZK服务器之间的连接数限制，不是针对指定客户端IP，也不是ZK集群的连接数限制，也不是单台ZK对所有客户端的连接数限制。 建议设置为2000 <strong>maxSessionTimeout=60000000</strong> Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。默认的Session超时时间是在2 * tickTime ~ 20 * tickTime 这个范围 <strong>preAllocSize=131072</strong> 预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。如果ZK的快照频率较大的话，建议适当减小这个参数。单位kb。 <strong>配置：</strong> <pre><code class="language-bash">tickTime=2000</p>
+<p>initLimit=30000<br>syncLimit=10</p>
+<p>maxClientCnxns=2000<br>maxSessionTimeout=60000000</p>
+<p>dataDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/data<br>dataLogDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/logs</p>
+<p>autopurge.purgeInterval=1<br>autopurge.snapRetainCount=10</p>
+<p>snapCount=3000000</p>
+<p>preAllocSize=131072<br></code></pre>   </li>- <strong>建ClickHouse表配置元数据压缩</strong> 建表的时候设置use_minimalistic_part_header_in_zookeeper=1， 则ZooKeeper中会存储较少的数据，支持副本的表使用单个znode紧凑地存储数据片段的头信息。如果表包含很多列， 则此存储方法将大大减少Zookeeper中存储的数据量。</ol></p>
+<h3 id="3-服务监控"><a href="#3-服务监控" class="headerlink" title="3.服务监控"></a>3.服务监控</h3><blockquote>
+<p> ClickHouse内置了自我状态检测的功能， 可根据系统表、查询日志等监控服务器计算资源的不同度量以及查询处理的通用统计信息。<br> <ol><li> 系统表  ClickHouse提供了system.metrics、system.events和system.asynchronous_metrics表收集服务器的不同的运行度量。  1.1)system.metrics           这张表的数据实时更新， 用于查看正在运行的查询或当前副本的延迟信息等。           包含的列有：               •metric(String) ： 度量名称。               •value(Int64) ：指标值。               •description (String) ：度量描述。           <strong>示例:</strong> <pre><code class="language-sql">select * from system.metrics;</p>
+</blockquote>
+<p>┌─metric───────────────────────────────────────┬────value─┬─description─────────────────────────────────────────────┐<br>│ Query                                        │        1 │ Number of executing queries                             │<br>│ Merge                                        │        0 │ Number of executing background merges                   │<br>│ PartMutation                                 │        0 │ Number of mutations (ALTER DELETE/UPDATE)               │<br>│ GlobalThread                                 │       65 │ Number of threads in global thread pool.                │<br>│ GlobalThreadActive                           │       51 │ Number of threads in global thread pool running a task. │<br>└──────────────────────────────────────────────┴──────────┴─────────────────────────────────────────────────────────┘<br></code></pre>   1.2)<strong>system.events         用于收集系统中发生的事件数的信息。例如，可以查询自ClickHouse服务启动以来已处理的SELECT 查询数。         列信息如下：             •event (String) ： 事件名称。             •value (UInt64) ： 发生的事件数。             •description (String) ： 事件描述。         示例：</strong> <pre><code class="language-sql">clickhouse1 :) select * from system.events LIMIT 5;</p>
+<p>SELECT *<br>FROM system.events<br>LIMIT 5</p>
+<p>┌─event───────────────────────┬───value─┬─description────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ Query                       │       7 │ Number of queries to be interpreted and potentially executed. Does not include queries that failed to parse or were rejected due to AST size limits, quota limits or limits on the number of simultaneously running queries. May include internal queries initiated by ClickHouse itself. Does not count subqueries. │<br>│ SelectQuery                 │       7 │ Same as Query, but only for SELECT queries.                                                                                                                                                                                                                │<br>│ QueryTimeMicroseconds       │  140616 │ Total time of all queries.                                                                                                                                                                                                                                 │<br>│ SelectQueryTimeMicroseconds │  140616 │ Total time of SELECT queries.                                                                                                                                                                                                                              │<br>│ FileOpen                    │ 3645730 │ Number of files opened.                                                                                                                                                                                                                                    │<br>└─────────────────────────────┴─────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>5 rows in set. Elapsed: 0.002 sec. </p>
+<p>clickhouse1 :)<br></code></pre>   1.3)<strong>system.asynchronous_metrics        <strong>用于实时监控后台定期计算的指标。例如，正在使用的RAM大小        列信息如下：</strong>             •metric (String)</strong> ： 事件名称。**             •value (Float64)** ：指标值。        **例如：        ** <pre><code class="language-sql">clickhouse1 :) SELECT * FROM system.asynchronous_metrics;</p>
+<p>SELECT *<br>FROM system.asynchronous_metrics</p>
+<p>┌─metric───────────────────────────────────┬──────value─┐<br>│ CPUFrequencyMHz_0                        │   2591.504 │<br>│ jemalloc.arenas.all.pmuzzy               │          0 │<br>│ jemalloc.arenas.all.pdirty               │       1311 │<br>│ jemalloc.background_thread.run_intervals │          0 │<br>│ jemalloc.background_thread.num_runs      │          0 │<br>│ jemalloc.retained                        │  894418944 │<br>│ jemalloc.mapped                          │  136331264 │<br>│ jemalloc.metadata                        │   13635904 │<br>│ jemalloc.resident                        │  126943232 │<br>│ jemalloc.allocated                       │  102341072 │<br>│ jemalloc.epoch                           │       1298 │<br>│ NumberOfTables                           │         73 │<br>│ jemalloc.active                          │  109989888 │<br>│ NumberOfDatabases                        │          3 │<br>│ MaxPartCountForPartition                 │          7 │<br>│ jemalloc.background_thread.num_threads   │          0 │<br>│ ReplicasSumQueueSize                     │          0 │<br>│ ReplicasMaxMergesInQueue                 │          0 │<br>│ MemoryShared                             │ 4238995456 │<br>│ MemoryCode                               │  432128000 │<br>│ ReplicasMaxAbsoluteDelay                 │          0 │<br>│ ReplicasMaxQueueSize                     │          0 │<br>│ jemalloc.arenas.all.muzzy_purged         │          0 │<br>│ MemoryVirtual                            │ 6097547264 │<br>│ MarkCacheBytes                           │          0 │<br>│ Uptime                                   │      77887 │<br>│ jemalloc.arenas.all.dirty_purged         │  379880169 │<br>│ ReplicasMaxRelativeDelay                 │          0 │<br>│ MemoryResident                           │ 4455157760 │<br>│ ReplicasMaxInsertsInQueue                │          0 │<br>│ jemalloc.metadata_thp                    │          0 │<br>│ UncompressedCacheCells                   │          0 │<br>│ CompiledExpressionCacheCount             │          0 │<br>│ ReplicasSumMergesInQueue                 │          0 │<br>│ UncompressedCacheBytes                   │          0 │<br>│ ReplicasSumInsertsInQueue                │          0 │<br>│ MarkCacheFiles                           │          0 │<br>│ MemoryDataAndStack                       │ 1824006144 │<br>│ jemalloc.arenas.all.pactive              │      26853 │<br>└──────────────────────────────────────────┴────────────┘</p>
+<p>39 rows in set. Elapsed: 0.049 sec. </p>
+<p>clickhouse1 :)<br></code></pre>   </li><li> 查询日志<strong>query_log</strong> 记录所有查询语句的开始时间、耗时、用户、资源占用等信息，包括SELECT、SET、ALTER等语句。 在ClickHouse的主配置文件config.xml配置了query_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;!-- Query log. Used only for queries with setting log_queries = 1. --&gt;<br>    &lt;query_log&gt;<br>        &lt;!-- What table to insert data. If table is not exist, it will be created.<br>             When query log structure is changed after system update,<br>              then old table will be renamed and new table will be created automatically.<br>        --&gt;<br>        &lt;database&gt;system&lt;/database&gt;<br>        &lt;table&gt;query_log&lt;/table&gt;<br>        &lt;!--<br>            PARTITION BY expr <a target="_blank" rel="noopener" href="https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/">https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/</a><br>            Example:<br>                event_date<br>                toMonday(event_date)<br>                toYYYYMM(event_date)<br>                toStartOfHour(event_time)<br>        --&gt;<br>        &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;</p>
+<pre><code>    &amp;lt;!-- Instead of partition_by, you can provide full engine expression (starting with ENGINE = ) with parameters,
+         Example: &amp;lt;engine&amp;gt;ENGINE = MergeTree PARTITION BY toYYYYMM(event_date) ORDER BY (event_date, event_time) SETTINGS index_granularity = 1024&amp;lt;/engine&amp;gt;
+      --&amp;gt;
+
+    &amp;lt;!-- Interval of flushing data. --&amp;gt;
+    &amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
+&amp;lt;/query_log&amp;gt;
+</code></pre>
+<p></code></pre> ClickHouse默认不会收集查询的日志， 可通过设置log_queries = 1开启查询日志的功能,下面开启的命令要在服务器的黑窗口执行。 <pre><code class="language-bash">set log_queries = 1;<br>show tables;</p>
+<p>SELECT * from <code>system</code>.query_log ql limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003637697.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>trace_log</strong> 存储query profilers收集的堆栈跟踪日志。 堆栈日志根据计时器类型分为REAL和CPU，分别表示实际时钟计时器和CPU时钟计时器。 计时器相关的两个设置： <pre><code class="language-sql">query_profiler_real_time_period_ns：设置query profilers的实际计时器的周期，单位为纳秒，默认为1000000000（1秒）<br>query_profiler_cpu_time_period_ns：设置query profilers的CPU计时器的周期，单位为纳秒，默认为1000000000（1秒）。<br></code></pre> 在ClickHouse的主配置文件config.xml配置了trace_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;trace_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;trace_log&lt;/table&gt;</p>
+<pre><code>&amp;lt;partition_by&amp;gt;toYYYYMM(event_date)&amp;lt;/partition_by&amp;gt;
+&amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
+</code></pre>
+<p>&lt;/trace_log&gt;<br></code></pre> <strong>示例：</strong> <pre><code class="language-sql">SELECT * FROM system.trace_log ORDER BY event_date ASC LIMIT 2;<br></code></pre> <strong>query_thread_log</strong> 查询线程日志， 记录查询执行的所有线程的信息。 在ClickHouse的主配置文件config.xml配置了query_thread_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;query_thread_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;query_thread_log&lt;/table&gt;<br>    &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/query_thread_log&gt;<br></code></pre> ClickHouse默认不会收集查询线程的日志， 可通过设置log_query_threads= 1开启查询日志的功能。 <pre><code class="language-sql">set log_query_threads = 1;</p>
+<p>select * from system.query_thread_log limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003929835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>part_log</strong> 用户监控MergeTree引擎表中针对数据片段所有操作（创建、删除、合并、下载等）的信息。 part_log默认是关闭， 在ClickHouse的主配置文件使用如下配置开启数据片段日志 <pre><code class="language-XML">&lt;part_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;part_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/part_log&gt;<br></code></pre> <strong>text_log</strong> text_log用于记录服务器的常规日志，但是以结构化和高效的方式存储在表中。 text_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。 <pre><code class="language-XML">&lt;text_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;text_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/text_log&gt;<br></code></pre> <strong>metric_log</strong> 用于存储来自表system.metrics和system.events指标值的历史记录。collect_interval_milliseconds用于设置采集的时间间隔。metric_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。</li></ol></p>
+<h3 id="4-用户管理"><a href="#4-用户管理" class="headerlink" title="4.用户管理"></a>4.用户管理</h3><blockquote>
+ <ol><li> profile管理 profile是一组设置的集合，类似于角色的概念，每个用户都有一个profile。 可以有两种方式使用profile： 在会话中应用profile的所有设置，例如：SET profile = ‘web’ 。 在users.xml的users部分为某个用户指定profile。**profiles在users.xml配置文件的profiles标签下配置：** <pre><code class="language-XML">&lt;!-- Settings profiles --&gt;
+&lt;profiles&gt;
+    &lt;!-- Default settings --&gt;
+    &lt;default&gt;
+        &lt;!-- The maximum number of threads when running a single query. --&gt;
+        &lt;max_threads&gt;8&lt;/max_threads&gt;
+    &lt;/default&gt;
+​
+    &lt;!-- Settings for quries from the user interface --&gt;
+    &lt;web&gt;
+        &lt;max_rows_to_read&gt;1000000000&lt;/max_rows_to_read&gt;
+        &lt;max_bytes_to_read&gt;100000000000&lt;/max_bytes_to_read&gt;
+​
+        &lt;max_rows_to_group_by&gt;1000000&lt;/max_rows_to_group_by&gt;
+        &lt;group_by_overflow_mode&gt;any&lt;/group_by_overflow_mode&gt;
+​
+        &lt;max_rows_to_sort&gt;1000000&lt;/max_rows_to_sort&gt;
+        &lt;max_bytes_to_sort&gt;1000000000&lt;/max_bytes_to_sort&gt;
+​
+        &lt;max_result_rows&gt;100000&lt;/max_result_rows&gt;
+        &lt;max_result_bytes&gt;100000000&lt;/max_result_bytes&gt;
+        &lt;result_overflow_mode&gt;break&lt;/result_overflow_mode&gt;
+​
+        &lt;max_execution_time&gt;600&lt;/max_execution_time&gt;
+        &lt;min_execution_speed&gt;1000000&lt;/min_execution_speed&gt;
+        &lt;timeout_before_checking_execution_speed&gt;15&lt;/timeout_before_checking_execution_speed&gt;
+​
+        &lt;max_columns_to_read&gt;25&lt;/max_columns_to_read&gt;
+        &lt;max_temporary_columns&gt;100&lt;/max_temporary_columns&gt;
+        &lt;max_temporary_non_const_columns&gt;50&lt;/max_temporary_non_const_columns&gt;
+​
+        &lt;max_subquery_depth&gt;2&lt;/max_subquery_depth&gt;
+        &lt;max_pipeline_depth&gt;25&lt;/max_pipeline_depth&gt;
+        &lt;max_ast_depth&gt;50&lt;/max_ast_depth&gt;
+        &lt;max_ast_elements&gt;100&lt;/max_ast_elements&gt;
+​
+        &lt;readonly&gt;1&lt;/readonly&gt;
+    &lt;/web&gt;
+&lt;/profiles&gt;
+</code></pre> 上面的配置指定了两个profile：default和web。默认的default不能省略，它包含默认的设置，在服务器启动时应用。web是常规的profile，可以使用SET语句或HTTP查询中的URL参数进行设置。 profile设置可相互继承。如果使用继承，在配置文件中列出的其他设置之前， 先指定一个或多个profile。如果一个设置在不同的profile都定义了，则使用最新的设置。 </li><li> Quotas设置 Quotas用于在一段时间内跟踪资源的使用情况或限制资源的使用。quotas在user.xml配置文件的quotas标签下配置，在users标签下分配给用户。 注意：quota用于限制一组查询，并且将所有远程服务器上的分布式查询处理的资源纳入限制范围，而不是限制单个查询。**quotas的配置示例1:** <pre><code class="language-XML">&lt;!-- Quotas --&gt;
+&lt;quotas&gt;
+    &lt;!-- Quota name. --&gt;
+    &lt;default&gt;
+        &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
+        &lt;interval&gt;
+            &lt;!-- Length of the interval. --&gt;
+            &lt;duration&gt;3600&lt;/duration&gt;
+​
+            &lt;!-- Unlimited. Just collect data for the specified time interval. --&gt;
+            &lt;queries&gt;0&lt;/queries&gt;
+            &lt;errors&gt;0&lt;/errors&gt;
+            &lt;result_rows&gt;0&lt;/result_rows&gt;
+            &lt;read_rows&gt;0&lt;/read_rows&gt;
+            &lt;execution_time&gt;0&lt;/execution_time&gt;
+        &lt;/interval&gt;
+    &lt;/default&gt;
+&lt;/quotas&gt;
+</code></pre> 默认情况下，quota只跟踪一个小时内的资源使用情况，并不会限制资源的使用。每个时间间隔内的资源消耗在每次请求之后输出到服务器日志。**Quota配置示例2：** <pre><code class="language-XML">&lt;statbox&gt;
+    &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
+    &lt;interval&gt;
+        &lt;!-- Length of the interval. --&gt;
+        &lt;duration&gt;3600&lt;/duration&gt;
+​
+        &lt;queries&gt;1000&lt;/queries&gt;
+        &lt;errors&gt;100&lt;/errors&gt;
+        &lt;result_rows&gt;1000000000&lt;/result_rows&gt;
+        &lt;read_rows&gt;100000000000&lt;/read_rows&gt;
+        &lt;execution_time&gt;900&lt;/execution_time&gt;
+    &lt;/interval&gt;
+</blockquote>
+<pre><code>&amp;lt;interval&amp;gt;
+    &amp;lt;duration&amp;gt;86400&amp;lt;/duration&amp;gt;
+</code></pre>
+<p>​<br>        &lt;queries&gt;10000&lt;/queries&gt;<br>        &lt;errors&gt;1000&lt;/errors&gt;<br>        &lt;result_rows&gt;5000000000&lt;/result_rows&gt;<br>        &lt;read_rows&gt;500000000000&lt;/read_rows&gt;<br>        &lt;execution_time&gt;7200&lt;/execution_time&gt;<br>    &lt;/interval&gt;<br>&lt;/statbox&gt;<br></code></pre> 上面配置了一个名称为statbox的quota，在每小时（3600秒）和每24小时（86400秒）设置了对资源的限制。间隔结束时，将清除所有收集的值，在接下来的下一个时间区间，quota将重新开始计算。 可用于quota限制的资源如下： queries ： 请求总数。 errors ： 抛出异常的总数。 result_rows : 作为结果给出的总行数。 read_rows : 在所有远程服务器上，从表中读取用于运行查询的源总行数。 execution_time : 查询执行的总耗时，单位为秒。如果在至少一个时间间隔内超过了限制，则会引发异常，异常信息包括限制的类型、时间间隔以及新时间间隔的开始时间。 对于分布式查询处理， 资源的累积量存储在请求服务器上，因此，如果用户转到另一个服务器，则这个服务器的quota将重新开始累积。重启服务器后，quota将重置。 </li><li> 约束管理 在users.xml配置文件的profiles部分定义对设置的约束，可以禁止用户使用SET语句更改某些设置。 约束的定义模板如下： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;profile_name&gt;<br>    &lt;constraints&gt;<br>      &lt;setting_name_1&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>      &lt;/setting_name_1&gt;<br>      &lt;setting_name_2&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_2&gt;<br>      &lt;setting_name_3&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_3&gt;<br>      &lt;setting_name_4&gt;<br>        &lt;readonly/&gt;<br>      &lt;/setting_name_4&gt;<br>    &lt;/constraints&gt;<br>  &lt;/profile_name&gt;<br>&lt;/profiles&gt;<br></code></pre> 如果用户尝试违法冲突，则会引发异常。 支持三种类型的约束：max、min和readonly。 max和min约束使用数值指定约束的上限和下限，这两个约束可以组合使用。 readonly约束指定了用户无法更改相应的设置。 使用示例： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;default&gt;<br>    &lt;max_memory_usage&gt;10000000000&lt;/max_memory_usage&gt;<br>    &lt;force_index_by_date&gt;0&lt;/force_index_by_date&gt;<br>    ...<br>    &lt;constraints&gt;<br>      &lt;max_memory_usage&gt;<br>        &lt;min&gt;5000000000&lt;/min&gt;<br>        &lt;max&gt;20000000000&lt;/max&gt;<br>      &lt;/max_memory_usage&gt;<br>      &lt;force_index_by_date&gt;<br>        &lt;readonly/&gt;<br>      &lt;/force_index_by_date&gt;<br>    &lt;/constraints&gt;<br>  &lt;/default&gt;<br>&lt;/profiles&gt;<br></code></pre> 上面的约束配置限制了max_memory_usage的范围在20000000000和5000000000之间，force_index_by_date设置为只读。 使用下面的语句修改配置将引发异常： <pre><code class="language-sql">SET max_memory_usage=20000000001;<br>SET max_memory_usage=4999999999;<br>SET force_index_by_date=1;<br></code></pre> <strong>异常信息如下：</strong> <pre><code class="language-sql">Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be greater than 20000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be less than 5000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting force_index_by_date should not be changed.<br></code></pre> Note：在default的profile中定义的约束为默认的约束，这些约束会限制所有的用户，除非用户在自己的profile中显式覆盖这些设置。 force_index_by_date，如果表的主键包含日期列，则查询条件必须包含该该列。如果表的主键不包含日期列，则无需包含日期列。 仅适用于MergeTree引擎。 </li><li> 查询权限 ClickHouse中的查询可分为如下几种类型：<strong>读取数据查询</strong>：SELECT、SHOW、DESCRIBE、EXISTS。<strong>写数据查询</strong>：INSERT、OPTIMIZE。<strong>更改设置查询</strong>：SET、USE。<strong>DDL查询</strong>：CREATE、ALTER、RENAME、ATTACH、DETACH、 DROP、TRUNCATE。 KILL QUERY 下面的设置可用户配置用户的查询权限：<strong>readonly <strong>：限制读取、写入和更改三类查询的权限。</strong>allow_ddl</strong>：限制DDL查询的权限。<strong>KILL QUERY</strong>不受任何设置的限制。 <pre><code>1. readonly<br>用于限制读取、写入和更改三类查询的权限，默认值为0。<br>readonly的取值如下：<br>0 ： 允许执行所有查询。<br>1 ： 仅允许读取数据的查询。<br>2 ： 允许读取数据和更改设置。<br>在设置readonly=1后，用户将无法在当前会话中更改readonly和allow_ddl的设置。<br>在HTTP请求中使用GET方法时将自动设置readonly=1。如果在http请求中修改数据，则必须使用POST方法。</p>
+<p>设置readonly=1将禁止用户更改所有的设置。如果要禁止用户修改某些特定的设置，可以在users.xml配置文件中配置profiles的约束。</p>
+<ol start="2">
+<li>allow_ddl<br>用于配置是否允许DDL操作的权限，默认值为1。<br>可设置的值如下：<br>0 ： 不允许DDL查询。<br>1 ： 允许DDL查询。<br>如果当前会话的allow_ddl=0，则无法执行： SET allow_ddl=0。</code></pre>   </li><li> 用户管理配置 xml文件的users标签的结构如下： <pre><code class="language-XML">&lt;users&gt;<br> &lt;!-- If user name was not specified, 'default' user is used. --&gt;<br> &lt;user_name&gt;<pre><code> &amp;lt;password&amp;gt;&amp;lt;/password&amp;gt;
+ &amp;lt;!-- Or --&amp;gt;
+ &amp;lt;password_sha256_hex&amp;gt;&amp;lt;/password_sha256_hex&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;networks incl=&quot;networks&quot; replace=&quot;replace&quot;&amp;gt;
+ &amp;lt;/networks&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;profile&amp;gt;profile_name&amp;lt;/profile&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;quota&amp;gt;default&amp;lt;/quota&amp;gt;
+</code></pre>
+​<pre><code> &amp;lt;databases&amp;gt;
+     &amp;lt;database_name&amp;gt;
+         &amp;lt;table_name&amp;gt;
+             &amp;lt;filter&amp;gt;expression&amp;lt;/filter&amp;gt;
+         &amp;lt;table_name&amp;gt;
+     &amp;lt;/database_name&amp;gt;
+ &amp;lt;/databases&amp;gt;
+</code></pre>
+​<pre><code>&amp;lt;allow_databases&amp;gt;
+    &amp;lt;database&amp;gt;test&amp;lt;/database&amp;gt;
+ &amp;lt;/allow_databases&amp;gt;
+ &amp;lt;allow_dictionaries&amp;gt;
+    &amp;lt;dictionary&amp;gt;test&amp;lt;/dictionary&amp;gt;
+ &amp;lt;/allow_dictionaries&amp;gt;
+</code></pre>
+ &lt;/user_name&gt;<br> &lt;!– Other users settings –&gt;</li>
+</ol>
+<p>&lt;/users&gt;<br></code></pre> 在上面的配置中，定义了一个user_name的用户，该用户的所有其他配置都通过该标签的子标签配置。下面详细介绍每个具体子标签的配置信息。 1）**user_name/password       **密码可以使用明文、SHA256或SHA1指定。       明文形式的密码通过password标签指定。       <strong>例如:</strong> <pre><code class="language-XML">&lt;password&gt;qwerty&lt;/password&gt;<br></code></pre>    密码可以为空。    SHA256散列密码通过password_sha256_hex标签指定。    示例： <pre><code class="language-XML">&lt;password_sha256_hex&gt;65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5&lt;/password_sha256_hex&gt;<br></code></pre> **   <strong>可通过如下shell命令生成SHA256散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha256sum | tr -d '-'<br></code></pre> **  <strong>命令的输出如下： <pre><code class="language-bash">pmpjaK2V<br>21c4185b8155e532ca5a1eb0d4ca74ecde83eddee4ca55af393007f7c29f7eb7<br></code></pre> 第一行是明文的密码，第二行对应的SHA256加密散列。 SHA1散列密码通过password_double_sha1_hex标签指定。 SHA1密码是为了兼容MySQL客户端。 使用示例： <pre><code class="language-XML">&lt;password_double_sha1_hex&gt;08b4a0f1de6ad37da17359e592c8d74788a83eb0&lt;/password_double_sha1_hex&gt;<br></code></pre> 可通过如下shell命令生成SHA1散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha1sum | tr -d '-' | xxd -r -p | sha1sum | tr -d '-'<br></code></pre> 命令的输出如下： <pre><code class="language-bash">KCXM95It<br>de4bbcb9bbb35e3e497fcbebafc0f04b3dcef383<br></code></pre> 第一行是明文的密码，第二行对应的SHA1加密散列。</strong>2）user_name/networks      <strong>networks用于配置网络列表，只有网络列表范围内的用户可以连接到ClickHouse。     列表中的元素可以使用如下形式定义：     ： IP地址或带掩码的IP地址。     例如： <pre><code class="language-bash">213.180.204.3, 10.0.0.1/8, 10.0.0.1/255.255.255.0, 2a02:6b8::3, 2a02:6b8::3/64, 2a02:6b8::3/ffff:ffff:ffff:ffff::<br></code></pre> ： 主机名。 例如： <pre><code class="language-bash">example01.host.ru<br></code></pre> &lt;host_regexp&gt; ： 主机名的正则表达式。</strong>例如：</strong> <pre><code class="language-bash">^example\d\d-\d\d-\d.host.ru$<br></code></pre> 使用这种方式指定网络列表，强烈建议regexp以$结尾。 示例1：用户可以从任意网络访问，指定： <pre><code class="language-XML">&lt;ip&gt;::/0&lt;/ip&gt;<br></code></pre> <strong>示例2：仅限本地网络访问，指定：</strong>   <pre><code class="language-XML">&lt;ip&gt;::1&lt;/ip&gt;<br>&lt;ip&gt;127.0.0.1&lt;/ip&gt;<br></code></pre> **3）user_name/profile        <strong>profile用于给用户分配一个配置好的profile，这个profile是在users.xml配置文件的profiles标签下配置的。</strong>4）user_name/quota      <strong>用于给用户分配quota，这里quota是在users.xml配置文件的quotas标签下配置的。quota用于在一定时间内跟踪或限制资源的使用。</strong>5）user_name/databases      <strong>用于限制当前用户的SELECT查询返回的行，可实现基本的行级安全性。     <strong>示例：</strong>      以下的配置将限制用户user1只能查询table1表中id=1000的行，其他记录对用户不可见，就好像表中不存在其他行一样。 <pre><code class="language-XML">&lt;user1&gt;<br>    &lt;databases&gt;<br>        &lt;database_name&gt;<br>            &lt;table1&gt;<br>                &lt;filter&gt;id = 1000&lt;/filter&gt;<br>            &lt;/table1&gt;<br>        &lt;/database_name&gt;<br>    &lt;/databases&gt;<br>&lt;/user1&gt;<br></code></pre> 使用这种方式需要注意WHERE子句的查询谓词不会下推，即禁用了WHERE移动到PREWHERE的优化。</strong>6）user_name/allow_databases      **用于指定用户可以访问的数据库列表。默认情况下，用户可以访问所有数据库。      Note： 用户对system数据库的访问始终是有权限的，因为用户需要根据此数据库处理查询。      配置示例，配置用户可访问test1和test2数据库： <pre><code class="language-XML">&lt;allow_databases&gt;<br>  &lt;database&gt;test1&lt;/database&gt;<br>  &lt;database&gt;test2&lt;/database&gt;<br>&lt;/allow_databases&gt;<br></code></pre> **7）user_name/allow_dictionaries       **配置可以访问的字典列表。默认情况下，用户可访问所有字典。      示例， 配置用户可访问test1和test2字典： <pre><code class="language-XML">&lt;allow_dictionaries&gt;<br>  &lt;dictionary&gt;test1&lt;/dictionary&gt;<br>  &lt;dictionary&gt;test2&lt;/dictionary&gt;<br>&lt;/allow_dictionaries&gt;<br></code></pre>   </li></ol></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            clickhouse20.1.4.14-2单机版安装
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Clickhouse 字典表使用场景</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

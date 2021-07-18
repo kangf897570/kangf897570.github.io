@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.268Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">3.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.分布式表与集群配置</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>分布式表基于Distributed引擎创建，在多个分片上运行分布式查询。- 读取是自动并行化的，可使用远程服务器上的索引（如果有）。- 数据在请求的本地服务器上尽可能地被部分处理。例如，对于GROUP BY查询，数据将在远程服务器 上聚合，聚合函数的中间状态将发送到请求服务器，然后数据将进一步聚合。<br>创建分布式表： <pre><code class="language-sql">ENGINE = Distributed(cluster_name, db_name, table_name[, sharding_key[, policy_name]])
+</code></pre> </li>
+</ul>
+<p> <strong>参数：</strong> </p>
+<ul>
+<li><strong>cluster_name:集群名称。</strong>- <strong>db_name:数据库名称，可使用常量表达式：currentDatabase()。</strong>- <strong>table_name: 各分片上的表名称。</strong>- <strong>sharding_key: (可选)分片的key，可设置为rand()。</strong>- <strong>policy_name: (可选）策略名称，用于存储异步发送的临时文件。</strong><br>例如下面的/etc/metrika.xml的一部分内容： <pre><code class="language-XML">&lt;remote_servers&gt;
+ &lt;logs&gt;
+     &lt;shard&gt;
+         &lt;weight&gt;1&lt;/weight&gt;
+         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-01-1&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-01-2&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+     &lt;/shard&gt;
+     &lt;shard&gt;
+         &lt;weight&gt;2&lt;/weight&gt;
+         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-02-1&lt;/host&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+         &lt;replica&gt;
+             &lt;host&gt;example01-02-2&lt;/host&gt;
+             &lt;secure&gt;1&lt;/secure&gt;
+             &lt;port&gt;9000&lt;/port&gt;
+         &lt;/replica&gt;
+     &lt;/shard&gt;
+ &lt;/logs&gt;
+&lt;/remote_servers&gt;
+</code></pre> 
+这里定义了一个名为logs的集群名称，它有两个分片（shard）组成，每个分片包含两个副本（replica）。<br>分片是包含数据的不同服务器（要读取所有数据，必须访问所有分片）。<br>副本是存储复制数据的服务器（要读取所有数据，访问该分片上的任意一个副本上的数据即可）。 </li>
+</ul>
+<p> 1.weight : 可选，写入数据时分片的权重，建议忽略该配置。 2.internal_repliacation : 可选，同一时刻是否只将数据写入其中一个副本。默认值：false（将数据写入所有副本），建议设置为true。写一个即可。避免重复写。 3.副本配置：配置每个Server的信息，必须参数:host和port，可选参数：user、password、secure和compression。 （1）、host ： 远程服务器地址。支持IPv4和IPv6。也可指定域名，更改域名解析需 重启服务。 （2）、port ： 消息传递的TCP端口。配置文件的tcp_port指定的端口，通常设置为 9000。 （3）、user ： 用于连接到服务的用户名称。默认值：true。在users.xml文件中配置 了访问权限。 （4）、password：用于连接到远程服务的密码。默认值：空字符串。 （5）、secure ： 使用ssl进行连接，通常还应该定义port=9440。 （6）、compression ： 使用数据压缩。默认值：true。 </p>
+<h3 id="2-数据副本与复制表"><a href="#2-数据副本与复制表" class="headerlink" title="2.数据副本与复制表"></a>2.数据副本与复制表</h3><blockquote>
+</blockquote>
+<ul>
+<li>只有MergeTree系列引擎支持数据副本，支持副本的引擎是在MergeTree引擎名称的前面加上前缀 Replicated。- 副本是表级别的而不是整个服务器级别的，因此服务器可以同时存储复制表和非复制表。- 副本不依赖于分片，每个分片都有自己独立的副本。</li>
+</ul>
+<p> <strong>副本表如：</strong> </p>
+<ul>
+<li><strong>ReplicatedMergeTree</strong>- <strong>ReplicatedSummingMergeTree</strong>- <strong>ReplicatedReplacingMergeTree</strong>- <strong>ReplicatedAggregatingMergeTree</strong>- <strong>ReplicatedCollapsingMergeTree</strong>- <strong>ReplicatedVersionedCollapsingMergeTree</strong>- <strong>ReplicatedGraphiteMergeTree</strong></li>
+</ul>
+<h3 id="3-ZooKeeper整合"><a href="#3-ZooKeeper整合" class="headerlink" title="3.ZooKeeper整合"></a>3.ZooKeeper整合</h3><blockquote>
+<p> ClickHouse使用Apache ZooKeeper来存储副本元信息, 在配置文件设置 zookeeper相关的参数。 ClickHouse在创建复制表的时候指定Zookeeper的目录，指定的目录会在建 表时自动创建。 如果ClickHouse的配置文件未配置ZooKeeper， 则无法创建复制表， 并且 任何存量的复制表都将是只读的。 对本地复制表的查询，不会使用ZooKeeper， 其查询速度和非复制表一样快。<br> 本地复制表的数据插入，针对每个数据块（一个块最多有 max_insert_block_size = 1048576条记录），会通过几个事务将大约十个条目添加到Zookeeper。因此，与非复制表相比， 复制表的INSERT操作等 待时间稍长。<br> <pre><code class="language-XML">&lt;zookeeper&gt;<br>    &lt;node index="1"&gt;<br>        &lt;host&gt;example1&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="2"&gt;<br>        &lt;host&gt;example2&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="3"&gt;<br>        &lt;host&gt;example3&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>&lt;/zookeeper&gt;<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="4-创建复制表"><a href="#4-创建复制表" class="headerlink" title="4.创建复制表"></a>4.创建复制表</h3><blockquote>
+<p> 复制表的引擎要以Replicated为前缀，例如：ReplicatedMergeTree。<br> <pre><code class="language-sql">CREATE TABLE table_name<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_name', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> 引擎参数包含了变量，这些变量是在配置文件的”macros”部分配置的，例如：<br> <pre><code class="language-XML">&lt;macros&gt;<br>    &lt;layer&gt;05&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;clickhouse1&lt;/replica&gt;<br>&lt;/macros&gt;<br></code></pre><br> <strong>Replicated*MergeTree引擎参数：</strong> zoo_path : ZooKeeper中表的路径。 replica_name : ZooKeeper中的副本名称。<br> 1.第一个参数ZooKeeper路径组成： （1）、通用前缀：/clickhouse/tables/,建议复制表都使用类似这样的前缀。 （2）、分片标识符：{layer}-{shard},在本示例中，分片标识符有两部分组成，只要保证分片标识符能唯一标识一个分片即可。 （3）、ZooKeeper节点名称：table_name。节点名称最好与表名相同，节点名称在定义后不会更改，即使执行表的重命名操作。<strong>2.第二个参数是副本名称，用于标识同一个分片的不同副本。副本名称只需要在每个shard中唯一即可。</strong><br> 上面的示例中，复制引擎的参数使用了变量替换。ClickHouse也支持使用显示的参数。在这种情况下，不能使用分布式的DDL查询（ON CLUSTER）。建议使用变量替换的方式传入参数，<br> 降低出错概率。<br> 在每个副本服务器上运行CREATE TABLE语句，如果该分片的表在其他节点已经创建且有数据，则该新副本自动同步其他副本的数据。 </p>
+</blockquote>
+<h3 id="5-副本同步机制"><a href="#5-副本同步机制" class="headerlink" title="5.副本同步机制"></a>5.副本同步机制</h3><blockquote>
+</blockquote>
+<ul>
+<li>复制是多主异步的。- INSERT语句（以及ALTER）可在任意可用的服务器上执行。数据首先插入到本地的服务器 （即运行查询的服务器），然后数据被复制到其他服务器。- 由于复制是异步的，所以最近插入的数据出现在其他副本上会有一定的延迟。- 如果部分副本不可用，则在它们可用时写入数据。- 如果副本可用， 则等待的时间是通过网络传输压缩数据块所耗费的时间。- 默认情况下， INSERT操作只需等待一个副本写入成功后返回。如果仅将数据成功写入一个 副本，并且该副本的服务器不再存在， 则存储的数据将丢失。要启动来自多个副本的写入确 认机制，使用insert_quorum选项。</li>
+</ul>
+<h3 id="6-数据原子写入与去重"><a href="#6-数据原子写入与去重" class="headerlink" title="6.数据原子写入与去重"></a>6.数据原子写入与去重</h3><blockquote>
+</blockquote>
+<ul>
+<li>INSERT查询按照数据块插入数据，每个数据块最多max_insert_block_size(默认 max_insert_block_size = 1048576)条记录。换言之， 如果INSERT插入少于1048576条记 录，则插入操作是原子的。单个数据块的写入是原子的。- 数据块是去重的。 对于同一数据块的多次写入（相同大小的的数据块，包含相同的行以及相 同的顺序），该块仅写入一次。在出现网口故障等异常情况下， 客户端应用程序不知道数据 是否已将数据成功写入数据库，因此可以简单地重复执行INSERT查询。相同的数据发送到哪 个副本进行插入并不重要，INSERT是幂等的。数据去重可通过参数 insert_deduplicate控 制，默认为0(开启去重)。- 在复制过程中， 只有插入的源数据通过网络传输。进一步的数据转换（合并）会在所有副本 上以相同的方式进行处理。 这样可以最大限度减少网络带宽占用，这意味着当副本位于不同 的数据中心时，复制的效果也很好。- ClickHouse内部监控副本的数据同步，并能够在发生故障后恢复。故障转义是自动的（对于数据的微小差异）或半自动的（当数据的差异太大时，这可能表示配置错误）。- ClickHouse内部监控副本上的数据同步，并能够在发生故障后恢复。故障转移是自动的（对于数据的微小差异）或半自动的（当数据差异太大时，这可能表示配置错误）。</li>
+</ul>
+<h3 id="7-负载平衡策略"><a href="#7-负载平衡策略" class="headerlink" title="7.负载平衡策略"></a>7.负载平衡策略</h3><blockquote>
+<p> 执行分布式查询时，首先计算分片的每个副本的错误数，然后将查询发送至最少错误的副本。如果没有错误或者错误数相同，则按如下的策略查询数据： 1.random(默认) ： 将查询发送至任意一个副本。 2.nearest_hostname : 将查询发送至主机名最相似的副本。 3.in_order : 将查询按配置文件中的配置顺序发送至副本。 4.first_or_random : 选择第一个副本，如果第一个副本不可用，随机选择一个可用的副本。<br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/202012162320232.png#pic_center"><br> <strong>设置策略的方式：</strong><br> <pre><code class="language-sql">set load_balancing = 'first_or_random';<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="8-案例"><a href="#8-案例" class="headerlink" title="8.案例"></a>8.案例</h3><blockquote>
+<p> <strong>1.在所有节点执行如下语句：</strong><br> **     **创建本地复制表：<br> <pre><code class="language-sql">CREATE TABLE table_local on cluster mycluster<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> <strong>执行效果图： 在docker01-node节点执行的效果图如下：</strong><br> <img alt="" height="669" src="https://img-blog.csdnimg.cn/20210424154112568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1074"> <br> <strong>在docker02-node上执行后的效果如下（提示已经存在了）：</strong><br> <pre><code class="language-sql">docker02-node :) CREATE TABLE table_local on cluster mycluster<br>:-] (<br>:-]     EventDate DateTime,<br>:-]     CounterID UInt32,<br>:-]     UserID UInt32<br>:-] ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>:-] PARTITION BY toYYYYMM(EventDate)<br>:-] ORDER BY (CounterID, EventDate, intHash32(UserID))<br>:-] SAMPLE BY intHash32(UserID);</p>
+</blockquote>
+<p>CREATE TABLE table_local ON CLUSTER mycluster<br>(<br>    <code>EventDate</code> DateTime,<br>    <code>CounterID</code> UInt32,<br>    <code>UserID</code> UInt32<br>)<br>ENGINE = ReplicatedMergeTree(‘/clickhouse/tables/{layer}-{shard}/table_local’, ‘{replica}’)<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID)</p>
+<p>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.13 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   3 │                1 │<br>│ 192.168.56.11 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   2 │                1 │<br>│ 192.168.56.10 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   1 │                1 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.12 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   0 │                0 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>↓ Progress: 0.00 rows, 0.00 B (0.00 rows/s., 0.00 B/s.)                                                                                                                                0%Received exception from server (version 20.1.4):<br>Code: 57. DB::Exception: Received from 192.168.56.11:9000. DB::Exception: There was an error on [192.168.56.13:9000]: Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)).</p>
+<p>4 rows in set. Elapsed: 0.617 sec.</p>
+<p>docker02-node :)</code></pre><br> 通过上面的案例可以知道，只要在一个节点上创建了副本表之后，在其它节点上也已经存在了。<br> <strong>创建分布式表(每个节点都要创建)：</strong><br> <pre><code class="language-sql">CREATE TABLE table_distributed as table_local ENGINE = Distributed(mycluster, default, table_local, rand());<br></code></pre><br> <strong>2.验证副本的复制****在clickhouse1上，对本地表操作。</strong><br> <img alt="" height="505" src="https://img-blog.csdnimg.cn/20210424154842225.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="903"><br> <strong>在docker02-node上（docker02-node的分片副本节点）上，验证数据是否同步：</strong><br> <img alt="" height="335" src="https://img-blog.csdnimg.cn/20210424154940833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="961"><br> <strong>在docker03-node和docker04-node上执行（即shard2上）。发现查询不到结果，效果如下：</strong><br> <img alt="" height="218" src="https://img-blog.csdnimg.cn/20210424155132498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="558"><br> <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210424155146647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557"><br> 3.<strong>验证集群的功能</strong><br> 在任意节点查看分布式表的数据（都将出现下面的效果）。<br> <img alt="" height="277" src="https://img-blog.csdnimg.cn/20210424155259421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738"><br> 在任意一个节点往分布式表里面插入5条数据：<br> <pre><code class="language-sql">insert into table_distributed values('2020-03-11 12:12:31', 21, 1);    docker04-node上执行<br>insert into table_distributed values('2020-03-12 12:12:32', 22, 2);    docker04-node上执行<br>insert into table_distributed values('2020-03-13 12:12:33', 23, 3);    docker03-node上执行<br>insert into table_distributed values('2020-03-14 12:12:34', 24, 4);    docker03-node上执行<br>insert into table_distributed values('2020-03-15 12:12:35', 25, 5);    docker02-node上执行<br></code></pre><br> 然后在任意一台机器上执行：<br> <pre><code class="language-sql">select * from table_distributed;<br></code></pre><br> 都可以看到：<br> <pre><code class="language-sql">docker02-node :) select * from table_distributed;</p>
+<p>SELECT *<br>FROM table_distributed</p>
+<p>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:33 │        22 │     37 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-12 12:12:32 │        22 │      2 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:31 │        21 │      1 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-14 12:12:34 │        24 │      4 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-13 12:12:33 │        23 │      3 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-15 12:12:35 │        25 │      5 │<br>└─────────────────────┴───────────┴────────┘</p>
+<p>6 rows in set. Elapsed: 0.007 sec.</p>
+<p>docker02-node :)</code></pre><br> 然后，分别在两个分片的主机上查询本地表：<strong>在docker01-node上（shard1）发现的效果是：</strong><br> <img alt="" height="445" src="https://img-blog.csdnimg.cn/2021042416000130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555"><br> <strong>在docker03-node上（shard2）发现的效果是：</strong><br> <img alt="" height="340" src="https://img-blog.csdnimg.cn/20210424160051386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="564"><br> 可以看到，使用分布式表插入数据，数据分散到不同分片（shard）的本地表。 </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            ClickHouse函数整理（详细）
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse分布式集群部署</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

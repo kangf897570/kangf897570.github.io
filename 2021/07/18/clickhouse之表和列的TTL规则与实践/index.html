@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>azkaban的安装 |  爱上口袋的天空</title>
+      <title>clickhouse之表和列的TTL规则与实践 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-azkaban的安装"
+  id="post-clickhouse之表和列的TTL规则与实践"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  azkaban的安装
+  clickhouse之表和列的TTL规则与实践
 </h1>
  
 
@@ -62,11 +62,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-date">
-  <time datetime="2021-07-18T14:10:34.889Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.359Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
   
 <div class="word_count">
@@ -74,7 +74,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">703</span>
+            <span class="post-count">1.1k</span>
         </span>
     </span>
 
@@ -83,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">3 分钟</span>
+            <span class="post-count">5 分钟</span>
         </span>
     </span>
 </div>
@@ -98,33 +98,104 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: azkaban的安装<br>categories:</p>
+  <p>title: clickhouse之表和列的TTL规则与实践<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—title: azkaban的安装<br>categories:</p>
+<p>—### 1.表和列的TTL</p>
+<blockquote>
+<p> 定义值的生命周期<br> 可以为整个表设置，也可以为每个单独的列设置。<br> 表级的TTL也可以指定在磁盘和卷之间自动移动数据的逻辑。<br> 设置TTL的表，必须包含Date或DateTime类型的字段。<br> 定义数据的生命周期，需要在这个日期字段使用操作符：<br> <pre><code>TTL time_column<br>TTL time_column + interval<br></code></pre><br> 示例：<br> <pre><code>TTL date_time + INTERVAL 1 MONTH</p>
+</blockquote>
+<p>TTL date_time + INTERVAL 15 HOUR</code></pre> </p>
+<h3 id="2-列级TTL"><a href="#2-列级TTL" class="headerlink" title="2.列级TTL"></a>2.列级TTL</h3><blockquote>
+<p> 当列中的值过期时，ClickHouse将它们替换为该列对应数据类型的默认值。<br> 如果数据片段中所有列值都过期，则删除该数据片段下的该列的文件。<br> TTL子句不能用于key列。<br> 示例： </p>
+</blockquote>
 <ul>
-<li>BigData</li>
+<li>创建TTL表- TTL过期验证- 给列增加TTL- 修改列的TTL</li>
 </ul>
-<p>—1. 上传安装包  机器：hadoop112  <img alt="" class="has" height="348" src="https://img-blog.csdnimg.cn/20191112221358405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752">1. 解压安装包   <img alt="" class="has" height="319" src="https://img-blog.csdnimg.cn/20191112221732490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">1. 创建一个azkaban文件夹，讲安装包都放入  <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20191112222008392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. azkaban脚本导入，进入mysql，创建azkaban数据库，并将解压的脚本导入到azkaban数据库。  <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20191112223412370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="369">  因为我们的sql文件在hadoop112,mysql在hadoop111,那么我们需要将文件移到hadoop111上  <img alt="" class="has" height="415" src="https://img-blog.csdnimg.cn/20191112223751905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="646">  在mysql上执行移动过来的脚本  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20191112223929718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">  执行后相关表  <img alt="" class="has" height="410" src="https://img-blog.csdnimg.cn/20191112224041285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="341">1. 生成密钥对和证书  a：进入/usr/local/module/azkaban/azkaban-web-2.5.0目录下          <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20191112224817159.png" width="683">  b：生成 keystore的密码及相应信息的密钥库        命令：keytool -keystore keystore -alias jetty -genkey -keyalg RSA        <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20191112224858272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">       <img alt="" class="has" height="473" src="https://img-blog.csdnimg.cn/20191112225112551.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="666">      <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191112225143399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">1. 配置时间的同步，（集群之间服务器需要同步，之前通过ntp配置过了）<li>开始配置文件/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban.properties   <pre class="has"><code class="language-bash">#Azkaban Personalization Settings<br>#服务器UI名称,用于服务器上方显示的名字<br>azkaban.name=Test<br>#描述<br>azkaban.label=My Local Azkaban<br>#UI颜色<br>azkaban.color=#FF3601<br>azkaban.default.servlet.path=/index<br>#默认web server存放web文件的目录<br>web.resource.dir=/usr/local/module/azkaban/azkaban-web-2.5.0/web/<br>#默认时区,已改为亚洲/上海 默认为美国<br>default.timezone.id=Asia/Shanghai</p>
-<p>#Azkaban UserManager class<br>user.manager.class=azkaban.user.XmlUserManager<br>#用户权限管理默认类（绝对路径）<br>user.manager.xml.file=/usr/local/module/azkaban/azkaban-web-2.5.0/conf/azkaban-users.xml</p>
-<p>#Loader for projects<br>#global配置文件所在位置（绝对路径）<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>#mysql链接<br>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>#最大连接数<br>mysql.numconnections=100</p>
-<h1 id="Velocity-dev-mode"><a href="#Velocity-dev-mode" class="headerlink" title="Velocity dev mode"></a>Velocity dev mode</h1><p>velocity.dev.mode=false</p>
-<h1 id="Azkaban-Jetty-server-properties"><a href="#Azkaban-Jetty-server-properties" class="headerlink" title="Azkaban Jetty server properties."></a>Azkaban Jetty server properties.</h1><p>jetty.maxThreads=25<br>jetty.ssl.port=8443<br>jetty.port=8081<br>#SSL文件名（绝对路径）<br>jetty.keystore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.password=897570<br>#Jetty主密码与keystore文件相同<br>jetty.keypassword=897570<br>#SSL文件名（绝对路径）<br>jetty.truststore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.trustpassword=897570</p>
-<h1 id="Azkaban-Executor-settings"><a href="#Azkaban-Executor-settings" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.port=12321</p>
-<h1 id="mail-settings"><a href="#mail-settings" class="headerlink" title="mail settings"></a>mail settings</h1><p>mail.sender=<br>mail.host=<br>job.failure.email=<br>job.success.email=</p>
-<p>lockdown.create.projects=false</p>
-<p>cache.directory=cache<br></code></pre>   </li><li>/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban-users.xml   <pre class="has"><code class="language-html">&lt;azkaban-users&gt;<br>    &lt;user username="azkaban" password="azkaban" roles="admin" groups="azkaban" /&gt;<br>    &lt;user username="metrics" password="metrics" roles="metrics"/&gt;<br>    &lt;!--添加自己的用户--&gt;<br>    &lt;user username="kgf" password="897570" roles="admin"/&gt;</p>
-<pre><code>&amp;lt;role name=&quot;admin&quot; permissions=&quot;ADMIN&quot; /&amp;gt;
-&amp;lt;role name=&quot;metrics&quot; permissions=&quot;METRICS&quot;/&amp;gt;
-</code></pre>
-<p>&lt;/azkaban-users&gt;<br></code></pre>   </li><li>修改/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/目录下的azkaban.properties文件   <pre class="has"><code class="language-bash">#Azkaban<br>#修改时区<br>default.timezone.id=Asia/Shanghai</p>
-<h1 id="Azkaban-JobTypes-Plugins"><a href="#Azkaban-JobTypes-Plugins" class="headerlink" title="Azkaban JobTypes Plugins"></a>Azkaban JobTypes Plugins</h1><p>azkaban.jobtype.plugin.dir=plugins/jobtypes</p>
-<p>#Loader for projects<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>mysql.numconnections=100</p>
-<h1 id="Azkaban-Executor-settings-1"><a href="#Azkaban-Executor-settings-1" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.maxThreads=50<br>executor.port=12321<br>executor.flow.threads=30</p>
-<p></code></pre>   </li>1. 进入/usr/local/module/azkaban目录下启动  a：先启动executor        <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20191113222540471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686"> b：再启动web        <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20191113222655646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="612">        <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20191113222740327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">1. 效果,用户名就是刚配置的kgf/897570  <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/2019111322292215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="665"></p>
+<h3 id="3-表级TTL"><a href="#3-表级TTL" class="headerlink" title="3.表级TTL"></a>3.表级TTL</h3><blockquote>
+ <ol>- 表级的TTL定义了过期行的删除、磁盘和卷之间自动移动数据的逻辑。- 一张表可以定义一个过期行移除的表达式和多个磁盘和卷之间自动移动数据的逻辑的表达式。 TTL expr [DELETE|TO DISK 'aaa'|TO VOLUME 'bbb'], ...- 当表中的数据过期时，ClickHouse删除所有对应的行。- TTL规则的类型跟在每个TTL表达式后面，它表示表达式满足后（达到当前时间）要执行的操作。**DELETE - 删除过期的行（默认操作）； TO DISK ‘aaa’ - 将片段移至磁盘aaa； TO VOLUME ‘bbb’ - 将片段移动至磁盘bbb；**<li>创建表示例： <pre><code class="language-sql">CREATE TABLE example_table
+(
+    d DateTime, 
+    a Int 
+)ENGINE = MergeTree 
+PARTITION BY toYYYYMM(d) 
+ORDER BY d 
+TTL d + INTERVAL 1 MONTH [DELETE], 
+    d + INTERVAL 1 WEEK TO VOLUME 'aaa',
+    d + INTERVAL 2 WEEK TO DISK 'bbb'
+SETTINGS storage_policy = 'moving_from_ssd_to_hdd';
+</code></pre> 注意：当TTL表达式指定了磁盘和卷之间移动数据的逻辑，那么ClickHouse的表必须指定存储策略，且该存储策略中要包含相应的磁盘和卷。 </li>- **使用案例：TTL过期后执行数据删除案例。** 1).当ClickHouse合并数据片段时， 将删除TTL过期的数据。 2).当ClickHouse发现数据过期时， 它将执行一个计划外的合并。 要控制这类合并的频率， 可设置参数 merge_with_ttl_timeout。如果该值设置的过低， 它将导致执行许多的计划外合并，这可能会消耗大量资源。 3).如果在合并的时候执行SELECT查询， 则可能会得到过期的数据。 为了避免这种情况， 可以在SELECT 之前使用OPTIMIZE查询。</ol>
+</blockquote>
+<h3 id="4-列级TTL示例"><a href="#4-列级TTL示例" class="headerlink" title="4.列级TTL示例"></a>4.列级TTL示例</h3><blockquote>
+ <ol><li>**创建带TTL的表** <pre><code class="language-sql">DROP TABLE example_table;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int TTL d + INTERVAL 1 MINUTE,
+    b String TTL d + INTERVAL 1 MINUTE,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d;
+xxxxx :) show create table example_table;
+</blockquote>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre> </li><li><strong>插入数据</strong> <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');<br>insert into example_table values(now(), 2, 'value2', 'ccc2');<br></code></pre> 等待1分钟之后，执行： <pre><code class="language-sql">xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:16 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘<br>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:15 │ 1 │ value1 │ ccc1 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.009 sec. </p>
+<p>xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b─┬─c────┐<br>│ 2020-11-26 14:53:15 │ 0 │   │ ccc1 │<br>│ 2020-11-26 14:53:16 │ 0 │   │ ccc2 │<br>└─────────────────────┴───┴───┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li><li><strong>给表的列添加TTL：</strong> <pre><code class="language-sql">ALTER TABLE example_table<br>MODIFY COLUMN<br>c String TTL d + INTERVAL 1 DAY;<br>xxxxx :) ALTER TABLE example_table<br>:-] MODIFY COLUMN<br>:-] c String TTL d + INTERVAL 1 DAY;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalDay(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.018 sec. </p>
+<p>xxxxx :)<br></code></pre> 修改列的TTL： <pre><code class="language-sql">ALTER TABLE example_table<br>    MODIFY COLUMN<br>    c String TTL d + INTERVAL 1 MONTH;<br>xxxxx :) ALTER TABLE example_table<br>:-]     MODIFY COLUMN<br>:-]     c String TTL d + INTERVAL 1 MONTH;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalMonth(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.015 sec. </p>
+<p>xxxxx :) show create table example_table;</p>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String TTL d + toIntervalMonth(1)<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
+<h3 id="5-表级TTL示例"><a href="#5-表级TTL示例" class="headerlink" title="5.表级TTL示例"></a>5.表级TTL示例</h3><blockquote>
+ <ol><li>**创建表** <pre><code class="language-sql">drop table example_table ;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int,
+    b String,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d
+TTL d + INTERVAL 1 MINUTE DELETE;
+</code></pre> </li><li>**插入数据** <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');
+insert into example_table values(now(), 2, 'value2', 'ccc2');
+</code></pre> 然后查询结果： <pre><code class="language-sql">xxxxx :) select * from example_table;
+</blockquote>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 15:24:53 │ 1 │ value1 │ ccc1 │<br>│ 2020-11-26 15:24:54 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.008 sec. </p>
+<p>xxxxx :)<br></code></pre> 等待1分钟后， 执行optimize操作。 <pre><code class="language-sql">xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.006 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.003 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
  
       <!-- reward -->
       
@@ -177,7 +248,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -188,15 +259,11 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            azkaban知识点学习
-          
-        </div>
-      </a>
     
+      <a href="/2021/07/18/clickhouse%E4%B9%8BTSKV%E6%A0%BC%E5%BC%8F/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse之TSKV格式</div>
+      </a>
     
   </nav>
 

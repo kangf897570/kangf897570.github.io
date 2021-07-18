@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>ClickHouse数据查询 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-ClickHouse数据查询"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  ClickHouse数据查询
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.334Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.6k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">13 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: ClickHouse数据查询<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.查询语法</p>
+<blockquote>
+ <pre><code class="language-sql">[WITH expr_list|(subquery)]
+SELECT [DISTINCT] expr_list
+[FROM [db.]table | (subquery) | table_function] [FINAL]
+[SAMPLE sample_coeff]
+[ARRAY JOIN ...]
+[GLOBAL] [ANY|ALL|ASOF] [INNER|LEFT|RIGHT|FULL|CROSS] [OUTER|SEMI|ANTI] JOIN (subquery)|table (ON &lt;expr_list&gt;)|(USING &lt;column_list&gt;)
+[PREWHERE expr]
+[WHERE expr]
+[GROUP BY expr_list] [WITH TOTALS]
+[HAVING expr]
+[ORDER BY expr_list] [WITH FILL] [FROM expr] [TO expr] [STEP expr]
+[LIMIT [offset_value, ]n BY columns]
+[LIMIT [n, ]m] [WITH TIES]
+[UNION ALL ...]
+[INTO OUTFILE filename]
+[FORMAT format]
+</blockquote>
+<p></code></pre><br> 可以看到ClickHouse的SELECT语句的语法和通用的SQL的SELECT语句非常类似，包括： </p>
+<ul>
+<li>SELECT: 指定返回结果字段- DISTINCT：去重- FROM: 指定要查询的表或子查询- JOIN：表连接，支持内连接和外连接、左连接和右连接- WHERE：筛选条件- GROUP BY：分组，和聚合函数一起使用- HAVING：分组后筛选- ORDER BY：排序- LIMIT：限制返回记录数- UNION ALL：并集；ClickHouse目前只支持UNION ALL，还不支持UNION<br>ClickHouse的SELECT语句中也有一些特殊的用法： </li>
+<li>WITH: 设置查询中要用到的变量- SAMPLE: 数据取样，类似Pandas库的sample()函数- PREWHERE: 预筛选，起到提升性能作用- ARRAY JOIN：数组连接，用来展开数组或嵌套字段，一行变多行- LIMIT BY: 分组，再从每组中取前n条记录- INTO OUTFILE: 导出表数据到文件，再用FORMAT指定文件格式</li>
+</ul>
+<h3 id="2-WITH子句"><a href="#2-WITH子句" class="headerlink" title="2.WITH子句"></a>2.WITH子句</h3><blockquote>
+ <pre><code class="language-sql">-- 在WITH子句中定义一个变量并赋值，然后在SELECT子句中通过别名使用该变量
+with '2014-03-17' as dt \
+select count(1) from hits_v1 where EventDate = dt;
+</blockquote>
+<p>– 在WITH子句中定义一个函数，然后在SELECT子句中通过别名使用该函数<br>with round(Duration / 60)as duration_minutes <br>select StartDate, max(duration_minutes) as max_duration_minutes from visits_v1 <br>group by StartDate, Duration <br>order by max_duration_minutes desc <br>limit 10;</p>
+<p>– 在WITH子句中定义一个子查询，然后在SELECT子句中通过别名使用该子查询<br>– 该子查询只能返回一行数据<br>with ( <br>  select sum(Duration) from visits_v1 <br>) as total_duration <br>select StartDate, sum(Duration) / total_duration as duration_percentage from visits_v1 <br>group by StartDate, Duration <br>limit 10;</p>
+<p></code></pre><br> <h3> </h3> </p>
+<h3 id="3-SAMPLE子句"><a href="#3-SAMPLE子句" class="headerlink" title="3.SAMPLE子句"></a>3.SAMPLE子句</h3><blockquote>
+<p> 对使用了MergeTree表引擎的表，并且设置了SAMPLE BY的表，可以使用SAMPLE子句来对数据进行抽样。<br> 表例子：<br> <pre><code class="language-sql">CREATE TABLE tutorial.hits_v1 \<br>(<br>  ...<br>)<br>ENGINE = MergeTree() \<br>PARTITION BY toYYYYMM(EventDate) \<br>ORDER BY (CounterID, EventDate, intHash32(UserID)) \<br>SAMPLE BY intHash32(UserID) \<br>SETTINGS index_granularity = 8192;</p>
+</blockquote>
+<p></code></pre><br> hits_v1表使用MergeTree表引擎，并且SAMPLE BY为将UserID转换成32位的Hash值。<br> <img alt="" height="276" src="https://img-blog.csdnimg.cn/20210428212535801.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> SAMPLE子句示例：<br> <pre><code class="language-sql">-- 按比例采样<br>-- 采样结果记录数<br>select count(1) from hits_v1 sample 0.1<br>-- 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1<br>-- 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 limit 10</p>
+<p>– 按记录数采样<br>– 采样记录数较小时，采样结果数据为0条<br>select count(1) from hits_v1 sample 100<br>– 采样记录数大过索引粒度时，采样结果数据记录数接近采样记录数<br>elect count(1) from hits_v1 sample 10000<br>– 采样数据，默认限制返回10000条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000<br>– 采样数据，限制返回10条<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 20000 limit 10</p>
+<p>– 按比例和偏移量采样，类似于按比例采样<br>select CounterID, UserID, EventDate, EventTime  from hits_v1 sample 0.1 offset 0.3 limit 10<br></code></pre><br> SAMPLE子句数据采样具有幂等性和近似性的特点： </p>
+<ul>
+<li>幂等性：采样条件不变时，两次采样的结果<strong>可能</strong>一样- 近似性：采样范围和采样结果不保证精确</li>
+</ul>
+<h3 id="4-PREWHERE子句"><a href="#4-PREWHERE子句" class="headerlink" title="4.PREWHERE子句"></a>4.PREWHERE子句</h3><blockquote>
+<p> 只有MergeTree表引擎的表才能使用PREWHERE子句，可以将PREWHERE看作是ClickHouse对WHERE子句的优化。<br> ClickHouse默认将WHERE自动优化为PREWHERE:<br> <pre><code class="language-sql">-- optimize_move_to_prewhere为1时，表示开始PREWHERE自动优化<br>select name, value from system.settings where name like '%prewhere%'<br></code></pre> 
+   </p>
+</blockquote>
+<h3 id="5-ARRAY-JOIN子句"><a href="#5-ARRAY-JOIN子句" class="headerlink" title="5.ARRAY JOIN子句"></a>5.ARRAY JOIN子句</h3><blockquote>
+<p> 可以用ARRAY JOIN子句来对数组（Array）或嵌套（Nested）类型做链接查询，可以将一行数组展成多行。<br> ARRAY JOIN数组示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, RefererCategories from hits_v1 where WatchID = 4944118417295196513</p>
+</blockquote>
+<p>– 结果：<br>┌─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │ [6,98,456,8586]   │<br>└─────────────────────┴───────────────────┘</p>
+<p>– 使用ARRAY JOIN<br>select WatchID, RefererCategories <br>from hits_v1 <br>array join RefererCategories <br>where WatchID = 4944118417295196513;</p>
+<p>– 结果：<br>─────────────WatchID─┬─RefererCategories─┐<br>│ 4944118417295196513 │                 6 │<br>│ 4944118417295196513 │                98 │<br>│ 4944118417295196513 │               456 │<br>│ 4944118417295196513 │              8586 │<br>└─────────────────────┴───────────────────┘</p>
+<p></code></pre><br> ARRAY JOIN嵌套类型示例：<br> <pre><code class="language-sql">-- 不使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 from hits_v1 where WatchID = 5024825574842900819</p>
+<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1───────────┬─ParsedParams.Key2───┐<br>│ 5024825574842900819 │ [‘gen_timestamp’,’Toolbar’] │ [‘group’,’true” /‘] │<br>└─────────────────────┴─────────────────────────────┴─────────────────────┘</p>
+<p>– 使用ARRAY JOIN<br>select WatchID, ParsedParams.Key1, ParsedParams.Key2 <br>from hits_v1 <br>array join ParsedParams <br>where WatchID = 5024825574842900819;</p>
+<p>– 结果：<br>┌─────────────WatchID─┬─ParsedParams.Key1─┬─ParsedParams.Key2─┐<br>│ 5024825574842900819 │ gen_timestamp     │ group             │<br>│ 5024825574842900819 │ Toolbar           │ true” /           │<br>└─────────────────────┴───────────────────┴───────────────────┘</p>
+<p></code></pre><br> ARRAY JOIN也支持左连接接<code>LEFT ARRAY JOIN</code>。 </p>
+<h3 id="6-LIMIT-BY子句"><a href="#6-LIMIT-BY子句" class="headerlink" title="6.LIMIT BY子句"></a>6.LIMIT BY子句</h3><blockquote>
+<p> LIMIT BY子句不同于通用SQL的LIMIT子句。<br> <code>LIMIT n BY expression</code> 对SELECT结果先按expression分组，再在每组里选出前n个，类似分类排行榜的概念。<br> 示例：<br> <pre><code class="language-sql">CREATE TABLE limit_by(id Int, val Int) ENGINE = Memory;<br>INSERT INTO limit_by VALUES (1, 10), (1, 11), (1, 12), (2, 20), (2, 21), (2, 22), (3, 31);<br></code></pre><br> <pre><code class="language-sql">-- 排序<br>SELECT * FROM limit_by ORDER BY id, val</p>
+</blockquote>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  1 │  12 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  2 │  22 │<br>│  3 │  31 │<br>└────┴─────┘</p>
+<p>– 分类排序，再在每个分组内取前2条记录<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2 BY id</p>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>│  2 │  20 │<br>│  2 │  21 │<br>│  3 │  31 │<br>└────┴─────┘</p>
+<p>– 注意，与LIMIT 2的不同<br>SELECT * FROM limit_by ORDER BY id, val LIMIT 2</p>
+<p>┌─id─┬─val─┐<br>│  1 │  10 │<br>│  1 │  11 │<br>└────┴─────┘</p>
+<p></code></pre><br> LIMIT BY子句也支持偏移量：<code>LIMIT n OFFSET m BY exression</code> </p>
+<h3 id="7-INTO-OUTFILE子句"><a href="#7-INTO-OUTFILE子句" class="headerlink" title="7.INTO OUTFILE子句"></a>7.INTO OUTFILE子句</h3><blockquote>
+<p> ClickHouse的INTO OUTFILE子句与MySQL的INTO OUTFILE子句类似。<br> <pre><code class="language-sql">-- 输出到当前目录<br>-- 默认格式为TSV<br>-- 注意文件名必须用单引号来括起来，且不能用双引号括起来，否则会报错：Expected string literal<br>-- 目录下不能存在同名文件，否则会报错<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile 'test.tsv'</p>
+</blockquote>
+<p>– 设置格式为CSV，CSV需要为全大小<br>select WatchID, JavaEnable, EventDate  from hits_v1 limit 10 into outfile ‘out.csv’ format CSV<br></code></pre> 
+   </p>
+<h3 id="8-执行计划"><a href="#8-执行计划" class="headerlink" title="8.执行计划"></a>8.执行计划</h3><blockquote>
+ <h3>查看执行计划</h3> 
+ 可以通过以下方式查看执行计划： 
+ <ol>- 直接查看执行计划： ch --send_logs_level=trace &lt;&lt;&lt; 'select * from tutorial.hits_v1' &gt; /dev/null <li>可以将以下内容保持到一个脚本文件，比如`chx.sh`中： <pre><code class="language-bash">#!/bin/bash
+</blockquote>
+<p>clickhouse-client –send_logs_level=trace &lt;&lt;&lt; “$1” &gt; /dev/null<br></code></pre> 再通过<code>bash chi.sh &quot;select * from tutorial.hits_v1&quot;</code> 来查看执行计划。 </li>- 也可以在clickhouse-client执行sql同时，用<code>tail -f clickhouse-server.log</code> 查看clickhouse-server的日志。</ol><br> <h3>执行计划示例</h3><br> <code>select * from tutorial.hits_v1</code>的执行计划日志示例：<br> <pre><code class="language-bash">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown<br>&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0<br>&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0<br>&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete<br>&lt;Information&gt; executeQuery: Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.<br>&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 204.54 MiB.<br></code></pre><br> <strong>说明：</strong> </p>
+<ul>
+<li><strong>Key condition: unknown：没有使用主键索引。</strong>- <strong>MinMax index condition: unknown： 没有使用分区索引。</strong>- <strong>Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges： 共扫描了9个分区，共1094个mark。</strong>- <strong>Read 8873898 rows, 7.88 GiB in 47.964 sec., 185011 rows/sec., 168.22 MiB/sec.: 读取了8873898行数据，数据大小为7.88GB，用时47.964秒。</strong>- <strong>Peak memory usage (for query): 204.54 MiB.: 内存峰值（最大内存使用量）为204.54MB。</strong><br>将SQL改为只返回一个字段<code>select WatchID from tutorial.hits_v1</code>，再来看执行计划： <pre><code class="language-sql">&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: unknown
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: unknown
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 1094 marks to read from 9 ranges
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_1_6_1, approx. 1900000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_7_12_1, approx. 1900000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_13_18_1, approx. 1800000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_19_24_1, approx. 1800000 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_25_25_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_26_26_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_27_27_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_28_28_0, approx. 303104 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 1 ranges from part 201403_29_29_0, approx. 278528 rows starting from 0
+&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
+&lt;Information&gt; executeQuery: Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.
+&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 12.32 MiB.
+</code></pre> 
+几个变化： </li>
+<li>Read 8873898 rows, 67.70 MiB in 0.318 sec., 27892532 rows/sec., 212.80 MiB/sec.: 数据大小从7.88GB减小到67.70MB，用时从47.964秒减小到0.318秒。- Peak memory usage (for query): 12.32 MiB.: 内存峰值从204.54MB减小到12.32MB。<br>再将SQL改为指定分区查询： <pre><code class="language-sql">select WatchID from tutorial.hits_v1 where EventDate = '2014-03-17'
+</code></pre> 
+执行计划日志：  <pre><code class="language-bash">&lt;Debug&gt; executeQuery: (from 127.0.0.1:48102) SELECT WatchID FROM tutorial.hits_v1 WHERE EventDate = '2014-03-17'
+&lt;Debug&gt; InterpreterSelectQuery: MergeTreeWhereOptimizer: condition "EventDate = '2014-03-17'" moved to PREWHERE
+&lt;Trace&gt; ContextAccess (default): Access granted: SELECT(WatchID, EventDate) ON tutorial.hits_v1
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Key condition: (column 1 in [16146, 16146])
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): MinMax index condition: (column 0 in [16146, 16146])
+&lt;Debug&gt; tutorial.hits_v1 (SelectExecutor): Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_1_6_1, approx. 818656, up to 818656 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_7_12_1, approx. 1621472, up to 1621472 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 15 ranges from part 201403_13_18_1, approx. 1349440, up to 1349440 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 14 ranges from part 201403_19_24_1, approx. 1619776, up to 1619776 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 4 ranges from part 201403_25_25_0, approx. 278528, up to 278528 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_26_26_0, approx. 286720, up to 286720 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 2 ranges from part 201403_27_27_0, approx. 294912, up to 294912 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_28_28_0, approx. 229376, up to 229376 rows starting from 0
+&lt;Trace&gt; MergeTreeSelectProcessor: Reading 3 ranges from part 201403_29_29_0, approx. 253952, up to 253952 rows starting from 0
+&lt;Trace&gt; InterpreterSelectQuery: FetchColumns -&gt; Complete
+&lt;Information&gt; executeQuery: Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.
+&lt;Debug&gt; MemoryTracker: Peak memory usage (for query): 16.32 MiB.
+</code></pre> </li>
+</ul>
+<p> <strong>说明：</strong> </p>
+<ul>
+<li>MergeTreeWhereOptimizer: condition “EventDate = ‘2014-03-17’” moved to PREWHERE： 启动了PREWHERE优化。- Key condition: (column 1 in [16146, 16146])： 用了主键索引。- MinMax index condition: (column 0 in [16146, 16146])： 用了分区索引。- Selected 9 parts by date, 9 parts by key, 833 marks to read from 72 ranges：从1094 marks减少到833 marks。- Read 6735786 rows, 61.49 MiB in 0.097 sec., 69655325 rows/sec., 635.86 MiB/sec.： 数据大小从67.70MB变为61.49MB，用时从0.318秒减少到0.097秒。</li>
+</ul>
+<h3 id="执行计划示例"><a href="#执行计划示例" class="headerlink" title="执行计划示例"></a>执行计划示例</h3> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/clickhouse%E7%AE%97%E6%9C%AF%E5%87%BD%E6%95%B0/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            clickhouse算术函数
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse输入输出格式之不常用数据格式</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

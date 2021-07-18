@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>azkaban的安装 |  爱上口袋的天空</title>
+      <title>clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-azkaban的安装"
+  id="post-clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  azkaban的安装
+  clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】
 </h1>
  
 
@@ -62,11 +62,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" class="article-date">
-  <time datetime="2021-07-18T14:10:34.889Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.304Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
   </div>
   
 <div class="word_count">
@@ -74,7 +74,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">703</span>
+            <span class="post-count">678</span>
         </span>
     </span>
 
@@ -98,33 +98,83 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: azkaban的安装<br>categories:</p>
+  <p>title: clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】<br>categories:</p>
 <ul>
-<li>BigData</li>
+<li>clickhouse</li>
 </ul>
-<p>—title: azkaban的安装<br>categories:</p>
+<p>—# JSON</p>
+<h2 id="JSON格式的输入输出"><a href="#JSON格式的输入输出" class="headerlink" title="JSON格式的输入输出"></a>JSON格式的输入输出</h2><p>JSON格式只支持数据的输出，不支持数据的解析（数据导入）。</p>
+<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><h3 id="建表插数据"><a href="#建表插数据" class="headerlink" title="建表插数据"></a>建表插数据</h3><blockquote>
+ <pre><code class="language-sql">create table t_json_demo(id UInt8, prov String) ENGINE=TinyLog;
+insert into t_json_demo values(1, 'jiangsu'),
+(1, 'jiangsu'),
+(2, 'anhui'),
+(2, 'anihu'),
+(3, 'beijing');
+</code></pre> 
+</blockquote>
+<h3 id="查询演示"><a href="#查询演示" class="headerlink" title="查询演示"></a>查询演示</h3><p><strong>以JSON格式查询</strong></p>
+<blockquote>
+<p> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="854" src="https://img-blog.csdnimg.cn/20210411144340734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="532"> </p>
+</blockquote>
+<h3 id="取出value的双引号"><a href="#取出value的双引号" class="headerlink" title="取出value的双引号"></a>取出value的双引号</h3><blockquote>
+<p> 默认情况下， Int64和UInit64的整型使用双引号包裹， 如果要移除双引号，设置配置参数output_format_json_quote_64bit_integers为0。<br> 命令：set output_format_json_quote_64bit_integers=0;<br> 再进行同样的查询<br> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="843" src="https://img-blog.csdnimg.cn/20210411144556516.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528"> </p>
+</blockquote>
+<h3 id="查询时出现rows-before-limit-at-least"><a href="#查询时出现rows-before-limit-at-least" class="headerlink" title="查询时出现rows_before_limit_at_least"></a>查询时出现rows_before_limit_at_least</h3><blockquote>
+<p> 只有查询包含LIMIT时才输出， 只有在包含group by的语句中才有意义。当查询没有LIMIT时， 执行结果的最小行数。 </p>
+</blockquote>
+<h3 id="设置显示极值的参数extremes-1（默认为0）"><a href="#设置显示极值的参数extremes-1（默认为0）" class="headerlink" title="设置显示极值的参数extremes=1（默认为0）"></a>设置显示极值的参数extremes=1（默认为0）</h3><blockquote>
+<p> set extremes=1;<br> 在进行查询<code>select id,count() as cnt from t_json_demo group by id format JSON;</code><br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318151530860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
+</blockquote>
+<p> </p>
+<h1 id="JSONCompact"><a href="#JSONCompact" class="headerlink" title="JSONCompact"></a>JSONCompact</h1><h2 id="JSONCompact的输入输出"><a href="#JSONCompact的输入输出" class="headerlink" title="JSONCompact的输入输出"></a>JSONCompact的输入输出</h2><blockquote>
+</blockquote>
 <ul>
-<li>BigData</li>
+<li>JSON格式的数据以对象的方式输出， 而JSONCompact以数组的方式输出。- JSONCompact只支持数据的查看， 不支持数据的导入。<h2>案例演示</h2> 
+`select id,count() as cnt from t_json_demo group by id format JSONCompact;` 
+<img alt="" height="729" src="https://img-blog.csdnimg.cn/20210411145009619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"> </li>
 </ul>
-<p>—1. 上传安装包  机器：hadoop112  <img alt="" class="has" height="348" src="https://img-blog.csdnimg.cn/20191112221358405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="752">1. 解压安装包   <img alt="" class="has" height="319" src="https://img-blog.csdnimg.cn/20191112221732490.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614">1. 创建一个azkaban文件夹，讲安装包都放入  <img alt="" class="has" height="334" src="https://img-blog.csdnimg.cn/20191112222008392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730">1. azkaban脚本导入，进入mysql，创建azkaban数据库，并将解压的脚本导入到azkaban数据库。  <img alt="" class="has" height="384" src="https://img-blog.csdnimg.cn/20191112223412370.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="369">  因为我们的sql文件在hadoop112,mysql在hadoop111,那么我们需要将文件移到hadoop111上  <img alt="" class="has" height="415" src="https://img-blog.csdnimg.cn/20191112223751905.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="646">  在mysql上执行移动过来的脚本  <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/20191112223929718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="542">  执行后相关表  <img alt="" class="has" height="410" src="https://img-blog.csdnimg.cn/20191112224041285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="341">1. 生成密钥对和证书  a：进入/usr/local/module/azkaban/azkaban-web-2.5.0目录下          <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/20191112224817159.png" width="683">  b：生成 keystore的密码及相应信息的密钥库        命令：keytool -keystore keystore -alias jetty -genkey -keyalg RSA        <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20191112224858272.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">       <img alt="" class="has" height="473" src="https://img-blog.csdnimg.cn/20191112225112551.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="666">      <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191112225143399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">1. 配置时间的同步，（集群之间服务器需要同步，之前通过ntp配置过了）<li>开始配置文件/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban.properties   <pre class="has"><code class="language-bash">#Azkaban Personalization Settings<br>#服务器UI名称,用于服务器上方显示的名字<br>azkaban.name=Test<br>#描述<br>azkaban.label=My Local Azkaban<br>#UI颜色<br>azkaban.color=#FF3601<br>azkaban.default.servlet.path=/index<br>#默认web server存放web文件的目录<br>web.resource.dir=/usr/local/module/azkaban/azkaban-web-2.5.0/web/<br>#默认时区,已改为亚洲/上海 默认为美国<br>default.timezone.id=Asia/Shanghai</p>
-<p>#Azkaban UserManager class<br>user.manager.class=azkaban.user.XmlUserManager<br>#用户权限管理默认类（绝对路径）<br>user.manager.xml.file=/usr/local/module/azkaban/azkaban-web-2.5.0/conf/azkaban-users.xml</p>
-<p>#Loader for projects<br>#global配置文件所在位置（绝对路径）<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>#mysql链接<br>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>#最大连接数<br>mysql.numconnections=100</p>
-<h1 id="Velocity-dev-mode"><a href="#Velocity-dev-mode" class="headerlink" title="Velocity dev mode"></a>Velocity dev mode</h1><p>velocity.dev.mode=false</p>
-<h1 id="Azkaban-Jetty-server-properties"><a href="#Azkaban-Jetty-server-properties" class="headerlink" title="Azkaban Jetty server properties."></a>Azkaban Jetty server properties.</h1><p>jetty.maxThreads=25<br>jetty.ssl.port=8443<br>jetty.port=8081<br>#SSL文件名（绝对路径）<br>jetty.keystore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.password=897570<br>#Jetty主密码与keystore文件相同<br>jetty.keypassword=897570<br>#SSL文件名（绝对路径）<br>jetty.truststore=/usr/local/module/azkaban/azkaban-web-2.5.0/keystore<br>#SSL文件密码<br>jetty.trustpassword=897570</p>
-<h1 id="Azkaban-Executor-settings"><a href="#Azkaban-Executor-settings" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.port=12321</p>
-<h1 id="mail-settings"><a href="#mail-settings" class="headerlink" title="mail settings"></a>mail settings</h1><p>mail.sender=<br>mail.host=<br>job.failure.email=<br>job.success.email=</p>
-<p>lockdown.create.projects=false</p>
-<p>cache.directory=cache<br></code></pre>   </li><li>/usr/local/module/azkaban/azkaban-web-2.5.0/conf目录下azkaban-users.xml   <pre class="has"><code class="language-html">&lt;azkaban-users&gt;<br>    &lt;user username="azkaban" password="azkaban" roles="admin" groups="azkaban" /&gt;<br>    &lt;user username="metrics" password="metrics" roles="metrics"/&gt;<br>    &lt;!--添加自己的用户--&gt;<br>    &lt;user username="kgf" password="897570" roles="admin"/&gt;</p>
-<pre><code>&amp;lt;role name=&quot;admin&quot; permissions=&quot;ADMIN&quot; /&amp;gt;
-&amp;lt;role name=&quot;metrics&quot; permissions=&quot;METRICS&quot;/&amp;gt;
-</code></pre>
-<p>&lt;/azkaban-users&gt;<br></code></pre>   </li><li>修改/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/目录下的azkaban.properties文件   <pre class="has"><code class="language-bash">#Azkaban<br>#修改时区<br>default.timezone.id=Asia/Shanghai</p>
-<h1 id="Azkaban-JobTypes-Plugins"><a href="#Azkaban-JobTypes-Plugins" class="headerlink" title="Azkaban JobTypes Plugins"></a>Azkaban JobTypes Plugins</h1><p>azkaban.jobtype.plugin.dir=plugins/jobtypes</p>
-<p>#Loader for projects<br>executor.global.properties=/usr/local/module/azkaban/azkaban-executor-2.5.0/conf/global.properties<br>azkaban.project.dir=projects</p>
-<p>database.type=mysql<br>mysql.port=3306<br>mysql.host=hadoop111<br>mysql.database=azkaban<br>mysql.user=root<br>mysql.password=897570<br>mysql.numconnections=100</p>
-<h1 id="Azkaban-Executor-settings-1"><a href="#Azkaban-Executor-settings-1" class="headerlink" title="Azkaban Executor settings"></a>Azkaban Executor settings</h1><p>executor.maxThreads=50<br>executor.port=12321<br>executor.flow.threads=30</p>
-<p></code></pre>   </li>1. 进入/usr/local/module/azkaban目录下启动  a：先启动executor        <img alt="" class="has" height="215" src="https://img-blog.csdnimg.cn/20191113222540471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686"> b：再启动web        <img alt="" class="has" height="266" src="https://img-blog.csdnimg.cn/20191113222655646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="612">        <img alt="" class="has" height="163" src="https://img-blog.csdnimg.cn/20191113222740327.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">1. 效果,用户名就是刚配置的kgf/897570  <img alt="" class="has" height="357" src="https://img-blog.csdnimg.cn/2019111322292215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="665"></p>
+<h1 id="JSONEachRow"><a href="#JSONEachRow" class="headerlink" title="JSONEachRow"></a>JSONEachRow</h1><h2 id="JSONEachRow数据输入输出"><a href="#JSONEachRow数据输入输出" class="headerlink" title="JSONEachRow数据输入输出"></a>JSONEachRow数据输入输出</h2><blockquote>
+</blockquote>
+<ul>
+<li>每行数据以换行符分隔的JSON对象。- 支持数据的输出和数据导入。<h2>案例演示</h2> 
+`select id,count() as cnt from t_json_demo group by id format JSONEachRow;` 
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318152711341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
+</ul>
+<h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
+</blockquote>
+<ul>
+<li>对象中键值对的顺序可任意排列。- 缺失某些字段。<h3>建表插入数据</h3> 
+<pre><code class="language-sql">#建表
+create table UserActivity (PageViews UInt8, UserID String, Duration UInt64, Sign Int8) ENGINE TinyLog;
+#插入数据
+INSERT INTO UserActivity FORMAT JSONEachRow &#123;"PageViews":5, "UserID":"4324182021466249494", "Duration":146,"Sign":-1&#125; &#123;"UserID":"4324182021466249494","PageViews":6,"Duration":185,"Sign":1&#125;
+</code></pre> 
+<h2>缺失值处理演示</h2> 
+<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS example_table
+(
+ x UInt32,
+ a DEFAULT x + 2
+) ENGINE = Memory;
+# 第二条数据第二个值没有设置
+insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":4&#125;;
+</code></pre> 
+<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154207105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
+</ul>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><blockquote>
+<p> 参数：input_format_defaults_for_omitted_fields 如果为0， 则x和a的默认值等于0（即UInt32数据类型的默认值）。 如果为1， 则x的默认值等于0， 但a的默认值等于x+2。 input_format_defaults_for_omitted_fields=1 </p>
+</blockquote>
+<h3 id="嵌套数据结构"><a href="#嵌套数据结构" class="headerlink" title="嵌套数据结构"></a>嵌套数据结构</h3><p><strong>案例演示</strong></p>
+<p><strong>建表插入数据</strong></p>
+<blockquote>
+<p> #建表 CREATE TABLE json_each_row_nested (n Nested (s String, i Int32) ) ENGINE = Memory; # 插入数据 INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n.s”: [“abc”, “def”], “n.i”: [1, 23]}; # 查看数据 select * from json_each_row_nested;<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154828387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
+</blockquote>
+<h3 id="要将数据作为分层JSON对象插入"><a href="#要将数据作为分层JSON对象插入" class="headerlink" title="要将数据作为分层JSON对象插入"></a>要将数据作为分层JSON对象插入</h3><blockquote>
+<p> 需要设置input_format_import_nested_json=1。（默认为0） </p>
+</blockquote>
+<h3 id="当参数设置为零时"><a href="#当参数设置为零时" class="headerlink" title="当参数设置为零时"></a>当参数设置为零时</h3><blockquote>
+<p> 当需要设置input_format_import_nested_json=0时： INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n”: {“s”: [“abc”, “def”], “i”: [1, 23]}}<br> Exception on client: Code: 117. DB::Exception: Unknown field found while parsing JSONEachRow format: n<br> Connecting to 192.168.0.200:9000 as user default. Connected to ClickHouse server version 20.1.4 revision 54431. </p>
+</blockquote>
  
       <!-- reward -->
       
@@ -177,7 +227,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/azkaban%E7%9A%84%E5%AE%89%E8%A3%85/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -188,15 +238,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BORC/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            azkaban知识点学习
+            clickhouse输入输出格式之ORC
           
         </div>
       </a>
     
+    
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】</div>
+      </a>
     
   </nav>
 

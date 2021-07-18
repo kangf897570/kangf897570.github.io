@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>归档: 2021/7 |  爱上口袋的天空</title>
+      <title>clickhouse输入输出格式之不常用数据格式 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -42,262 +42,218 @@
       
     <main class="content on">
       <section class="outer">
+  <article
+  id="post-clickhouse输入输出格式之不常用数据格式"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  clickhouse输入输出格式之不常用数据格式
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.326Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
   
-  <ul class="ads">
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://curl.qcloud.com/kvO7hb43">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/ten_1.jpg" width="300" alt="云服务器限时秒杀">
-            </a>
-        </li>
-    
-        <li>
-            <a target="_blank" rel="noopener" href="https://www.vultr.com/?ref=8630075">
-                <img src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/vultr.png" width="300" alt="vultr优惠vps">
-            </a>
-        </li>
-    
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">246</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">1 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse输入输出格式之不常用数据格式<br>categories:</p>
+<ul>
+<li>clickhouse</li>
 </ul>
-  
-  
-  <article class="articles">
-    
-    
-    <h1 class="page-type-title">2021/7</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2021" class="archive-year">2021</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.283Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"
-    >clickHouse基本介绍</a> 
-</h2>
+<p>—# 1. Native</p>
+<blockquote>
+<p> 数据以二进制数据块的方式进行读写。 数据的导出： clickhouse-client –query=“SELECT * FROM tsv_demo FORMAT Native” &gt; a.native<br> 数据的导入： clickhouse-client –query=“insert into tsv_demo FORMAT Native” &lt; a.native </p>
+</blockquote>
+<h1 id="2-Null"><a href="#2-Null" class="headerlink" title="2. Null"></a>2. Null</h1><blockquote>
+<p> 主要用于测试性能。 查询会被处理，并且数据会被传送到客户端，但是什么也不输出。 Null格式只能用于查询， 不能用于数据的导入。 </p>
+</blockquote>
+<h1 id="3-Pretty"><a href="#3-Pretty" class="headerlink" title="3. Pretty"></a>3. Pretty</h1><blockquote>
+<p> PrettyCompact：在交互式模式下，默认的数据显示格式。 PrettySpace </p>
+</blockquote>
+<h1 id="4-Values"><a href="#4-Values" class="headerlink" title="4. Values"></a>4. Values</h1><blockquote>
+<p> 每行之间使用逗号分隔，列之间也是使用逗号分隔。在括号中打印每一行。 INSERT INTO XX values<br> INSERT INTO XX FORMAT Values<br> insert into tsv_demo FORMAT Values (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’), (‘115.248.158.231’, ‘115.248.158.232’, ‘2020-07-12 17:22:56’); </p>
+</blockquote>
+<h1 id="5-Vertical"><a href="#5-Vertical" class="headerlink" title="5. Vertical"></a>5. Vertical</h1><blockquote>
+<p> 数据以垂直的格式进行展示。 \G </p>
+</blockquote>
+<ul>
+<li>XML 只支持数据的查看。<br>select * from tsv_demo limit 2 FORMAT XML; </li>
+</ul>
  
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.276Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/"
-    >ClickHouse函数整理（详细）</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.268Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/"
-    >clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.261Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"
-    >clickhouse分布式集群部署</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.254Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/"
-    >clickhouse20.1.4.14-2单机版安装</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.246Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/"
-    >clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="archive-article-date">
-  <time datetime="2021-07-18T14:12:50.240Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/"
-    >Clickhouse 字典表使用场景</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.243Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >MapReduce知识点学习</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.237Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/"
-    >MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/" class="archive-article-date">
-  <time datetime="2021-07-18T14:10:35.227Z" itemprop="datePublished">07/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/"
-    >MapReduce之入门概述以及WordCount 案例</a> 
-</h2>
- 
-
-    </header>
-    
-    
-  </div>
-</article>
-      
+      <!-- reward -->
       
     </div>
-  </div>
-  
-  
-
-  
-  <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/archives/2021/07/">上一页</a><a class="page-number" href="/archives/2021/07/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2021/07/page/3/">3</a><a class="page-number" href="/archives/2021/07/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2021/07/page/6/">6</a><a class="extend next" rel="next" href="/archives/2021/07/page/3/">下一页</a>
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/ClickHouse%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            ClickHouse数据查询
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BParquet/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">clickhouse输入输出格式之Parquet</div>
+      </a>
+    
   </nav>
-  
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
 </section>
       <footer class="footer">
   <div class="outer">
@@ -440,6 +396,22 @@
 <script src="/js/lazyload.min.js"></script>
 
 <!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
 <link
