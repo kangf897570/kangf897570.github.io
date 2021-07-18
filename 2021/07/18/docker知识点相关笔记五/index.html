@@ -105,7 +105,7 @@
 <li>docker</li>
 </ul>
 <p>—<li>创建一个自定义的tomcat9镜像  ⑴创建一个存放dockerfile的目录       <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/2018110316462743.png" width="365">  ⑵在这个目录下创建一个test1.txt文件（这个文件是用来演示cp命令的，      完成宿主机到容器的拷贝）      <img alt="" class="has" height="91" src="https://img-blog.csdnimg.cn/20181103164831288.png" width="314">      并且我们在这个目录下准备好jdk和tomcat的压缩包，后面有用     <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20181103172001716.png" width="462"> ⑶下面我们开始在这个目录下编写Dockerfile文件     <img alt="" class="has" height="123" src="https://img-blog.csdnimg.cn/20181103175215340.png" width="467">     dockerfile文件内容：      <pre class="has"><code>#基于我们从阿里云下载下来的centos基础镜像<br>FROM centos</p>
-<p>#定义维护者的信息<br>MAINTAINER kgf&lt;<a href="mailto:&#x6b;&#x67;&#102;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#x6f;&#x6d;">&#x6b;&#x67;&#102;&#64;&#x31;&#54;&#x33;&#46;&#x63;&#x6f;&#x6d;</a>&gt;</p>
+<p>#定义维护者的信息<br>MAINTAINER kgf&lt;<a href="mailto:&#107;&#103;&#x66;&#x40;&#49;&#54;&#51;&#46;&#x63;&#111;&#x6d;">&#107;&#103;&#x66;&#x40;&#49;&#54;&#51;&#46;&#x63;&#111;&#x6d;</a>&gt;</p>
 <p>#把宿主机当前上下文的test1.txt文件拷贝到容器/usr/local/路径下<br>COPY test1.txt /usr/local/test1Copytocontainer.txt</p>
 <p>#把java与tomcat添加到容器中<br>ADD jdk-8u191-linux-x64.tar.gz /usr/local/<br>ADD apache-tomcat-9.0.12.tar.gz /usr/local/</p>
 <p>#安装vim编辑器<br>RUN yum -y install vim</p>
