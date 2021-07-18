@@ -160,6 +160,221 @@
     
     
     <article
+  id="post-hashCode的作用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/"
+    >hashCode的作用</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.087Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: hashCode的作用<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—<strong>1、hashCoed 的特性：</strong></p>
+<p>（1）HashCode的存在主要是用于查找的快捷性，如Hashtable，HashMap等，HashCode经常用于确定对象的存储地址；</p>
+<p>（2）如果两个对象相同， equals方法一定返回true，并且这两个对象的HashCode一定相同；</p>
+<p>（3）两个对象的HashCode相同，并不一定表示两个对象就相同，即equals()不一定为true，只能够说明这两个对象在一个散列存储结构中。</p>
+<p>（4）如果对象的equals方法被重写，那么对象的HashCode也尽量重写。</p>
+<p>有关equals 与hashCode 方法可以参考这篇文章：</p>
+<p> </p>
+<p><strong>2、hashCode 的作用：</strong></p>
+<p>Java中的集合有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。 equals方法可用于保证元素不重复，但如果每增加一个元素就检查一次，若集合中现在已经有1000个元素，那么第1001个元素加入集合时，就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。</p>
+<p>哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上。这样一来，当集合要添加新的元素时，先调用这个元素的HashCode方法，就一下子能定位到它应该放置的物理位置上。</p>
+<p>（1）如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；</p>
+<p>（2）如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了；</p>
+<p>（3）不相同的话，也就是发生了Hash key相同导致冲突的情况，那么就在这个Hash key的地方产生一个链表，将所有产生相同HashCode的对象放到这个单链表上去，串在一起。这样一来实际调用equals方法的次数就大大降低了。 </p>
+<p> 所以hashCode在上面扮演的角色为寻域（寻找某个对象在集合中区域位置）。hashCode可以将集合分成若干个区域，每个对象都可以计算出他们的hash码，可以将hash码分组，每个分组对应着某个存储区域，根据一个对象的hash码就可以确定该对象所存储区域，这样就大大减少查询匹配元素的数量，提高了查询效率。  </p>
+<p><strong>3、hashCode实践：</strong></p>
+<p>hashCode是用于查找使用的，而equals是用于比较两个对象是否相等的。</p>
+<p>（1）例如内存中有这样的位置 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0  1  2  3  4  5  6  7    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>而我有个类，这个类有个字段叫ID，我要把这个类存放在以上8个位置之一，如果不用HashCode而任意存放，那么当查找时就需要到这八个位置里挨个去找，或者用二分法一类的算法。   但以上问题如果用HashCode就会使效率提高很多。  定义我们的HashCode为ID％8，比如我们的ID为9，9除8的余数为1，那么我们就把该类存在1这个位置，如果ID是13，求得的余数是5，那么我们就把该类放在5这个位置。依此类推。  </p>
+<p>（2）但是如果两个类有相同的HashCode，例如9除以8和17除以8的余数都是1，也就是说，我们先通过 HashCode来判断两个类是否存放某个桶里，但这个桶里可能有很多类，那么我们就需要再通过equals在这个桶里找到我们要的类。    </p>
+<p>请看下面这个例子 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">[HashTest@1, HashTest@1]</span><br></pre></td></tr></table></figure>
+
+<p>以上这个示例，我们只是重写了HashCode方法，从上面的结果可以看出，虽然两个对象的HashCode相等，但是实际上两个对象并不是相等，因为我们没有重写equals方法，那么就会调用Object默认的equals方法，Object的equals方法调用的是 == 进行比较两个对象，显示这是两个不同的对象。</p>
+<p>这里我们将生成的对象放到了HashSet中，而HashSet中只能够存放唯一的对象，也就是相同的（适用于equals方法）的对象只会存放一个，但是这里实际上是两个对象ab都被放到了HashSet中，这样HashSet就失去了他本身的意义了。</p>
+<p>下面我们继续重写equals方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public boolean equals(Object object) &#123;  </span><br><span class="line">        if (object == null) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (object == this) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (!(object instanceof HashTest)) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        HashTest other = (HashTest) object;  </span><br><span class="line">        if (other.getI() == this.getI()) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        return false;  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下所示:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">[HashTest@1]</span><br></pre></td></tr></table></figure>
+
+<p>从结果我们可以看出，现在两个对象就完全相等了，HashSet中也只存放了一份对象。</p>
+<p>原文地址：</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop知识点学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
+    >Hadoop知识点学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.080Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hadoop知识点学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 1. 1. 1. 1. 1. 1. </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hadoop之完全分布式模式环境搭建"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
+    >Hadoop之完全分布式模式环境搭建</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.073Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—rsync -rvl $pdir/$fname $user@hadoop202:$pdir<br></code></pre>  b:在103的服务器上，在/opt/module/hadoop-2.7.2/etc下执行下面命令      <img alt="" class="has" height="402" src="https://img-blog.csdnimg.cn/20190710224709359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="417">           </li></p>
+<h1 id="七：集群启动及测试"><a href="#七：集群启动及测试" class="headerlink" title="七：集群启动及测试"></a>七：集群启动及测试</h1><ol>
+<li> 进入/opt/module/hadoop-2.7.2目录下，103，104，202三台服务器都要清理之前启动的数据   <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190710225308526.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">1.  第一次启动集群，需要格式化namenode,进入/opt/module/hadoop-2.7.2目录下，只需要格式化103即可，因为我们  的namenode节点配置在103节点上   命令：bin/hdfs namenode -format   <img alt="" class="has" height="327" src="https://img-blog.csdnimg.cn/20190710225826151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">1. 下面我们在103这个namenode的节点上去启动集群，当然ssh必须要配置完成的情况下,进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-dfs.sh  这个命令一次性把namenode和datanode启动起来   <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20190710230437871.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">          我们可以分别到104，202服务器去看看   <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190710230549856.png" width="328"><img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190710230604118.png" width="415">1. 因为我们的resourcemanager是在104上面的，我们在104上启动resourcemanager和nodemanager, 进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-yarn.sh<img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190710231012172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567">  可以到103，202服务器上查看，发现NodeManager也启动了，可以对比上面我们的集群规划。1. 集群测试    ⑴集群基本测试           ①上传文件到集群                      a：上传小文件                                ㈠首先在103的hdfs上创建一个文件夹                                           命令：hadoop fs -mkdir -p /user/kgf/input                                            <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190712223047447.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">                                            可以通过浏览器50070端口页面看效果：                                            <img alt="" class="has" height="302" src="https://img-blog.csdnimg.cn/20190712223135342.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="513">                                 ㈡下面我们创建一个文件通过命令上传到上面刚建的hdfs上的文件夹中                                       <img alt="" class="has" height="176" src="https://img-blog.csdnimg.cn/20190712223517227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">                                         <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190712223543887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">                                       点击发现，三台服务器上都有该文件备份：                                       <img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/201907122245459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="373">                      b：上传一个大文件试试，大于128M的，因为我们可以发现上面Block Size是128，那么                            大于128M时，会怎么样呢？ 下面开始上传：                           <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190712225153998.png" width="479">                           <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190712225307761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">                          效果：                             <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190712225509961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="577">                             <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190712225627630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="416">                                                       1. 集群时间同步        ⑴问题：因为我们配置的是集群，那么我们在跑数据的时候，这几台服务器的时间必须要保持一致，                       不然会出现问题。        ⑵时间同步的方式                    找一个机器，作为时间服务器，所有的机器与这台集群时间进行定时的同步，比如每隔十分钟同步一次。             注意：配置时间同步操作必须使用root用户。        ⑶时间服务器配置（必须是root用户）                    a：检测ntp是否安装，命令：rpm -qa | grep ntp                          <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713084812614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="486">                   b：修改ntp配置文件，路径：/etc/ntp.conf                           ①设置本地网络上的主机不受限制                                  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190713085230255.png" width="567">                            ②设置为不采用公共的服务器                                  <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20190713085539502.png" width="433">                            ③添加默认的一个内部时钟数据，使用它为局域网用户提供服务                                 <img alt="" class="has" height="165" src="https://img-blog.csdnimg.cn/20190713085904915.png" width="499">                  c：修改/etc/sysconfig/ntpd文件                             a：让硬件时间与系统时间一起同步                                  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/2019071309050714.png" width="378">                             b：重启ntpd                                  命令：systemctl status ntpd   查看ntpd状态                                  启动命令：systemctl start ntpd                             c：设置开启自启动ntp服务                                   执行：systemctl enable ntpd.service         ⑷其它机器配置（必须是root用户）               a：在其它机器上配置10分钟与时间服务器同步一次（生产环境一般是10分钟，这里我们演示就1分钟）                      命令：crontab -e然后编写下面的脚本命令                       */1 * * * * /usr/sbin/ntpdate 要同步时间的服务器地址               b：下面我们先同步104服务器                        <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713093634836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="454">                        <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/20190713093705895.png" width="454">               c：同理，我们同步202的时间                     <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190713093825473.png" width="623">               d：测试，我们分别查看3台服务器时间，三台目前都是这个时间                    <img alt="" class="has" height="98" src="https://img-blog.csdnimg.cn/20190713094042110.png" width="369">                    下面我们将104的时间修改掉                     <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190713094506658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="425">                    一分钟后…..可以发现时间又同步回来了。                     <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/2019071309463594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="749"><h1 id=""><a href="#" class="headerlink" title=""></a></h1></li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-hadoop之快照管理,回收站"
   class="article article-type-post"
   itemscope
@@ -636,214 +851,6 @@
 <li>BigData</li>
 </ul>
 <p>—1. 1. 1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Flume Taildir Source监听实时追加内容的文件"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Flume%20Taildir%20Source%E7%9B%91%E5%90%AC%E5%AE%9E%E6%97%B6%E8%BF%BD%E5%8A%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%96%87%E4%BB%B6/"
-    >Flume Taildir Source监听实时追加内容的文件</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Flume%20Taildir%20Source%E7%9B%91%E5%90%AC%E5%AE%9E%E6%97%B6%E8%BF%BD%E5%8A%A0%E5%86%85%E5%AE%B9%E7%9A%84%E6%96%87%E4%BB%B6/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.003Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Flume Taildir Source监听实时追加内容的文件<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Flume Taildir Source监听实时追加内容的文件<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 简介         flume中有三种可监控文件或目录的source、分别是Exec Source、Spooling Directory Source和Taildir Source。         Taildir Source是1.7版本的新特性，综合了Spooling Directory Source和Exec Source的优点。1. Exec Source使用场景         Exec Source可通过tail -f命令去tail住一个文件，然后实时同步日志到sink。但存在的问题是，当agent进程挂掉重启后，会有重复消费的问题。可以通过增加UUID来解决，或通过改进ExecSource来解决。1.  Spooling Directory Source使用场景        Spooling Directory Source可监听一个目录，同步目录中的新文件到sink,被同步完的文件可被立即删除或被打上标记。适合用于同步新文件，但不适合对实时追加日志的文件进行监听并同步。如果需要实时监听追加内容的文件，可对SpoolDirectorySource进行改进 1.  Taildir Source使用场景  Taildir Source可实时监控一批文件，并记录每个文件最新消费位置，agent进程重启后不会有重复消费的问题。  使用时建议用1.8.0版本的flume，1.8.0版本中解决了Taildir Source一个可能会丢数据的bug。 <li> TailSource配置如下   <pre class="has"><code class="language-bash"># source的名字<br>agent.sources = s1</p>
-<h1 id="channels的名字"><a href="#channels的名字" class="headerlink" title="channels的名字"></a>channels的名字</h1><p>agent.channels = c1</p>
-<h1 id="sink的名字"><a href="#sink的名字" class="headerlink" title="sink的名字"></a>sink的名字</h1><p>agent.sinks = r1</p>
-<h1 id="指定source使用的channel"><a href="#指定source使用的channel" class="headerlink" title="指定source使用的channel"></a>指定source使用的channel</h1><p>agent.sources.s1.channels = c1</p>
-<h1 id="指定sink使用的channel"><a href="#指定sink使用的channel" class="headerlink" title="指定sink使用的channel"></a>指定sink使用的channel</h1><p>agent.sinks.r1.channel = c1</p>
-<p>######## source相关配置 ########</p>
-<h1 id="source类型"><a href="#source类型" class="headerlink" title="source类型"></a>source类型</h1><p>agent.sources.s1.type = TAILDIR</p>
-<h1 id="元数据位置"><a href="#元数据位置" class="headerlink" title="元数据位置"></a>元数据位置</h1><p>agent.sources.s1.positionFile = /Users/wangpei/tempData/flume/taildir_position.json</p>
-<h1 id="监控的目录"><a href="#监控的目录" class="headerlink" title="监控的目录"></a>监控的目录</h1><p>agent.sources.s1.filegroups = f1<br>agent.sources.s1.filegroups.f1=/Users/wangpei/tempData/flume/data/.*log<br>agent.sources.s1.fileHeader = true</p>
-<p>######## channel相关配置 ########</p>
-<h1 id="channel类型"><a href="#channel类型" class="headerlink" title="channel类型"></a>channel类型</h1><p>agent.channels.c1.type = file</p>
-<h1 id="数据存放路径"><a href="#数据存放路径" class="headerlink" title="数据存放路径"></a>数据存放路径</h1><p>agent.channels.c1.dataDirs = /Users/wangpei/tempData/flume/filechannle/dataDirs</p>
-<h1 id="检查点路径"><a href="#检查点路径" class="headerlink" title="检查点路径"></a>检查点路径</h1><p>agent.channels.c1.checkpointDir = /Users/wangpei/tempData/flume/filechannle/checkpointDir</p>
-<h1 id="channel中最多缓存多少"><a href="#channel中最多缓存多少" class="headerlink" title="channel中最多缓存多少"></a>channel中最多缓存多少</h1><p>agent.channels.c1.capacity = 1000</p>
-<h1 id="channel一次最多吐给sink多少"><a href="#channel一次最多吐给sink多少" class="headerlink" title="channel一次最多吐给sink多少"></a>channel一次最多吐给sink多少</h1><p>agent.channels.c1.transactionCapacity = 100</p>
-<p>######## sink相关配置 ########</p>
-<h1 id="sink类型"><a href="#sink类型" class="headerlink" title="sink类型"></a>sink类型</h1><p>agent.sinks.r1.type = org.apache.flume.sink.kafka.KafkaSink</p>
-<h1 id="brokers地址"><a href="#brokers地址" class="headerlink" title="brokers地址"></a>brokers地址</h1><p>agent.sinks.r1.kafka.bootstrap.servers = localhost:9092</p>
-<h1 id="topic"><a href="#topic" class="headerlink" title="topic"></a>topic</h1><p>agent.sinks.r1.kafka.topic = testTopic3</p>
-<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><p>agent.sinks.r1.kafka.producer.compression.type = snappy<br></code></pre>   </li><li> 记录每个文件消费位置的元数据 <pre class="has"><code class="language-bash">#配置<br>agent.sources.s1.positionFile = /Users/wangpei/tempData/flume/taildir_position.json<br>#内容<br>[<br>&#123;<br>    "inode":6028358,<br>    "pos":144,<br>    "file":"/Users/wangpei/tempData/flume/data/test.log"<br>&#125;,<br>&#123;<br>    "inode":6028612,<br>    "pos":20,<br>    "file":"/Users/wangpei/tempData/flume/data/test_a.log"<br>&#125;<br>]  </p>
-<p>可以看到，在taildir_position.json文件中，通过json数组的方式，记录了每个文件最新的消费位置，每消费一次便去更新这个文件。<br></code></pre> 转载自： </li></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/DataNode%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%A4%9A%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%EF%BC%8C%E6%9C%8D%E5%BD%B9%E6%96%B0%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8C%E9%80%80%E5%BD%B9%E6%97%A7%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8CHadoop%20%C2%A0%E5%AD%98%E6%A1%A3/"
-    >DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/DataNode%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6%EF%BC%8C%E5%A4%9A%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%EF%BC%8C%E6%9C%8D%E5%BD%B9%E6%96%B0%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8C%E9%80%80%E5%BD%B9%E6%97%A7%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9%EF%BC%8CHadoop%20%C2%A0%E5%AD%98%E6%A1%A3/" class="article-date">
-  <time datetime="2021-07-18T14:10:34.901Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: DataNode的工作机制，多目录配置，服役新数据节点，退役旧数据节点，Hadoop  存档<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—         rsync -rvl $pdir/$fname $user@hadoop$host:$pdir<br>done;</code></pre>   ⑸增加新增节点的ssh无密登录（102，103，104，105这几个节点上都要确保有所有节点的ssh免密登录）         注意：102的root用户也要配置对方的ssh免密登录   ⑹                  </li>1. 服役新节点具体步骤，在102服务器这个namenode节点上操作     ⑴在 102服务器namenode 的/opt/module/hadoop-2.7.2/etc/hadoop 目录下创建 dfs.hosts 文件           <img alt="" class="has" height="245" src="https://img-blog.csdnimg.cn/20190722220804852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">      ⑵在 namenode 的 hdfs-site.xml 配置文件中增加 dfs.hosts 属性             <img alt="" class="has" height="262" src="https://img-blog.csdnimg.cn/20190722221210500.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="413">      ⑶刷新 namenode            <img alt="" class="has" height="219" src="https://img-blog.csdnimg.cn/20190722221330463.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="552">      ⑷更新 resourcemanager 节点             <img alt="" class="has" height="83" src="https://img-blog.csdnimg.cn/20190722221432616.png" width="659">      ⑸可以在浏览器上发现多了一个节点            <img alt="" class="has" height="369" src="https://img-blog.csdnimg.cn/20190722221540752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="386">    ⑹在 namenode 的 slaves 文件中增加新主机名称            <img alt="" class="has" height="160" src="https://img-blog.csdnimg.cn/20190722221706325.png" width="227">    ⑺将修改的hdfs-site.xml,slaves文件同步到其它服务器          <img alt="" class="has" height="316" src="https://img-blog.csdnimg.cn/20190722221929771.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="365">   ⑻到105服务器上单独命令启动新的数据节点和节点管理器         a:启动datanode                  <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/20190722222155289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="465">         b：启动nodemanager               <img alt="" class="has" height="106" src="https://img-blog.csdnimg.cn/20190722222259780.png" width="575">    ⑼我们到浏览器看一下状态           <img alt="" class="has" height="362" src="https://img-blog.csdnimg.cn/20190722222355781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="424">     ⑽如果数据不均衡，可以用命令实现集群的再平衡            <img alt="" class="has" height="165" src="https://img-blog.csdnimg.cn/2019072222273332.png" width="580">      </p>
-<h1 id="四：退役旧数据节点"><a href="#四：退役旧数据节点" class="headerlink" title="四：退役旧数据节点"></a>四：退役旧数据节点</h1><ol>
-<li>需求：        随着公司业务的减少，数据量变少了，原有的数据节点的容量有点多了， 需要在原有集群基础上动态减少一些数据节点。1. 环境准备    ⑴保持集群正在运行状态           <img alt="" class="has" height="372" src="https://img-blog.csdnimg.cn/2019072321450086.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">   ⑵要退的节点我们选择105   ⑶在 namenode 的/opt/module/hadoop-2.7.2/etc/hadoop 目录下创建 dfs.hosts.exclude 文件，       在文件中添加主机名称（要退役的节点）       <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190723214828682.png" width="499">   ⑷在 namenode 的 hdfs-site.xml 配置文件中增加 dfs.hosts.exclude 属性       <img alt="" class="has" height="294" src="https://img-blog.csdnimg.cn/20190723215125482.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="527">  ⑸刷新 namenode、刷新 resourcemanager        <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190723215254849.png" width="619">         <img alt="" class="has" height="77" src="https://img-blog.csdnimg.cn/20190723215344699.png" width="676">   ⑹检查 web 浏览器，退役节点的状态为 decommission in progress（退役中），说明数据节点正在复制块到其他节点        <img alt="" class="has" height="67" src="https://img-blog.csdnimg.cn/20190723215646506.png" width="763">    ⑺等待退役节点状态为 decommissioned（所有块已经复制完成），停止该节点及节点资源管理器。       注意：如果副本数是 3，服役的节点小于等于 3，是不能退役成功的，需要修改副本数后才能退役       <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190723215747719.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="323">    ⑻到105节点上关闭指定的datanode和nodemanager         sbin/hadoop-daemon.sh stop datanode         sbin/yarn-daemon.sh stop nodemanager    ⑼后面还要进行下面操作          a:从 namenode 的 dfs.hosts 文件中删除退役节点 hadoop105               <img alt="" class="has" height="213" src="https://img-blog.csdnimg.cn/20190723221113495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="377">          b：刷新 namenode，刷新 resourcemanager                  hdfs dfsadmin -refreshNodes                  yarn rmadmin -refreshNodes          c：从 namenode 的 slave 文件中删除退役节点 hadoop105                <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190723221406524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="333">         d:同步各个服务器的配置文件               <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190723221539134.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="313">     ⑽最后再次看浏览器，105已经没了          <img alt="" class="has" height="366" src="https://img-blog.csdnimg.cn/20190723221627586.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="391">
- </li>
-</ol>
-<h1 id="五：集群间数据拷贝"><a href="#五：集群间数据拷贝" class="headerlink" title="五：集群间数据拷贝"></a>五：集群间数据拷贝</h1><ol>
-<li>采用 discp 命令实现两个 hadoop 集群之间的递归数据复制  <img alt="" class="has" height="86" src="https://img-blog.csdnimg.cn/20190723225029499.png" width="678">           1. scp 实现两个远程主机之间的文件复制（目前一直在用的）<h1 id="六：Hadoop-存档"><a href="#六：Hadoop-存档" class="headerlink" title="六：Hadoop  存档"></a>六：Hadoop  存档</h1></li>
-<li>简介       每个文件均按块存储，每个块的元数据存储在 namenode 的内存中，因此 hadoop 存储小文件会非常低效。 因为大量的小文件会耗尽 namenode 中的大部分内存。但注意，存储小文件所需要的磁盘容量和存储这些文件 原始内容所需要的磁盘空间相比也不会增多。例如，一个 1MB 的文件以大小为 128MB 的块存储，使用的是 1MB 的磁盘空间，而不是 128MB。       Hadoop 存档文件或 HAR 文件，是一个更高效的文件存档工具，它将文件存入 HDFS块，在减少 namenode 内存使用的同时，允许对文件进行透明的访问。具体说来，Hadoop存档文件可以用作 MapReduce 的输入。        就是说hadoop会将许多的小文件看成一个整体，这样就不会存在一个小文件占用一个数据块了。是这个Har 文件整体占用一个数据块。1.  案例实操     ⑴首先我们在hdfs上创建一个目录           <img alt="" class="has" height="96" src="https://img-blog.csdnimg.cn/2019072322591116.png" width="542">     ⑵在这个目录下上传3个小文件          <img alt="" class="has" height="224" src="https://img-blog.csdnimg.cn/20190723230038141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="533">      ⑶归档文件：归档成一个叫做 xxx.har 的文件夹，该文件夹下有相应的数据文件。Xx.har 目录是                            一个整体，该目录看成是一个归档文件即可。                      下面这个命令表示，将/user/kgf/input目录下的锁文件归档到“/”根目录下，名称为myhar.har的归档文件           命令：hadoop archive -archiveName myhar.har -p /user/kgf/input /           效果：出现下面问题                 <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/2019072323282198.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="775">         解决方法：发现集群重新启动一下就好了。             <img alt="" class="has" height="320" src="https://img-blog.csdnimg.cn/20190723234140806.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="479">        ⑷如何查看归档文件里面的文件呢？              <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190723234325482.png" width="558">                   命令：hadoop fs -lsr har:///myhar.har              我们可以将这里面的文件拷贝到其它目录             <img alt="" class="has" height="177" src="https://img-blog.csdnimg.cn/20190723234526964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="654">             <img alt="" class="has" height="299" src="https://img-blog.csdnimg.cn/20190723234549256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590"> </li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-azkaban知识点学习"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >azkaban知识点学习</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/azkaban%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:10:34.895Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: azkaban知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: azkaban知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. </p>
  
       <!-- reward -->
       

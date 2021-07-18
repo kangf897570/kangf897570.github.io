@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>ES之词库的动态添加 |  爱上口袋的天空</title>
+      <title>FastDFS环境搭建 |  爱上口袋的天空</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/image1.ico" />
@@ -43,7 +43,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-ES之词库的动态添加"
+  id="post-FastDFS环境搭建"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -54,7 +54,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  ES之词库的动态添加
+  FastDFS环境搭建
 </h1>
  
 
@@ -62,11 +62,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/ES%E4%B9%8B%E8%AF%8D%E5%BA%93%E7%9A%84%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.455Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/FastDFS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2021-07-18T14:22:37.086Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+    <a class="article-category-link" href="/categories/Fastdfs/">Fastdfs</a>
   </div>
   
 <div class="word_count">
@@ -74,7 +74,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">190</span>
+            <span class="post-count">852</span>
         </span>
     </span>
 
@@ -83,7 +83,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">3 分钟</span>
         </span>
     </span>
 </div>
@@ -98,20 +98,41 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: ES之词库的动态添加<br>categories:</p>
+  <p>title: FastDFS环境搭建<br>categories:</p>
 <ul>
-<li>elasticsearch</li>
+<li>fastdfs</li>
 </ul>
-<p>—### 1、环境准备</p>
+<p>—### 1.安装前的准备</p>
 <blockquote>
-<p> 1）安装nginx1.18.0<br> 2)  安装好ES7.8.1和kibana7.8.1（提前准备好） </p>
+<p> 检查Linux上是否安装了 gcc、libevent、libevent-devel </p>
 </blockquote>
-<h3 id="2、安装nginx"><a href="#2、安装nginx" class="headerlink" title="2、安装nginx"></a>2、安装nginx</h3><blockquote>
-<p> 2.1）拉取nginx1.18.0镜像<br>         docker pull nginx:1.18.0<br> 2.2）创建挂载容器里面的界面的访问<br>          mkdir -p /mydata/nignx/html<br> 2.3）在/mydata/nignx/html/中创建hotwords.txt<br>          <img alt="" height="208" src="https://img-blog.csdnimg.cn/20210704142127275.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="464"><br> 2.4）docker命令启动nginx<br>          docker run -itd -p 80:80 -v /mydata/nignx/html:/usr/share/nginx/html nginx:1.18.0<br> <img alt="" height="156" src="https://img-blog.csdnimg.cn/20210704142706539.png" width="1200"><br> 2.5) 浏览器访问：<br>     <img alt="" height="131" src="https://img-blog.csdnimg.cn/20210704142903713.png" width="649"> </p>
+<ul>
+<li>yum list installed | grep gcc- yum list installed | grep libevent- yum list installed | grep libevent-devel<br>如果没有安装，则需进行安装<br>命令：yum install gcc libevent libevent-devel -y </li>
+</ul>
+<h3 id="2-安装-libfastcommon-库"><a href="#2-安装-libfastcommon-库" class="headerlink" title="2.安装 libfastcommon 库"></a>2.安装 libfastcommon 库</h3><blockquote>
+<p> libfastcommon 库是 FastDFS 文件系统运行需要的公共 C 语言函数库<br> *<em>注意：目前最新版本的v1.0.39</em><em><strong>和最新版的FastDFS5.11</strong></em><em>不兼容，所有我们这里使用的版本是v1.0.36  <strong>下载地址：<br> 将下载好的libfastcommon文件上传到Linuxs（/opt/FastDFS）<br> <img alt="" height="192" src="https://img-blog.csdnimg.cn/20210417181554593.png" width="877"><br> 解压下载下来的tar.gz压缩包到当前目录<br> 命令：tar -zxvf libfastcommon-1.0.36.tar.gz<br> 切换到解压后的libfastcommon目录<br> <img alt="" height="251" src="https://img-blog.csdnimg.cn/20210417181925833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="762"><br> 执行make脚本进行编译<br>  ** ./make.sh</strong><br> <img alt="" height="241" src="https://img-blog.csdnimg.cn/20210417182035706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1005"><br> <strong>注意： make</strong></em><em>编译的时候如果报错，需解决错误后再次进行make</em><em><strong>，通常发生错误是由于Linux</strong></em><em>缺少某些依赖库导致，根据错误提示解决错误</em>*<br> 执行make install进行安装<br> ./make.sh install<br> <img alt="" height="261" src="https://img-blog.csdnimg.cn/20210417182154506.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1152"> </p>
 </blockquote>
-<h3 id="3、开始配置es"><a href="#3、开始配置es" class="headerlink" title="3、开始配置es"></a>3、开始配置es</h3><blockquote>
-<p> 3.1) 进入/opt/es781/elasticsearch-7.8.1/plugins/ik/config目录下修改IKAnalyzer.cfg.xml<br> <img alt="" height="363" src="https://img-blog.csdnimg.cn/20210704143225821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="925"><br> 3.2）重启es<br> 3.3）使用kibana查看<br>      <img alt="" height="136" src="https://img-blog.csdnimg.cn/20210704143626716.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="578"><br> 3.4）测试一个单词“就是我”<br>       <img alt="" height="190" src="https://img-blog.csdnimg.cn/20210704143741562.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591"><br>      我们在nginx的hotwords.txt中添加这个单词<br>        <img alt="" height="130" src="https://img-blog.csdnimg.cn/20210704143923740.png" width="506"><br> 不重启es直接查询：<br> <img alt="" height="280" src="https://img-blog.csdnimg.cn/2021070414394629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1053"> </p>
+<h3 id="3-安装FastDFS"><a href="#3-安装FastDFS" class="headerlink" title="3.安装FastDFS"></a>3.安装FastDFS</h3><blockquote>
+<p> FastDFS没有Windows版本，不能在Windows下使用。<br> FastDFS需要安装部署在Linux环境下，我们这里使用的是fastdfs-5.11版本（201901）<br> 下载地址：<br> 解压下载下来的tar.gz压缩包到当前目录<br> 命令：tar -zxvf fastdfs-5.11.tar.gz<br> <img alt="" height="305" src="https://img-blog.csdnimg.cn/20210417182356215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="800"><br> 切换到解压后FastDFS的目录，执行make脚本进行编译<br> <img alt="" height="530" src="https://img-blog.csdnimg.cn/20210417182507948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="862"><br> 执行make install进行安装<br> 命令：./make.sh install<br> <img alt="" height="501" src="https://img-blog.csdnimg.cn/20210417182626786.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1073"><br> 至此FastDFS安装完成<br> 所有编译出来的文件存放在/usr/bin目录下<br> 所有配置文件存放在/etc/fdfs目录下<br> 查看安装后的效果：<br> 命令：ll /usr/bin/fdfs*<br> <img alt="" height="351" src="https://img-blog.csdnimg.cn/2021041718314329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="864"><br> /usr/bin是Linux的环境变量，可通过echo $PATH查看<br> 查看FastDFS的配置文件：<br> 命令：ll /etc/fdfs/<br> <img alt="" height="186" src="https://img-blog.csdnimg.cn/20210417183302325.png" width="767"><br> 另外注意需要把解压后的fastdfs-5.11/conf目录下的两个文件拷贝到/etc/fdfs/ ，否则后续会有很多奇怪问题不好解决<br> 命令：<br> cp http.conf /etc/fdfs/<br> cp mime.types /etc/fdfs/<br> <img alt="" height="322" src="https://img-blog.csdnimg.cn/20210417183955536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="659"> </p>
 </blockquote>
+<h3 id="4-配置FastDFS"><a href="#4-配置FastDFS" class="headerlink" title="4.配置FastDFS"></a>4.配置FastDFS</h3><blockquote>
+<p> 去掉/etc/fdfs/目录下FastDFS配置文件的后缀名<br> <img alt="" height="479" src="https://img-blog.csdnimg.cn/20210417184429614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="894"><br> 修改tracker.conf文件<br> <strong>默认指向的FastDFS****作者余庆的目录，因为在我们的机器上不存在，所有手动改一下</strong><br>  base_path=/opt/FastDFS/tracker             #配置tracker存储数据的目录，<strong>这个目录需要提前创建</strong><br> 命令：vim tracker.conf<br> <img alt="" height="580" src="https://img-blog.csdnimg.cn/2021041718523648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642"><br> 修改storage.conf文件<br>          base_path=/opt/FastDFS/storage                     #storage存储数据目录，<strong>目录需要提前创建</strong><br>          store_path0=/opt/FastDFS/storage/files         #真正存放文件的目录，<strong>目录需要提前创建</strong><br>          tracker_server=192.168.56.13:22122        #注册当前存储节点的跟踪器地址<br> <img alt="" height="124" src="https://img-blog.csdnimg.cn/20210417185931650.png" width="553"><br> <img alt="" height="169" src="https://img-blog.csdnimg.cn/20210417190051272.png" width="956"><br> <img alt="" height="129" src="https://img-blog.csdnimg.cn/20210417190124513.png" width="524"> </p>
+</blockquote>
+<h3 id="5-启动FastDFS"><a href="#5-启动FastDFS" class="headerlink" title="5.启动FastDFS"></a>5.启动FastDFS</h3><blockquote>
+</blockquote>
+<ul>
+<li>启动FastDFS的tracker服务 在任意目录下执行：fdfs_trackerd /etc/fdfs/tracker.conf- 查看启动的进程<img alt="" height="139" src="https://img-blog.csdnimg.cn/20210417195757797.png" width="898">- 启动FastDFS的storage服务 在任意目录下执行：fdfs_storaged /etc/fdfs/storage.conf- 查看启动进程<img alt="" height="147" src="https://img-blog.csdnimg.cn/20210417200521133.png" width="898">- 查看storage是否已经注册到了tracker下 命令：fdfs_monitor /etc/fdfs/storage.conf<img alt="" height="437" src="https://img-blog.csdnimg.cn/20210417201359824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="780">- 首次启动storage后，会在配置的路径下创建存储文件的目录<img alt="" height="289" src="https://img-blog.csdnimg.cn/20210417201437435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="533"></li>
+</ul>
+<h3 id="6-FastDFS重启"><a href="#6-FastDFS重启" class="headerlink" title="6.FastDFS重启"></a>6.FastDFS重启</h3><blockquote>
+</blockquote>
+<ul>
+<li>重启tracker 命令：fdfs_trackerd /etc/fdfs/tracker.conf restart<img alt="" height="115" src="https://img-blog.csdnimg.cn/20210417201950615.png" width="828">- 重启storage 命令：fdfs_storaged /etc/fdfs/storage.conf restart<img alt="" height="87" src="https://img-blog.csdnimg.cn/20210417202025395.png" width="773"></li>
+</ul>
+<h3 id="7-​​​​​​​FastDFS关闭"><a href="#7-​​​​​​​FastDFS关闭" class="headerlink" title="7.​​​​​​​FastDFS关闭"></a>7.​​​​​​​FastDFS关闭</h3><blockquote>
+</blockquote>
+<ul>
+<li>关闭tracker执行命令 在任意目录下执行：fdfs_trackerd /etc/fdfs/tracker.conf stop<img alt="" height="112" src="https://img-blog.csdnimg.cn/20210417202141922.png" width="757">- 关闭storage执行命令 在任意目录下执行：fdfs_storaged /etc/fdfs/storage.conf stop<img alt="" height="89" src="https://img-blog.csdnimg.cn/20210417202212646.png" width="723"><img alt="" height="80" src="https://img-blog.csdnimg.cn/20210417202444469.png" width="734">- 或者kill关闭fastdfs，但不建议在线上使用 kill -9 强制关闭，因为可能会导致文件信息不同步问题 ​​​​​​​</li>
+</ul>
  
       <!-- reward -->
       
@@ -164,7 +185,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/ES%E4%B9%8B%E8%AF%8D%E5%BA%93%E7%9A%84%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/FastDFS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -175,19 +196,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/07/18/FastDFS%E6%B5%8B%E8%AF%95/" class="article-nav-link">
+      <a href="/2021/07/18/FastDFS%E7%AE%80%E4%BB%8B/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            FastDFS测试
+            FastDFS简介
           
         </div>
       </a>
     
     
-      <a href="/2021/07/18/ELK%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-nav-link">
+      <a href="/2021/07/18/FastDFS%E6%B5%8B%E8%AF%95/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">ELK知识点学习</div>
+        <div class="article-nav-title">FastDFS测试</div>
       </a>
     
   </nav>

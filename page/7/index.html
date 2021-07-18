@@ -160,6 +160,375 @@
     
     
     <article
+  id="post-CSS背景(background)"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/"
+    >CSS背景(background)</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.197Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS背景(background)<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.背景颜色</p>
+<blockquote>
+<p> background-color: 颜色值;   默认的值是 **transparent  **透明的 </p>
+</blockquote>
+<p>2.背景图片(image)</p>
+<blockquote>
+<p> 语法： background-image : none | url (url) ; 例如: background-image: url(images/1.png); </p>
+</blockquote>
+<p>3.背景平铺（repeat）</p>
+<blockquote>
+ <pre><code class="language-css">background-repeat : repeat | no-repeat | repeat-x | repeat-y 
+</code></pre> 
+ <table><thead>|参数|作用
+</blockquote>
+</thead><tbody>|repeat|背景图像在纵向和横向上平铺（默认的）
+|no-repeat|背景图像不平铺
+|repeat-x|背景图像在横向上平铺
+|repeat-y| 背景图像在纵向平铺   
+</tbody></table> 什么是repeat？
+          
+ <img alt="" height="380" src="https://img-blog.csdnimg.cn/20210202210607583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">
+  什么是repeat-x？
+          
+ <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210202210750597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="483">
+  什么是repeat-y？
+          
+ <img alt="" height="369" src="https://img-blog.csdnimg.cn/20210202210842685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="451">
+
+
+<p>4.背景位置(position)</p>
+<blockquote>
+ <pre><code class="language-css">background-position : length || length
+background-position : position || position 
+</code></pre> 
+ <table><thead>|参数|值
+</blockquote>
+</thead><tbody>|length|百分数 | 由浮点数字和单位标识符组成的长度值
+|position|top | center | bottom | left | center | right   方位名词
+</tbody></table>
+ 注意： 
+ -  必须先指定background-image属性 -  position 后面是x坐标和y坐标。可以使用方位名词或者 精确单位。 -  如果指定两个值，两个值都是方位名字，则两个值前后顺序无关，比如left  top和top  left效果一致 -  如果只指定了一个方位名词，另一个值默认居中对齐。 -  如果position 后面是精确坐标， 那么第一个，肯定是 x 第二个一定是y -  如果只指定一个数值,那该数值一定是x坐标，另一个默认垂直居中 -  如果指定的两个值是 精确单位和方位名字混合使用，则第一个值是x坐标，第二个值是y坐标 
+ 背景简写： 
+ -  background：属性的值的书写顺序官方没有强制的标准。为了可读性，建议如下写： -  background: 背景颜色 背景图片地址 背景平铺 背景滚动 背景位置; 
+ <pre><code>/* 有背景图片背景颜色可以不用写*/
+background: transparent url(image.jpg) repeat-y  scroll center top ;</code></pre> 
+
+
+<p>5.背景图像固定background-attachment</p>
+<blockquote>
+<p> 背景是否跟着滚动而滚动<br> <img alt="" height="456" src="https://img-blog.csdnimg.cn/20210202214748899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> </p>
+</blockquote>
+<p>6.背景半透明(CSS3)</p>
+<blockquote>
+ <pre><code class="language-css">background: rgba(0, 0, 0, 0.3);
+background: rgba(0, 0, 0, .3);
+</code></pre> 
+</blockquote>
+<ul>
+<li>等同于background-color: rgba(0, 0, 0, .3) -  最后一个参数是alpha 透明度  取值范围 0~1之间 -  我们习惯把0.3 的 0 省略掉  这样写 background: rgba(0, 0, 0, .3); -  注意：背景半透明是指盒子背景半透明，盒子里面的内容不受影响 -  低于IE 9的版本不支持<br>盒子半透明 opacity </li>
+<li>设置opacity元素的所有后代元素会随着一起具有透明性，一般用于调整图片或者模块的整体不透明度 <pre>`opacity: .2;`</pre> </li>
+</ul>
+<p>7.背景总结</p>
+<blockquote>
+ <table><thead>|属性|作用|值
+</blockquote>
+</thead><tbody>|background-color|背景颜色|预定义的颜色值/十六进制/RGB代码
+|background-image|背景图片|url(图片路径)
+|background-repeat|是否平铺|repeat/no-repeat/repeat-x/repeat-y
+|background-position|背景位置|length/position    分别是x  和 y坐标， 切记 如果有 精确数值单位，则必须按照先X 后Y 的写法
+|background-attachment|背景固定还是滚动|scroll/fixed
+|背景简写|更简单|背景颜色 背景图片地址 背景平铺 背景滚动 背景位置;  他们没有顺序
+|背景透明|让盒子半透明|background: rgba(0,0,0,0.3);   后面必须是 4个值
+</tbody></table>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-CSS3 新增圆角以及盒子阴影"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/"
+    >CSS3 新增圆角以及盒子阴影</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.195Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS3 新增圆角以及盒子阴影<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.圆角边框</p>
+<blockquote>
+ <pre><code class="language-css">border-radius:length;
+</blockquote>
+<p>border-top-left-radius   定义了左上角的弧度<br>border-top-right-radius   定义了右上角的弧度<br>border-bottom-right-radius   定义了右下角的弧度<br>border-bottom-left-radius   定义了左下角的弧度<br></code></pre> </p>
+<ul>
+<li>其中每一个值可以为 数值或百分比的形式。 -  技巧：让一个正方形 变成圆圈 <pre><code class="language-css">border-radius: 50%;
+</code></pre> 
+<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/cd90d25bf757638154c28d92250dac7c.png">如果要在四个角上一一指定，可以使用以下规则👇👇： <pre><code class="language-css">border-radius: 左上角 右上角  右下角  左下角;
+</code></pre> </li>
+<li> 四个值: 第一个值为左上角，第二个值为右上角，第三个值为右下角，第四个值为左下角。 -  三个值: 第一个值为左上角, 第二个值为右上角和左下角，第三个值为右下角 -  两个值: 第一个值为左上角与右下角，第二个值为右上角与左下角 -  一个值：四个圆角值相同 </li>
+</ul>
+<p>2.盒子阴影(box-shadow)</p>
+<blockquote>
+ <pre><code class="language-css">box-shadow: offset-x offset-y [blur [spread]] [color] [inset]
+</code></pre> 
+ <table><thead>|值|描述
+</blockquote>
+</thead><tbody>|offset-x|阴影的水平偏移量。正数向右偏移，负数向左偏移。
+|offset-y|阴影的垂直偏移量。正数向下偏移，负数向上偏移。
+|blur|可选。阴影模糊距离，不能取负数。
+|spread|可选。阴影大小
+|color|可选。阴影的颜色
+|inset|可选。表示添加内阴影，默认为外阴影
+</tbody></table>
+ <pre><code class="language-css">div &#123;
+   width: 200px;
+   height: 200px;
+   border: 10px solid red;
+   /* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
+   /* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
+   box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);   
+&#125;</code></pre> 
+
+
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse之表和列的TTL规则与实践"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/"
+    >clickhouse之表和列的TTL规则与实践</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.359Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse之表和列的TTL规则与实践<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.表和列的TTL</p>
+<blockquote>
+<p> 定义值的生命周期<br> 可以为整个表设置，也可以为每个单独的列设置。<br> 表级的TTL也可以指定在磁盘和卷之间自动移动数据的逻辑。<br> 设置TTL的表，必须包含Date或DateTime类型的字段。<br> 定义数据的生命周期，需要在这个日期字段使用操作符：<br> <pre><code>TTL time_column<br>TTL time_column + interval<br></code></pre><br> 示例：<br> <pre><code>TTL date_time + INTERVAL 1 MONTH</p>
+</blockquote>
+<p>TTL date_time + INTERVAL 15 HOUR</code></pre> </p>
+<h3 id="2-列级TTL"><a href="#2-列级TTL" class="headerlink" title="2.列级TTL"></a>2.列级TTL</h3><blockquote>
+<p> 当列中的值过期时，ClickHouse将它们替换为该列对应数据类型的默认值。<br> 如果数据片段中所有列值都过期，则删除该数据片段下的该列的文件。<br> TTL子句不能用于key列。<br> 示例： </p>
+</blockquote>
+<ul>
+<li>创建TTL表- TTL过期验证- 给列增加TTL- 修改列的TTL</li>
+</ul>
+<h3 id="3-表级TTL"><a href="#3-表级TTL" class="headerlink" title="3.表级TTL"></a>3.表级TTL</h3><blockquote>
+ <ol>- 表级的TTL定义了过期行的删除、磁盘和卷之间自动移动数据的逻辑。- 一张表可以定义一个过期行移除的表达式和多个磁盘和卷之间自动移动数据的逻辑的表达式。 TTL expr [DELETE|TO DISK 'aaa'|TO VOLUME 'bbb'], ...- 当表中的数据过期时，ClickHouse删除所有对应的行。- TTL规则的类型跟在每个TTL表达式后面，它表示表达式满足后（达到当前时间）要执行的操作。**DELETE - 删除过期的行（默认操作）； TO DISK ‘aaa’ - 将片段移至磁盘aaa； TO VOLUME ‘bbb’ - 将片段移动至磁盘bbb；**<li>创建表示例： <pre><code class="language-sql">CREATE TABLE example_table
+(
+    d DateTime, 
+    a Int 
+)ENGINE = MergeTree 
+PARTITION BY toYYYYMM(d) 
+ORDER BY d 
+TTL d + INTERVAL 1 MONTH [DELETE], 
+    d + INTERVAL 1 WEEK TO VOLUME 'aaa',
+    d + INTERVAL 2 WEEK TO DISK 'bbb'
+SETTINGS storage_policy = 'moving_from_ssd_to_hdd';
+</code></pre> 注意：当TTL表达式指定了磁盘和卷之间移动数据的逻辑，那么ClickHouse的表必须指定存储策略，且该存储策略中要包含相应的磁盘和卷。 </li>- **使用案例：TTL过期后执行数据删除案例。** 1).当ClickHouse合并数据片段时， 将删除TTL过期的数据。 2).当ClickHouse发现数据过期时， 它将执行一个计划外的合并。 要控制这类合并的频率， 可设置参数 merge_with_ttl_timeout。如果该值设置的过低， 它将导致执行许多的计划外合并，这可能会消耗大量资源。 3).如果在合并的时候执行SELECT查询， 则可能会得到过期的数据。 为了避免这种情况， 可以在SELECT 之前使用OPTIMIZE查询。</ol>
+</blockquote>
+<h3 id="4-列级TTL示例"><a href="#4-列级TTL示例" class="headerlink" title="4.列级TTL示例"></a>4.列级TTL示例</h3><blockquote>
+ <ol><li>**创建带TTL的表** <pre><code class="language-sql">DROP TABLE example_table;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int TTL d + INTERVAL 1 MINUTE,
+    b String TTL d + INTERVAL 1 MINUTE,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d;
+xxxxx :) show create table example_table;
+</blockquote>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre> </li><li><strong>插入数据</strong> <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');<br>insert into example_table values(now(), 2, 'value2', 'ccc2');<br></code></pre> 等待1分钟之后，执行： <pre><code class="language-sql">xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:16 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘<br>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:15 │ 1 │ value1 │ ccc1 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.009 sec. </p>
+<p>xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b─┬─c────┐<br>│ 2020-11-26 14:53:15 │ 0 │   │ ccc1 │<br>│ 2020-11-26 14:53:16 │ 0 │   │ ccc2 │<br>└─────────────────────┴───┴───┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li><li><strong>给表的列添加TTL：</strong> <pre><code class="language-sql">ALTER TABLE example_table<br>MODIFY COLUMN<br>c String TTL d + INTERVAL 1 DAY;<br>xxxxx :) ALTER TABLE example_table<br>:-] MODIFY COLUMN<br>:-] c String TTL d + INTERVAL 1 DAY;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalDay(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.018 sec. </p>
+<p>xxxxx :)<br></code></pre> 修改列的TTL： <pre><code class="language-sql">ALTER TABLE example_table<br>    MODIFY COLUMN<br>    c String TTL d + INTERVAL 1 MONTH;<br>xxxxx :) ALTER TABLE example_table<br>:-]     MODIFY COLUMN<br>:-]     c String TTL d + INTERVAL 1 MONTH;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalMonth(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.015 sec. </p>
+<p>xxxxx :) show create table example_table;</p>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String TTL d + toIntervalMonth(1)<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
+<h3 id="5-表级TTL示例"><a href="#5-表级TTL示例" class="headerlink" title="5.表级TTL示例"></a>5.表级TTL示例</h3><blockquote>
+ <ol><li>**创建表** <pre><code class="language-sql">drop table example_table ;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int,
+    b String,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d
+TTL d + INTERVAL 1 MINUTE DELETE;
+</code></pre> </li><li>**插入数据** <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');
+insert into example_table values(now(), 2, 'value2', 'ccc2');
+</code></pre> 然后查询结果： <pre><code class="language-sql">xxxxx :) select * from example_table;
+</blockquote>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 15:24:53 │ 1 │ value1 │ ccc1 │<br>│ 2020-11-26 15:24:54 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.008 sec. </p>
+<p>xxxxx :)<br></code></pre> 等待1分钟后， 执行optimize操作。 <pre><code class="language-sql">xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.006 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.003 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-clickhouse之TSKV格式"
   class="article article-type-post"
   itemscope
@@ -817,267 +1186,6 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
 <h3 id="当参数设置为零时"><a href="#当参数设置为零时" class="headerlink" title="当参数设置为零时"></a>当参数设置为零时</h3><blockquote>
 <p> 当需要设置input_format_import_nested_json=0时： INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n”: {“s”: [“abc”, “def”], “i”: [1, 23]}}<br> Exception on client: Code: 117. DB::Exception: Unknown field found while parsing JSONEachRow format: n<br> Connecting to 192.168.0.200:9000 as user default. Connected to ClickHouse server version 20.1.4 revision 54431. </p>
 </blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/"
-    >clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.296Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—# CSV</p>
-<ul>
-<li>CSV默认的分隔符为逗号，format_csv_delimiter设置自定义的分隔符。- CSV中的双引号使用两个双引号转义。- 支持数据的查询和数据导入的。<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2></li>
-</ul>
-<h3 id="clickhouse中建表"><a href="#clickhouse中建表" class="headerlink" title="clickhouse中建表"></a>clickhouse中建表</h3><blockquote>
-<p> create table csv_demo(create_date Date, update_time DateTime, desc String) ENGINE=TinyLog; </p>
-</blockquote>
-<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><blockquote>
-</blockquote>
-<h1 id="创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy"><a href="#创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy" class="headerlink" title="创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy"></a>创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy</h1><h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
-<p> clickhouse-client –format_csv_delimiter=”|” –query=”INSERT INTO tutorial.csv_demo FORMAT CSV” &lt; csv_dmeo.csv </p>
-</blockquote>
-<h3 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h3><blockquote>
-<p> select * from csv_demo FORMAT CSV; </p>
-</blockquote>
-<img alt="" height="314" src="https://img-blog.csdnimg.cn/20210411124429818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="826">
-
-<h1 id="CSVWithNames"><a href="#CSVWithNames" class="headerlink" title="CSVWithNames"></a>CSVWithNames</h1><ul>
-<li>CSVWithNames会打印表头的信息。- 支持数据的导入和数据的查看。<h2 id="查询数据演示"><a href="#查询数据演示" class="headerlink" title="查询数据演示"></a>查询数据演示</h2></li>
-</ul>
-<blockquote>
-<p> select * from csv_demo FORMAT CSVWithNames; </p>
-</blockquote>
-<img alt="" height="327" src="https://img-blog.csdnimg.cn/20210411124532485.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="871">
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse基础语法简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/"
-    >clickhouse基础语法简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.290Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse基础语法简介<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—## 1.常用SQL语法</p>
-<blockquote>
- <pre><code class="language-sql">-- 列出数据库列表
-show databases;
-</blockquote>
-<p>– 列出数据库中表列表<br>show tables;</p>
-<p>– 创建数据库<br>create database test;</p>
-<p>–选中数据库<br>use test;</p>
-<p>– 删除一个表<br>drop table if exists test.t1;</p>
-<p>– 创建第一个表<br>create /<em>temporary</em>/ table /<em>if not exists</em>/ test.m1 (<br> id UInt16<br>,name String<br>) ENGINE = Memory<br>;<br>– 插入测试数据<br>insert into test.m1 (id, name) values (1, ‘abc’), (2, ‘bbbb’);</p>
-<p>– 查询<br>select * from test.m1;</p>
-<p></code></pre> 
-   </p>
-<h2 id="2-默认值"><a href="#2-默认值" class="headerlink" title="2.默认值"></a>2.默认值</h2><blockquote>
-<p> 默认值 的处理方面， ClickHouse 中，默认值总是有的，如果没有显示式指定的话，会按字段类型处理： </p>
-</blockquote>
-<ul>
-<li>数字类型， 0- 字符串，空字符串- 数组，空数组- 日期， 0000-00-00- 时间， 0000-00-00 00:00:00- 注：NULLs 是不支持的</li>
-</ul>
-<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3.数据类型"></a>3.数据类型</h3><blockquote>
- <ul>- 整型：UInt8,UInt16,UInt32,UInt64,Int8,Int16,Int32,Int64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184612320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x1eGlhbmd5MTMxNA==,size_16,color_FFFFFF,t_70">- 枚举类型：Enum8,Enum16 存储为Int8或Int16的一组枚举字符串值。例： Enum8（'hello'= 1，'world'= 2）， 这个数据类型有两个值  'hello'和'world'。 该数值必须在-128..127为Enum8和-32768..32767为Enum16。枚举的每个成员也必须有不同的数字。空字符串是一个有效的值。数字不需要是连续的，可以以任何顺序。是顺序无关的。 在内存中，数据的存储方式与数字类型Int8和Int16相同。以文本格式读取时，读取字符串并查找相应的数值。如果找不到，则会抛出异常。当以文本格式写入时，查找存储的数字并写出相应的字符串。 如果数字不对应已知的值，则会抛出异常。以二进制格式，信息以与Int8和Int16相同的方式保存。Enum的隐式默认值是具有最小数值的值 -  字符串(String、FixedString 和 UUID) 1)String         String 不限制长度，相当于Varchar、Text、Clob 和 Blob 等字符类型 2)FixedString(N)        FixedString(N)相当于Char，长度固定，数据长度不够时，添加空字节（null）；长度过长返回错误消息 3)UUID        32位，格式8-4-4-4-12，如果未被赋值，则用0填充 -  日期时间类型 1)Date: 2020-02-02 精确到天 2)DateTime: 2020-02-02 20:20:20 精确到秒 3)DateTime64: 2020-02-02 20:20:20.335 精确到亚秒，可以设置精度均支持字符串写入 -  数组类型 Array(T) T 类型的数组。T型可以是任何类型，包括数组。我们不推荐使用多维数组，因为它们不被很好的支持（例如，除了内存表之外，你不能在多维数组中存储多维数组） -  元组：Tuple 由多个元素组成，允许不同类型 创建数据：(T1, T2, …)，Tuple(T1, T2, …) <li> 嵌套（Nested(Name1 Type1, Name2 Type2, ...)） 嵌套数据结构类似于嵌套表。嵌套数据结构的参数（列名和类型）与 CREATE 查询类似。每个表可以包含任意多行嵌套数据结构。 只支持一级嵌套。嵌套结构的列中，若列的类型是数组类型，那么该列其实和多维数组是相同的，所以目前嵌套层级的支持很局限（MergeTree 引擎中不支持存储这样的列） 大多数情况下，处理嵌套数据结构时，会指定一个单独的列。为了这样实现，列的名称会与点号连接起来。这些列构成了一组匹配类型。在同一条嵌套数据中，所有的列都具有相同的长度。 不能对整个嵌套数据结构执行 SELECT。只能明确列出属于它一部分列。 <pre><code class="language-sql">CREATE TABLE test.visits
-(
-    CounterID UInt32,
-    StartDate Date,
-    Sign Int8,
-    IsNew UInt8,
-    VisitID UInt64,
-    UserID UInt64,
-    ...
-    Goals Nested
-    (
-        ID UInt32,
-        Serial UInt32,
-        EventTime DateTime,
-        Price Int64,
-        OrderID String,
-        CurrencyID UInt32
-    ),
-    ...
-) ENGINE = CollapsingMergeTree(StartDate, intHash32(UserID), (CounterID, StartDate, intHash32(UserID), VisitID), 8192, Sign)</code></pre>  作者：盗梦者_56f2 链接：https://www.jianshu.com/p/39e675ccbf3b 来源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 </li>-  浮点数 Float32 和 Float64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184649655.png"> float精度是：7~8位有效数字 double精度是：16~17位有效数字 -  定点数 Decimal32、Decimal64 和Decimal128 Decimal(P, S)：P代表精度，决定总位数（整数部分+小数部分），取值范围是1~38; S代表规模，决定小数位数，取值范围是0～P。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127185044682.png#pic_center"> <li> 缺失值（Nullable(TypeName)） 允许用特殊标记NULL表示"缺失值"，可以与 `TypeName` 的正常值存放一起。例如，`Nullable(Int8)` 类型的列可以存储 `Int8` 类型值，而没有值的行将存储 `NULL`。 对于 `TypeName`，不能使用复合数据类型 Array和 Tuple。复合数据类型可以包含 `Nullable` 类型值，例如`Array(Nullable(Int8))`。`Nullable` 类型字段不能包含在表索引中。 除非在 ClickHouse 服务器配置中另有说明，否则 `NULL` 是任何 `Nullable` 类型的默认值。 使用 Nullable 几乎总是对性能产生负面影响。 <pre><code class="language-sql"> CREATE TABLE t_null(x Int8, y Nullable(Int8)) ENGINE TinyLog
-#
-INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
-</blockquote>
-<h3 id="4-物化列"><a href="#4-物化列" class="headerlink" title="4.物化列"></a>4.物化列</h3><blockquote>
-<p> 指定 MATERIALIZED 表达式，即将一个列作为<code>物化列</code>处理了，这意味着这个列的值不能从<code>insert</code> 语句获取，只能是自己计算出来的。同时，物化列也不会出现在 <code>select *</code> 的结果中：<br> <pre><code class="language-sql">drop table if exists test.m2;<br>create table test.m2 (<br> a MATERIALIZED (b+1)<br>,b UInt16<br>) ENGINE = Memory;<br>insert into test.m2 (b) values (1);<br>select * from test.m2;<br>select a, b from test.m2; --这个可以查出来</code></pre> 
-   </p>
-</blockquote>
-<h3 id="5-表达式列"><a href="#5-表达式列" class="headerlink" title="5.表达式列"></a>5.表达式列</h3><blockquote>
-<p> ALIAS 表达式列某方面跟物化列相同，就是它的值不能从 insert 语句获取。不同的是， 物化列 是会真正保存数据（这样查询时不需要再计算），<br> 而表达式列不会保存数据（这样查询时总是需要计算），只是在查询时返回表达式的结果。<br> <pre><code class="language-sql">create table test.m3 (a ALIAS (b+1), b UInt16) ENGINE = Memory;<br>insert into test.m3(b) values (1);<br>select * from test.m3;<br>select a, b from test.m3;</code></pre> 
-   </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickHouse基本介绍"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"
-    >clickHouse基本介绍</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.283Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickHouse基本介绍<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—## 1.简介</p>
-<blockquote>
-<p>       ClickHouse是俄罗斯的Yandex于2016年开源的一个用于联机分析(OLAP:Online Analytical Processing)的列式数据库管理系统(DBMS:Database Management System)，简称CK , 主要用于在线分析处理查询（OLAP），能够使用SQL查询实时生成分析数据报告。<br>       ClickHouse是一个完全的列式数据库管理系统，允许在运行时创建表和数据库，加载数据和运行查询，而无需重新配置和重新启动服务器，支持线性扩展，简单方便，高可靠性，容错。它在大数据领域没有走 Hadoop 生态，而是采用 Local attached storage 作为存储，这样整个 IO 可能就没有 Hadoop 那一套的局限。它的系统在生产环境中可以应用到比较大的规模，因为它的线性扩展能力和可靠性保障能够原生支持 shard + replication 这种解决方案。它还提供了一些 SQL 直接接口，有比较丰富的原生 client。另外就是它比较快。 </p>
-</blockquote>
-<h2 id="2-ClickHouse的特点"><a href="#2-ClickHouse的特点" class="headerlink" title="2.ClickHouse的特点"></a>2.<strong><strong>ClickHouse的特点</strong></strong></h2><blockquote>
-</blockquote>
-<ul>
-<li>开源的列存储数据库管理系统，支持线性扩展，简单方便，高可靠性，- 容错跑分快：比Vertica快5倍，比Hive快279倍，比MySQL快800倍,其可处理的数据级别已达到10亿级别- 功能多：支持数据统计分析各种场景，支持类SQL查询，异地复制部署</li>
-</ul>
-<h2 id="3-clickHouse的性能"><a href="#3-clickHouse的性能" class="headerlink" title="3.clickHouse的性能"></a><strong><strong>3.clickHouse的性能</strong></strong></h2><blockquote>
-</blockquote>
-<ul>
-<li>低延迟：对于数据量（几千行，列不是很多）不是很大的短查询，如果数据已经被载入缓存，且使用主码，延迟在50MS左右。- 并发量：虽然 ClickHouse 是一种在线分析型数据库，也可支持一定的并发。当单个查询比较短时，官方建议 100 Queries / second- 写入速度：在使用 MergeTree 引擎的情况下，写入速度大概是 50 - 200 M / s，如果按照 1 K 一条记录来算，大约每秒可写入 50000 ~ 200000 条记录每秒。如果每条记录比较小的话写入速度会更快</li>
-</ul>
-<h2 id="4-clickhouse的优缺点介绍"><a href="#4-clickhouse的优缺点介绍" class="headerlink" title="4.clickhouse的优缺点介绍"></a><strong><strong>4.</strong></strong>clickhouse的优缺点介绍</h2><blockquote>
-<p> 优点： </p>
-</blockquote>
-<ul>
-<li>快，超乎想象的快（单表），clickhouse目前测试和使用中来看，单表的查询性能无人能敌。- 压缩率高，目前clickhouse的数据压缩能够达到30%～40%之前，这对于一个 精打细算的公司来说是一件很划算的事情（省磁盘） 总结起来就是吃的是草，挤的是奶（手动滑稽）<br>缺点： </li>
-<li>就是对于并发支持不够友好。在高并发查询，大概同时的查询数量在上千级别的话，就很容易出问题，因 此，用来做面向用户的查询的存储肯定就不是一个正确的选择- 相对于查询来说，他的写入速度没有那么优秀，目前测试 来看，单台机器的写入速度只能达到大概30W/s～60W/s- 相比较他自己单表查询性能来说，join的性能就不是很优秀了，但是相 比较传统的hive和spark来说，性能还是很很不错的</li>
-</ul>
  
       <!-- reward -->
       

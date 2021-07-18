@@ -160,6 +160,244 @@
     
     
     <article
+  id="post-FastDFS简介"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/FastDFS%E7%AE%80%E4%BB%8B/"
+    >FastDFS简介</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/FastDFS%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:22:37.088Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Fastdfs/">Fastdfs</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: FastDFS简介<br>categories:</p>
+<ul>
+<li>fastdfs</li>
+</ul>
+<p>—### 1.什么是分布式文件系统</p>
+<blockquote>
+<p>         分布式文件系统 (Distributed File System) 是一个软件/软件服务器，这个软件可以用来管理文件。但这个软件所管理的文件通常不是在一个服务器节点上，而是在多个服务器节点上，这些服务器节点通过网络相连构成一个庞大的文件存储服务器集群，这些服务器都用于存储文件资源，通过分布式文件系统来管理这些服务器上的文件。<br>        常见的分布式文件系统有：FastDFS、GFS、HDFS、Lustre 、Ceph 、GridFS 、mogileFS、TFS等。<br>        分布式文件系统与传统文件系统对比<br> <img alt="" height="292" src="https://img-blog.csdnimg.cn/20210417174637335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553"><br> 传统方式弊端 </p>
+</blockquote>
+<ul>
+<li>如果用户数量多，IO操作比较多，对磁盘访问压力很大- 如果磁盘发生故障，会造成数据丢失- 存储容量有限</li>
+</ul>
+<h3 id="2-​​​​​​​FastDFS简介"><a href="#2-​​​​​​​FastDFS简介" class="headerlink" title="2.​​​​​​​FastDFS简介"></a>2.​​​​​​​FastDFS简介</h3><blockquote>
+<p>         FastDFS是一个开源的轻量级分布式文件系统，为互联网应用量身定做，简单、灵活、高效，采用C语言开发，由阿里巴巴开发并开源。<br>        FastDFS对文件进行管理，功能包括：文件存储、文件同步、文件访问（文件上传、文件下载、文件删除）等，解决了大容量文件存储的问题，特别适合以文件为载体的在线服务，如相册网站、文档网站、图片网站、视频网站等等。<br>        FastDFS充分考虑了冗余备份、线性扩容等机制，并注重高可用、高性能等指标，使用FastDFS很容易搭建一套高性能的文件服务器集群提供文件上传、下载等服务。 </p>
+</blockquote>
+<h3 id="3-​​​​​​​FastDFS整体架构"><a href="#3-​​​​​​​FastDFS整体架构" class="headerlink" title="3.​​​​​​​FastDFS整体架构"></a>3.​​​​​​​FastDFS整体架构</h3><blockquote>
+<p>       FastDFS文件系统由两大部分构成，一个是客户端，一个是服务端<br>       客户端通常指我们的程序，比如我们的Java程序去连接FastDFS、操作FastDFS，那我们的Java程序就是一个客户端，FastDFS提供专有API访问，目前提供了C、Java和PHP几种编程语言的API，用来访问FastDFS文件系统。<br>          服务端由两个部分构成：一个是跟踪器（tracker），一个是存储节点（storage）<br>          跟踪器（tracker）主要做调度工作，在内存中记录集群中存储节点storage的状态信息，是前端Client和后端存储节点storage的枢纽。因为相关信息全部在内存中，Tracker server的性能非常高，一个较大的集群（比如上百个group）中有3台就足够了。<br>          存储节点（storage）用于存储文件，包括文件和文件属性（meta data）都保存到存储服务器磁盘上，完成文件管理的所有功能：文件存储、文件同步和提供文件访问等。 ​​​​​​​</p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-FastDFS环境搭建"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/FastDFS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
+    >FastDFS环境搭建</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/FastDFS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2021-07-18T14:22:37.086Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Fastdfs/">Fastdfs</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: FastDFS环境搭建<br>categories:</p>
+<ul>
+<li>fastdfs</li>
+</ul>
+<p>—### 1.安装前的准备</p>
+<blockquote>
+<p> 检查Linux上是否安装了 gcc、libevent、libevent-devel </p>
+</blockquote>
+<ul>
+<li>yum list installed | grep gcc- yum list installed | grep libevent- yum list installed | grep libevent-devel<br>如果没有安装，则需进行安装<br>命令：yum install gcc libevent libevent-devel -y </li>
+</ul>
+<h3 id="2-安装-libfastcommon-库"><a href="#2-安装-libfastcommon-库" class="headerlink" title="2.安装 libfastcommon 库"></a>2.安装 libfastcommon 库</h3><blockquote>
+<p> libfastcommon 库是 FastDFS 文件系统运行需要的公共 C 语言函数库<br> *<em>注意：目前最新版本的v1.0.39</em><em><strong>和最新版的FastDFS5.11</strong></em><em>不兼容，所有我们这里使用的版本是v1.0.36  <strong>下载地址：<br> 将下载好的libfastcommon文件上传到Linuxs（/opt/FastDFS）<br> <img alt="" height="192" src="https://img-blog.csdnimg.cn/20210417181554593.png" width="877"><br> 解压下载下来的tar.gz压缩包到当前目录<br> 命令：tar -zxvf libfastcommon-1.0.36.tar.gz<br> 切换到解压后的libfastcommon目录<br> <img alt="" height="251" src="https://img-blog.csdnimg.cn/20210417181925833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="762"><br> 执行make脚本进行编译<br>  ** ./make.sh</strong><br> <img alt="" height="241" src="https://img-blog.csdnimg.cn/20210417182035706.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1005"><br> <strong>注意： make</strong></em><em>编译的时候如果报错，需解决错误后再次进行make</em><em><strong>，通常发生错误是由于Linux</strong></em><em>缺少某些依赖库导致，根据错误提示解决错误</em>*<br> 执行make install进行安装<br> ./make.sh install<br> <img alt="" height="261" src="https://img-blog.csdnimg.cn/20210417182154506.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1152"> </p>
+</blockquote>
+<h3 id="3-安装FastDFS"><a href="#3-安装FastDFS" class="headerlink" title="3.安装FastDFS"></a>3.安装FastDFS</h3><blockquote>
+<p> FastDFS没有Windows版本，不能在Windows下使用。<br> FastDFS需要安装部署在Linux环境下，我们这里使用的是fastdfs-5.11版本（201901）<br> 下载地址：<br> 解压下载下来的tar.gz压缩包到当前目录<br> 命令：tar -zxvf fastdfs-5.11.tar.gz<br> <img alt="" height="305" src="https://img-blog.csdnimg.cn/20210417182356215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="800"><br> 切换到解压后FastDFS的目录，执行make脚本进行编译<br> <img alt="" height="530" src="https://img-blog.csdnimg.cn/20210417182507948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="862"><br> 执行make install进行安装<br> 命令：./make.sh install<br> <img alt="" height="501" src="https://img-blog.csdnimg.cn/20210417182626786.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1073"><br> 至此FastDFS安装完成<br> 所有编译出来的文件存放在/usr/bin目录下<br> 所有配置文件存放在/etc/fdfs目录下<br> 查看安装后的效果：<br> 命令：ll /usr/bin/fdfs*<br> <img alt="" height="351" src="https://img-blog.csdnimg.cn/2021041718314329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="864"><br> /usr/bin是Linux的环境变量，可通过echo $PATH查看<br> 查看FastDFS的配置文件：<br> 命令：ll /etc/fdfs/<br> <img alt="" height="186" src="https://img-blog.csdnimg.cn/20210417183302325.png" width="767"><br> 另外注意需要把解压后的fastdfs-5.11/conf目录下的两个文件拷贝到/etc/fdfs/ ，否则后续会有很多奇怪问题不好解决<br> 命令：<br> cp http.conf /etc/fdfs/<br> cp mime.types /etc/fdfs/<br> <img alt="" height="322" src="https://img-blog.csdnimg.cn/20210417183955536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="659"> </p>
+</blockquote>
+<h3 id="4-配置FastDFS"><a href="#4-配置FastDFS" class="headerlink" title="4.配置FastDFS"></a>4.配置FastDFS</h3><blockquote>
+<p> 去掉/etc/fdfs/目录下FastDFS配置文件的后缀名<br> <img alt="" height="479" src="https://img-blog.csdnimg.cn/20210417184429614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="894"><br> 修改tracker.conf文件<br> <strong>默认指向的FastDFS****作者余庆的目录，因为在我们的机器上不存在，所有手动改一下</strong><br>  base_path=/opt/FastDFS/tracker             #配置tracker存储数据的目录，<strong>这个目录需要提前创建</strong><br> 命令：vim tracker.conf<br> <img alt="" height="580" src="https://img-blog.csdnimg.cn/2021041718523648.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="642"><br> 修改storage.conf文件<br>          base_path=/opt/FastDFS/storage                     #storage存储数据目录，<strong>目录需要提前创建</strong><br>          store_path0=/opt/FastDFS/storage/files         #真正存放文件的目录，<strong>目录需要提前创建</strong><br>          tracker_server=192.168.56.13:22122        #注册当前存储节点的跟踪器地址<br> <img alt="" height="124" src="https://img-blog.csdnimg.cn/20210417185931650.png" width="553"><br> <img alt="" height="169" src="https://img-blog.csdnimg.cn/20210417190051272.png" width="956"><br> <img alt="" height="129" src="https://img-blog.csdnimg.cn/20210417190124513.png" width="524"> </p>
+</blockquote>
+<h3 id="5-启动FastDFS"><a href="#5-启动FastDFS" class="headerlink" title="5.启动FastDFS"></a>5.启动FastDFS</h3><blockquote>
+</blockquote>
+<ul>
+<li>启动FastDFS的tracker服务 在任意目录下执行：fdfs_trackerd /etc/fdfs/tracker.conf- 查看启动的进程<img alt="" height="139" src="https://img-blog.csdnimg.cn/20210417195757797.png" width="898">- 启动FastDFS的storage服务 在任意目录下执行：fdfs_storaged /etc/fdfs/storage.conf- 查看启动进程<img alt="" height="147" src="https://img-blog.csdnimg.cn/20210417200521133.png" width="898">- 查看storage是否已经注册到了tracker下 命令：fdfs_monitor /etc/fdfs/storage.conf<img alt="" height="437" src="https://img-blog.csdnimg.cn/20210417201359824.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="780">- 首次启动storage后，会在配置的路径下创建存储文件的目录<img alt="" height="289" src="https://img-blog.csdnimg.cn/20210417201437435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="533"></li>
+</ul>
+<h3 id="6-FastDFS重启"><a href="#6-FastDFS重启" class="headerlink" title="6.FastDFS重启"></a>6.FastDFS重启</h3><blockquote>
+</blockquote>
+<ul>
+<li>重启tracker 命令：fdfs_trackerd /etc/fdfs/tracker.conf restart<img alt="" height="115" src="https://img-blog.csdnimg.cn/20210417201950615.png" width="828">- 重启storage 命令：fdfs_storaged /etc/fdfs/storage.conf restart<img alt="" height="87" src="https://img-blog.csdnimg.cn/20210417202025395.png" width="773"></li>
+</ul>
+<h3 id="7-​​​​​​​FastDFS关闭"><a href="#7-​​​​​​​FastDFS关闭" class="headerlink" title="7.​​​​​​​FastDFS关闭"></a>7.​​​​​​​FastDFS关闭</h3><blockquote>
+</blockquote>
+<ul>
+<li>关闭tracker执行命令 在任意目录下执行：fdfs_trackerd /etc/fdfs/tracker.conf stop<img alt="" height="112" src="https://img-blog.csdnimg.cn/20210417202141922.png" width="757">- 关闭storage执行命令 在任意目录下执行：fdfs_storaged /etc/fdfs/storage.conf stop<img alt="" height="89" src="https://img-blog.csdnimg.cn/20210417202212646.png" width="723"><img alt="" height="80" src="https://img-blog.csdnimg.cn/20210417202444469.png" width="734">- 或者kill关闭fastdfs，但不建议在线上使用 kill -9 强制关闭，因为可能会导致文件信息不同步问题 ​​​​​​​</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-FastDFS测试"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/FastDFS%E6%B5%8B%E8%AF%95/"
+    >FastDFS测试</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/FastDFS%E6%B5%8B%E8%AF%95/" class="article-date">
+  <time datetime="2021-07-18T14:22:37.083Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Fastdfs/">Fastdfs</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: FastDFS测试<br>categories:</p>
+<ul>
+<li>fastdfs</li>
+</ul>
+<p>—### 1.简介</p>
+<blockquote>
+<p> FastDFS安装完成之后，可以使用fdfs_test脚本测试文件上传 </p>
+</blockquote>
+<h3 id="2-测试之前，需要修改client-conf配置文件，修改两个配置"><a href="#2-测试之前，需要修改client-conf配置文件，修改两个配置" class="headerlink" title="2.测试之前，需要修改client.conf配置文件，修改两个配置"></a>2.测试之前，需要修改client.conf配置文件，修改两个配置</h3><blockquote>
+ <img alt="" height="280" src="https://img-blog.csdnimg.cn/20210417204142585.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="645"> 
+ <img alt="" height="197" src="https://img-blog.csdnimg.cn/20210417204301702.png" width="686"> 
+</blockquote>
+<ul>
+<li>在/opt/FastDFS//目录下创建client<img alt="" height="163" src="https://img-blog.csdnimg.cn/2021041720440960.png" width="507"></li>
+</ul>
+<h3 id="3-启动fdfs"><a href="#3-启动fdfs" class="headerlink" title="3.启动fdfs"></a>3.启动fdfs</h3><blockquote>
+ <img alt="" height="230" src="https://img-blog.csdnimg.cn/20210417205010495.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="900"> 
+</blockquote>
+<h3 id="4-测试文件上传"><a href="#4-测试文件上传" class="headerlink" title="4.测试文件上传"></a>4.测试文件上传</h3><blockquote>
+</blockquote>
+<ul>
+<li>准备需要上传的文件<img alt="" height="177" src="https://img-blog.csdnimg.cn/20210417205317340.png" width="702"><img alt="" height="162" src="https://img-blog.csdnimg.cn/20210417205415154.png" width="640">- 执行上传命令fdfs_test /etc/fdfs/client.conf upload /root/aa.txt<img alt="" height="409" src="https://img-blog.csdnimg.cn/20210417210039610.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="704"><img alt="" height="770" src="https://img-blog.csdnimg.cn/20210417211150986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1009">- 切换到存储目录查看文件上传情况<img alt="" height="206" src="https://img-blog.csdnimg.cn/20210417210240688.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1078"><img alt="" height="188" src="https://img-blog.csdnimg.cn/20210417211219718.png" width="1006">- FastDFS生成的文件目录结构及名称示例<img alt="" height="89" src="https://img-blog.csdnimg.cn/20210417210319330.png" width="527">
+  </li>
+</ul>
+<h3 id="5-测试文件下载"><a href="#5-测试文件下载" class="headerlink" title="5.测试文件下载"></a>5.测试文件下载</h3><blockquote>
+ <img alt="" height="563" src="https://img-blog.csdnimg.cn/20210417214249415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> 
+ 命令：fdfs_test /etc/fdfs/client.conf download group1 M00/00/00/wKg4DWB620aAeye8AAAWdd4My38470.txt 
+ group1：表示组名 
+ M00/00/00/wKg4DWB620aAeye8AAAWdd4My38470.txt：要下载的文件名称，和上面上传时候的文件路径对应 
+</blockquote>
+<h3 id="6-测试文件删除"><a href="#6-测试文件删除" class="headerlink" title="6.测试文件删除"></a>6.测试文件删除</h3><blockquote>
+<p> 命令：fdfs_test /etc/fdfs/client.conf delete group1 M00/00/00/wKg4DWB620aAeye8AAAWdd4My38470.txt<br> <img alt="" height="328" src="https://img-blog.csdnimg.cn/20210417214624413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 查看之前上传的路径：<br> <img alt="" height="168" src="https://img-blog.csdnimg.cn/20210417214929783.png" width="1029"> </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-ES之词库的动态添加"
   class="article article-type-post"
   itemscope
@@ -1375,338 +1613,6 @@ public static void main(String[] args) &#123;
 </blockquote>
 <h3 id="6、Elasticsearch之⾃定义分词器以及应⽤"><a href="#6、Elasticsearch之⾃定义分词器以及应⽤" class="headerlink" title="6、Elasticsearch之⾃定义分词器以及应⽤"></a>6、Elasticsearch之⾃定义分词器以及应⽤</h3><blockquote>
 <p> 6.1、案例需求：<br> <img alt="" height="58" src="https://img-blog.csdnimg.cn/20210704154206109.png" width="796"><img alt="" height="783" src="https://img-blog.csdnimg.cn/20210704154226316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="463"><br> 6.2、设置分词器<br> <img alt="" height="621" src="https://img-blog.csdnimg.cn/20210704154308863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="699"><br> 6.3、验证分词器效果<br> <img alt="" height="135" src="https://img-blog.csdnimg.cn/20210704154525604.png" width="800"><br> <img alt="" height="588" src="https://img-blog.csdnimg.cn/20210704154546577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="982"><br> 6.4、为属性添加分词器<br> <img alt="" height="373" src="https://img-blog.csdnimg.cn/20210704154634587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="996"><br> 6.5、结果验证<br>    执⾏如下命令添加数据<br>    <img alt="" height="234" src="https://img-blog.csdnimg.cn/20210704154704254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="452">    <img alt="" height="728" src="https://img-blog.csdnimg.cn/20210704154744408.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="462" src="https://img-blog.csdnimg.cn/20210704154800679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="566" src="https://img-blog.csdnimg.cn/20210704154826224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch优化"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E4%BC%98%E5%8C%96/"
-    >Elasticsearch优化</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E4%BC%98%E5%8C%96/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.440Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch优化<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、硬件选择</p>
-<blockquote>
-<p> Elasticsearch 的基础是 Lucene，所有的索引和文档数据是存储在本地的磁盘中，具体的路径可在 ES 的配置文件…/config/elasticsearch.yml中配置，如下：<br> <pre><code class="language-XML">#</p>
-</blockquote>
-<h1 id="Path-to-directory-where-to-store-the-data-separate-multiple-locations-by-comma"><a href="#Path-to-directory-where-to-store-the-data-separate-multiple-locations-by-comma" class="headerlink" title="Path to directory where to store the data (separate multiple locations by comma):"></a>Path to directory where to store the data (separate multiple locations by comma):</h1><h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>path.data: /path/to/data<br>#</p>
-<h1 id="Path-to-log-files"><a href="#Path-to-log-files" class="headerlink" title="Path to log files:"></a>Path to log files:</h1><h1 id="-1"><a href="#-1" class="headerlink" title=""></a></h1><p>path.logs: /path/to/logs<br></code></pre><br> 磁盘在现代服务器上通常都是瓶颈。Elasticsearch重度使用磁盘，你的磁盘能处理的吞吐量越大，你的节点就越稳定。这里有一些优化磁盘I/O的技巧： </p>
-<ul>
-<li>使用SSD就像其他地方提过的，他们比机械磁盘优秀多了。- 使用RAID0。条带化RAID会提高磁盘IO，代价显然就是当一块硬盘故障时整个就故障了。不要使用镜像或者奇偶校验RAID，因为副本已经提供了这个功能。- 另外，使用多块硬盘，并允许Elasticsearch 通过多个path data目录配置把数据条带化分配到它们上面。- 不要使用远程挂载的存储，比如NFS或者SMB/CIFS。这个引入的延迟对性能来说完全是背道而驰的。</li>
-</ul>
-<h3 id="2、分片策略"><a href="#2、分片策略" class="headerlink" title="2、分片策略"></a>2、分片策略</h3><blockquote>
- <h3>合理设置分片数</h3> 
- 分片和副本的设计为 ES 提供了支持分布式和故障转移的特性，但并不意味着分片和副本是可以无限分配的。而且索引的分片完成分配后由于索引的路由机制，我们是不能重新修改分片数的。 
- 可能有人会说，我不知道这个索引将来会变得多大，并且过后我也不能更改索引的大小，所以为了保险起见，还是给它设为 1000 个分片吧。但是需要知道的是，一个分片并不是没有代价的。需要了解： 
-</blockquote>
-<ul>
-<li>一个分片的底层即为一个 Lucene 索引，会消耗一定文件句柄、内存、以及 CPU运转。- 每一个搜索请求都需要命中索引中的每一个分片，如果每一个分片都处于不同的节点还好， 但如果多个分片都需要在同一个节点上竞争使用相同的资源就有些糟糕了。- 用于计算相关度的词项统计信息是基于分片的。如果有许多分片，每一个都只有很少的数据会导致很低的相关度。<br>一个业务索引具体需要分配多少分片可能需要架构师和技术人员对业务的增长有个预先的判断，横向扩展应当分阶段进行。为下一阶段准备好足够的资源。 只有当你进入到下一个阶段，你才有时间思考需要作出哪些改变来达到这个阶段。一般来说，我们遵循一些原则： </li>
-<li>控制每个分片占用的硬盘容量不超过 ES 的最大 JVM 的堆空间设置（一般设置不超过 32G，参考下文的 JVM 设置原则），因此，如果索引的总容量在 500G 左右，那分片大小在 16 个左右即可；当然，最好同时考虑原则 2。- 考虑一下 node 数量，一般一个节点有时候就是一台物理机，如果分片数过多，大大超过了节点数，很可能会导致一个节点上存在多个分片，一旦该节点故障，即使保持了 1 个以上的副本，同样有可能会导致数据丢失，集群无法恢复。所以， 一般都设置分片数不超过节点数的 3 倍。- 主分片，副本和节点最大数之间数量，我们分配的时候可以参考以下关系：- 节点数&lt;=主分片数 *（副本数+1）</li>
-</ul>
-<h3 id="3、推迟分片分配"><a href="#3、推迟分片分配" class="headerlink" title="3、推迟分片分配"></a>3、推迟分片分配</h3><blockquote>
-<p> 对于节点瞬时中断的问题，默认情况，集群会等待一分钟来查看节点是否会重新加入，如果这个节点在此期间重新加入，重新加入的节点会保持其现有的分片数据，不会触发新的分片分配。这样就可以减少 ES 在自动再平衡可用分片时所带来的极大开销。<br> 通过修改参数 delayed_timeout ，可以延长再均衡的时间，可以全局设置也可以在索引级别进行修改：<br> <pre><code class="language-java">#PUT /_all/_settings<br>&#123;<br>    "settings": &#123;<br>        "index.unassigned.node_left.delayed_timeout": "5m"<br>    &#125;<br>&#125;<br></code></pre> </p>
-</blockquote>
-<h3 id="4、路由选择"><a href="#4、路由选择" class="headerlink" title="4、路由选择"></a>4、路由选择</h3><blockquote>
-<p> 当我们查询文档的时候， Elasticsearch 如何知道一个文档应该存放到哪个分片中呢？它其实是通过下面这个公式来计算出来：<br> <pre><code class="language-java">shard = hash(routing) % number_of_primary_shards<br></code></pre><br> routing 默认值是文档的 id，也可以采用自定义值，比如用户 id。<br> <h3>不带routing查询</h3><br> 在查询的时候因为不知道要查询的数据具体在哪个分片上，所以整个过程分为2个步骤 </p>
-</blockquote>
-<ul>
-<li>分发：请求到达协调节点后，协调节点将查询请求分发到每个分片上。- 聚合：协调节点搜集到每个分片上查询结果，在将查询的结果进行排序，之后给用户返回结果。<h3>带routing查询</h3> 
-查询的时候，可以直接根据routing 信息定位到某个分配查询，不需要查询所有的分配，经过协调节点排序。向上面自定义的用户查询，如果routing 设置为userid 的话，就可以直接查询出数据来，效率提升很多。 </li>
-</ul>
-<h3 id="带routing查询"><a href="#带routing查询" class="headerlink" title="带routing查询"></a>带routing查询</h3><h3 id="5、写入速度优化"><a href="#5、写入速度优化" class="headerlink" title="5、写入速度优化"></a>5、写入速度优化</h3><blockquote>
-<p> ES 的默认配置，是综合了数据可靠性、写入速度、搜索实时性等因素。实际使用时，我们需要根据公司要求，进行偏向性的优化。<br> 针对于搜索性能要求不高，但是对写入要求较高的场景，我们需要尽可能的选择恰当写优化策略。综合来说，可以考虑以下几个方面来提升写索引的性能： </p>
-</blockquote>
-<ul>
-<li>加大Translog Flush，目的是降低Iops、Writeblock。- 增加Index Refesh间隔，目的是减少Segment Merge的次数。- 调整Bulk 线程池和队列。- 优化节点间的任务分布。- 优化Lucene层的索引建立，目的是降低CPU及IO。<h3>优化存储设备</h3> 
-ES 是一种密集使用磁盘的应用，在段合并的时候会频繁操作磁盘，所以对磁盘要求较高，当磁盘速度提升之后，集群的整体性能会大幅度提高。 
-<h3>合理使用合并</h3> 
-Lucene 以段的形式存储数据。当有新的数据写入索引时， Lucene 就会自动创建一个新的段。 
-随着数据量的变化，段的数量会越来越多，消耗的多文件句柄数及 CPU 就越多，查询效率就会下降。 
-由于 Lucene 段合并的计算量庞大，会消耗大量的 I/O，所以 ES 默认采用较保守的策略，让后台定期进行段合并。 
-<h3>减少 Refresh 的次数</h3> 
-Lucene 在新增数据时，采用了延迟写入的策略，默认情况下索引的refresh_interval 为1 秒。 
-Lucene 将待写入的数据先写到内存中，超过 1 秒（默认）时就会触发一次 Refresh，然后 Refresh 会把内存中的的数据刷新到操作系统的文件缓存系统中。 
-如果我们对搜索的实效性要求不高，可以将 Refresh 周期延长，例如 30 秒。 
-这样还可以有效地减少段刷新次数，但这同时意味着需要消耗更多的 Heap 内存。 
-<h3>加大 Flush 设置</h3> 
-Flush 的主要目的是把文件缓存系统中的段持久化到硬盘，当 Translog 的数据量达到 512MB 或者 30 分钟时，会触发一次 Flush。 
-index.translog.flush_threshold_size 参数的默认值是 512MB，我们进行修改。 
-增加参数值意味着文件缓存系统中可能需要存储更多的数据，所以我们需要为操作系统的文件缓存系统留下足够的空间。 
-<h3>减少副本的数量</h3> 
-ES 为了保证集群的可用性，提供了 Replicas（副本）支持，然而每个副本也会执行分析、索引及可能的合并过程，所以 Replicas 的数量会严重影响写索引的效率。 
-当写索引时，需要把写入的数据都同步到副本节点，副本节点越多，写索引的效率就越慢。 
-如果我们需要大批量进行写入操作，可以先禁止Replica复制，设置 index.number_of_replicas: 0 关闭副本。在写入完成后， Replica 修改回正常的状态。 </li>
-</ul>
-<h3 id="合理使用合并"><a href="#合理使用合并" class="headerlink" title="合理使用合并"></a>合理使用合并</h3><h3 id="加大-Flush-设置"><a href="#加大-Flush-设置" class="headerlink" title="加大 Flush 设置"></a>加大 Flush 设置</h3><h3 id="6、内存设置"><a href="#6、内存设置" class="headerlink" title="6、内存设置"></a>6、内存设置</h3><blockquote>
-<p> ES 默认安装后设置的内存是 1GB，对于任何一个现实业务来说，这个设置都太小了。如果是通过解压安装的 ES，则在 ES 安装文件中包含一个 jvm.option 文件，添加如下命令来设置 ES 的堆大小， Xms 表示堆的初始大小， Xmx 表示可分配的最大内存，都是 1GB。<br> 确保 Xmx 和 Xms 的大小是相同的，其目的是为了能够在 Java 垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小而浪费资源，可以减轻伸缩堆大小带来的压力。<br> 假设你有一个 64G 内存的机器，按照正常思维思考，你可能会认为把 64G 内存都给ES 比较好，但现实是这样吗， 越大越好？虽然内存对 ES 来说是非常重要的，但是答案是否定的！<br> 因为 ES 堆内存的分配需要满足以下两个原则： </p>
-</blockquote>
-<ul>
-<li>不要超过物理内存的 50%： Lucene 的设计目的是把底层 OS 里的数据缓存到内存中。Lucene 的段是分别存储到单个文件中的，这些文件都是不会变化的，所以很利于缓存，同时操作系统也会把这些段文件缓存起来，以便更快的访问。如果我们设置的堆内存过大， Lucene 可用的内存将会减少，就会严重影响降低 Lucene 的全文本查询性能。- 堆内存的大小最好不要超过 32GB：在 Java 中，所有对象都分配在堆上，然后有一个 Klass Pointer 指针指向它的类元数据。这个指针在 64 位的操作系统上为 64 位， 64 位的操作系统可以使用更多的内存（2^64）。在 32 位的系统上为 32 位， 32 位的操作系统的最大寻址空间为 4GB（2^32）。但是 64 位的指针意味着更大的浪费，因为你的指针本身大了。浪费内存不算，更糟糕的是，更大的指针在主内存和缓存器（例如 LLC, L1 等）之间移动数据的时候，会占用更多的带宽。<br>最终我们都会采用 31 G 设置 </li>
-<li>-Xms 31g- -Xmx 31g<br>假设你有个机器有 128 GB 的内存，你可以创建两个节点，每个节点内存分配不超过 32 GB。也就是说不超过 64 GB 内存给 ES 的堆内存，剩下的超过 64 GB 的内存给 Lucene。 </li>
-</ul>
-<h3 id="7、重要配置"><a href="#7、重要配置" class="headerlink" title="7、重要配置"></a>7、重要配置</h3><blockquote>
- <h3> <img alt="" height="732" src="https://img-blog.csdnimg.cn/20210626214501178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1196"></h3> 
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch相关问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/"
-    >Elasticsearch相关问题</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.438Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch相关问题<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—### 1、为什么要使用 Elasticsearch？</p>
-<blockquote>
-<p> 系统中的数据， 随着业务的发展，时间的推移， 将会非常多， 而业务中往往采用模糊查询进行数据的搜索， 而模糊查询会导致查询引擎放弃索引，导致系统查询数据时都是全表扫描，在百万级别的数据库中，查询效率是非常低下的，而我们使用 ES 做一个全文索引，将经常查询的系统功能的某些字段，比如说电商系统的商品表中商品名，描述、价格还有 id 这些字段我们放入 ES 索引库里，可以提高查询速度。 </p>
-</blockquote>
-<h3 id="2、Elasticsearch-的-master-选举流程？"><a href="#2、Elasticsearch-的-master-选举流程？" class="headerlink" title="2、Elasticsearch 的 master 选举流程？"></a>2、Elasticsearch 的 master 选举流程？</h3><blockquote>
-</blockquote>
-<ul>
-<li>Elasticsearch的选主是ZenDiscovery模块负责的，主要包含Ping（节点之间通过这个RPC来发现彼此）和Unicast（单播模块包含-一个主机列表以控制哪些节点需要ping通）这两部分。- 对所有可以成为master的节点（node master: true）根据nodeId字典排序，每次选举每个节点都把自己所知道节点排一次序，然后选出第一个（第0位）节点，暂且认为它是master节点。- 如果对某个节点的投票数达到一定的值（可以成为master节点数n/2+1）并且该节点自己也选举自己，那这个节点就是master。否则重新选举一直到满足上述条件。- master节点的职责主要包括集群、节点和索引的管理，不负责文档级别的管理；data节点可以关闭http功能。</li>
-</ul>
-<h3 id="3、Elasticsearch-集群脑裂问题？"><a href="#3、Elasticsearch-集群脑裂问题？" class="headerlink" title="3、Elasticsearch 集群脑裂问题？"></a>3、Elasticsearch 集群脑裂问题？</h3><blockquote>
-<p> “脑裂”问题可能的成因： </p>
-</blockquote>
-<ul>
-<li>网络问题：集群间的网络延迟导致一些节点访问不到master, 认为master 挂掉了从而选举出新的master,并对master上的分片和副本标红，分配新的主分片。- 节点负载：主节点的角色既为master又为data,访问量较大时可能会导致ES停止响应造成大面积延迟，此时其他节点得不到主节点的响应认为主节点挂掉了，会重新选取主节点。- 内存回收：data 节点上的ES进程占用的内存较大，引发JVM的大规模内存回收，造成ES进程失去响应。<br>脑裂问题解决方案： </li>
-<li>减少误判：discovery.zen ping_ timeout 节点状态的响应时间，默认为3s，可以适当调大，如果master在该响应时间的范围内没有做出响应应答，判断该节点已经挂掉了。调大参数（如6s，discovery.zen.ping_timeout:6），可适当减少误判。- 选举触发：discovery.zen.minimum. <em>master</em> nodes:1，该参數是用于控制选举行为发生的最小集群主节点数量。当备选主节点的个數大于等于该参数的值，且备选主节点中有该参数个节点认为主节点挂了，进行选举。官方建议为(n / 2) +1, n为主节点个数（即有资格成为主节点的节点个数）。- 角色分离：即master节点与data节点分离，限制角色 主节点配置为：node master: true，node data: false 从节点配置为：node master: false，node data: true</li>
-</ul>
-<h3 id="4、Elasticsearch-索引文档的流程？"><a href="#4、Elasticsearch-索引文档的流程？" class="headerlink" title="4、Elasticsearch 索引文档的流程？"></a>4、Elasticsearch 索引文档的流程？</h3><blockquote>
- <img alt="" src="https://img-blog.csdnimg.cn/img_convert/1bdc6c30d1be9b1bff83a683c64d2ac7.png"> 
-</blockquote>
-<ul>
-<li>协调节点默认使用文档 ID 参与计算（也支持通过 routing），以便为路由提供合适的分片：shard = hash(document_id) % (num_of_primary_shards)- 当分片所在的节点接收到来自协调节点的请求后，会将请求写入到 Memory Buffer，然后定时（默认是每隔 1 秒）写入到 Filesystem Cache，这个从 Memory Buffer 到 Filesystem Cache 的过程就叫做 refresh；- 当然在某些情况下，存在 Momery Buffer 和 Filesystem Cache 的数据可能会丢失， ES 是通过 translog的机制来保证数据的可靠性的。其实现机制是接收到请求后，同时也会写入到 translog 中，当 Filesystemcache 中的数据写入到磁盘中时，才会清除掉，这个过程叫做 flush；- 在 flush 过程中，内存中的缓冲将被清除，内容被写入一个新段，段的 fsync 将创建一个新的提交点，并将内容刷新到磁盘，旧的 translog 将被删除并开始一个新的 translog。- flush 触发的时机是定时触发（默认 30 分钟）或者 translog 变得太大（默认为 512M）时；</li>
-</ul>
-<h3 id="5、Elasticsearch-更新和删除文档的流程？"><a href="#5、Elasticsearch-更新和删除文档的流程？" class="headerlink" title="5、Elasticsearch 更新和删除文档的流程？"></a>5、Elasticsearch 更新和删除文档的流程？</h3><blockquote>
-</blockquote>
-<ul>
-<li>删除和更新也都是写操作，但是 Elasticsearch 中的文档是不可变的，因此不能被删除或者改动以展示其变更；- 磁盘上的每个段都有一个相应的.del 文件。当删除请求发送后，文档并没有真的被删除，而是在.del文件中被标记为删除。该文档依然能匹配查询，但是会在结果中被过滤掉。当段合并时，在.del 文件中被标记为删除的文档将不会被写入新段。- 在新的文档被创建时， Elasticsearch 会为该文档指定一个版本号，当执行更新时，旧版本的文档在.del文件中被标记为删除，新版本的文档被索引到一个新段。旧版本的文档依然能匹配查询，但是会在结果中被过滤掉。</li>
-</ul>
-<h3 id="6、Elasticsearch-搜索的流程？"><a href="#6、Elasticsearch-搜索的流程？" class="headerlink" title="6、Elasticsearch 搜索的流程？"></a>6、Elasticsearch 搜索的流程？</h3><blockquote>
- <img alt="" src="https://img-blog.csdnimg.cn/img_convert/053a14eee04ace7b4e5aec0ce53a5284.png"> 
-</blockquote>
-<ul>
-<li>搜索被执行成一个两阶段过程，我们称之为 Query Then Fetch；- 在初始查询阶段时，查询会广播到索引中每一个分片拷贝（主分片或者副本分片）。 每个分片在本地执行搜索并构建一个匹配文档的大小为 from + size 的优先队列。 PS：在搜索的时候是会查询Filesystem Cache 的，但是有部分数据还在 Memory Buffer，所以搜索是近实时的。- 每个分片返回各自优先队列中 所有文档的 ID 和排序值 给协调节点，它合并这些值到自己的优先队列中来产生一个全局排序后的结果列表。- 接下来就是取回阶段， 协调节点辨别出哪些文档需要被取回并向相关的分片提交多个 GET 请求。每个分片加载并丰富文档，如果有需要的话，接着返回文档给协调节点。一旦所有的文档都被取回了，协调节点返回结果给客户端。- Query Then Fetch 的搜索类型在文档相关性打分的时候参考的是本分片的数据，这样在文档数量较少的时候可能不够准确， DFS Query Then Fetch 增加了一个预查询的处理，询问 Term 和 Document frequency，这个评分更准确，但是性能会变差。</li>
-</ul>
-<h3 id="7、Elasticsearch-在部署时，对-Linux-的设置有哪些优化方法？"><a href="#7、Elasticsearch-在部署时，对-Linux-的设置有哪些优化方法？" class="headerlink" title="7、Elasticsearch 在部署时，对 Linux 的设置有哪些优化方法？"></a>7、Elasticsearch 在部署时，对 Linux 的设置有哪些优化方法？</h3><blockquote>
-</blockquote>
-<ul>
-<li>64 GB 内存的机器是非常理想的， 但是 32 GB 和 16 GB 机器也是很常见的。少于 8 GB 会适得其反。- 如果你要在更快的 CPUs 和更多的核心之间选择，选择更多的核心更好。多个内核提供的额外并发远胜过稍微快一点点的时钟频率。- 如果你负担得起 SSD，它将远远超出任何旋转介质。 基于 SSD 的节点，查询和索引性能都有提升。如果你负担得起， SSD 是一个好的选择。- 即使数据中心们近在咫尺，也要避免集群跨越多个数据中心。绝对要避免集群跨越大的地理距离。- 请确保运行你应用程序的 JVM 和服务器的 JVM 是完全一样的。 在 Elasticsearch 的几个地方，使用 Java 的本地序列化。- 通过设置 gateway.recover_after_nodes、 gateway.expected_nodes、 gateway.recover_after_time 可以在集群重启的时候避免过多的分片交换，这可能会让数据恢复从数个小时缩短为几秒钟。- Elasticsearch 默认被配置为使用单播发现，以防止节点无意中加入集群。只有在同一台机器上运行的节点才会自动组成集群。最好使用单播代替组播。- 不要随意修改垃圾回收器（CMS）和各个线程池的大小。- 把你的内存的（少于）一半给 Lucene（但不要超过 32 GB！），通过 ES_HEAP_SIZE 环境变量设置。- 内存交换到磁盘对服务器性能来说是致命的。如果内存交换到磁盘上，一个 100 微秒的操作可能变成 10 毫秒。 再想想那么多 10 微秒的操作时延累加起来。 不难看出 swapping 对于性能是多么可怕。- Lucene 使用了大量的文件。同时， Elasticsearch 在节点和 HTTP 客户端之间进行通信也使用了大量的套接字。 所有这一切都需要足够的文件描述符。你应该增加你的文件描述符，设置一个很大的值，如 64,000。</li>
-</ul>
-<h3 id="8、GC-方面，在使用-Elasticsearch-时要注意什么？"><a href="#8、GC-方面，在使用-Elasticsearch-时要注意什么？" class="headerlink" title="8、GC 方面，在使用 Elasticsearch 时要注意什么？"></a>8、GC 方面，在使用 Elasticsearch 时要注意什么？</h3><blockquote>
-<p> 倒排词典的索引需要常驻内存，无法 GC，需要监控 data node 上 segment memory 增长趋势。<br> 各类缓存， field cache, filter cache, indexing cache, bulk queue 等等，要设置合理的大小，并且要应该根据最坏的情况来看 heap 是否够用，也就是各类缓存全部占满的时候，还有 heap 空间可以分配给其他任务吗？避免采用 clear cache 等“自欺欺人”的方式来释放内存。<br> 避免返回大量结果集的搜索与聚合。确实需要大量拉取数据的场景，可以采用 scan &amp; scroll api 来实现。<br> cluster stats 驻留内存并无法水平扩展，超大规模集群可以考虑分拆成多个集群通过 tribe node 连接。<br> 想知道 heap 够不够，必须结合实际应用场景，并对集群的 heap 使用情况做持续的监控。 </p>
-</blockquote>
-<h3 id="9、Elasticsearch-对于大数据量（上亿量级）的聚合如何实现？"><a href="#9、Elasticsearch-对于大数据量（上亿量级）的聚合如何实现？" class="headerlink" title="9、Elasticsearch 对于大数据量（上亿量级）的聚合如何实现？"></a>9、Elasticsearch 对于大数据量（上亿量级）的聚合如何实现？</h3><blockquote>
-<p> Elasticsearch 提供的首个近似聚合是 cardinality 度量。它提供一个字段的基数，即该字段的 distinct或者 unique 值的数目。它是基于 HLL 算法的。 HLL 会先对我们的输入作哈希运算，然后根据哈希运算的结果中的 bits 做概率估算从而得到基数。其特点是：可配置的精度，用来控制内存的使用（更精确 ＝ 更多内存）；小的数据集精度是非常高的；我们可以通过配置参数，来设置去重需要的固定内存使用量。无论数千还是数十亿的唯一值，内存使用量只与你配置的精确度相关。 </p>
-</blockquote>
-<h3 id="10、在并发情况下，-Elasticsearch-如果保证读写一致？"><a href="#10、在并发情况下，-Elasticsearch-如果保证读写一致？" class="headerlink" title="10、在并发情况下， Elasticsearch 如果保证读写一致？"></a>10、在并发情况下， Elasticsearch 如果保证读写一致？</h3><blockquote>
-</blockquote>
-<ul>
-<li>可以通过版本号使用乐观并发控制，以确保新版本不会被旧版本覆盖，由应用层来处理具体的冲突；- 另外对于写操作，一致性级别支持 quorum/one/all，默认为 quorum，即只有当大多数分片可用时才允许写操作。但即使大多数可用，也可能存在因为网络等原因导致写入副本失败，这样该副本被认为故障，分片将会在一个不同的节点上重建。- 对于读操作，可以设置 replication 为 sync(默认)，这使得操作在主分片和副本分片都完成后才会返回；如果设置 replication 为 async 时，也可以通过设置搜索请求参数_preference 为 primary 来查询主分片，确保文档是最新版本。</li>
-</ul>
-<h3 id="11、如何监控-Elasticsearch-集群状态？"><a href="#11、如何监控-Elasticsearch-集群状态？" class="headerlink" title="11、如何监控 Elasticsearch 集群状态？"></a>11、如何监控 Elasticsearch 集群状态？</h3><blockquote>
-</blockquote>
-<ul>
-<li>elasticsearch-head 插件。- 通过 Kibana 监控 Elasticsearch。你可以实时查看你的集群健康状态和性能，也可以分析过去的集群、索引和节点指标</li>
-</ul>
-<h3 id="12、Elasticsearch-中的集群、节点、索引、文档、类型是什么？"><a href="#12、Elasticsearch-中的集群、节点、索引、文档、类型是什么？" class="headerlink" title="12、Elasticsearch 中的集群、节点、索引、文档、类型是什么？"></a>12、Elasticsearch 中的集群、节点、索引、文档、类型是什么？</h3><blockquote>
-</blockquote>
-<ul>
-<li>集群是一个或多个节点（服务器）的集合，它们共同保存您的整个数据，并提供跨所有节点的联合索引和搜索功能。群集由唯一名 称标识，默认情况下为”elasticsearch”。此名称很重要，因为如果节点设置为按名称加入群集，则该节点只能是群集的一部分。- 节点是属于集群一部分的单个服务器。它存储数据并参与群集索引和搜索功能。- 索引就像关系数据库中的“数据库”。它有一个定义多种类型的映射。索引是逻辑名称空间，映射到一个或多个主分片，并且可以有零个或多个副本分片。MySQL =&gt;数据库，Elasticsearch=&gt;索引。- 文档类似于关系数据库中的一行。不同之处在于索引中的每个文档可以具有不同的结构(字段)，但是对于通用字段应该具有相同的数据类型。MySQL =&gt; Databases =&gt; Tables =&gt; Columns / Rows，Elasticsearch=&gt; Indices =&gt; Types =&gt;具有属性的文档Doc。- 类型是索引的逻辑类别/分区，其语义完全取决于用户。</li>
-</ul>
-<h3 id="13、Elasticsearch-中的倒排索引是什么？"><a href="#13、Elasticsearch-中的倒排索引是什么？" class="headerlink" title="13、Elasticsearch 中的倒排索引是什么？"></a>13、Elasticsearch 中的倒排索引是什么？</h3><blockquote>
-<p> 倒排索引是搜索引擎的核心。搜索引擎的主要目标是在查找发生搜索条件的文档时提供快速搜索。ES中的倒排索引其实就是 lucene 的倒排索引，区别于传统的正向索引， 倒排索引会再存储数据时将关键词和数据进行关联，保存到倒排表中，然后查询时，将查询内容进行分词后在倒排表中进行查询，最后匹配数据即可。 </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Elasticsearch相关核心概念"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Elasticsearch%E7%9B%B8%E5%85%B3%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"
-    >Elasticsearch相关核心概念</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Elasticsearch%E7%9B%B8%E5%85%B3%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/" class="article-date">
-  <time datetime="2021-07-18T14:21:56.436Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Elasticsearch相关核心概念<br>categories:</p>
-<ul>
-<li>elasticsearch</li>
-</ul>
-<p>—<img alt="" src="https://img-blog.csdnimg.cn/img_convert/146a779da01f53e7f7a8d53132d3c7cf.png"></p>
-<h3 id="1、索引Index"><a href="#1、索引Index" class="headerlink" title="1、索引Index"></a>1、索引Index</h3><blockquote>
-<p>         一个索引就是一个拥有几分相似特征的文档的集合。比如说，你可以有一个客户数据的索引，另一个产品目录的索引，还有一个订单数据的索引。一个索引由一个名字来标识（必须全部是小写字母），并且当我们要对这个索引中的文档进行索引、搜索、更新和删除（CRUD）的时候，都要使用到这个名字。在一个集群中，可以定义任意多的索引。<br>         能搜索的数据必须索引，这样的好处是可以提高查询速度，比如：新华字典前面的目录就是索引的意思，目录可以提高查询速度。<br>      <strong>Elasticsearch 索引的精髓：一切设计都是为了提高搜索的性能。</strong> </p>
-</blockquote>
-<h3 id="2、-类型Type"><a href="#2、-类型Type" class="headerlink" title="2、 类型Type"></a>2、 类型Type</h3><blockquote>
-<p> 在一个索引中，你可以定义一种或多种类型。<br> 一个类型是你的索引的一个逻辑上的分类/分区，其语义完全由你来定。通常，会为具有一组共同字段的文档定义一个类型。不同的版本，类型发生了不同的变化。<br> <table><thead>|版本|Type</p>
-</blockquote>
-</thead><tbody>|5.x|支持多种 type
-|6.x|只能有一种 type
-|7.x|默认不再支持自定义索引类型（默认类型为： _doc）
-</tbody></table>
-
-
-<h3 id="3、文档Document"><a href="#3、文档Document" class="headerlink" title="3、文档Document"></a>3、文档Document</h3><blockquote>
-<p> 一个文档是一个可被索引的基础信息单元，也就是一条数据。<br> 比如：你可以拥有某一个客户的文档，某一个产品的一个文档，当然，也可以拥有某个订单的一个文档。文档以 JSON（Javascript Object Notation）格式来表示，而 JSON 是一个到处存在的互联网数据交互格式。<br> 在一个 index/type 里面，你可以存储任意多的文档。 </p>
-</blockquote>
-<h3 id="4、字段Field"><a href="#4、字段Field" class="headerlink" title="4、字段Field"></a>4、字段Field</h3><blockquote>
-<p> 相当于是数据表的字段，对文档数据根据不同属性进行的分类标识。 </p>
-</blockquote>
-<h3 id="5、映射Mapping"><a href="#5、映射Mapping" class="headerlink" title="5、映射Mapping"></a>5、映射Mapping</h3><blockquote>
-<p> mapping 是处理数据的方式和规则方面做一些限制，如：某个字段的数据类型、默认值、分析器、是否被索引等等。这些都是映射里面可以设置的，其它就是处理 ES 里面数据的一些使用规则设置也叫做映射，按着最优规则处理数据对性能提高很大，因此才需要建立映射，并且需要思考如何建立映射才能对性能更好。 </p>
-</blockquote>
-<h3 id="6、分片Shards"><a href="#6、分片Shards" class="headerlink" title="6、分片Shards"></a>6、分片Shards</h3><blockquote>
-<p> 一个索引可以存储超出单个节点硬件限制的大量数据。比如，一个具有 10 亿文档数据<br> 的索引占据 1TB 的磁盘空间，而任一节点都可能没有这样大的磁盘空间。 或者单个节点处理搜索请求，响应太慢。为了解决这个问题，<strong>Elasticsearch 提供了将索引划分成多份的能力，每一份就称之为分片。</strong>当你创建一个索引的时候，你可以指定你想要的分片的数量。每个分片本身也是一个功能完善并且独立的“索引”，这个“索引”可以被放置到集群中的任何节点上。<br> 分片很重要，主要有两方面的原因： </p>
-</blockquote>
-<ul>
-<li>允许你水平分割 / 扩展你的内容容量。- 允许你在分片之上进行分布式的、并行的操作，进而提高性能/吞吐量。<br>至于一个分片怎样分布，它的文档怎样聚合和搜索请求，是完全由 Elasticsearch 管理的，对于作为用户的你来说，这些都是透明的，无需过分关心。<br>被混淆的概念是，一个 Lucene 索引 我们在 Elasticsearch 称作 分片 。 一个Elasticsearch 索引 是分片的集合。 当 Elasticsearch 在索引中搜索的时候， 他发送查询到每一个属于索引的分片（Lucene 索引），然后合并每个分片的结果到一个全局的结果集。<br>Lucene 是 Apache 软件基金会 Jakarta 项目组的一个子项目，提供了一个简单却强大的应用程式接口，能够做全文索引和搜寻。在 Java 开发环境里 Lucene 是一个成熟的免费开源工具。就其本身而言， Lucene 是当前以及最近几年最受欢迎的免费 Java 信息检索程序库。但 Lucene 只是一个提供全文搜索功能类库的核心工具包，而真正使用它还需要一个完善的服务框架搭建起来进行应用。<br>目前市面上流行的搜索引擎软件，主流的就两款： Elasticsearch 和 Solr,这两款都是基于 Lucene 搭建的，可以独立部署启动的搜索引擎服务软件。由于内核相同，所以两者除了服务器安装、部署、管理、集群以外，对于数据的操作 修改、添加、保存、查询等等都十分类似。 </li>
-</ul>
-<h3 id="7、副本Replicas"><a href="#7、副本Replicas" class="headerlink" title="7、副本Replicas"></a>7、副本Replicas</h3><blockquote>
-<p> 在一个网络 / 云的环境里，失败随时都可能发生，在某个分片/节点不知怎么的就处于 离线状态，或者由于任何原因消失了，这种情况下，有一个故障转移机制是非常有用并且是强烈推荐的。为此目的， Elasticsearch 允许你创建分片的一份或多份拷贝，这些拷贝叫做复制分片(副本)。<br> 复制分片之所以重要，有两个主要原因： </p>
-</blockquote>
-<ul>
-<li>在分片/节点失败的情况下，<strong>提供了高可用性</strong>。因为这个原因，注意到复制分片从不与原/主要（original/primary）分片置于同一节点上是非常重要的。- 扩展你的搜索量/吞吐量，因为搜索可以在所有的副本上并行运行<br>总之，每个索引可以被分成多个分片。一个索引也可以被复制 0 次（意思是没有复制）或多次。一旦复制了，每个索引就有了主分片（作为复制源的原来的分片）和复制分片（主分片的拷贝）之别。<br>分片和复制的数量可以在索引创建的时候指定。在索引创建之后，你可以在任何时候动态地改变复制的数量，但是你事后不能改变分片的数量。<br>默认情况下，Elasticsearch 中的每个索引被分片 1 个主分片和 1 个复制，这意味着，如果你的集群中至少有两个节点，你的索引将会有 1 个主分片和另外 1 个复制分片（1 个完全拷贝），这样的话每个索引总共就有 2 个分片， 我们需要根据索引需要确定分片个数。 </li>
-</ul>
-<h3 id="8、分配Allocation"><a href="#8、分配Allocation" class="headerlink" title="8、分配Allocation"></a>8、分配Allocation</h3><blockquote>
-<p> 将分片分配给某个节点的过程，包括分配主分片或者副本。如果是副本，还包含从主分片复制数据的过程。这个过程是由 master 节点完成的。 </p>
-</blockquote>
-<h3 id="9、es的系统架构"><a href="#9、es的系统架构" class="headerlink" title="9、es的系统架构"></a>9、es的系统架构</h3><blockquote>
- <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e4d13427545dc174eb9ccface85c1f0c.png"> 
- 一个运行中的 Elasticsearch 实例称为一个节点，而集群是由一个或者多个拥有相同 cluster.name 配置的节点组成， 它们共同承担数据和负载的压力。当有节点加入集群中或者从集群中移除节点时，集群将会重新平均分布所有的数据。 
- 当一个节点被选举成为主节点时， 它将负责管理集群范围内的所有变更，例如增加、 删除索引，或者增加、删除节点等。 而主节点并不需要涉及到文档级别的变更和搜索等操作，所以当集群只拥有一个主节点的情况下，即使流量的增加它也不会成为瓶颈。 任何节点都可以成为主节点。我们的示例集群就只有一个节点，所以它同时也成为了主节点。 
- 作为用户，我们可以将请求发送到集群中的任何节点 ，包括主节点。 每个节点都知道 任意文档所处的位置，并且能够将我们的请求直接转发到存储我们所需文档的节点。 无论我们将请求发送到哪个节点，它都能负责从各个包含我们所需文档的节点收集回数据，并将最终结果返回給客户端。 Elasticsearch 对这一切的管理都是透明的 
 </blockquote>
  
       <!-- reward -->

@@ -160,6 +160,235 @@
     
     
     <article
+  id="post-Docker数据卷之具名挂载和匿名挂载"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E6%95%B0%E6%8D%AE%E5%8D%B7%E4%B9%8B%E5%85%B7%E5%90%8D%E6%8C%82%E8%BD%BD%E5%92%8C%E5%8C%BF%E5%90%8D%E6%8C%82%E8%BD%BD/"
+    >Docker数据卷之具名挂载和匿名挂载</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E6%95%B0%E6%8D%AE%E5%8D%B7%E4%B9%8B%E5%85%B7%E5%90%8D%E6%8C%82%E8%BD%BD%E5%92%8C%E5%8C%BF%E5%90%8D%E6%8C%82%E8%BD%BD/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.579Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker数据卷之具名挂载和匿名挂载<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—### 1、匿名挂载</p>
+<p>(1）启动容器</p>
+<p>docker run -d -P –name nginx01 -v /etc/nginx nginx </p>
+<p>-v 容器内路径</p>
+<img alt="" height="54" src="https://img-blog.csdnimg.cn/20200706160620860.png" width="644">
+
+<p>（2）查看所有卷的情况</p>
+<p>docker volume ls<img alt="" height="71" src="https://img-blog.csdnimg.cn/20200706160710977.png" width="624"></p>
+<p>注：</p>
+<p>由上图可以看到，VOLUME NAME 有的是随机生成的字符串，对于这种就是匿名挂载，因为-v的时候只写了容器内的路径看，而没有写容器外的路径</p>
+<h3 id="2、具名挂载"><a href="#2、具名挂载" class="headerlink" title="2、具名挂载"></a>2、具名挂载</h3><p>(1)  启动容器</p>
+<p>docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx nginx </p>
+<p>语法： -v 卷名：容器内路径</p>
+<img alt="" height="187" src="https://img-blog.csdnimg.cn/20200706160923588.png" width="1053">
+
+<p>（2）查看一下这个卷</p>
+<p>docker volumn inspect juming-nginx</p>
+<img alt="" height="218" src="https://img-blog.csdnimg.cn/20200706161119579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3h5YWppYQ==,size_16,color_FFFFFF,t_70" width="510">
+
+<p>注：</p>
+<p>a、所有docker容器内的卷，没有指定目录的情况下都是在 /var/lib/docker/volumes/XXX</p>
+<img alt="" height="53" src="https://img-blog.csdnimg.cn/20200706161228773.png" width="754">
+
+<p>b、docker volumn ls 查看所有的卷都在这个位置/var/lib/docker/volumns</p>
+<img alt="" height="128" src="https://img-blog.csdnimg.cn/20200706161232907.png" width="764">
+
+<p>c、查看刚才添加的juming-nginx目录</p>
+<img alt="" height="99" src="https://img-blog.csdnimg.cn/20200706161256139.png" width="807">
+
+<h3 id="3、选择"><a href="#3、选择" class="headerlink" title="3、选择"></a>3、选择</h3><p>我们通过具名挂载可以方便的找到我们的一个卷，大多数情况在使用的，不建议大家使用匿名挂载</p>
+<p>如何确定是匿名挂载还是具名挂载呢？</p>
+<p>-v 容器内路径               #匿名挂载 -v 卷名：容器内路径         #具名挂载 -v /宿主机路径：容器内路径    #指定路径挂载</p>
+<h3 id="4、拓展"><a href="#4、拓展" class="headerlink" title="4、拓展"></a>4、拓展</h3><p>（1）通过 -v 容器内路径:ro rw 改变读写权限</p>
+<p>ro readonly  #只读 rw readwrite #可读可写</p>
+<p>（2）一旦这个设定了容器权限，容器对我们挂载出来的内容就有限定了</p>
+<p>docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx:ro  nginx docker run -d -P –name nginx02 -v juming-nginx:/etc/nginx:rw  nginx</p>
+<p>（3）ro</p>
+<p>只要看到ro就说明这个路径只能通过宿主机来改变，容器内部是无法操作的</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Docker容器相关知识点总结"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Docker%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/"
+    >Docker容器相关知识点总结</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Docker%E5%AE%B9%E5%99%A8%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.577Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Docker容器相关知识点总结<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—# 一：简介</p>
+<p>       1：什么是docker?                <img alt="" class="has" height="362" src="https://img-blog.csdn.net/20181016204647520?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="625">                <img alt="" class="has" height="235" src="https://img-blog.csdn.net/20181016205211455?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="610">        2：docker解决了什么问题？              <strong>Docker解决了运行环境和配置问题，方便发布，也就方便做持续集成</strong>。        </p>
+<p>       3：docker的生命周期               Docker的生命周期包含三个部分，镜像，容器，仓库，我们可以把镜像，               容器想像成java的类和对象，即容器是由镜像实例化而来的。也就是说我                们想使用装有相关软件的镜像，首先要把镜像创建成容器。</p>
+<p>      4：什么是docker镜像？              <img alt="" class="has" height="295" src="https://img-blog.csdn.net/20181016230820975?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="484"></p>
+<p>      5：什么是docker容器？              <img alt="" class="has" height="298" src="https://img-blog.csdn.net/20181016230900110?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">        6：什么是docker仓库？             <img alt="" class="has" height="239" src="https://img-blog.csdn.net/20181016231010989?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="545">              <img alt="" class="has" height="195" src="https://img-blog.csdn.net/20181017203507706?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="312"></p>
+<h1 id="二：Windows系统上安装Docker"><a href="#二：Windows系统上安装Docker" class="headerlink" title="二：Windows系统上安装Docker"></a>二：Windows系统上安装Docker</h1><p>       1：下载地址                <img alt="" class="has" height="203" src="https://img-blog.csdn.net/20181017203712503?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="595">               我们这里是在国内网站下载的，速度比较快                    Docker Toolbox for Win7下载地址：                                                  <img alt="" class="has" height="347" src="https://img-blog.csdn.net/20181017205207991?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="467">                        <img alt="" class="has" height="108" src="https://img-blog.csdn.net/20181017205256736?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="334">         2：安装                 ⑴下载完成后，双击下载文件                 ⑵ 一路Next，接受所有默认安装 。注意：在安装过程中，会出现几个其他的安装过程，                      如Ocracle Corporation等系列软件，全部选择安装即可。                 ⑶整个安装过程非常简单，安装完成后，可以在桌面得到如下的三个图标：                       <img alt="è¿éåå¾çæè¿°" class="has" src="https://img-blog.csdn.net/20160517175511388">                ⑷点击Docker Quickstart Terminal图标，从而打开一个Docker Toolbox terminal                       <img alt="è¿éåå¾çæè¿°" class="has" height="176" src="https://img-blog.csdn.net/20160517175602919" width="355">                       打开terminal后，terminal会自动进行一些设置，需要点时间，全部完成后，会出现如下的结果                        <img alt="" class="has" height="258" src="https://img-blog.csdn.net/20181017211540464?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="543">                      查看docker的版本信息：docker info                        <img alt="" class="has" height="373" src="https://img-blog.csdn.net/20181017211927234?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="411"></p>
+<h1 id="三：Linux上安装Docker"><a href="#三：Linux上安装Docker" class="headerlink" title="三：Linux上安装Docker"></a>三：Linux上安装Docker</h1><p>        <img alt="" class="has" height="214" src="https://img-blog.csdn.net/20181017214429547?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="373">         就是说必须要是64位的，内核版本要大于3.10，还有就是docker本身是在Ubuntu         系统上开发的，所以它对Ubuntu系统的支持是最好的，所以推荐使用Ubuntu系统         进行学习。        1：查看一下系统的内核版本：命令：uname -r   版本为4.15.0              <img alt="" class="has" height="101" src="https://img-blog.csdn.net/20181019230726238?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="339">        2：保证我们的apt-get是最新版本的：命令：apt-get update                 <img alt="" class="has" height="264" src="https://img-blog.csdn.net/20181019231928292?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="476">       3：安装Docker,最新版本的 Docker 安装包命令：curl -s <a target="_blank" rel="noopener" href="https://get.docker.com|sh/">https://get.docker.com|sh</a>               问题：curl command not found                   <img alt="" class="has" height="139" src="https://img-blog.csdn.net/20181019232709244?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="512">                解决：                   <img alt="" class="has" height="173" src="https://img-blog.csdn.net/20181019232854291?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="404">                再次执行安装Docker命令：                    <img alt="" class="has" height="260" src="https://img-blog.csdn.net/20181019233732246?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="488">                安装完成后有个提示：                    <img alt="" class="has" height="77" src="https://img-blog.csdn.net/20181019233931211?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="610">                 当要以非root用户可以直接运行docker时，需要执行 **sudo usermod -aG docker +用户 **命令，                 然后重新登陆，否则会有如下报错：                    <img alt="" class="has" src="http://www.runoob.com/wp-content/uploads/2016/05/docker06.png">           4：使用docker version命令查看是否安装成功                  <img alt="" class="has" height="333" src="https://img-blog.csdn.net/20181019234358577?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="432">           5：启动docker后台服务命令：sudo service docker start，                下面存在Server就说明Docker服务端已经启动                  <img alt="" class="has" height="333" src="https://img-blog.csdn.net/20181019234358577?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="432">                   </p>
+<h1 id="四：Docker镜像"><a href="#四：Docker镜像" class="headerlink" title="四：Docker镜像"></a>四：Docker镜像</h1><p>        1：相关命令               ⑴docker pull [OPTIONS] NAME[:TAG]：                       这条命令是用来拉取镜像的，它会从docker远程仓库拉取一个镜像到我们本地。               ⑵docker images [OPTIONS] [REPOSITORY[:TAG]]                       这条命令是用来查看我们本机都存在哪些镜像，也可以用来验证我们pull镜像是否成功了。         2：操作我们上面安装好的docker               ⑴查看一下我们本地镜像                     <img alt="" class="has" height="153" src="https://img-blog.csdn.net/20181020114442883?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="609">        3：我们使用命令去docker的一个公共img仓库拉取hello world镜像，在官网上可以查到docker有哪些镜像                <img alt="" class="has" height="125" src="https://img-blog.csdn.net/2018102011571711?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="591">                <img alt="" class="has" height="138" src="https://img-blog.csdn.net/20181020115941529?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="640"></p>
+<h1 id="五：Docker容器"><a href="#五：Docker容器" class="headerlink" title="五：Docker容器"></a>五：Docker容器</h1><p>      1：运行镜像               docker run [OPTIONS] IMAGE[:TAG][COMMAND][ARG..]               <img alt="" class="has" height="303" src="https://img-blog.csdn.net/20181020142521906?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="497">               出现上面的效果说明hello-world镜像运行结束。</p>
+<h1 id="六：Docker运行Nginx"><a href="#六：Docker运行Nginx" class="headerlink" title="六：Docker运行Nginx"></a>六：Docker运行Nginx</h1><p>        1：前往网易云蜂巢镜像中心：                 <img alt="" class="has" height="256" src="https://img-blog.csdn.net/2018102014523129?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="530">         2:查找到nginx镜像 ，这里使用docker同步的nginx镜像               <img alt="" class="has" height="135" src="https://img-blog.csdn.net/2018102014531188?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="462">        3：进入复制下载地址               <img alt="" class="has" height="78" src="https://img-blog.csdn.net/20181020145358328?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="605">       4： 在服务器中粘贴执行该下载镜像               <img alt="" class="has" height="148" src="https://img-blog.csdn.net/20181020145725314?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="582">              <img alt="" class="has" height="155" src="https://img-blog.csdn.net/20181020145917718?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="567">       5：后台启动nginx服务,命令是docker run -d +服务名称              <img alt="" class="has" height="176" src="https://img-blog.csdn.net/20181020150337334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="560">               <img alt="" class="has" height="116" src="https://img-blog.csdn.net/20181020150510133?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="557">        6：进入到容器内部，命令：docker exec -it +容器名称 +bash               <img alt="" class="has" height="120" src="https://img-blog.csdn.net/20181020152214946?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="563">               可以发现进入容器内部后，就像是进入了一个新的电脑一样                <img alt="" class="has" height="75" src="https://img-blog.csdn.net/20181020152321630?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="523">                 <img alt="" class="has" height="168" src="https://img-blog.csdn.net/201810201525019?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="466">        7：如何让外部访问到容器中的nginx              ⑴首先我们将容器停掉，命令：docker stop +服务名称                   <img alt="" class="has" height="154" src="https://img-blog.csdn.net/20181020161059739?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="542">              ⑵nginx 的默认启动端口是80，8080:80  将外部主机8080端口映射到容器的80端口。                   <img alt="" class="has" height="244" src="https://img-blog.csdn.net/20181020161509916?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="575">                  命令：docker run -d -p 8080:80 +镜像名称                  <img alt="" class="has" height="99" src="https://img-blog.csdn.net/20181020161733514?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="595">                 效果：说明已经OK了。                   <img alt="" class="has" height="236" src="https://img-blog.csdn.net/2018102016194610?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="674">              8：我们也可以随意开辟一个端口去映射nginx的80端口                   <img alt="" class="has" height="243" src="https://img-blog.csdn.net/20181020162508162?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="577">                   命令：docker run -d -P +镜像名称                   从上面可以发现，随机分配了一个32768的端口去映射80端口。                    <img alt="" class="has" height="205" src="https://img-blog.csdn.net/20181020162701144?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="568">                    完美！</p>
+<h1 id="七：简单的java-web应用"><a href="#七：简单的java-web应用" class="headerlink" title="七：简单的java web应用"></a>七：简单的java web应用</h1><p>       1：制作自己的镜像              ⑴什么是Dockerfile？                     Dockerfile就是用来告诉Docker，我们要怎么制作一个镜像，                     我们制作镜像的每一步操作是什么。              ⑵什么是docker build？                     当Dockerfile写好之后，我们使用docker build命令来执行Dockerfile                     里面我们编写的代码，最终把docker镜像给构建出来。        2：开始制作Dockerfile               <img alt="" class="has" height="156" src="https://img-blog.csdn.net/20181020211609396?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="653">                  ⑴那么我们需要如何制作java web端的镜像呢？                    ①我们的镜像是要运行在tomcat中的。一般创建镜像，第一步是要继承一个基础镜像。                        那么我们就去网易蜂巢去找一个tomcat镜像，作为一个基础镜像                       <img alt="" class="has" height="124" src="https://img-blog.csdn.net/20181020212635912?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="640">                        我们将tomcat下载下来，注意：这个tomcat是包含JDK的，所以我们不用担心JDK问题。                      <img alt="" class="has" height="260" src="https://img-blog.csdn.net/20181020213441170?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="553">                      <img alt="" class="has" height="153" src="https://img-blog.csdn.net/20181020213616168?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="547">                   ②编写Dockerfile，以tomcat作为基础镜像，这个位置是镜像中的位置                        <img alt="" class="has" height="283" src="https://img-blog.csdn.net/20181020215557979?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="599">                        <img alt="" class="has" height="435" src="https://img-blog.csdn.net/20181020220057227?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="525">                        <img alt="" class="has" height="120" src="https://img-blog.csdn.net/20181020220951896?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="469">            3：使用docker build执行Dockerfile文件                    命令：docker build -t +名称:版本 +Dockerfile文件路径，如果是当前目录，                               就是docker build -t +名称:版本 .                         <img alt="" class="has" height="256" src="https://img-blog.csdn.net/20181020221932148?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="508">                         <img alt="" class="has" height="244" src="https://img-blog.csdn.net/2018102022222666?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="593">               4：运行自己的容器                      ⑴运行命令                            <img alt="" class="has" height="293" src="https://img-blog.csdn.net/20181020222949107?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="528">                             <img alt="" class="has" height="96" src="https://img-blog.csdn.net/20181020223114385?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="477">                    ⑵访问端口                          <img alt="" class="has" height="259" src="https://img-blog.csdn.net/20181020223243837?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="551">                   ⑶访问我们的应用程序                         <img alt="" class="has" height="208" src="https://img-blog.csdn.net/2018102022355978?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" width="648"></p>
+<p>                                                         </p>
+<p> </p>
+<p>        </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-docker镜像原理"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/docker%E9%95%9C%E5%83%8F%E5%8E%9F%E7%90%86/"
+    >docker镜像原理</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/docker%E9%95%9C%E5%83%8F%E5%8E%9F%E7%90%86/" class="article-date">
+  <time datetime="2021-07-18T14:20:56.576Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: docker镜像原理<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—title: docker镜像原理<br>categories:</p>
+<ul>
+<li>docker</li>
+</ul>
+<p>—1. 镜像是什么? 形象说法：镜像就像千层饼，一层套一层 官方：镜像是一种轻量级、可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含运行某个软件所需的所有内容包括代码、运行时、库、环境变量和配置文件。1. 什么是UnionFS（联合文件系统）         UnionFS(联合文件系统): Union文件系统(UnionFS)是一种分层、轻量级并且高性能的文件系统，它支持<strong>对文件系统的修改作为一次提交来一层层的叠加</strong>，同时可以将不同目录挂载到同一个虚拟文件系统下(unite several directories into a single virtual filesystem)。Union文件系统是Docker镜像的基础。镜像可以通过分层来进行继承, 基于基础镜像(没有父镜像)， 可以制作各种具体的应用镜像。 特性: 一次同时加载多个文件系统，但从外面看起来，只能看到一个文件系统，联合加载会把各层文件系统叠加起来，这样最终的文件系统会包含所有底层的文件和目录        我们在下载某个镜像的时候，可能会看到下载了一层一层的多个镜像。    <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820173232156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center">1. docker镜像加载原理 1)docker镜像实际上是由一层层的文件系统组成，这种层级文件系统就是联合文件系统。 2)bootfs（boot file system,用于系统引导的文件系统）主要包含BootLoader和kernel，BootLoader主要负责引导加载kernel，Linux刚启动时会加载bootfs文件系统来引导内核的加载，     Docker镜像的最底层就是bootfs。这一层与我们典 型的unix系统是一样的，包含boot引导器和内核，当boot加载完成后整个内核就在内存中了，此时内存的使用权已经由bootfs转交给内核，     此时系统会卸载bootfs。 3)rootfs（root file system,根文件系统）在bootfs之上，包含的就是典型的unix系统的/dev、 /proc、 /etc等标准目录和文件和一些命令，rootfs就是不同unix系统的发行版，比如Ubuntu、centos等。 4)我们平时安装的虚拟机centos镜像好几个G，Docker安装的才200多m，因为对于一个精简的OS，rootfs可以很小，只需包含最基本的命令，工具和程序库就行了，因为底层直接使用宿主机的内核，    自己只需提供rootfs（相当于操作内核的客户端）就可以，由此可见不同发行版的bootfs基本是一致的，roorfs有差别，因此不同的发行版可以公有bootfs。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820180619143.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 第一个图仅仅是bootfs+rootfs，然后如果要制作一个emacs环境的镜像，就在这个基础上新加一层emacs镜像，如图二。如果要在添加一个Apache环境，那就再图二基础上加一个apache镜像。如图三。图中的每一层镜像都能进行复用。 比如：上面的redis镜像。使用docker inspect redis镜像的ID 命令查看镜像的元信息，找到layer信息。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820174106623.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 由上图可以看到下载的redis镜像是由6个镜像一层层组成的。<img alt="在这里插入图片描述" height="444" src="https://img-blog.csdnimg.cn/20200820174621185.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center" width="462"> 这些镜像都是一个个独立可复用的镜像，如果下载其他镜像是，某一层镜像是已经存在本地的了，就不用在下载，直接复用该镜像，节省空间。比如上面下载redis镜像时，提示某个镜像已经存在。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820174801540.png#pic_center"> 注意： Docker镜像都是只读的，用镜像创建容器启动时，实际上是在原本的镜像上新建了一层可写层到原本镜像的顶部，这一层我们叫作容器层，容器层之下的叫作镜像层。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200820181518835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODM3MzEw,size_16,color_FFFFFF,t_70#pic_center"> 如上图，使用Tomcat镜像创建容器后，会在Tomcat镜像的基础上新建一个可写层，容器的写入是在可写层进行记录，然后使用commit命令把该容器创建一个新的镜像，实际上新的镜像是tomcat镜像+可写层镜像，以tomcat镜像为基础。通过下面介绍使用容器构建镜像，可以更好地理解。1. 分层理解<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20200813125712686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FscGhy,size_16,color_FFFFFF,t_70#pic_center"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-docker简介"
   class="article article-type-post"
   itemscope
@@ -596,232 +825,6 @@
 
 <p>事实上，当要读取URL远程资源的时候，并不推荐使用ADD指令，而是建议使用RUN指令，在RUN指令中执行wget或curl命令。</p>
 <p>转载自：</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Dockerfile简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Dockerfile%E7%AE%80%E4%BB%8B/"
-    >Dockerfile简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Dockerfile%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.558Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Dockerfile简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: Dockerfile简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—1. 什么是Dockerfile？ Dockerfile是用来构建docker镜像的构建文件，是由一系列命令和参数构成的脚本。1. 构建Dockerfile的三步骤：  a：编写Dockerfile文件  b：docker build去执行文件  c：docker run去运行生产的镜像1. Dockerfile的构建过程解析  a：每条保留字指令都必须为大写字母且后面要跟随至少一个参数  b：指令按照从上到下，顺序执行  c：#表示注释  d：每条指令都会创建一个新的镜像层，并对镜像进行提交<img alt="" height="347" src="https://img-blog.csdnimg.cn/20201226101923368.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="706">1. Docker执行Dockerfile的大致流程       a：dcoker从基础镜像运行一个容器       b：执行一条指令并对容器做出修改       c：执行类似docker commit的操作提交一个新的镜像层       d：docker再基于刚提交的镜像运行一个新容器       e：执行dockerfile中的下一条指令直到所有指令都执行完成1. dockerfile的体系结构（保留字指令） ①FROM：表示基础镜像，当前新镜像是基于哪个镜像的。              例如：FROM tomcat  —–》就是基于tomcat作为基础镜像的 ②MAINTAINER：表示镜像维护者的姓名和邮箱地址                  例如：MAINTAINER The Centos Project &lt;<a href="mailto:&#99;&#108;&#x6f;&#117;&#100;&#45;&#x6f;&#x70;&#x73;&#x40;&#99;&#x65;&#110;&#x74;&#111;&#115;&#46;&#111;&#x72;&#x67;">&#99;&#108;&#x6f;&#117;&#100;&#45;&#x6f;&#x70;&#x73;&#x40;&#99;&#x65;&#110;&#x74;&#111;&#115;&#46;&#111;&#x72;&#x67;</a>&gt; ③RUN：表示容器构建时需要运行的命令 ④EXPOSE：表示构建的容器启动后对外暴露的端口号              例如：EXPOSE 6379 ⑤WORKDIR：表示指定在容器创建后，终端默认登录进来的工作目录，一个落脚点                    例如：WORKDIR /data   表示当我们进入容器后默认就在/data这个目录下 ⑥ENV：用来在构建镜像过程中设置环境变量              例如：ENV MY_PATH /usr/mytest   表示我们设置一个环境变量名称为MY_PATH，                         值为/usr/mytest，那么我们后面就可以引用这个环境变量。比如我们在设置                         落脚点的时候，WORKDIR $MY_PATH，那么登录进来后直接就是在/usr/mytest                         目录下。 ⑦ADD： 将宿主机目录下的文件拷贝进镜像并且ADD命令会自动处理URL和解压tar压缩包                   例如：ADD centos-7-docker.tar.xz / ⑧COPY：类似ADD，拷贝文件和目录到镜像中。将从构建上下文目录中&lt;源路径&gt;的文件/目录                        复制到新的一层镜像内的&lt;目标路径&gt;位置。              例如：COPY src dest 或者 COPY [“src”,”dest”]  ⑨VOLUME：容器数据卷，用于数据保存和持久化工作  ⑩CMD           a：表示指定一个容器启动时要运行的命令                     <img alt="" height="159" src="https://img-blog.csdnimg.cn/20181103103647354.png" width="572">               b：Dockerfile中可以有多个CMD指令，但只有最后一个生效，CMD会被docker run 之后                     的参数替代。   ENTRYPOINT：表示指定一个容器启动时要运行的命令，ENTRYPOINT的目的和CMD一样，                                  都是在指定容器启动程序及参数。   ONBUILD：表示当构建一个被继承的Dockerfile时运行命令，父镜像在被子继承后父镜像的                           onbuild被触发。<li>案例之构建自己的centos镜像  ⑴Base镜像（scratch）        Docker Hub中99%的镜像都是通过在base镜像中安装和配置需要的软件构建出来的。  ⑵自定义镜像mycentos        ①我们现在可以看看我们从网上下载下载的centos镜像原本是什么样子的              <img alt="" height="323" src="https://img-blog.csdnimg.cn/20181103134447707.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="547"> ⑶在/opt/dockerfile目录下创建自己的dockerfile    <img alt="" height="668" src="https://img-blog.csdnimg.cn/20201226115505509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="605">       <pre><code class="language-bash">#基于我们从阿里云下载下来的centos基础镜像<br>FROM centos</p>
-<p>#定义作者信息<br>MAINTAINER kgf&lt;<a href="mailto:&#107;&#103;&#102;&#64;&#49;&#x36;&#x33;&#46;&#x63;&#111;&#109;">&#107;&#103;&#102;&#64;&#49;&#x36;&#x33;&#46;&#x63;&#111;&#109;</a>&gt;</p>
-<p>#设置环境变量<br>ENV MY_PATH /usr/local</p>
-<p>#定义进入容器后的工作目录就是/usr/local<br>WORKDIR $MY_PATH</p>
-<p>#定义容器支持vim命令<br>RUN yum -y install vim</p>
-<p>#定义容器支持ifconfig命令<br>RUN yum -y install net-tools</p>
-<p>#定义容器暴露的端口号为80<br>EXPOSE 80</p>
-<p>#输出构建完成信息<br>CMD echo “=============构建完成============”</p>
-<p>#最后进入容器的/bin/bash路径下<br>CMD /bin/bash</code></pre>  ⑷使用dockerfile文件构建新的镜像       命令：docker build -f Dockerfile的绝对路径 -t 镜像名称:版本号 .           docker build -f /opt/dockerfile/mydockerfile-centos -t mycentos:v1.1 .    <img alt="" height="464" src="https://img-blog.csdnimg.cn/20201226120355247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="849">     <img alt="" height="441" src="https://img-blog.csdnimg.cn/20201226120419220.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="704"> ⑸下面我们运行新建的镜像        命令：docker run -it mycentos:v1.1   <img alt="" height="617" src="https://img-blog.csdnimg.cn/20201226121353215.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="796">  <img alt="" height="174" src="https://img-blog.csdnimg.cn/20201226121504898.png" width="713"> ⑹使用docker history +镜像ID 查看镜像详细信息         <img alt="" height="385" src="https://img-blog.csdnimg.cn/2020122612205842.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="770"></li></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-DockerCompose简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/DockerCompose%E7%AE%80%E4%BB%8B/"
-    >DockerCompose简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/DockerCompose%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.555Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: DockerCompose简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—title: DockerCompose简介<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—composetest_redis_1   docker-entrypoint.sh redis …   Up      6379/tcp<br>composetest_web_1     flask run                        Up      0.0.0.0:5000-&gt;5000/tcp</code></pre> 停止命令 <strong>docker-compose stop 或docker-compose down</strong> <pre><code class="language-bash">[root@web composetest]# docker-compose stop<br>Stopping composetest_web_1   ... done<br>Stopping composetest_redis_1 ... done</code></pre> 假设项目需要重新打包**  docker-compose up –build** </li><li>网络规则<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201029112250681.png#pic_center"><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201029113336750.png#pic_center"><pre><code class="language-bash">docker network inspect [networkid]<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/2020102911344840.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MzY5MTc3Mw==,size_16,color_FFFFFF,t_70#pic_center"><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201029113548962.png#pic_center"><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/2020102911372757.png#pic_center"> </li></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-docker-19.03.11离线安装"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/docker-19.03.11%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/"
-    >docker-19.03.11离线安装</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/docker-19.03.11%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" class="article-date">
-  <time datetime="2021-07-18T14:20:56.552Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: docker-19.03.11离线安装<br>categories:</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>—有时候docker运行环境连不了互联网，怎么安装呢？这里介绍docker 离线安装方法，非常简单，只需要一个下载包和几个命令就能搞好！</p>
-<p>1、去官网下载docker 安装二进制包，选择适合自己的版本。这里下载的是docker-19.03.11.tgz，在centos7中安装（cento6无法使用，提示linux版本内核版本太低）</p>
-<p>下载地址：<a target="_blank" rel="noopener" href="https://download.docker.com/linux/static/stable/x86_64/">https://download.docker.com/linux/static/stable/x86_64/</a></p>
-<p>2、复制docker-19.03.11.tgz到服务器上，解压：tar xzvf docker-19.03.11.tgz</p>
-<p>3、进入docker目录复制所有文件到/usr/bin目录下，目的/user/bin是环境变量目录，在路径下都可以运行docker命令</p>
-<p>ls -l docker</p>
-<p>cp docker/* /usr/bin/</p>
-<blockquote>
- <pre><code>[root@localhost local]# tar xvf docker-19.03.11.tgz
-docker/
-docker/docker-init
-docker/runc
-docker/docker
-docker/docker-proxy
-docker/containerd
-docker/ctr
-docker/dockerd
-docker/containerd-shim
-[root@localhost local]# ls -l docker
-total 195504
--rwxr-xr-x. 1 lr lr 32751272 May 14 17:29 containerd
--rwxr-xr-x. 1 lr lr  6012928 May 14 17:29 containerd-shim
--rwxr-xr-x. 1 lr lr 18194536 May 14 17:29 ctr
--rwxr-xr-x. 1 lr lr 61113382 May 14 17:29 docker
--rwxr-xr-x. 1 lr lr 68874208 May 14 17:29 dockerd
--rwxr-xr-x. 1 lr lr   708616 May 14 17:29 docker-init
--rwxr-xr-x. 1 lr lr  2928514 May 14 17:29 docker-proxy
--rwxr-xr-x. 1 lr lr  9600696 May 14 17:29 runc
-[root@localhost local]# mv docker/* /usr/bin/
-[root@localhost local]#</code></pre> 
-<p>   </p>
-</blockquote>
-<p>vim /etc/systemd/system/docker.service</p>
-<p>添加文件内容：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line"></span><br><span class="line">Description=Docker Application Container Engine</span><br><span class="line"></span><br><span class="line">Documentation=https://docs.docker.com</span><br><span class="line"></span><br><span class="line">After=network-online.target firewalld.service</span><br><span class="line"></span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line"></span><br><span class="line">Type=notify</span><br><span class="line"></span><br><span class="line">ExecStart=/usr/bin/dockerd</span><br><span class="line"></span><br><span class="line">ExecReload=/bin/kill -s HUP $MAINPID</span><br><span class="line"></span><br><span class="line">LimitNOFILE=infinity</span><br><span class="line"></span><br><span class="line">LimitNPROC=infinity</span><br><span class="line"></span><br><span class="line">TimeoutStartSec=0</span><br><span class="line"></span><br><span class="line">Delegate=yes</span><br><span class="line"></span><br><span class="line">KillMode=process</span><br><span class="line"></span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">StartLimitBurst=3</span><br><span class="line"></span><br><span class="line">StartLimitInterval=60s</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line"></span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>赋执行权限</p>
-<p>chmod +x /etc/systemd/system/docker.service</p>
-<p>systemctl daemon-reload </p>
-<p>#开机启动</p>
-<p>systemctl enable docker.service</p>
-<p>启动docker</p>
-<p>systemctl start docker</p>
  
       <!-- reward -->
       

@@ -160,6 +160,214 @@
     
     
     <article
+  id="post-Hive知识点入门学习三"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/"
+    >Hive知识点入门学习三</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%B8%89/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.156Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习三<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：Hive 常见属性配置 </p>
+<ol>
+<li>  Hive 数据仓库位置配置     ⑴Default 数据仓库的最原始位置是在 hdfs 上的：/user/hive/warehouse 路径下 。    ⑵在仓库目录下，没有对默认的数据库 default 创建文件夹。如果某张表属于 default        数据库，直接在数据仓库目录下创建一个文件夹。        <img alt="" class="has" height="199" src="https://img-blog.csdnimg.cn/20190819223122673.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="594">    ⑶修改 default 数据仓库原始位置（将 hive-default.xml.template 如下配置信息拷贝到        hive-site.xml 文件中）         <img alt="" class="has" height="147" src="https://img-blog.csdnimg.cn/20190819223236422.png" width="665">         配置同组用户有执行权限 ：        bin/hdfs dfs -chmod g+w /user/hive/warehouse 1.  显示当前数据库，以及查询表的头信息配置  ⑴在 hive-site.xml 文件中添加如下配置信息         <img alt="" class="has" height="162" src="https://img-blog.csdnimg.cn/20190819223610457.png" width="437">  ⑵效果：        <img alt="" class="has" height="309" src="https://img-blog.csdnimg.cn/20190819223716280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="466"> 1.  Hive 运行日志信息配置     ⑴Hive 的 log 默认存放在/tmp/kgf/hive.log 目录下（当前用户名下）。     ⑵修改 hive 的 log 存放日志到/opt/module/hive/logs           a：修改/opt/module/hive/conf/hive-log4j.properties.template 文件名称为hive-log4j.properties                   <img alt="" class="has" height="287" src="https://img-blog.csdnimg.cn/20190819224138274.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="505">                b：在 hive-log4j.properties 文件中修改 log 存放位置                  <img alt="" class="has" height="157" src="https://img-blog.csdnimg.cn/2019081922430168.png" width="447">          c：重新启动hive,查看日志                <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190819224456124.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">               <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190819224522341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="610">        <h1 id="二：Hive-数据类型"><a href="#二：Hive-数据类型" class="headerlink" title="二：Hive 数据类型"></a>二：Hive 数据类型</h1></li>
+<li> 基本数据类型   <img alt="" class="has" height="526" src="https://img-blog.csdnimg.cn/20190820220115405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="623">1. 集合数据类型   <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/2019082022021964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">  <img alt="" class="has" height="365" src="https://img-blog.csdnimg.cn/2019082022030196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">1. 案例实操  ⑴需求：         <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190820220418141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="599">  ⑵基于上述数据结构，我们在 Hive 里创建对应的表，并导入数据。          a：创建本地测试文件 test.txt                <img alt="" class="has" height="86" src="https://img-blog.csdnimg.cn/20190820220903466.png" width="672">               <img alt="" class="has" height="197" src="https://img-blog.csdnimg.cn/20190820223457971.png" width="714">         b：Hive 上创建测试表 test                <img alt="" class="has" height="198" src="https://img-blog.csdnimg.cn/20190820222540748.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="693">               <img alt="" class="has" height="242" src="https://img-blog.csdnimg.cn/20190820223114431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">               <img alt="" class="has" height="206" src="https://img-blog.csdnimg.cn/20190820223229937.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="492">       c：导入数据             <img alt="" class="has" height="139" src="https://img-blog.csdnimg.cn/20190820223714627.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="619">    ⑶访问三种集合列里的数据，以下分别是 ARRAY，MAP，STRUCT 的访问方式           <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20190820224559347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="664">1.  类型转化   <img alt="" class="has" height="459" src="https://img-blog.csdnimg.cn/2019082022464613.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">      <h1 id="三：DDL数据定义"><a href="#三：DDL数据定义" class="headerlink" title="三：DDL数据定义"></a>三：DDL数据定义</h1></li>
+<li>创建数据库  <img alt="" class="has" height="281" src="https://img-blog.csdnimg.cn/2019082121445173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="457">  注意：避免要创建的数据库已经存在错误，增加 if not exists 判断。（标准写法）   <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190821214719765.png" width="525">    <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190821214826855.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">1. 创建一个数据库，指定数据库在 HDFS 上存放的位置   <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/2019082121542295.png" width="727">  <img alt="" class="has" height="280" src="https://img-blog.csdnimg.cn/20190821215432560.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="468">1. 修改数据库  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190821220003912.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="648">1.  查询数据库   <img alt="" class="has" height="509" src="https://img-blog.csdnimg.cn/20190821220237936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="563">1.   删除数据库   <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190821221230754.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="606">  <img alt="" class="has" height="196" src="https://img-blog.csdnimg.cn/20190821221244886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597">1. 管理表   ⑴简介         <img alt="" class="has" height="144" src="https://img-blog.csdnimg.cn/20190821223046384.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="622">  ⑵案例实操         a：普通创建表                 <img alt="" class="has" height="131" src="https://img-blog.csdnimg.cn/20190821223705196.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576">                <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/2019082122372787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="553">         b：根据查询结果创建表（查询的结果会添加到新创建的表中）                <img alt="" class="has" height="390" src="https://img-blog.csdnimg.cn/20190821224316559.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="481">         c：根据已经存在的表结构创建表                <img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20190821224448961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">         d：查询表的类型               <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190821224556752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="503">1.  外部表   ⑴简介         <img alt="" class="has" height="73" src="https://img-blog.csdnimg.cn/20190822221648101.png" width="625">  ⑵使用场景         <img alt="" class="has" height="109" src="https://img-blog.csdnimg.cn/20190822221740240.png" width="651">  ⑶案例实操：分别创建部门和员工外部表，并向表中导入数据。          a：创建部门表               <img alt="" class="has" height="186" src="https://img-blog.csdnimg.cn/20190822222033545.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="581">        b：创建员工表               <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190822222211120.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">        c：<strong>我们向表中导入数据后，数据存储在hdfs上，删除表后，数据不会删除，重新建立表后，数据会重新              关联起来</strong>。</li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hive知识点入门学习二"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/"
+    >Hive知识点入门学习二</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E4%BA%8C/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.149Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习二<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—# 一：将本地文件导入Hive案例</p>
+<ol>
+<li>需求：  将本地/opt/module/datas/student.txt这个目录下的数据导入到hive的student(id int, name string)表中。1. 数据准备：  ⑴在/opt/module/datas/student.txt 这个目录下准备数据        <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190818155847518.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="474">1. 启动hive，在数据库中创建的student表，并声明文件分隔符’\t’   sql为：create table student(id int,name string) row format delimited fields terminated by ‘\t’;<img alt="" class="has" height="231" src="https://img-blog.csdnimg.cn/20190818161243241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="885">1.  加载/opt/module/datas/student.txt 文件到 student 数据库表中。   sql：load data local inpath ‘/opt/module/datas/student.txt’ into table student;   <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190818162112793.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="766">1.   遇到的问题   ⑴现在我们使用的是一个102连接窗口启动hive数据库，如果我们再打开一个102连接窗口去启动hive,就会报错        <img alt="" class="has" height="290" src="https://img-blog.csdnimg.cn/20190818162627607.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="600">        我们在第二个窗口也启动hive试试：        <img alt="" class="has" height="278" src="https://img-blog.csdnimg.cn/20190818162737579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="631">    ⑵原因：        Metastore（元数据） 默认存储在自带的 derby 数据库中，只支持一个hive客户端连接。        推荐使用 MySQL 存储 Metastore;       <h1 id="二：Mysql安装"><a href="#二：Mysql安装" class="headerlink" title="二：Mysql安装"></a>二：Mysql安装</h1></li>
+<li>查看mysql是否安装，如果安装了，可以先卸载掉  <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190818163504163.png" width="639">1.  版本：  <img alt="" class="has" height="36" src="https://img-blog.csdnimg.cn/20190818164417782.png" width="395">1. 上传到Linux上  <img alt="" class="has" height="174" src="https://img-blog.csdnimg.cn/2019081816460563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="681">1. 将文件解压到/usr/local/目录下  <img alt="" class="has" height="262" src="https://img-blog.csdnimg.cn/20190818174205322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="698">   <img alt="" class="has" height="291" src="https://img-blog.csdnimg.cn/20190818174236815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="625">1. 修改文件夹的名称  <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/20190818174306725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="735">1.  检查并创建用户和用户组  <img alt="" class="has" height="181" src="https://img-blog.csdnimg.cn/20190818165556903.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="529"> 1.  创建data文件夹<img alt="" class="has" height="130" src="https://img-blog.csdnimg.cn/20190818174340602.png" width="481"> 1.  授权授权目录和用户  <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190818174438487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568"> 1.  安装并初始化  命令如下：datadir就是安装路径，basedir就是根目录  /usr/local/mysql/bin/mysqld –initialize –user=mysql –datadir=/usr/local/mysql/data –basedir=/usr/local/mysql  <img alt="" class="has" height="194" src="https://img-blog.csdnimg.cn/20190818174556621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683"> 1.  复制启动脚本到资源目录  <img alt="" class="has" height="173" src="https://img-blog.csdnimg.cn/20190818174655432.png" width="806"> 1.  增加mysqld服务控制脚本执行权限  <img alt="" class="has" height="63" src="https://img-blog.csdnimg.cn/20190818173327480.png" width="523"> 1.  将mysqld服务加入到系统服务  <img alt="" class="has" height="74" src="https://img-blog.csdnimg.cn/20190818173349521.png" width="475"> 1.  检查mysqld服务是否已经生效  <img alt="" class="has" height="304" src="https://img-blog.csdnimg.cn/20190818173412493.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="730"> 1.  启动mysql（注意：安装目录一定要在/usr/local下）  <img alt="" class="has" height="203" src="https://img-blog.csdnimg.cn/20190818174808466.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="653"> 1.  登录mysql（提示找不到mysql命令）  <img alt="" class="has" height="150" src="https://img-blog.csdnimg.cn/2019081817500748.png" width="477"> 1.  解决  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190818175110764.png" width="660"> 1.  再次登录  <img alt="" class="has" height="328" src="https://img-blog.csdnimg.cn/20190818175148527.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="662"> 1.  修改密码  <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190818175332282.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="614"> 1.  最后退出使用修改后的密码登录  <img alt="" class="has" height="395" src="https://img-blog.csdnimg.cn/20190818175419923.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="597"> 1.  连接出现如下  <img alt="" class="has" height="212" src="https://img-blog.csdnimg.cn/2019081817592794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587"> 1.  解决  <img alt="" class="has" height="177" src="https://img-blog.csdnimg.cn/20190818180225818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="690"> 1.  连接成功  <img alt="" class="has" height="503" src="https://img-blog.csdnimg.cn/20190818180303108.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="576"> <h1 id="三：将Hive元数据拷贝到mysql"><a href="#三：将Hive元数据拷贝到mysql" class="headerlink" title="三：将Hive元数据拷贝到mysql"></a>三：将Hive元数据拷贝到mysql</h1></li>
+<li>驱动拷贝，将mysql-connector-java-5.1.38.jar拷贝到/opt/module/hive/lib/   <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/20190818183931789.png" width="727">1.  在/opt/module/hive/conf 目录下创建一个 hive-site.xml   <img alt="" class="has" height="258" src="https://img-blog.csdnimg.cn/20190818184128415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="709"><li> 根据官方文档配置mysql参数，拷贝数据到 hive-site.xml 文件中。    <pre class="has"><code class="language-html">&lt;?xml version="1.0"?&gt;<br>&lt;?xml-stylesheet type="text/xsl" href="configuration.xsl"?&gt;<br>&lt;configuration&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionURL&amp;lt;/name&amp;gt;    
+ &amp;lt;value&amp;gt;jdbc:mysql://hadoop102:3306/metastore?createDatabaseIfNotExist=true&amp;amp;amp;useSSL=false&amp;lt;/value&amp;gt;    
+ &amp;lt;description&amp;gt;JDBC connect string for a JDBC metastore&amp;lt;/description&amp;gt;  
+</code></pre>
+ &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionDriverName&amp;lt;/name&amp;gt;    
+ &amp;lt;value&amp;gt;com.mysql.jdbc.Driver&amp;lt;/value&amp;gt;    
+ &amp;lt;description&amp;gt;Driver class name for a JDBC metastore&amp;lt;/description&amp;gt;  
+</code></pre>
+ &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionUserName&amp;lt;/name&amp;gt;    
+ &amp;lt;value&amp;gt;root&amp;lt;/value&amp;gt;    
+ &amp;lt;description&amp;gt;username to use against metastore database&amp;lt;/description&amp;gt;  
+</code></pre>
+ &lt;/property&gt;<br> &lt;property&gt;    <pre><code> &amp;lt;name&amp;gt;javax.jdo.option.ConnectionPassword&amp;lt;/name&amp;gt;    
+ &amp;lt;value&amp;gt;897570&amp;lt;/value&amp;gt;    
+ &amp;lt;description&amp;gt;password to use against metastore database&amp;lt;/description&amp;gt;  
+</code></pre>
+ &lt;/property&gt;<br> &lt;property&gt;         <pre><code> &amp;lt;name&amp;gt;hive.cli.print.current.db&amp;lt;/name&amp;gt;         
+ &amp;lt;value&amp;gt;true&amp;lt;/value&amp;gt;         
+ &amp;lt;description&amp;gt;Whether to include the current database in the Hive prompt.&amp;lt;/description&amp;gt;      
+</code></pre>
+ &lt;/property&gt;<br> &lt;property&gt;     <pre><code> &amp;lt;name&amp;gt;hive.cli.print.header&amp;lt;/name&amp;gt;     
+ &amp;lt;value&amp;gt;false&amp;lt;/value&amp;gt;     
+ &amp;lt;description&amp;gt;Whether to print the names of the columns in query output.&amp;lt;/description&amp;gt;   
+</code></pre>
+ &lt;/property&gt;<br>&lt;/configuration&gt; </code></pre>   </li>1. 配置完毕后，如果启动 hive 异常，可以重新启动虚拟机。（重启后，别忘了启动 hadoop 集群）,启动hive后可以发现我们之前的student表不见了，我们看看mysql数据库变化  <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190818185323958.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="428">1.  mysql数据库变化，多了一个元数据库，之前是没有的  <img alt="" class="has" height="303" src="https://img-blog.csdnimg.cn/20190818185545416.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">1.   多窗口启动测试，可以的  <img alt="" class="has" height="184" src="https://img-blog.csdnimg.cn/20190818185724384.png" width="688"><h1 id="四：Hive中常用的交互命令"><a href="#四：Hive中常用的交互命令" class="headerlink" title="四：Hive中常用的交互命令"></a>四：Hive中常用的交互命令</h1></li>
+<li> 首先在hive中新建一张表，并且导入一些数据   <img alt="" class="has" height="312" src="https://img-blog.csdnimg.cn/20190819213852186.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="660">1. “-e”不进入 hive 的交互窗口执行 sql 语句     <img alt="" class="has" height="284" src="https://img-blog.csdnimg.cn/20190819214253808.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="794">1.  “-f”执行脚本中 sql 语句    ⑴新建一个sql脚本         <img alt="" class="has" height="182" src="https://img-blog.csdnimg.cn/20190819214823235.png" width="496">  ⑵执行sql脚本         <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190819214939544.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="552">1.   执行文件中的 sql 语句并将结果写入文件中     <img alt="" class="has" height="314" src="https://img-blog.csdnimg.cn/20190819215111211.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="755"><h1 id="五：-Hive-其他命令操作"><a href="#五：-Hive-其他命令操作" class="headerlink" title="五： Hive 其他命令操作"></a>五： Hive 其他命令操作</h1></li>
+<li> 在 hive cli 命令窗口中如何查看 hdfs 文件系统   <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190819220124828.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="739">1. 在 hive cli 命令窗口中如何查看 hdfs 本地系统   <img alt="" class="has" height="187" src="https://img-blog.csdnimg.cn/20190819220235303.png" width="548">1. 查看在 hive 中输入的所有历史命令   a：进入到当前用户的根目录         <img alt="" class="has" height="29" src="https://img-blog.csdnimg.cn/20190819220435242.png" width="291">  b：查看. hivehistory 文件         <img alt="" class="has" height="233" src="https://img-blog.csdnimg.cn/20190819220505938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="376">      </li>
+</ol>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-Hive知识点入门学习"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/"
+    >Hive知识点入门学习</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Hive%E7%9F%A5%E8%AF%86%E7%82%B9%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time datetime="2021-07-18T14:10:35.142Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/BigData/">BigData</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Hive知识点入门学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—title: Hive知识点入门学习<br>categories:</p>
+<ul>
+<li>BigData</li>
+</ul>
+<p>—1. 1. 1. 1. 1. </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-Hive整合Hbase详解"
   class="article article-type-post"
   itemscope
@@ -806,221 +1014,6 @@ public static void main(String[] args) &#123;
 &#125;
 </code></pre>
 <p>}<br></code></pre>   </li>1. 打成jar包，上传Linux  <img alt="" class="has" height="260" src="https://img-blog.csdnimg.cn/20191006231143621.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="732">1. 进入/usr/local/module/hadoop-2.7.2目录下执行jar包  <img alt="" class="has" height="169" src="https://img-blog.csdnimg.cn/2019100623144363.png" width="1110"><img alt="" class="has" height="347" src="https://img-blog.csdnimg.cn/20191007094918730.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="861"> 1. 查看fruit表信息  <img alt="" class="has" height="275" src="https://img-blog.csdnimg.cn/20191007100122765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1028">       </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-hashCode的作用"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/"
-    >hashCode的作用</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/hashCode%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.087Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: hashCode的作用<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—<strong>1、hashCoed 的特性：</strong></p>
-<p>（1）HashCode的存在主要是用于查找的快捷性，如Hashtable，HashMap等，HashCode经常用于确定对象的存储地址；</p>
-<p>（2）如果两个对象相同， equals方法一定返回true，并且这两个对象的HashCode一定相同；</p>
-<p>（3）两个对象的HashCode相同，并不一定表示两个对象就相同，即equals()不一定为true，只能够说明这两个对象在一个散列存储结构中。</p>
-<p>（4）如果对象的equals方法被重写，那么对象的HashCode也尽量重写。</p>
-<p>有关equals 与hashCode 方法可以参考这篇文章：</p>
-<p> </p>
-<p><strong>2、hashCode 的作用：</strong></p>
-<p>Java中的集合有两类，一类是List，再有一类是Set。前者集合内的元素是有序的，元素可以重复；后者元素无序，但元素不可重复。 equals方法可用于保证元素不重复，但如果每增加一个元素就检查一次，若集合中现在已经有1000个元素，那么第1001个元素加入集合时，就要调用1000次equals方法。这显然会大大降低效率。 于是，Java采用了哈希表的原理。</p>
-<p>哈希算法也称为散列算法，是将数据依特定算法直接指定到一个地址上。这样一来，当集合要添加新的元素时，先调用这个元素的HashCode方法，就一下子能定位到它应该放置的物理位置上。</p>
-<p>（1）如果这个位置上没有元素，它就可以直接存储在这个位置上，不用再进行任何比较了；</p>
-<p>（2）如果这个位置上已经有元素了，就调用它的equals方法与新元素进行比较，相同的话就不存了；</p>
-<p>（3）不相同的话，也就是发生了Hash key相同导致冲突的情况，那么就在这个Hash key的地方产生一个链表，将所有产生相同HashCode的对象放到这个单链表上去，串在一起。这样一来实际调用equals方法的次数就大大降低了。 </p>
-<p> 所以hashCode在上面扮演的角色为寻域（寻找某个对象在集合中区域位置）。hashCode可以将集合分成若干个区域，每个对象都可以计算出他们的hash码，可以将hash码分组，每个分组对应着某个存储区域，根据一个对象的hash码就可以确定该对象所存储区域，这样就大大减少查询匹配元素的数量，提高了查询效率。  </p>
-<p><strong>3、hashCode实践：</strong></p>
-<p>hashCode是用于查找使用的，而equals是用于比较两个对象是否相等的。</p>
-<p>（1）例如内存中有这样的位置 ：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0  1  2  3  4  5  6  7    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>而我有个类，这个类有个字段叫ID，我要把这个类存放在以上8个位置之一，如果不用HashCode而任意存放，那么当查找时就需要到这八个位置里挨个去找，或者用二分法一类的算法。   但以上问题如果用HashCode就会使效率提高很多。  定义我们的HashCode为ID％8，比如我们的ID为9，9除8的余数为1，那么我们就把该类存在1这个位置，如果ID是13，求得的余数是5，那么我们就把该类放在5这个位置。依此类推。  </p>
-<p>（2）但是如果两个类有相同的HashCode，例如9除以8和17除以8的余数都是1，也就是说，我们先通过 HashCode来判断两个类是否存放某个桶里，但这个桶里可能有很多类，那么我们就需要再通过equals在这个桶里找到我们要的类。    </p>
-<p>请看下面这个例子 ：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-<p>输出结果为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">[HashTest@1, HashTest@1]</span><br></pre></td></tr></table></figure>
-
-<p>以上这个示例，我们只是重写了HashCode方法，从上面的结果可以看出，虽然两个对象的HashCode相等，但是实际上两个对象并不是相等，因为我们没有重写equals方法，那么就会调用Object默认的equals方法，Object的equals方法调用的是 == 进行比较两个对象，显示这是两个不同的对象。</p>
-<p>这里我们将生成的对象放到了HashSet中，而HashSet中只能够存放唯一的对象，也就是相同的（适用于equals方法）的对象只会存放一个，但是这里实际上是两个对象ab都被放到了HashSet中，这样HashSet就失去了他本身的意义了。</p>
-<p>下面我们继续重写equals方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">public class HashTest &#123;  </span><br><span class="line">    private int i;  </span><br><span class="line">  </span><br><span class="line">    public int getI() &#123;  </span><br><span class="line">        return i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public void setI(int i) &#123;  </span><br><span class="line">        this.i = i;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public boolean equals(Object object) &#123;  </span><br><span class="line">        if (object == null) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (object == this) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        if (!(object instanceof HashTest)) &#123;  </span><br><span class="line">            return false;  </span><br><span class="line">        &#125;  </span><br><span class="line">        HashTest other = (HashTest) object;  </span><br><span class="line">        if (other.getI() == this.getI()) &#123;  </span><br><span class="line">            return true;  </span><br><span class="line">        &#125;  </span><br><span class="line">        return false;  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    public int hashCode() &#123;  </span><br><span class="line">        return i % 10;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    public final static void main(String[] args) &#123;  </span><br><span class="line">        HashTest a = new HashTest();  </span><br><span class="line">        HashTest b = new HashTest();  </span><br><span class="line">        a.setI(1);  </span><br><span class="line">        b.setI(1);  </span><br><span class="line">        Set&amp;lt;HashTest&amp;gt; set = new HashSet&amp;lt;HashTest&amp;gt;();  </span><br><span class="line">        set.add(a);  </span><br><span class="line">        set.add(b);  </span><br><span class="line">        System.out.println(a.hashCode() == b.hashCode());  </span><br><span class="line">        System.out.println(a.equals(b));  </span><br><span class="line">        System.out.println(set);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-
-<p>输出结果如下所示:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">[HashTest@1]</span><br></pre></td></tr></table></figure>
-
-<p>从结果我们可以看出，现在两个对象就完全相等了，HashSet中也只存放了一份对象。</p>
-<p>原文地址：</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hadoop知识点学习"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/"
-    >Hadoop知识点学习</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hadoop%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.080Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hadoop知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Hadoop知识点学习<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—1. 1. 1. 1. 1. 1. 1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-Hadoop之完全分布式模式环境搭建"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
-    >Hadoop之完全分布式模式环境搭建</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/Hadoop%E4%B9%8B%E5%AE%8C%E5%85%A8%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%BC%8F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.073Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—title: Hadoop之完全分布式模式环境搭建<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—rsync -rvl $pdir/$fname $user@hadoop202:$pdir<br></code></pre>  b:在103的服务器上，在/opt/module/hadoop-2.7.2/etc下执行下面命令      <img alt="" class="has" height="402" src="https://img-blog.csdnimg.cn/20190710224709359.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="417">           </li></p>
-<h1 id="七：集群启动及测试"><a href="#七：集群启动及测试" class="headerlink" title="七：集群启动及测试"></a>七：集群启动及测试</h1><ol>
-<li> 进入/opt/module/hadoop-2.7.2目录下，103，104，202三台服务器都要清理之前启动的数据   <img alt="" class="has" height="427" src="https://img-blog.csdnimg.cn/20190710225308526.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="395">1.  第一次启动集群，需要格式化namenode,进入/opt/module/hadoop-2.7.2目录下，只需要格式化103即可，因为我们  的namenode节点配置在103节点上   命令：bin/hdfs namenode -format   <img alt="" class="has" height="327" src="https://img-blog.csdnimg.cn/20190710225826151.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">1. 下面我们在103这个namenode的节点上去启动集群，当然ssh必须要配置完成的情况下,进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-dfs.sh  这个命令一次性把namenode和datanode启动起来   <img alt="" class="has" height="239" src="https://img-blog.csdnimg.cn/20190710230437871.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="568">          我们可以分别到104，202服务器去看看   <img alt="" class="has" height="141" src="https://img-blog.csdnimg.cn/20190710230549856.png" width="328"><img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190710230604118.png" width="415">1. 因为我们的resourcemanager是在104上面的，我们在104上启动resourcemanager和nodemanager, 进入/opt/module/hadoop-2.7.2目录下  命令：sbin/start-yarn.sh<img alt="" class="has" height="364" src="https://img-blog.csdnimg.cn/20190710231012172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="567">  可以到103，202服务器上查看，发现NodeManager也启动了，可以对比上面我们的集群规划。1. 集群测试    ⑴集群基本测试           ①上传文件到集群                      a：上传小文件                                ㈠首先在103的hdfs上创建一个文件夹                                           命令：hadoop fs -mkdir -p /user/kgf/input                                            <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190712223047447.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579">                                            可以通过浏览器50070端口页面看效果：                                            <img alt="" class="has" height="302" src="https://img-blog.csdnimg.cn/20190712223135342.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="513">                                 ㈡下面我们创建一个文件通过命令上传到上面刚建的hdfs上的文件夹中                                       <img alt="" class="has" height="176" src="https://img-blog.csdnimg.cn/20190712223517227.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="572">                                         <img alt="" class="has" height="200" src="https://img-blog.csdnimg.cn/20190712223543887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="585">                                       点击发现，三台服务器上都有该文件备份：                                       <img alt="" class="has" height="338" src="https://img-blog.csdnimg.cn/201907122245459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="373">                      b：上传一个大文件试试，大于128M的，因为我们可以发现上面Block Size是128，那么                            大于128M时，会怎么样呢？ 下面开始上传：                           <img alt="" class="has" height="114" src="https://img-blog.csdnimg.cn/20190712225153998.png" width="479">                           <img alt="" class="has" height="140" src="https://img-blog.csdnimg.cn/20190712225307761.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="530">                          效果：                             <img alt="" class="has" height="230" src="https://img-blog.csdnimg.cn/20190712225509961.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="577">                             <img alt="" class="has" height="343" src="https://img-blog.csdnimg.cn/20190712225627630.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="416">                                                       1. 集群时间同步        ⑴问题：因为我们配置的是集群，那么我们在跑数据的时候，这几台服务器的时间必须要保持一致，                       不然会出现问题。        ⑵时间同步的方式                    找一个机器，作为时间服务器，所有的机器与这台集群时间进行定时的同步，比如每隔十分钟同步一次。             注意：配置时间同步操作必须使用root用户。        ⑶时间服务器配置（必须是root用户）                    a：检测ntp是否安装，命令：rpm -qa | grep ntp                          <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713084812614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="486">                   b：修改ntp配置文件，路径：/etc/ntp.conf                           ①设置本地网络上的主机不受限制                                  <img alt="" class="has" height="113" src="https://img-blog.csdnimg.cn/20190713085230255.png" width="567">                            ②设置为不采用公共的服务器                                  <img alt="" class="has" height="102" src="https://img-blog.csdnimg.cn/20190713085539502.png" width="433">                            ③添加默认的一个内部时钟数据，使用它为局域网用户提供服务                                 <img alt="" class="has" height="165" src="https://img-blog.csdnimg.cn/20190713085904915.png" width="499">                  c：修改/etc/sysconfig/ntpd文件                             a：让硬件时间与系统时间一起同步                                  <img alt="" class="has" height="137" src="https://img-blog.csdnimg.cn/2019071309050714.png" width="378">                             b：重启ntpd                                  命令：systemctl status ntpd   查看ntpd状态                                  启动命令：systemctl start ntpd                             c：设置开启自启动ntp服务                                   执行：systemctl enable ntpd.service         ⑷其它机器配置（必须是root用户）               a：在其它机器上配置10分钟与时间服务器同步一次（生产环境一般是10分钟，这里我们演示就1分钟）                      命令：crontab -e然后编写下面的脚本命令                       */1 * * * * /usr/sbin/ntpdate 要同步时间的服务器地址               b：下面我们先同步104服务器                        <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190713093634836.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="454">                        <img alt="" class="has" height="122" src="https://img-blog.csdnimg.cn/20190713093705895.png" width="454">               c：同理，我们同步202的时间                     <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190713093825473.png" width="623">               d：测试，我们分别查看3台服务器时间，三台目前都是这个时间                    <img alt="" class="has" height="98" src="https://img-blog.csdnimg.cn/20190713094042110.png" width="369">                    下面我们将104的时间修改掉                     <img alt="" class="has" height="222" src="https://img-blog.csdnimg.cn/20190713094506658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="425">                    一分钟后…..可以发现时间又同步回来了。                     <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/2019071309463594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="749"><h1 id=""><a href="#" class="headerlink" title=""></a></h1></li>
-</ol>
  
       <!-- reward -->
       

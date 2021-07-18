@@ -160,6 +160,267 @@
     
     
     <article
+  id="post-clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/"
+    >clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.296Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—# CSV</p>
+<ul>
+<li>CSV默认的分隔符为逗号，format_csv_delimiter设置自定义的分隔符。- CSV中的双引号使用两个双引号转义。- 支持数据的查询和数据导入的。<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2></li>
+</ul>
+<h3 id="clickhouse中建表"><a href="#clickhouse中建表" class="headerlink" title="clickhouse中建表"></a>clickhouse中建表</h3><blockquote>
+<p> create table csv_demo(create_date Date, update_time DateTime, desc String) ENGINE=TinyLog; </p>
+</blockquote>
+<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><blockquote>
+</blockquote>
+<h1 id="创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy"><a href="#创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy" class="headerlink" title="创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy"></a>创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy</h1><h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
+<p> clickhouse-client –format_csv_delimiter=”|” –query=”INSERT INTO tutorial.csv_demo FORMAT CSV” &lt; csv_dmeo.csv </p>
+</blockquote>
+<h3 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h3><blockquote>
+<p> select * from csv_demo FORMAT CSV; </p>
+</blockquote>
+<img alt="" height="314" src="https://img-blog.csdnimg.cn/20210411124429818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="826">
+
+<h1 id="CSVWithNames"><a href="#CSVWithNames" class="headerlink" title="CSVWithNames"></a>CSVWithNames</h1><ul>
+<li>CSVWithNames会打印表头的信息。- 支持数据的导入和数据的查看。<h2 id="查询数据演示"><a href="#查询数据演示" class="headerlink" title="查询数据演示"></a>查询数据演示</h2></li>
+</ul>
+<blockquote>
+<p> select * from csv_demo FORMAT CSVWithNames; </p>
+</blockquote>
+<img alt="" height="327" src="https://img-blog.csdnimg.cn/20210411124532485.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="871">
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse基础语法简介"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/"
+    >clickhouse基础语法简介</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.290Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse基础语法简介<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—## 1.常用SQL语法</p>
+<blockquote>
+ <pre><code class="language-sql">-- 列出数据库列表
+show databases;
+</blockquote>
+<p>– 列出数据库中表列表<br>show tables;</p>
+<p>– 创建数据库<br>create database test;</p>
+<p>–选中数据库<br>use test;</p>
+<p>– 删除一个表<br>drop table if exists test.t1;</p>
+<p>– 创建第一个表<br>create /<em>temporary</em>/ table /<em>if not exists</em>/ test.m1 (<br> id UInt16<br>,name String<br>) ENGINE = Memory<br>;<br>– 插入测试数据<br>insert into test.m1 (id, name) values (1, ‘abc’), (2, ‘bbbb’);</p>
+<p>– 查询<br>select * from test.m1;</p>
+<p></code></pre> 
+   </p>
+<h2 id="2-默认值"><a href="#2-默认值" class="headerlink" title="2.默认值"></a>2.默认值</h2><blockquote>
+<p> 默认值 的处理方面， ClickHouse 中，默认值总是有的，如果没有显示式指定的话，会按字段类型处理： </p>
+</blockquote>
+<ul>
+<li>数字类型， 0- 字符串，空字符串- 数组，空数组- 日期， 0000-00-00- 时间， 0000-00-00 00:00:00- 注：NULLs 是不支持的</li>
+</ul>
+<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3.数据类型"></a>3.数据类型</h3><blockquote>
+ <ul>- 整型：UInt8,UInt16,UInt32,UInt64,Int8,Int16,Int32,Int64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184612320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x1eGlhbmd5MTMxNA==,size_16,color_FFFFFF,t_70">- 枚举类型：Enum8,Enum16 存储为Int8或Int16的一组枚举字符串值。例： Enum8（'hello'= 1，'world'= 2）， 这个数据类型有两个值  'hello'和'world'。 该数值必须在-128..127为Enum8和-32768..32767为Enum16。枚举的每个成员也必须有不同的数字。空字符串是一个有效的值。数字不需要是连续的，可以以任何顺序。是顺序无关的。 在内存中，数据的存储方式与数字类型Int8和Int16相同。以文本格式读取时，读取字符串并查找相应的数值。如果找不到，则会抛出异常。当以文本格式写入时，查找存储的数字并写出相应的字符串。 如果数字不对应已知的值，则会抛出异常。以二进制格式，信息以与Int8和Int16相同的方式保存。Enum的隐式默认值是具有最小数值的值 -  字符串(String、FixedString 和 UUID) 1)String         String 不限制长度，相当于Varchar、Text、Clob 和 Blob 等字符类型 2)FixedString(N)        FixedString(N)相当于Char，长度固定，数据长度不够时，添加空字节（null）；长度过长返回错误消息 3)UUID        32位，格式8-4-4-4-12，如果未被赋值，则用0填充 -  日期时间类型 1)Date: 2020-02-02 精确到天 2)DateTime: 2020-02-02 20:20:20 精确到秒 3)DateTime64: 2020-02-02 20:20:20.335 精确到亚秒，可以设置精度均支持字符串写入 -  数组类型 Array(T) T 类型的数组。T型可以是任何类型，包括数组。我们不推荐使用多维数组，因为它们不被很好的支持（例如，除了内存表之外，你不能在多维数组中存储多维数组） -  元组：Tuple 由多个元素组成，允许不同类型 创建数据：(T1, T2, …)，Tuple(T1, T2, …) <li> 嵌套（Nested(Name1 Type1, Name2 Type2, ...)） 嵌套数据结构类似于嵌套表。嵌套数据结构的参数（列名和类型）与 CREATE 查询类似。每个表可以包含任意多行嵌套数据结构。 只支持一级嵌套。嵌套结构的列中，若列的类型是数组类型，那么该列其实和多维数组是相同的，所以目前嵌套层级的支持很局限（MergeTree 引擎中不支持存储这样的列） 大多数情况下，处理嵌套数据结构时，会指定一个单独的列。为了这样实现，列的名称会与点号连接起来。这些列构成了一组匹配类型。在同一条嵌套数据中，所有的列都具有相同的长度。 不能对整个嵌套数据结构执行 SELECT。只能明确列出属于它一部分列。 <pre><code class="language-sql">CREATE TABLE test.visits
+(
+    CounterID UInt32,
+    StartDate Date,
+    Sign Int8,
+    IsNew UInt8,
+    VisitID UInt64,
+    UserID UInt64,
+    ...
+    Goals Nested
+    (
+        ID UInt32,
+        Serial UInt32,
+        EventTime DateTime,
+        Price Int64,
+        OrderID String,
+        CurrencyID UInt32
+    ),
+    ...
+) ENGINE = CollapsingMergeTree(StartDate, intHash32(UserID), (CounterID, StartDate, intHash32(UserID), VisitID), 8192, Sign)</code></pre>  作者：盗梦者_56f2 链接：https://www.jianshu.com/p/39e675ccbf3b 来源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 </li>-  浮点数 Float32 和 Float64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184649655.png"> float精度是：7~8位有效数字 double精度是：16~17位有效数字 -  定点数 Decimal32、Decimal64 和Decimal128 Decimal(P, S)：P代表精度，决定总位数（整数部分+小数部分），取值范围是1~38; S代表规模，决定小数位数，取值范围是0～P。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127185044682.png#pic_center"> <li> 缺失值（Nullable(TypeName)） 允许用特殊标记NULL表示"缺失值"，可以与 `TypeName` 的正常值存放一起。例如，`Nullable(Int8)` 类型的列可以存储 `Int8` 类型值，而没有值的行将存储 `NULL`。 对于 `TypeName`，不能使用复合数据类型 Array和 Tuple。复合数据类型可以包含 `Nullable` 类型值，例如`Array(Nullable(Int8))`。`Nullable` 类型字段不能包含在表索引中。 除非在 ClickHouse 服务器配置中另有说明，否则 `NULL` 是任何 `Nullable` 类型的默认值。 使用 Nullable 几乎总是对性能产生负面影响。 <pre><code class="language-sql"> CREATE TABLE t_null(x Int8, y Nullable(Int8)) ENGINE TinyLog
+#
+INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
+</blockquote>
+<h3 id="4-物化列"><a href="#4-物化列" class="headerlink" title="4.物化列"></a>4.物化列</h3><blockquote>
+<p> 指定 MATERIALIZED 表达式，即将一个列作为<code>物化列</code>处理了，这意味着这个列的值不能从<code>insert</code> 语句获取，只能是自己计算出来的。同时，物化列也不会出现在 <code>select *</code> 的结果中：<br> <pre><code class="language-sql">drop table if exists test.m2;<br>create table test.m2 (<br> a MATERIALIZED (b+1)<br>,b UInt16<br>) ENGINE = Memory;<br>insert into test.m2 (b) values (1);<br>select * from test.m2;<br>select a, b from test.m2; --这个可以查出来</code></pre> 
+   </p>
+</blockquote>
+<h3 id="5-表达式列"><a href="#5-表达式列" class="headerlink" title="5.表达式列"></a>5.表达式列</h3><blockquote>
+<p> ALIAS 表达式列某方面跟物化列相同，就是它的值不能从 insert 语句获取。不同的是， 物化列 是会真正保存数据（这样查询时不需要再计算），<br> 而表达式列不会保存数据（这样查询时总是需要计算），只是在查询时返回表达式的结果。<br> <pre><code class="language-sql">create table test.m3 (a ALIAS (b+1), b UInt16) ENGINE = Memory;<br>insert into test.m3(b) values (1);<br>select * from test.m3;<br>select a, b from test.m3;</code></pre> 
+   </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickHouse基本介绍"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"
+    >clickHouse基本介绍</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.283Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickHouse基本介绍<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—## 1.简介</p>
+<blockquote>
+<p>       ClickHouse是俄罗斯的Yandex于2016年开源的一个用于联机分析(OLAP:Online Analytical Processing)的列式数据库管理系统(DBMS:Database Management System)，简称CK , 主要用于在线分析处理查询（OLAP），能够使用SQL查询实时生成分析数据报告。<br>       ClickHouse是一个完全的列式数据库管理系统，允许在运行时创建表和数据库，加载数据和运行查询，而无需重新配置和重新启动服务器，支持线性扩展，简单方便，高可靠性，容错。它在大数据领域没有走 Hadoop 生态，而是采用 Local attached storage 作为存储，这样整个 IO 可能就没有 Hadoop 那一套的局限。它的系统在生产环境中可以应用到比较大的规模，因为它的线性扩展能力和可靠性保障能够原生支持 shard + replication 这种解决方案。它还提供了一些 SQL 直接接口，有比较丰富的原生 client。另外就是它比较快。 </p>
+</blockquote>
+<h2 id="2-ClickHouse的特点"><a href="#2-ClickHouse的特点" class="headerlink" title="2.ClickHouse的特点"></a>2.<strong><strong>ClickHouse的特点</strong></strong></h2><blockquote>
+</blockquote>
+<ul>
+<li>开源的列存储数据库管理系统，支持线性扩展，简单方便，高可靠性，- 容错跑分快：比Vertica快5倍，比Hive快279倍，比MySQL快800倍,其可处理的数据级别已达到10亿级别- 功能多：支持数据统计分析各种场景，支持类SQL查询，异地复制部署</li>
+</ul>
+<h2 id="3-clickHouse的性能"><a href="#3-clickHouse的性能" class="headerlink" title="3.clickHouse的性能"></a><strong><strong>3.clickHouse的性能</strong></strong></h2><blockquote>
+</blockquote>
+<ul>
+<li>低延迟：对于数据量（几千行，列不是很多）不是很大的短查询，如果数据已经被载入缓存，且使用主码，延迟在50MS左右。- 并发量：虽然 ClickHouse 是一种在线分析型数据库，也可支持一定的并发。当单个查询比较短时，官方建议 100 Queries / second- 写入速度：在使用 MergeTree 引擎的情况下，写入速度大概是 50 - 200 M / s，如果按照 1 K 一条记录来算，大约每秒可写入 50000 ~ 200000 条记录每秒。如果每条记录比较小的话写入速度会更快</li>
+</ul>
+<h2 id="4-clickhouse的优缺点介绍"><a href="#4-clickhouse的优缺点介绍" class="headerlink" title="4.clickhouse的优缺点介绍"></a><strong><strong>4.</strong></strong>clickhouse的优缺点介绍</h2><blockquote>
+<p> 优点： </p>
+</blockquote>
+<ul>
+<li>快，超乎想象的快（单表），clickhouse目前测试和使用中来看，单表的查询性能无人能敌。- 压缩率高，目前clickhouse的数据压缩能够达到30%～40%之前，这对于一个 精打细算的公司来说是一件很划算的事情（省磁盘） 总结起来就是吃的是草，挤的是奶（手动滑稽）<br>缺点： </li>
+<li>就是对于并发支持不够友好。在高并发查询，大概同时的查询数量在上千级别的话，就很容易出问题，因 此，用来做面向用户的查询的存储肯定就不是一个正确的选择- 相对于查询来说，他的写入速度没有那么优秀，目前测试 来看，单台机器的写入速度只能达到大概30W/s～60W/s- 相比较他自己单表查询性能来说，join的性能就不是很优秀了，但是相 比较传统的hive和spark来说，性能还是很很不错的</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="post-ClickHouse函数整理（详细）"
   class="article article-type-post"
   itemscope
@@ -912,746 +1173,6 @@ create table test.test_dc(
 <li>BigData</li>
 </ul>
 <p>—1. 1. 1. 1. 1. 1. 1. 1. </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/"
-    >MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97(ETL)%E6%A1%88%E4%BE%8B,%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95%E6%A1%88%E4%BE%8B,ReduceTask%20%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6,Hadoop%20%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.237Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce之数据清洗(ETL)案例,倒排索引案例,ReduceTask 工作机制,Hadoop 数据压缩简介<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：简介</p>
-<p>             在运行核心业务 Mapreduce 程序之前，往往要先对数据进行清洗，清理掉不符合用户要求的数据。       清理的过程往往只需要运行 mapper 程序，不需要运行 reduce 程序。</p>
-<h1 id="二：日志清洗案例之简单解析版"><a href="#二：日志清洗案例之简单解析版" class="headerlink" title="二：日志清洗案例之简单解析版"></a>二：日志清洗案例之简单解析版</h1><ol>
-<li> 需求：去除日志中字段长度小于等于11的日志(每一行按照空格切割，切割后数组长度小于11的日志不要)1.  数据如下：   <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190808213958907.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="455"><li>代码实现如下：  ⑴创建mapper类：           <pre class="has"><code class="language-java">package com.kgf.mapreduce.weblog;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>public class LogMapper extends Mapper&lt;LongWritable, Text, Text, NullWritable&gt; &#123;</p>
-<pre><code>Text k = new Text();
-
-@Override
-protected void map(LongWritable key, Text value,Context context)
-        throws IOException, InterruptedException &#123;
-    
-    //1:获取一行
-    String line = value.toString();
-    
-    //2：解析一行数据
-    boolean result = parseLog(line);
-    
-    if(!result) &#123;
-        return;
-    &#125;
-    k.set(line);
-    context.write(k, NullWritable.get());
-&#125;
-
-private boolean parseLog(String line) &#123;
-    String[] fields = line.split(&quot; &quot;);
-    if(fields.length&amp;gt;11) &#123;
-        return true;
-    &#125;
-    return false;
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑵创建Driver: <pre class="has"><code class="language-java">package com.kgf.mapreduce.weblog;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class LogDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1：获取Job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2：设置jar对象
-    job.setJarByClass(LogDriver.class);
-    
-    //3:设置关联Mapper
-    job.setMapperClass(LogMapper.class);
-    
-    //4：设置mapper输出类型
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(NullWritable.class);
-    
-    //5:设置reduce task为0
-    job.setNumReduceTasks(0);
-    
-    //6：设置最终输出参数
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(NullWritable.class);
-    
-    //7：设置文件输入输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //8：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li>1.   效果：  ⑴日志清理前数据有如下数量：           <img alt="" class="has" height="120" src="https://img-blog.csdnimg.cn/20190808221608218.png" width="413">         ⑵清理后：            <img alt="" class="has" height="175" src="https://img-blog.csdnimg.cn/20190808221642199.png" width="474">   ⑶程序运行日志如下：           <img alt="" class="has" height="276" src="https://img-blog.csdnimg.cn/201908082218109.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="512">1. 计数器应用   ⑴简介：            Hadoop 为每个作业维护若干内置计数器，以描述多项指标。例如，某些计数器记录已      处理的字节数和记录数，使用户可监控已处理的输入数据量和已产生的输出数据量。   ⑵计数器方式如下：          <img alt="" class="has" height="274" src="https://img-blog.csdnimg.cn/20190808223125431.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="462">  ⑶案例，我们可以在上面的日志清洗案例中加上计数器组应用：代码如下：         <img alt="" class="has" height="349" src="https://img-blog.csdnimg.cn/2019080822352462.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="427">      效果如下（可以发现控制台出现了下面的日志内容，可以帮助我们定位问题）：         <img alt="" class="has" height="322" src="https://img-blog.csdnimg.cn/20190808223631620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="431"></p>
-<h1 id="三：倒排索引案例"><a href="#三：倒排索引案例" class="headerlink" title="三：倒排索引案例"></a>三：倒排索引案例</h1><ol>
-<li>现在有三个文件a.txt,b.txt,c.txt,现在我们需要将文件里面的单词汇总 ⑴文件如下：         <img alt="" class="has" height="67" src="https://img-blog.csdnimg.cn/20190809224946281.png" width="106"><img alt="" class="has" height="66" src="https://img-blog.csdnimg.cn/20190809224958271.png" width="156"><img alt="" class="has" height="65" src="https://img-blog.csdnimg.cn/2019080922501325.png" width="208"> ⑵最后要求的结果（汇总每个单词所在的文件中个数）：       <img alt="" class="has" height="117" src="https://img-blog.csdnimg.cn/20190809225058159.png" width="514"><li> 代码实现如下：  ⑴建立bean对象         <pre class="has"><code class="language-java">package com.kgf.mapreduce.index;</li>
-</ol>
-<p>import java.io.DataInput;<br>import java.io.DataOutput;<br>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.Writable;</p>
-<p>public class IndexVo implements Writable&#123;</p>
-<pre><code>private String word;
-
-private String file;
-
-private int num;
-
-public IndexVo(String word, String file, int num) &#123;
-    super();
-    this.word = word;
-    this.file = file;
-    this.num = num;
-&#125;
-
-public IndexVo() &#123;
-    super();
-&#125;
-
-@Override
-public void readFields(DataInput in) throws IOException &#123;
-    this.word = in.readUTF();
-    this.file = in.readUTF();
-    this.num = in.readInt();
-&#125;
-
-@Override
-public void write(DataOutput out) throws IOException &#123;
-    out.writeUTF(word);
-    out.writeUTF(file);
-    out.writeInt(num);
-&#125;
-
-public String getWord() &#123;
-    return word;
-&#125;
-
-public void setWord(String word) &#123;
-    this.word = word;
-&#125;
-
-public String getFile() &#123;
-    return file;
-&#125;
-
-public void setFile(String file) &#123;
-    this.file = file;
-&#125;
-
-public int getNum() &#123;
-    return num;
-&#125;
-
-public void setNum(int num) &#123;
-    this.num = num;
-&#125;
-
-@Override
-public String toString() &#123;
-    return word + &quot;\t&quot; + file + &quot;\t&quot; + num;
-&#125;
-</code></pre>
-<p>}<br></code></pre>  ⑵建立mapper对象         <pre class="has"><code class="language-java">package com.kgf.mapreduce.index;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import org.apache.hadoop.mapreduce.lib.input.FileSplit;</p>
-<p>public class IndexMapper extends Mapper&lt;LongWritable, Text, Text, IndexVo&gt;&#123;</p>
-<pre><code>private String fileName = null;
-
-Text k = new Text();
-
-IndexVo v = new IndexVo();
-
-@Override
-protected void setup(Context context)
-        throws IOException, InterruptedException &#123;
-    //1：获取文件切片信息
-    FileSplit splitFile = (FileSplit) context.getInputSplit();
-    fileName = splitFile.getPath().getName();
-&#125;
-
-@Override
-protected void map(LongWritable key, Text value,Context context)
-        throws IOException, InterruptedException &#123;
-    
-    //1:获取一行数据
-    String line = value.toString();
-    //2:切割数据
-    String[] fields = line.split(&quot;\t&quot;);
-    for (String field : fields) &#123;
-        k.set(field);
-        v.setWord(field);
-        v.setFile(fileName);
-        v.setNum(1);
-        context.write(k, v);
-    &#125;
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑶建立reducer对象       <pre class="has"><code class="language-java">package com.kgf.mapreduce.index;</p>
-<p>import java.io.IOException;<br>import java.util.HashMap;<br>import java.util.Map;<br>import java.util.Set;</p>
-<p>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>public class IndexReducer extends Reducer&lt;Text, IndexVo, Text, NullWritable&gt; &#123;</p>
-<pre><code>Text k = new Text();
-
-@Override
-protected void reduce(Text key, Iterable&amp;lt;IndexVo&amp;gt; values,Context context)
-        throws IOException, InterruptedException &#123;
-    
-    Map&amp;lt;String,Integer&amp;gt; map = new HashMap&amp;lt;String,Integer&amp;gt;();
-    
-    for (IndexVo indexVo : values) &#123;
-        String name = indexVo.getFile();
-        if(map.containsKey(name)) &#123;
-            map.put(name, map.get(name)+indexVo.getNum());
-        &#125;else &#123;
-            map.put(name, indexVo.getNum());
-        &#125;
-    &#125;
-    
-    String result = key.toString()+&quot;\t&quot;;
-    for (String fileName : map.keySet()) &#123;
-        result+=(fileName+&quot;\t&quot;+map.get(fileName))+&quot;\t&quot;;
-    &#125;
-    k.set(result);
-    context.write(k, NullWritable.get());
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑷建立Driver对象       <pre class="has"><code class="language-java">package com.kgf.mapreduce.index;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class IndexDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1：获取job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2：设置jar
-    job.setJarByClass(IndexDriver.class);
-    
-    //3:关联mapper和reducer
-    job.setMapperClass(IndexMapper.class);
-    job.setReducerClass(IndexReducer.class);
-    
-    //4:设置mapper输出参数
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(IndexVo.class);
-    
-    //5:设置最终输出参数
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(NullWritable.class);
-    
-    //6：设置数据输入输出路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //7：提交
-    boolean rsult = job.waitForCompletion(true);
-    System.exit(rsult?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>         </li></p>
-<h1 id="四：-ReduceTask-工作机制"><a href="#四：-ReduceTask-工作机制" class="headerlink" title="四： ReduceTask 工作机制"></a>四： ReduceTask 工作机制</h1><ol>
-<li>ReduceTask有如下特点：  <img alt="" class="has" height="381" src="https://img-blog.csdnimg.cn/20190810091911354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="529">1.  流程图如下：  <img alt="" class="has" height="461" src="https://img-blog.csdnimg.cn/20190810092256618.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="595">  ⑴Copy阶段：          ReduceTask 从各个 MapTask 上远程拷贝一片数据，并针对某一片数据，如果其大小超过一定阈值，     则写到磁盘上，否则直接放到内存中。  ⑵Merge 阶段：           在远程拷贝数据的同时，ReduceTask 启动了两个后台线程对内存和磁盘上的文件进行合并，     以防止内存使用过多或磁盘上文件过多。   ⑶Sort 阶段：           按照 MapReduce 语义，用户编写 reduce()函数输入数据是按 key 进行聚集的一组数据。     为了将 key 相同的数据聚在一起，Hadoop 采用了基于排序的策略。由于各个 MapTask 已经     实现对自己的处理结果进行了局部排序，因此，ReduceTask 只需对所有数据进行一次归并排序即可。   ⑷Reduce 阶段：            reduce()函数将计算结果写到 HDFS 上。 <h1 id="五：-Hadoop-数据压缩"><a href="#五：-Hadoop-数据压缩" class="headerlink" title="五： Hadoop 数据压缩"></a>五： Hadoop 数据压缩</h1></li>
-<li>简介     压缩技术能够有效减少底层存储系统（HDFS）读写字节数。压缩提高了网络带宽和磁盘空间的效率。 在 Hadoop 下，尤其是数据规模很大和工作负载密集的情况下，使用数据压缩显得非常重要。在这种情况下， I/O 操作和网络数据传输要花大量的时间。还有，Shuffle与 Merge 过程同样也面临着巨大的 I/O 压力。     鉴于磁盘 I/O 和网络带宽是 Hadoop 的宝贵资源，数据压缩对于节省资源、最小化磁盘 I/O 和网络传输非常有帮助。不过，尽管压缩与解压操作的 CPU 开销不高，其性能的提升和 资源的节省并非没有代价。      如果磁盘 I/O 和网络带宽影响了 MapReduce 作业性能，在任意 MapReduce 阶段启用压 缩都可以改善端到端处理时间并减少 I/O 和网络流量。       压缩 Mapreduce 的一种优化策略：通过压缩编码对 Mapper 或者 Reducer 的输出进行 压缩，以减少磁盘 IO，提高 MR 程序运行速度（但相应增加了 cpu 运算负担）。       <img alt="" class="has" height="201" src="https://img-blog.csdnimg.cn/20190810095228924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="562">1. MR支持的压缩编码     <img alt="" class="has" height="372" src="https://img-blog.csdnimg.cn/20190810095333486.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="422">    <img alt="" class="has" height="277" src="https://img-blog.csdnimg.cn/2019081009535852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="583">1.  压缩性能的比较     <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20190810095427226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="629">1.  压缩方式选择       ⑴Gzip 压缩           <img alt="" class="has" height="291" src="https://img-blog.csdnimg.cn/20190810105343262.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="518">   ⑵ Bzip2 压缩           <img alt="" class="has" height="310" src="https://img-blog.csdnimg.cn/20190810105413209.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="581">    ⑶Lzo 压缩           <img alt="" class="has" height="210" src="https://img-blog.csdnimg.cn/20190810105518675.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="548">          <img alt="" class="has" height="76" src="https://img-blog.csdnimg.cn/20190810105535471.png" width="549">    ⑷Snappy 压缩           <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20190810105618682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="559">1. 压缩位置选择   压缩可以在 MapReduce 作用的任意阶段启用。   <img alt="" class="has" height="651" src="https://img-blog.csdnimg.cn/20190810105756931.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="754">1. 压缩配置参数   <img alt="" class="has" height="352" src="https://img-blog.csdnimg.cn/20190810105926815.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="683">  <img alt="" class="has" height="369" src="https://img-blog.csdnimg.cn/20190810105950851.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">  <img alt="" class="has" height="376" src="https://img-blog.csdnimg.cn/20190810110017564.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="680">  <img alt="" class="has" height="336" src="https://img-blog.csdnimg.cn/20190810110042410.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="677"></li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce之入门概述以及WordCount 案例"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/"
-    >MapReduce之入门概述以及WordCount 案例</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%E4%B9%8B%E5%85%A5%E9%97%A8%E6%A6%82%E8%BF%B0%E4%BB%A5%E5%8F%8AWordCount%20%E6%A1%88%E4%BE%8B/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.227Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce之入门概述以及WordCount 案例<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：MapReduce定义</p>
-<ol>
-<li> 简介       Mapreduce 是一个分布式运算程序的编程框架，是用户开发“基于 hadoop 的数据分析应用”的核心框架。       Mapreduce 核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序， 并发运行在一个 hadoop 集群上。1. Mapreduce 优缺点       ⑴优点：                 a：MapReduce  易于编程                           它简单的实现一些接口，就可以完成一个分布式程序，这个分布式程序可以分布到大量                      廉价的 PC 机器上运行。也就是说你写一个分布式程序，跟写一个简单的串行程序是一模                      一样的。就是因为这个特点使得 MapReduce 编程变得非常流行。                 b：良好的 扩展性                            当你的计算资源不能得到满足的时候，你可以通过简单的增加机器来扩展它的计算能力。                 c： 高容错性                            MapReduce 设计的初衷就是使程序能够部署在廉价的 PC 机器上，这就要求它具有很高的容错性。                       比如其中一台机器挂了，它可以把上面的计算任务转移到另外一个节点上运行，不至于这个任务运行                       失败，而且这个过程不需要人工参与，而完全是由Hadoop 内部完成的。                 d：适合 PB  级以上海量数据的 离线处理                            这里加红字体离线处理，说明它适合离线处理而不适合在线处理。比如像毫秒级别的返回一个结果，                       MapReduce 很难做到。       ⑵缺点：                 a：MapReduce 不 擅长做实时计算、流式计算、DAG（有向图 ） 计算                 b：实时计算：                            MapReduce 无法像 Mysql 一样，在毫秒或者秒级内返回结果。                 c：流式计算：                             流式计算的输入数据是动态的，而 MapReduce 的输入数据集是静态的，不能动态变化。                       这是因为 MapReduce 自身的设计特点决定了数据源必须是静态的。                 d：DAG （有向图）计算：                              多个应用程序存在依赖关系，后一个应用程序的输入为前一个的输出。在这种情况下，                       MapReduce 并不是不能做，而是使用后，每个 MapReduce 作业的输出结果都会写入到磁盘，                       会造成大量的磁盘 IO，导致性能非常的低下。1. MapReduce的核心思想      <img alt="" class="has" height="478" src="https://img-blog.csdnimg.cn/20190727112452226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="591">      <img alt="" class="has" height="278" src="https://img-blog.csdnimg.cn/20190727112523638.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="633">          <h1 id="二：MapReduce进程"><a href="#二：MapReduce进程" class="headerlink" title="二：MapReduce进程"></a>二：MapReduce进程</h1></li>
-<li> 简介   <img alt="" class="has" height="251" src="https://img-blog.csdnimg.cn/20190727112710794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="706">         <h1 id="三：MapReduce-编程规范-（八股文）"><a href="#三：MapReduce-编程规范-（八股文）" class="headerlink" title="三：MapReduce  编程规范 （八股文）"></a>三：MapReduce  编程规范 （八股文）</h1></li>
-<li>简介       用户编写的程序分成三个部分：Mapper，Reducer，Driver(提交运行 mr 程序的客户端)。1. Mapper阶段       <img alt="" class="has" height="228" src="https://img-blog.csdnimg.cn/20190727113717265.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="587">1. Reducer阶段       <img alt="" class="has" height="204" src="https://img-blog.csdnimg.cn/20190727114144791.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="658">1. Driver 阶段      整个程序需要一个 Drvier 来进行提交，提交的是一个描述了各种必要信息的 job 对象            <h1 id="四：WordCount-案例"><a href="#四：WordCount-案例" class="headerlink" title="四：WordCount 案例"></a>四：WordCount 案例</h1></li>
-<li>需求：         在一堆给定的文本文件中统计输出每一个单词出现的总次数。1. 数据准备，一个文件hello.txt,内容如下   <img alt="" class="has" height="287" src="https://img-blog.csdnimg.cn/20190727114806278.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="354">1. 案例分析   <img alt="" class="has" height="361" src="https://img-blog.csdnimg.cn/20190727115633681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="539"><li>代码实现     ⑴在eclipse中创建工程               <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/2019072712170054.png" width="347">               jar包和之前的一样，从hadoop安装包中拷贝出来。环境变量之前已经配置好了。              <img alt="" class="has" height="212" src="https://img-blog.csdnimg.cn/20190727121812316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="437">     ⑵创建自定义的Mapper类去对数据进行分类，注意：我们这里会将所有数据分类完成后才会进入到下一阶段           <pre class="has"><code class="language-java">package com.kgf.mapreduce;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;</p>
-<p>/***</p>
-<ul>
-<li></li>
-<li><p>继承的Mapper参数如下：</p>
-</li>
-<li><p>第一个参数key：LongWritable表示输入的key的行号</p>
-</li>
-<li><p>第二个参数value：Text表示一行内容</p>
-</li>
-<li><p>第三个参数key： Text表示单词</p>
-</li>
-<li><p>第四个参数value:IntWritable表示计算后的单词的个数</p>
-</li>
-<li><p>@author kgf</p>
-</li>
-<li></li>
-<li><p>/<br>public class WordCountMapper extends Mapper&lt;LongWritable,Text,Text,IntWritable&gt;&#123;</p>
-<p>  Text k = new Text();<br>  IntWritable v = new IntWritable(1);</p>
-<p>  /**</p>
-<ul>
-<li>使用map方法去处理数据，数据是一行一行进入到这个方法处理的</li>
-<li>key：表示行号</li>
-<li>value：表示一行数据内容</li>
-<li>/<br>@Override<br>protected void map(LongWritable key, Text value, Context context)<pre><code>  throws IOException, InterruptedException &#123;
-</code></pre>
-  //首先我们将一行内容转换成String<br>  String line = value.toString();<br>  //数据的单词之间是以空格切割的<br>  String[] words = line.split(“ “);<br>  //将数据循环写出到下一阶段<br>  for (String word : words) {<pre><code>  k.set(word);
-  context.write(k, v);
-</code></pre>
-  }<br>}<br>}<br></code></pre> ⑶创建自定义的Reducer类对分类的数据进行汇总      <pre class="has"><code class="language-java">package com.kgf.mapreduce;</li>
-</ul>
-</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Reducer;</p>
-<p>/**</p>
-<ul>
-<li><p>注意：这里继承Reducer的前两个入参就是Mappper的出参数</p>
-</li>
-<li><p>@author kgf</p>
-</li>
-<li></li>
-<li><p>/<br>public class WordCountReducer extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt;&#123;</p>
-<p>  /**</p>
-<ul>
-<li>这个方法主要是对map分类之后的数据进行聚合的</li>
-<li>/<br>@Override<br>protected void reduce(Text key, Iterable&lt;IntWritable&gt; values,<pre><code>  Context context) throws IOException, InterruptedException &#123;
-</code></pre>
-  //统计单词个数<br>  int sum = 0;<br>  for (IntWritable count : values) {<pre><code>  sum+=count.get();
-</code></pre>
-  }<br>  //输出单词总个数<br>  context.write(key, new IntWritable(sum));<br>}</li>
-</ul>
-</li>
-</ul>
-<p>}<br></code></pre> ⑷创建Driver提交任务      <pre class="has"><code class="language-java">package com.kgf.mapreduce;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class WordCountDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    
-    //1:首先获取job信息
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:获取jar包位置,指定入口类，hadoop会自己找到
-    job.setJarByClass(WordCountDriver.class);
-    
-    //3：关联自定义的mapper和reducer
-    job.setMapperClass(WordCountMapper.class);
-    job.setReducerClass(WordCountReducer.class);
-    
-    //4:设置map输出类型
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(IntWritable.class);
-    
-    //5:设置reducer输出类型
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-    
-    //6:设置数据输入和输出文件路径,这里我们通过main方法获取参数路径
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //7:提交代码
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre>   </li>1.   在eclispe上将程序打成jar包   <img alt="" class="has" height="111" src="https://img-blog.csdnimg.cn/2019072715265789.png" width="150">1.  对jar包进行测试  ⑴启动集群  ⑵将jar包以及准备的hello.txt数据文本上传到/opt/module/hadoop-2.7.2目录下，并且设置有权限        <img alt="" class="has" height="336" src="https://img-blog.csdnimg.cn/20190727154242481.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="404">           ⑶将准备的hello.txt文件上传的hdfs指定目录下         <img alt="" class="has" height="79" src="https://img-blog.csdnimg.cn/20190727154354678.png" width="652">         <img alt="" class="has" height="179" src="https://img-blog.csdnimg.cn/20190727154506556.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="548">   ⑷使用我们的jar去测试（当前路径：/opt/module/hadoop-2.7.2）：         命令:hadoop jar +jar名称 +Driver入口的全路径 +输入路径 +输出路径         <img alt="" class="has" height="85" src="https://img-blog.csdnimg.cn/20190727155045147.png" width="666">        执行成功生成的文件：        <img alt="" class="has" height="225" src="https://img-blog.csdnimg.cn/20190727155247312.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="578">    ⑸查看文件内容           <img alt="" class="has" height="158" src="https://img-blog.csdnimg.cn/20190727155447856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="488">1. 本地模式运行     ⑴上面我们是将jar包放到集群上运行，这里我们们需要在本地直接运行，因为本地我们有hadoop的jar包     ⑵在eclise上配置环境变量          <img alt="" class="has" height="189" src="https://img-blog.csdnimg.cn/20190727160144166.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="405">          注意：输出路径不能提前建好。         <img alt="" class="has" height="168" src="https://img-blog.csdnimg.cn/20190727160219740.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="366">     ⑶执行效果：         <img alt="" class="has" height="195" src="https://img-blog.csdnimg.cn/20190727160422404.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="365">         <img alt="" class="has" height="229" src="https://img-blog.csdnimg.cn/20190727160525354.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="405">        </p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-MapReduce之Shuffle机制以及小文件处理案例（自定义 InputFormat），OutputFormat 案例"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/MapReduce%E4%B9%8BShuffle%E6%9C%BA%E5%88%B6%E4%BB%A5%E5%8F%8A%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%20InputFormat%EF%BC%89%EF%BC%8COutputFormat%20%E6%A1%88%E4%BE%8B/"
-    >MapReduce之Shuffle机制以及小文件处理案例（自定义 InputFormat），OutputFormat 案例</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/MapReduce%E4%B9%8BShuffle%E6%9C%BA%E5%88%B6%E4%BB%A5%E5%8F%8A%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%20InputFormat%EF%BC%89%EF%BC%8COutputFormat%20%E6%A1%88%E4%BE%8B/" class="article-date">
-  <time datetime="2021-07-18T14:10:35.219Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/BigData/">BigData</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: MapReduce之Shuffle机制以及小文件处理案例（自定义 InputFormat），OutputFormat 案例<br>categories:</p>
-<ul>
-<li>BigData</li>
-</ul>
-<p>—# 一：Shuffle机制</p>
-<ol>
-<li>简介        Mapreduce 确保每个 reducer 的输入都是按键排序的。系统执行排序的过程（即将 map 输出作为输入传给 reducer）称为 shuffle。   <img alt="" class="has" height="298" src="https://img-blog.csdnimg.cn/20190801211802997.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="511">1.  详细流程如下：  <img alt="" class="has" height="350" src="https://img-blog.csdnimg.cn/20190801213915875.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="415">          <h1 id="二：小文件处理案例（自定义-InputFormat）"><a href="#二：小文件处理案例（自定义-InputFormat）" class="headerlink" title="二：小文件处理案例（自定义 InputFormat）"></a>二：小文件处理案例（自定义 InputFormat）</h1></li>
-<li>需求：      无论 hdfs 还是 mapreduce，对于小文件都有损效率，实践中，又难免面临处理大量小文 件的场景，此时，就需要有相应解决方案。将多个小文件合并成一个文件 SequenceFile， SequenceFile 里面存储着多个文件，存储的形式为文件路径+名称为 key，文件内容为 value。1. 分析，小文件的优化无非以下几种方式：   a：在数据采集的时候，就将小文件或小批数据合成大文件再上传 HDFS   b：在业务处理之前，在 HDFS 上使用 mapreduce 程序对小文件进行合并   c：在 mapreduce 处理时，可采用 CombineTextInputFormat 提高效率 <img alt="" class="has" height="295" src="https://img-blog.csdnimg.cn/2019080122024881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="477">1.  数据准备（准备如下三个小文件）：  <img alt="" class="has" height="205" src="https://img-blog.csdnimg.cn/20190804081453104.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="392"><li>具体实现如下：   ⑴自定义 InputFromat             <pre class="has"><code class="language-java">package com.kgf.mapreduce.inputformat;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.BytesWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.InputSplit;<br>import org.apache.hadoop.mapreduce.JobContext;<br>import org.apache.hadoop.mapreduce.RecordReader;<br>import org.apache.hadoop.mapreduce.TaskAttemptContext;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</p>
-<p>/**</p>
-<ul>
-<li>自定义WholeFileInputformat,主要是在自定义的mapper读取数据之前对数据进行处理，然后传给mapper：</li>
-<li>这里我们的key是NullWritable，因为我们每次读取的是一个小文件，不需要关注行号等等。</li>
-<li>value是BytesWritable，字节数组，代表的是我们每次读取的一个小文件，然后将这个文件内容传递给mapper</li>
-<li>@author KGF</li>
-<li></li>
-<li>/<br>public class WholeFileInputformat extends FileInputFormat&lt;NullWritable,BytesWritable&gt;&#123;<br>  /***<ul>
-<li>设置每个小文件不可分片,保证一个小文件生成一个key-value键值对</li>
-<li>/<br>@Override<br>protected boolean isSplitable(JobContext context, Path filename) &#123;<br>  return false;<br>&#125;<br>/**</li>
-<li>自定义需重写父类RecordReader方法，自定义读取文件的方式</li>
-<li>split：表示的是我们每次读取一个小文件时的切片信息</li>
-<li>context：代表上下文信息</li>
-<li>/<br>@Override<br>public RecordReader&lt;NullWritable, BytesWritable&gt; createRecordReader(InputSplit split,<pre><code>  TaskAttemptContext context)
-  throws IOException, InterruptedException &#123;
-</code></pre>
-  //创建自定义的RecordReader对象<br>  WholeFileRecordReader record = new WholeFileRecordReader();<br>  //初始化record中的方法<br>  record.initialize(split, context);<br>  return record;<br>}</li>
-</ul>
-</li>
-</ul>
-<p>}<br></code></pre> ⑵自定义WholeFileRecordReader <pre class="has"><code class="language-java">package com.kgf.mapreduce.inputformat;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.FSDataInputStream;<br>import org.apache.hadoop.fs.FileSystem;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.BytesWritable;<br>import org.apache.hadoop.io.IOUtils;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.mapreduce.InputSplit;<br>import org.apache.hadoop.mapreduce.RecordReader;<br>import org.apache.hadoop.mapreduce.TaskAttemptContext;<br>import org.apache.hadoop.mapreduce.lib.input.FileSplit;</p>
-<p>/***</p>
-<ul>
-<li><p>该类主要用来读取每个小文件内容</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class WholeFileRecordReader extends RecordReader&lt;NullWritable, BytesWritable&gt;&#123;<br>  //创建返回结果对象<br>  BytesWritable v = new BytesWritable();<br>  //当前读取进度，默认没有读<br>  boolean isProgress = false;<br>  FileSplit fileSplit;<br>  Configuration conf;<br>  /***</p>
-<ul>
-<li>初始化方法：</li>
-<li>split:表示传递过来的文件切片</li>
-<li>/<br>@Override<br>public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException &#123;<br>  //1：首先我们需要将切片转换为FileSplit<br>  this.fileSplit = (FileSplit) split;<br>  //2:获取上下文配置信息<br>  conf = context.getConfiguration();<br>&#125;</li>
-</ul>
-<p>  /***</p>
-<ul>
-<li>读取一个一个文件</li>
-<li>/<br>@Override<br>public boolean nextKeyValue() throws IOException, InterruptedException &#123;<br>  //开始读取文件，我们有三个小文件，所以它要读取3次<br>  FileSystem fs = null;<br>  FSDataInputStream fis = null;<br>  if(!isProgress) &#123;//判断状态，程序没有读取文件时，我们就可以开始读了<pre><code>  try &#123;
-      //定义一个缓冲区对象，大小就是一个小文件的大小
-      byte[] buf = new byte[(int) fileSplit.getLength()];
-      //获取文件路径
-      Path path = this.fileSplit.getPath();
-      //获取文件系统对象
-      fs = path.getFileSystem(conf);
-      //打开文件输入流
-      fis = fs.open(path);
-      //流的拷贝,将读取的文件拷贝到缓冲区中
-      IOUtils.readFully(fis, buf, 0, buf.length);
-      //最后我们将缓冲区的数据拷贝到最终输出的对象中
-      v.set(buf, 0, buf.length);
-      //是否继续读文件，防止重复读,当下一个小文件进来时，这里的变量就会重新初始化为false
-      isProgress = true;
-      return true;
-  &#125; catch (Exception e) &#123;
-      e.printStackTrace();
-  &#125;finally &#123;
-      IOUtils.closeStream(fs);
-      IOUtils.closeStream(fis);
-  &#125;
-</code></pre>
-  }<br>  return false;<br>}<br>/**</li>
-<li>获取key,我们这里没有key，所以直接是NullWritable</li>
-<li>/<br>@Override<br>public NullWritable getCurrentKey() throws IOException, InterruptedException {<br>  return NullWritable.get();<br>}<br>/***</li>
-<li>这个是获取当前的value值方法</li>
-<li>/<br>@Override<br>public BytesWritable getCurrentValue() throws IOException, InterruptedException {<br>  return v;<br>}<br>/**</li>
-<li>获取当前进度的方法</li>
-<li>/<br>@Override<br>public float getProgress() throws IOException, InterruptedException {<br>  //正在读返回1，否则返回0，通过这个方法别人可以知道我们是否正在读取文件<br>  return isProgress?1:0;<br>}</li>
-</ul>
-<p>  @Override<br>  public void close() throws IOException {</p>
-<p>  }</p>
-</li>
-</ul>
-<p>}<br></code></pre> ⑶创建SequenseFileMapper.java类 <pre class="has"><code class="language-java">package com.kgf.mapreduce.inputformat;</p>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.BytesWritable;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Mapper;<br>import org.apache.hadoop.mapreduce.lib.input.FileSplit;</p>
-<p>/***</p>
-<ul>
-<li>创建自定义的mapper，前两个参数就是WholeFileInputformat处理数据后的输出参数，</li>
-<li>后面两个参数，一个是key-&gt;是文件路径加上名称拼接而成。一个是value，就是小文件内容</li>
-<li>@author KGF</li>
-<li></li>
-<li>/<br>public class SequenseFileMapper extends Mapper&lt;NullWritable, BytesWritable, Text, BytesWritable&gt;&#123;  Text k = new Text();  /***<ul>
-<li>该方法是主要用来获取文件路径和名称,程序运行会先进入这个setup方法，再进入我们自定义的WholeFileInputformat类中的方法，</li>
-<li>然后再回来进入map方法</li>
-<li>/<br>@Override<br>protected void setup(Mapper&lt;NullWritable, BytesWritable, Text, BytesWritable&gt;.Context context)<pre><code>  throws IOException, InterruptedException &#123;
-</code></pre>
-  //1:获取上下文切片信息<br>  FileSplit split = (FileSplit) context.getInputSplit();<br>  Path path = split.getPath();<br>  k.set(path.toString());<br>}<br>/***</li>
-<li>map方法是对数据进行处理，并且写出到下一阶段，这里是每次写一个小文件</li>
-<li>/<br>@Override<br>protected void map(NullWritable key, BytesWritable value,<pre><code>  Mapper&amp;lt;NullWritable, BytesWritable, Text, BytesWritable&amp;gt;.Context context)
-  throws IOException, InterruptedException &#123;
-</code></pre>
-  context.write(k, value);<br>}<br>}<br></code></pre> ⑷自定义SequenseFileReducer      <img alt="" class="has" height="289" src="https://img-blog.csdnimg.cn/20190804100533568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="406"> ⑸创建SequenseFileDriver <pre class="has"><code class="language-java">package com.kgf.mapreduce.inputformat;</li>
-</ul>
-</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.BytesWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;</p>
-<p>public class SequenseFileDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1:获取job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar路径
-    job.setJarByClass(SequenseFileDriver.class);
-    
-    //3：关联自定义的mapper和reducer
-    job.setMapperClass(SequenseFileMapper.class);
-    job.setReducerClass(SequenseFileReducer.class);
-    
-    //4:设置我们自定义的WholeFileInputformat对象,输出为SequenceFileOutputFormat
-    job.setInputFormatClass(WholeFileInputformat.class);
-    job.setOutputFormatClass(SequenceFileOutputFormat.class);
-    
-    //5：设置mapper的输出类型
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(BytesWritable.class);
-    
-    //6:设置reducer的输出类型
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(BytesWritable.class);
-    
-    //7：设置文件的输入输出路径
-    FileInputFormat.setInputPaths(job,new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //8：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑹效果：       <img alt="" class="has" height="211" src="https://img-blog.csdnimg.cn/20190804102313326.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="454">       <img alt="" class="has" height="154" src="https://img-blog.csdnimg.cn/20190804102445966.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="543">         </li></p>
-<h1 id="三：OutputFormat-接口实现"><a href="#三：OutputFormat-接口实现" class="headerlink" title="三：OutputFormat 接口实现"></a>三：OutputFormat 接口实现</h1><ol>
-<li>简介        OutputFormat 是 MapReduce 输出的基类，所有实现 MapReduce 输出都实现了  OutputFormat 接口。下面我们介绍几种常见的 OutputFormat 实现类。 <img alt="" class="has" height="265" src="https://img-blog.csdnimg.cn/20190804113214875.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="655">1. 自定义 OutputFormat   <img alt="" class="has" height="227" src="https://img-blog.csdnimg.cn/2019080411325760.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="765"><li> 案例：过滤日志及自定义日志输出路径案例（自定义 OutputFormat）   ⑴需求：过滤输入的log日志中是否包含topcheer，包含topcheer的行输出到e:/topcheer.log,否则                 输出到e:/other.log文件中。        <img alt="" class="has" height="268" src="https://img-blog.csdnimg.cn/20190804114012540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="390">   ⑵创建FilterOutputFormat.java用来自定义文件输出         <img alt="" class="has" height="269" src="https://img-blog.csdnimg.cn/20190804120644666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="374">  ⑶创建FilterRecordWriter.java,对输出的数据进行自定义处理          <pre class="has"><code class="language-java">package com.kgf.mapreduce.outputformat;</li>
-</ol>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.FSDataOutputStream;<br>import org.apache.hadoop.fs.FileSystem;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.RecordWriter;<br>import org.apache.hadoop.mapreduce.TaskAttemptContext;</p>
-<p>/**</p>
-<ul>
-<li><p>自定义RecordWriter实现类，对输出的数据进行自定义处理</p>
-</li>
-<li><p>@author KGF</p>
-</li>
-<li></li>
-<li><p>/<br>public class FilterRecordWriter extends RecordWriter&lt;Text, NullWritable&gt; &#123;</p>
-<p>  private Configuration conf = null;</p>
-<p>  FSDataOutputStream topcheerFos = null;</p>
-<p>  FSDataOutputStream otherFos = null;<br>  /**</p>
-<ul>
-<li><p>用来创建输出流相关配置</p>
-</li>
-<li><p>@param context</p>
-</li>
-<li><p>@throws IOException</p>
-</li>
-<li><p>/<br>public FilterRecordWriter(TaskAttemptContext context) throws IOException &#123;<br>  try &#123;</p>
-<pre><code>  //1：获取配置信息
-  conf = context.getConfiguration();
-  //2：获取文件输出流，分别输出到两个不同的路径文件用
-  FileSystem fs = FileSystem.get(conf);
-  //3:创建两个不同路径的输出流
-  topcheerFos = fs.create(new Path(&quot;e:/topcheer.log&quot;));
-  otherFos = fs.create(new Path(&quot;e:/other.log&quot;));
-</code></pre>
-<p>  } catch (Exception e) {</p>
-<pre><code>  e.printStackTrace();
-</code></pre>
-<p>  }<br>}<br>/**</p>
-</li>
-<li><p>根据输入参数key的内容去判断数据要输出到那个文件路径中</p>
-</li>
-<li><p>/<br>@Override<br>public void write(Text key, NullWritable arg1) throws IOException, InterruptedException {</p>
-<p>  //判断key中是否包含topcheer<br>  if(key.toString().contains(“topcheer”)) {</p>
-<pre><code>  topcheerFos.write(key.getBytes());
-</code></pre>
-<p>  }else {</p>
-<pre><code>  otherFos.write(key.getBytes());
-</code></pre>
-<p>  }<br>}<br>/**</p>
-</li>
-<li><p>最后我们需要将流关闭</p>
-</li>
-<li><p>/<br>@Override<br>public void close(TaskAttemptContext arg0) throws IOException, InterruptedException {<br>  //关闭资源<br>  if(topcheerFos!=null) {</p>
-<pre><code>  topcheerFos.close();
-</code></pre>
-<p>  }<br>  if(otherFos!=null) {</p>
-<pre><code>  otherFos.close();
-</code></pre>
-<p>  }<br>}<br>}<br></code></pre> ⑷自定义mapper阶段类FilterMapper        <img alt="" class="has" height="331" src="https://img-blog.csdnimg.cn/20190804121243957.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="406">     ⑸自定义reducer类        <img alt="" class="has" height="221" src="https://img-blog.csdnimg.cn/20190804121702752.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="465">   ⑹自定义FilterDriver         <pre class="has"><code class="language-java">package com.kgf.mapreduce.outputformat;</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>import java.io.IOException;</p>
-<p>import org.apache.hadoop.conf.Configuration;<br>import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.NullWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapreduce.Job;<br>import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br>import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</p>
-<p>public class FilterDriver &#123;</p>
-<pre><code>public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException &#123;
-    //1:获取job对象
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf);
-    
-    //2:设置jar
-    job.setJarByClass(FilterDriver.class);
-    
-    //3:关联自定义的mapper和reducer
-    job.setMapperClass(FilterMapper.class);
-    job.setReducerClass(FilterReducer.class);
-    
-    //4:设置mapper输出参数类型
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(NullWritable.class);
-    
-    //5:设置Reducer输出类型
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(NullWritable.class);
-    
-    //6:将自定义的输出outputFormat设置进来
-    job.setOutputFormatClass(FilterOutputFormat.class);
-    
-    //7：设置输出路径，虽然我们自定义了 outputformat，但是因为我们的 outputformat 继承自 fileoutputformat， 
-    //而 fileoutputformat 要输出一个_SUCCESS 文件，所以，在这还得指定一个输 出目录 .
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    
-    //8：提交
-    boolean result = job.waitForCompletion(true);
-    System.exit(result?0:1);
-&#125;
-</code></pre>
-<p>}<br></code></pre> ⑺效果：       <img alt="" class="has" height="138" src="https://img-blog.csdnimg.cn/20190804123037268.png" width="575">       <img alt="" class="has" height="151" src="https://img-blog.csdnimg.cn/20190804123049492.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="280">       <img alt="" class="has" height="130" src="https://img-blog.csdnimg.cn/20190804123720268.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="378">  ⑻具体流程：       数据–&gt;FilterMapper-&gt;FilterOutputFormat-&gt;FilterRecordWriter中构造方法初始化全局对象—&gt;FilterReducer中接受FilterMapper中       传递的每一行数据并且在输出的时候调用FilterRecordWriter中的write方法，将数据写入到指定的路径下。        </li></p>
  
       <!-- reward -->
       
