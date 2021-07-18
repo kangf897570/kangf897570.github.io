@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Elasticsearch之JAVA API操作 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Elasticsearch之JAVA API操作"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Elasticsearch之JAVA API操作
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8BJAVA%20API%E6%93%8D%E4%BD%9C/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.444Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">5.1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">28 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticsearch之JAVA API操作<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、JavaAPI-环境准备</p>
+<blockquote>
+<p> 1.1、创建一个springboot项目<br>       <img alt="" height="300" src="https://img-blog.csdnimg.cn/2021062012261018.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="477">      pom的依赖如下：<br> <pre><code class="language-html">&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>&lt;project xmlns="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0&quot;">http://maven.apache.org/POM/4.0.0&quot;</a><br>         xmlns:xsi="<a target="_blank" rel="noopener" href="http://www.w3.org/2001/XMLSchema-instance&quot;">http://www.w3.org/2001/XMLSchema-instance&quot;</a><br>         xsi:schemaLocation="<a target="_blank" rel="noopener" href="http://maven.apache.org/POM/4.0.0">http://maven.apache.org/POM/4.0.0</a> <a target="_blank" rel="noopener" href="http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;">http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</a>&gt;<br>    &lt;parent&gt;<br>        &lt;artifactId&gt;kgf-java-learning&lt;/artifactId&gt;<br>        &lt;groupId&gt;com.kgf.learning&lt;/groupId&gt;<br>        &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;<br>        &lt;relativePath&gt;../kgf-java-learning/pom.xml&lt;/relativePath&gt;<br>    &lt;/parent&gt;<br>    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</p>
+</blockquote>
+<pre><code>&amp;lt;groupId&amp;gt;com.kgf.es7.8&amp;lt;/groupId&amp;gt;
+&amp;lt;artifactId&amp;gt;kgf-es7.8-api&amp;lt;/artifactId&amp;gt;
+&amp;lt;properties&amp;gt;
+    &amp;lt;!--自定义elasticsearch版本--&amp;gt;
+    &amp;lt;elasticsearch.version&amp;gt;7.8.0&amp;lt;/elasticsearch.version&amp;gt;
+    &amp;lt;lombok.version&amp;gt;1.18.16&amp;lt;/lombok.version&amp;gt;
+    &amp;lt;fastjson.version&amp;gt;1.2.75&amp;lt;/fastjson.version&amp;gt;
+&amp;lt;/properties&amp;gt;
+&amp;lt;dependencies&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;$&#123;fastjson.version&#125;&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;!--引入lombok依赖--&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;$&#123;lombok.version&#125;&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-starter-data-elasticsearch&amp;lt;/artifactId&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;!--引入Juntil单元测试 --&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-configuration-processor&amp;lt;/artifactId&amp;gt;
+        &amp;lt;optional&amp;gt;true&amp;lt;/optional&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-starter-thymeleaf&amp;lt;/artifactId&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;!--jsoup解析网页，tiks解析视频音乐--&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.jsoup&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;jsoup&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;1.10.2&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+&amp;lt;/dependencies&amp;gt;
+&amp;lt;build&amp;gt;
+    &amp;lt;plugins&amp;gt;
+        &amp;lt;plugin&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-boot-maven-plugin&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;2.2.11.RELEASE&amp;lt;/version&amp;gt;
+        &amp;lt;/plugin&amp;gt;
+        &amp;lt;plugin&amp;gt;
+            &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
+            &amp;lt;configuration&amp;gt;
+                &amp;lt;source&amp;gt;1.8&amp;lt;/source&amp;gt;
+                &amp;lt;target&amp;gt;1.8&amp;lt;/target&amp;gt;
+            &amp;lt;/configuration&amp;gt;
+        &amp;lt;/plugin&amp;gt;
+    &amp;lt;/plugins&amp;gt;
+&amp;lt;/build&amp;gt;
+</code></pre>
+<p>&lt;/project&gt;</code></pre><br> <pre><code>ElasticConfig.java如下：</code></pre><br> <pre><code class="language-java">package com.kgf.es.config;</p>
+<p>import org.apache.http.HttpHost;<br>import org.elasticsearch.client.RestClient;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.springframework.context.annotation.Bean;<br>import org.springframework.context.annotation.Configuration;</p>
+<p>@Configuration<br>public class ElasticConfig &#123;</p>
+<pre><code>@Bean
+public RestHighLevelClient restHighLevelClient()&#123;
+    RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost(&quot;127.0.0.1&quot;, 9200, &quot;http&quot;))
+    );
+    return client;
+&#125;
+</code></pre>
+<p>}<br></code></pre><br> 1.2、ESApplication.java如下<br> <pre><code class="language-java">package com.kgf.es;</p>
+<p>import org.springframework.boot.SpringApplication;<br>import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
+<p>@SpringBootApplication<br>public class ESApplication &#123;</p>
+<pre><code>public static void main(String[] args) &#123;
+
+    SpringApplication.run(ESApplication.class,args);
+
+&#125;
+</code></pre>
+<p>}<br></code></pre> 
+   </p>
+<h3 id="2、JavaAPI-索引-创建"><a href="#2、JavaAPI-索引-创建" class="headerlink" title="2、JavaAPI-索引-创建"></a>2、JavaAPI-索引-创建</h3><blockquote>
+<p> 2.1、在一个Junit测试类创建索引<br> <pre><code class="language-java">package es7;</p>
+</blockquote>
+<p>import com.kgf.es.ESApplication;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.elasticsearch.client.indices.CreateIndexRequest;<br>import org.elasticsearch.client.indices.CreateIndexResponse;<br>import org.junit.Test;<br>import org.junit.runner.RunWith;<br>import org.springframework.boot.test.context.SpringBootTest;<br>import org.springframework.test.context.junit4.SpringRunner;</p>
+<p>import javax.annotation.Resource;<br>import java.io.IOException;</p>
+<p>@RunWith(SpringRunner.class)<br>@SpringBootTest(classes = ESApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)<br>public class EsApplicationTest &#123;</p>
+<pre><code>@Resource
+private RestHighLevelClient restHighLevelClient;
+
+/***
+ * 创建索引
+ */
+@Test
+public void createIndexTest()&#123;
+    try &#123;
+        //创建索引对象
+        CreateIndexRequest indexRequest = new CreateIndexRequest(&quot;user&quot;);
+        //客户端执行请求
+        CreateIndexResponse response = restHighLevelClient.indices().create(indexRequest, RequestOptions.DEFAULT);
+
+        boolean acknowledged = response.isAcknowledged();
+        // 响应状态
+        System.out.println(&quot;操作状态 = &quot; + acknowledged);
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;
+</code></pre>
+<p>}<br></code></pre><br> 执行：<br> <img alt="" height="245" src="https://img-blog.csdnimg.cn/20210620123925330.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="724"><br> 查看索引：<br> <img alt="" height="503" src="https://img-blog.csdnimg.cn/20210620124000441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1100"> </p>
+<h3 id="3、索引-查询-amp-删除"><a href="#3、索引-查询-amp-删除" class="headerlink" title="3、索引-查询 &amp; 删除"></a>3、索引-查询 &amp; 删除</h3><blockquote>
+<p> <strong>3.1、查询</strong><br> <pre><code class="language-java">   /***<br>     * 查询索引<br>     */<br>    @Test<br>    public void getIndexTest()&#123;<br>        try &#123;<br>            // 查询索引 - 请求对象<br>            GetIndexRequest request = new GetIndexRequest("user");<br>            // 发送请求，获取响应<br>            GetIndexResponse response = restHighLevelClient.indices().get(request,<br>                    RequestOptions.DEFAULT);</p>
+</blockquote>
+<pre><code>        System.out.println(&quot;aliases:&quot;+response.getAliases());
+        System.out.println(&quot;mappings:&quot;+response.getMappings());
+        System.out.println(&quot;settings:&quot;+response.getSettings());
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;&lt;/code&gt;&lt;/pre&gt; 
+</code></pre>
+<p> 后台打印：<br> <pre><code class="language-java">aliases:&#123;user=[]&#125;<br>mappings:&#123;user=org.elasticsearch.cluster.metadata.MappingMetadata@872c984c&#125;<br>settings:&#123;user=&#123;"index.creation_date":"1624163950299","index.number_of_replicas":"1","index.number_of_shards":"1","index.provided_name":"user","index.uuid":"XvPUSw3rR7CjmrGk0BtdCw","index.version.created":"7080099"&#125;&#125;<br></code></pre><br> <strong>3.2、删除</strong><br> <pre><code class="language-java"> /***<br>     * 删除索引<br>     */<br>    @Test<br>    public void DelIndexTest()&#123;<br>        try &#123;<br>            // 删除索引 - 请求对象<br>            DeleteIndexRequest request = new DeleteIndexRequest("user");<br>            // 发送请求，获取响应<br>            AcknowledgedResponse response = restHighLevelClient.indices().delete(request,RequestOptions.DEFAULT);<br>            // 操作结果<br>            System.out.println("操作结果 ： " + response.isAcknowledged());<br>        &#125; catch (IOException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code>操作结果 ： true<br></code></pre> 
+   </p>
+<h3 id="4、JavaAPI-文档-新增-amp-修改"><a href="#4、JavaAPI-文档-新增-amp-修改" class="headerlink" title="4、JavaAPI-文档-新增 &amp; 修改"></a>4、JavaAPI-文档-新增 &amp; 修改</h3><blockquote>
+<p> <strong>4.1、新增</strong><br> <pre><code class="language-java">/***<br>     * 添加文档<br>     */<br>    @Test<br>    public void addDocumentTest()&#123;<br>        try &#123;<br>            // 新增文档 - 请求对象<br>            IndexRequest request = new IndexRequest();<br>            // 设置索引及唯一性标识<br>            request.index("user").id("1001");</p>
+</blockquote>
+<pre><code>        // 创建数据对象
+        User user = new User();
+        user.setName(&quot;zhangsan&quot;);
+        user.setAge(30);
+        user.setSex(&quot;男&quot;);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productJson = objectMapper.writeValueAsString(user);
+        // 添加文档数据，数据格式为 JSON 格式
+        request.source(productJson, XContentType.JSON);
+        // 客户端发送请求，获取响应对象
+        IndexResponse response = restHighLevelClient.index(request, RequestOptions.DEFAULT);
+        //打印结果信息
+        System.out.println(&quot;_index:&quot; + response.getIndex());
+        System.out.println(&quot;_id:&quot; + response.getId());
+        System.out.println(&quot;_result:&quot; + response.getResult());
+    &#125; catch (IOException e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;&lt;/code&gt;&lt;/pre&gt; 
+</code></pre>
+<p> 后台打印：<br> <img alt="" height="210" src="https://img-blog.csdnimg.cn/20210620172914512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="668"><br> <strong>4.2、修改</strong><br> <pre><code class="language-java">/***<br>     * 修改文档信息<br>     */<br>    @Test<br>    public void updateDocument()&#123;<br>        try &#123;<br>            // 修改文档 - 请求对象<br>            UpdateRequest request = new UpdateRequest();<br>            // 配置修改参数<br>            request.index("user").id("1001");<br>            // 设置请求体，对数据进行修改<br>            request.doc(XContentType.JSON, "sex", "女");<br>            // 客户端发送请求，获取响应对象<br>            UpdateResponse response = restHighLevelClient.update(request, RequestOptions.DEFAULT);<br>            System.out.println("_index:" + response.getIndex());<br>            System.out.println("_id:" + response.getId());<br>            System.out.println("_result:" + response.getResult());<br>        &#125; catch (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <img alt="" height="188" src="https://img-blog.csdnimg.cn/20210620173126639.png" width="699"> </p>
+<h3 id="5、文档-查询-amp-删除"><a href="#5、文档-查询-amp-删除" class="headerlink" title="5、文档-查询 &amp; 删除"></a>5、文档-查询 &amp; 删除</h3><blockquote>
+<p> <strong>5.1、查询文档</strong><br> <pre><code class="language-java"> /***<br>     * 查询文档信息<br>     */<br>    @Test<br>    public void queryDocument()&#123;<br>        try &#123;<br>            //1.创建请求对象<br>            GetRequest request = new GetRequest().index("user").id("1001");<br>            //2.客户端发送请求，获取响应对象<br>            GetResponse response = restHighLevelClient.get(request, RequestOptions.DEFAULT);<br>            //打印结果信息<br>            System.out.println("_index:" + response.getIndex());<br>            System.out.println("_type:" + response.getType());<br>            System.out.println("_id:" + response.getId());<br>            System.out.println("source:" + response.getSourceAsString());<br>        &#125; catch (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code class="language-java">_index:user<br>_type:_doc<br>_id:1001<br>source:&#123;"name":"zhangsan","age":30,"sex":"男"&#125;</p>
+</blockquote>
+<p>Process finished with exit code 0<br></code></pre><br> <strong>5.2、删除</strong><br> <pre><code class="language-java"> /***<br>     * 删除文档操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void delDocumentTest() throws IOException &#123;<br>        //创建请求对象<br>        DeleteRequest request = new DeleteRequest().index("user").id("1001");<br>        //客户端发送请求，获取响应对象<br>        DeleteResponse response = restHighLevelClient.delete(request, RequestOptions.DEFAULT);<br>        //打印信息<br>        System.out.println(response.toString());<br>    &#125;</code></pre><br> 后台打印：<br> <pre><code class="language-java">DeleteResponse[index=user,type=_doc,id=1001,version=16,result=deleted,shards=ShardInfo&#123;total=2, successful=1, failures=[]&#125;]</p>
+<p>Process finished with exit code 0<br></code></pre> 
+   </p>
+<h3 id="6、文档-批量新增-amp-批量删除"><a href="#6、文档-批量新增-amp-批量删除" class="headerlink" title="6、文档-批量新增 &amp; 批量删除"></a>6、文档-批量新增 &amp; 批量删除</h3><blockquote>
+<p> <strong>6.1、批量新增</strong><br> <pre><code class="language-java"> /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkInsertRequestTest() throws IOException &#123;<br>        //创建批量新增请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new<br>                IndexRequest().index("user").id("1001").source(XContentType.JSON, "name",<br>                "zhangsan"));<br>        request.add(new<br>                IndexRequest().index("user").id("1002").source(XContentType.JSON, "name",<br>                "lisi"));<br>        request.add(new<br>                IndexRequest().index("user").id("1003").source(XContentType.JSON, "name",<br>                "wangwu"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:294ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@2beee7ff</p>
+</blockquote>
+<p>Process finished with exit code 0<br></code></pre><br> <strong>6.2、批量删除</strong><br> <pre><code class="language-java">  /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkDeleteRequestTest() throws IOException &#123;<br>        //创建批量删除请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new DeleteRequest().index("user").id("1001"));<br>        request.add(new DeleteRequest().index("user").id("1002"));<br>        request.add(new DeleteRequest().index("user").id("1003"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:108ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@7b02881e</p>
+<p>Process finished with exit code 0</p>
+<p></code></pre> 
+   </p>
+<h3 id="7、文档-高级查询-全量查询"><a href="#7、文档-高级查询-全量查询" class="headerlink" title="7、文档-高级查询-全量查询"></a>7、文档-高级查询-全量查询</h3><blockquote>
+<p> 7.1、先批量增加数据<br> <pre><code class="language-java"> /***<br>     * 测试批量插入操作<br>     * @throws IOException<br>     */<br>    @Test<br>    public void bulkInsertRequestTest() throws IOException &#123;<br>        //创建批量新增请求对象<br>        BulkRequest request = new BulkRequest();<br>        request.add(new IndexRequest().index("user").id("1001").source(XContentType.JSON, "name", "zhangsan", "age", "10", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1002").source(XContentType.JSON, "name", "lisi", "age", "30", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1003").source(XContentType.JSON, "name", "wangwu1", "age", "40", "sex","男"));<br>        request.add(new IndexRequest().index("user").id("1004").source(XContentType.JSON, "name", "wangwu2", "age", "20", "sex","女"));<br>        request.add(new IndexRequest().index("user").id("1005").source(XContentType.JSON, "name", "wangwu3", "age", "50", "sex","男"));<br>        request.add(new IndexRequest().index("user").id("1006").source(XContentType.JSON, "name", "wangwu4", "age", "20", "sex","男"));<br>        //客户端发送请求，获取响应对象<br>        BulkResponse responses = restHighLevelClient.bulk(request, RequestOptions.DEFAULT);<br>        //打印结果信息<br>        System.out.println("took:" + responses.getTook());<br>        System.out.println("items:" + responses.getItems());<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:168ms<br>items:[Lorg.elasticsearch.action.bulk.BulkItemResponse;@2beee7ff</p>
+</blockquote>
+<p>Process finished with exit code 0<br></code></pre><br> <strong>查询所有索引数据</strong><br> <pre><code class="language-java">/***<br>     * 查询所有索引数据<br>     * @throws IOException<br>     */<br>    @Test<br>    public void searchRequestTest() throws IOException &#123;<br>        // 创建搜索请求对象<br>        SearchRequest request = new SearchRequest();<br>        request.indices("user");<br>        // 构建查询的请求体<br>        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();<br>        // 查询所有数据<br>        sourceBuilder.query(QueryBuilders.matchAllQuery());<br>        request.source(sourceBuilder);<br>        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);<br>        // 查询匹配<br>        SearchHits hits = response.getHits();<br>        System.out.println("took:" + response.getTook());<br>        System.out.println("timeout:" + response.isTimedOut());<br>        System.out.println("total:" + hits.getTotalHits());<br>        System.out.println("MaxScore:" + hits.getMaxScore());<br>        System.out.println("hits========&gt;&gt;");<br>        for (SearchHit hit : hits) &#123;<br>            //输出每条查询的结果信息<br>            System.out.println(hit.getSourceAsString());<br>        &#125;<br>        System.out.println("&lt;&lt;========");<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:2ms<br>timeout:false<br>total:6 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
+<p>Process finished with exit code 0<br></code></pre> 
+   </p>
+<h3 id="8、文档-高级查询-分页查询-amp-条件查询-amp-查询排序"><a href="#8、文档-高级查询-分页查询-amp-条件查询-amp-查询排序" class="headerlink" title="8、文档-高级查询-分页查询 &amp; 条件查询 &amp; 查询排序"></a>8、文档-高级查询-分页查询 &amp; 条件查询 &amp; 查询排序</h3><blockquote>
+<p> <strong>8.1、条件查询</strong><br> <pre><code class="language-java"> /***<br>     * 条件查询<br>     * @throws IOException<br>     */<br>    @Test<br>    public void queryByConditiontest() throws IOException &#123;<br>        // 创建搜索请求对象<br>        SearchRequest request = new SearchRequest();<br>        request.indices("user");<br>        // 构建查询的请求体<br>        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();<br>        sourceBuilder.query(QueryBuilders.termQuery("age", "30"));<br>        request.source(sourceBuilder);<br>        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);<br>        // 查询匹配<br>        SearchHits hits = response.getHits();<br>        System.out.println("took:" + response.getTook());<br>        System.out.println("timeout:" + response.isTimedOut());<br>        System.out.println("total:" + hits.getTotalHits());<br>        System.out.println("MaxScore:" + hits.getMaxScore());<br>        System.out.println("hits========&gt;&gt;");<br>        for (SearchHit hit : hits) &#123;<br>            //输出每条查询的结果信息<br>            System.out.println(hit.getSourceAsString());<br>        &#125;<br>        System.out.println("&lt;&lt;========");<br>    &#125;</code></pre><br> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:1 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&lt;&lt;========<br></code></pre><br> <strong>8.2、分页查询</strong> </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/***</span><br><span class="line">     * 条件查询</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    @Test</span><br><span class="line">    public void queryByPagetest() throws IOException &#123;</span><br><span class="line">        // 创建搜索请求对象</span><br><span class="line">        SearchRequest request = new SearchRequest();</span><br><span class="line">        request.indices(&quot;user&quot;);</span><br><span class="line">        // 构建查询的请求体</span><br><span class="line">        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();</span><br><span class="line">        sourceBuilder.query(QueryBuilders.matchAllQuery());</span><br><span class="line">        // 分页查询</span><br><span class="line">        // 当前页其实索引(第一条数据的顺序号)， from</span><br><span class="line">        sourceBuilder.from(0);</span><br><span class="line"></span><br><span class="line">        // 每页显示多少条 size</span><br><span class="line">        sourceBuilder.size(2);</span><br><span class="line">        request.source(sourceBuilder);</span><br><span class="line">        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);</span><br><span class="line">        // 查询匹配</span><br><span class="line">        SearchHits hits = response.getHits();</span><br><span class="line">        System.out.println(&quot;took:&quot; + response.getTook());</span><br><span class="line">        System.out.println(&quot;timeout:&quot; + response.isTimedOut());</span><br><span class="line">        System.out.println(&quot;total:&quot; + hits.getTotalHits());</span><br><span class="line">        System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());</span><br><span class="line">        System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);</span><br><span class="line">        for (SearchHit hit : hits) &#123;</span><br><span class="line">            //输出每条查询的结果信息</span><br><span class="line">            System.out.println(hit.getSourceAsString());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>后台打印</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">took:1ms</span><br><span class="line">timeout:false</span><br><span class="line">total:6 hits</span><br><span class="line">MaxScore:1.0</span><br><span class="line">hits========&amp;gt;&amp;gt;</span><br><span class="line">&#123;&quot;name&quot;:&quot;zhangsan&quot;,&quot;age&quot;:&quot;10&quot;,&quot;sex&quot;:&quot;女&quot;&#125;</span><br><span class="line">&#123;&quot;name&quot;:&quot;lisi&quot;,&quot;age&quot;:&quot;30&quot;,&quot;sex&quot;:&quot;女&quot;&#125;</span><br><span class="line">&amp;lt;&amp;lt;========</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="8-3、查询排序"><a href="#8-3、查询排序" class="headerlink" title="8.3、查询排序"></a>8.3、查询排序</h3><blockquote>
+ <pre><code class="language-java">/***
+     * 条件查询
+     * @throws IOException
+     */
+    @Test
+    public void queryByOrdertest() throws IOException &#123;
+        // 创建搜索请求对象
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+</blockquote>
+<pre><code>    // 构建查询的请求体
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    sourceBuilder.query(QueryBuilders.matchAllQuery());
+    // 排序
+    sourceBuilder.sort(&quot;age&quot;, SortOrder.ASC);
+    request.source(sourceBuilder);
+    SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
+    // 查询匹配
+    SearchHits hits = response.getHits();
+    System.out.println(&quot;took:&quot; + response.getTook());
+    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
+    System.out.println(&quot;total:&quot; + hits.getTotalHits());
+    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
+    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
+    for (SearchHit hit : hits) &#123;
+        //输出每条查询的结果信息
+        System.out.println(hit.getSourceAsString());
+    &#125;
+    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
+&#125;&lt;/code&gt;&lt;/pre&gt; 
+</code></pre>
+<p> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:6 hits<br>MaxScore:NaN<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&lt;&lt;========<br></code></pre> 
+   </p>
+<h3 id="9、高级查询-组合查询-amp-范围查询"><a href="#9、高级查询-组合查询-amp-范围查询" class="headerlink" title="9、高级查询-组合查询 &amp; 范围查询"></a>9、高级查询-组合查询 &amp; 范围查询</h3><blockquote>
+ <h3>9.1、组合查询</h3> 
+ <pre><code class="language-java"> /***
+     * 条件查询
+     * @throws IOException
+     */
+    @Test
+    public void queryByCombinattest() throws IOException &#123;
+        // 创建搜索请求对象
+        SearchRequest request = new SearchRequest();
+        request.indices("user");
+        // 构建查询的请求体
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        // 必须包含
+        boolQueryBuilder.must(QueryBuilders.matchQuery("age", "30"));
+        // 一定不含
+        boolQueryBuilder.mustNot(QueryBuilders.matchQuery("name", "zhangsan"));
+        // 可能包含
+        boolQueryBuilder.should(QueryBuilders.matchQuery("sex", "男"));
+        sourceBuilder.query(boolQueryBuilder);
+        request.source(sourceBuilder);
+        SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
+        // 查询匹配
+        SearchHits hits = response.getHits();
+        System.out.println("took:" + response.getTook());
+        System.out.println("timeout:" + response.isTimedOut());
+        System.out.println("total:" + hits.getTotalHits());
+        System.out.println("MaxScore:" + hits.getMaxScore());
+        System.out.println("hits========&gt;&gt;");
+        for (SearchHit hit : hits) &#123;
+            //输出每条查询的结果信息
+            System.out.println(hit.getSourceAsString());
+        &#125;
+        System.out.println("&lt;&lt;========");
+    &#125;</code></pre> 
+ 后台打印 
+ <pre><code class="language-java">took:28ms
+timeout:false
+total:1 hits
+MaxScore:1.0
+hits========&gt;&gt;
+&#123;"name":"lisi","age":"30","sex":"女"&#125;
+&lt;&lt;========
+</blockquote>
+<p>Process finished with exit code 0<br></code></pre><br> <strong>9.2、范围查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.sort.SortOrder;</p>
+<p>public class QueryDoc &#123;</p>
+<pre><code>public static final ElasticsearchTask SEARCH_BY_RANGE = client -&amp;gt; &#123;
+    // 创建搜索请求对象
+    SearchRequest request = new SearchRequest();
+    request.indices(&quot;user&quot;);
+    // 构建查询的请求体
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(&quot;age&quot;);
+    // 大于等于
+    //rangeQuery.gte(&quot;30&quot;);
+    // 小于等于
+    rangeQuery.lte(&quot;40&quot;);
+    sourceBuilder.query(rangeQuery);
+    request.source(sourceBuilder);
+    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+    // 查询匹配
+    SearchHits hits = response.getHits();
+    System.out.println(&quot;took:&quot; + response.getTook());
+    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
+    System.out.println(&quot;total:&quot; + hits.getTotalHits());
+    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
+    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
+    for (SearchHit hit : hits) &#123;
+    //输出每条查询的结果信息
+        System.out.println(hit.getSourceAsString());
+    &#125;
+    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
+&#125;;
+
+public static void main(String[] args) &#123;
+    ConnectElasticsearch.connect(SEARCH_BY_RANGE);
+&#125;
+</code></pre>
+<p>}</p>
+<p></code></pre><br> 后台打印<br> <pre><code class="language-java">took:1ms<br>timeout:false<br>total:5 hits<br>MaxScore:1.0<br>hits========&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;"name":"lisi","age":"30","sex":"女"&#125;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
+<p>Process finished with exit code 0<br></code></pre> </p>
+<h3 id="10、高级查询-模糊查询-amp-高亮查询"><a href="#10、高级查询-模糊查询-amp-高亮查询" class="headerlink" title="10、高级查询-模糊查询 &amp; 高亮查询"></a><strong>10、</strong>高级查询-模糊查询 &amp; 高亮查询</h3><blockquote>
+<p> <strong>10.1、模糊查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.sort.SortOrder;</p>
+</blockquote>
+<p>public class QueryDoc &#123;</p>
+<pre><code>public static final ElasticsearchTask SEARCH_BY_FUZZY_CONDITION = client -&amp;gt; &#123;
+    // 创建搜索请求对象
+    SearchRequest request = new SearchRequest();
+    request.indices(&quot;user&quot;);
+    // 构建查询的请求体
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    sourceBuilder.query(QueryBuilders.fuzzyQuery(&quot;name&quot;,&quot;wangwu&quot;).fuzziness(Fuzziness.ONE));
+    request.source(sourceBuilder);
+    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+    // 查询匹配
+    SearchHits hits = response.getHits();
+    System.out.println(&quot;took:&quot; + response.getTook());
+    System.out.println(&quot;timeout:&quot; + response.isTimedOut());
+    System.out.println(&quot;total:&quot; + hits.getTotalHits());
+    System.out.println(&quot;MaxScore:&quot; + hits.getMaxScore());
+    System.out.println(&quot;hits========&amp;gt;&amp;gt;&quot;);
+    for (SearchHit hit : hits) &#123;
+        //输出每条查询的结果信息
+        System.out.println(hit.getSourceAsString());
+    &#125;
+    System.out.println(&quot;&amp;lt;&amp;lt;========&quot;);
+&#125;;
+
+
+public static void main(String[] args) &#123;
+</code></pre>
+<p>//        ConnectElasticsearch.connect(SEARCH_ALL);<br>//        ConnectElasticsearch.connect(SEARCH_BY_CONDITION);<br>//        ConnectElasticsearch.connect(SEARCH_BY_PAGING);<br>//        ConnectElasticsearch.connect(SEARCH_WITH_ORDER);<br>//        ConnectElasticsearch.connect(SEARCH_BY_BOOL_CONDITION);<br>//        ConnectElasticsearch.connect(SEARCH_BY_RANGE);<br>        ConnectElasticsearch.connect(SEARCH_BY_FUZZY_CONDITION);<br>    }</p>
+<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">took:152ms<br>timeout:false<br>total:4 hits<br>MaxScore:1.2837042<br>hits========&gt;&gt;<br>&#123;"name":"wangwu1","age":"40","sex":"男"&#125;<br>&#123;"name":"wangwu2","age":"20","sex":"女"&#125;<br>&#123;"name":"wangwu3","age":"50","sex":"男"&#125;<br>&#123;"name":"wangwu4","age":"20","sex":"男"&#125;<br>&lt;&lt;========</p>
+<p>Process finished with exit code 0<br></code></pre><br> <strong>10.2、高亮查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
+<p>import java.util.Map;</p>
+<p>public class QueryDoc &#123;</p>
+<pre><code>public static final ElasticsearchTask SEARCH_WITH_HIGHLIGHT = client -&amp;gt; &#123;
+    // 高亮查询
+    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
+    //2.创建查询请求体构建器
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    //构建查询方式：高亮查询
+    TermsQueryBuilder termsQueryBuilder =
+            QueryBuilders.termsQuery(&quot;name&quot;,&quot;zhangsan&quot;);
+    //设置查询方式
+    sourceBuilder.query(termsQueryBuilder);
+    //构建高亮字段
+    HighlightBuilder highlightBuilder = new HighlightBuilder();
+    highlightBuilder.preTags(&quot;&amp;lt;font color=&#39;red&#39;&amp;gt;&quot;);//设置标签前缀
+    highlightBuilder.postTags(&quot;&amp;lt;/font&amp;gt;&quot;);//设置标签后缀
+    highlightBuilder.field(&quot;name&quot;);//设置高亮字段
+    //设置高亮构建对象
+    sourceBuilder.highlighter(highlightBuilder);
+    //设置请求体
+    request.source(sourceBuilder);
+    //3.客户端发送请求，获取响应对象
+    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+    //4.打印响应结果
+    SearchHits hits = response.getHits();
+    System.out.println(&quot;took::&quot;+response.getTook());
+    System.out.println(&quot;time_out::&quot;+response.isTimedOut());
+    System.out.println(&quot;total::&quot;+hits.getTotalHits());
+    System.out.println(&quot;max_score::&quot;+hits.getMaxScore());
+    System.out.println(&quot;hits::::&amp;gt;&amp;gt;&quot;);
+    for (SearchHit hit : hits) &#123;
+        String sourceAsString = hit.getSourceAsString();
+        System.out.println(sourceAsString);
+        //打印高亮结果
+        Map&amp;lt;String, HighlightField&amp;gt; highlightFields = hit.getHighlightFields();
+        System.out.println(highlightFields);
+    &#125;
+    System.out.println(&quot;&amp;lt;&amp;lt;::::&quot;);
+&#125;;
+
+
+public static void main(String[] args) &#123;
+    ConnectElasticsearch.connect(SEARCH_WITH_HIGHLIGHT);
+&#125;
+</code></pre>
+<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">took::672ms<br>time_out::false<br>total::1 hits<br>max_score::1.0<br>hits::::&gt;&gt;<br>&#123;"name":"zhangsan","age":"10","sex":"女"&#125;<br>&#123;name=[name], fragments[[&lt;font color='red'&gt;zhangsan&lt;/font&gt;]]&#125;<br>&lt;&lt;::::</p>
+<p>Process finished with exit code 0<br></code></pre> 
+   </p>
+<h3 id="11、高级查询-最大值查询-amp-分组查询"><a href="#11、高级查询-最大值查询-amp-分组查询" class="headerlink" title="11、高级查询-最大值查询 &amp; 分组查询"></a>11、高级查询-最大值查询 &amp; 分组查询</h3><blockquote>
+<p> <strong>1、最大值查询</strong><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.aggregations.AggregationBuilders;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
+</blockquote>
+<p>import java.util.Map;</p>
+<p>public class QueryDoc &#123;</p>
+<pre><code>public static final ElasticsearchTask SEARCH_WITH_MAX = client -&amp;gt; &#123;
+    // 高亮查询
+    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    sourceBuilder.aggregation(AggregationBuilders.max(&quot;maxAge&quot;).field(&quot;age&quot;));
+    //设置请求体
+    request.source(sourceBuilder);
+    //3.客户端发送请求，获取响应对象
+    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+    //4.打印响应结果
+    SearchHits hits = response.getHits();
+    System.out.println(response);
+&#125;;
+
+public static void main(String[] args) &#123;
+    ConnectElasticsearch.connect(SEARCH_WITH_MAX);
+&#125;
+</code></pre>
+<p>}<br></code></pre><br> 后台打印<br> <pre><code>&#123;"took":16,"timed_out":false,"_shards":&#123;"total":1,"successful":1,"skipped":0,"failed":0&#125;,"hits":&#123;"total":&#123;"value":6,"relation":"eq"&#125;,"max_score":1.0,"hits":[&#123;"_index":"user","_type":"_doc","_id":"1001","_score":1.0,"_source":&#123;"name":"zhangsan","age":"10","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1002","_score":1.0,"_source":&#123;"name":"lisi","age":"30","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1003","_score":1.0,"_source":&#123;"name":"wangwu1","age":"40","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1004","_score":1.0,"_source":&#123;"name":"wangwu2","age":"20","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1005","_score":1.0,"_source":&#123;"name":"wangwu3","age":"50","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1006","_score":1.0,"_source":&#123;"name":"wangwu4","age":"20","sex":"男"&#125;&#125;]&#125;,"aggregations":&#123;"max#maxAge":&#123;"value":50.0&#125;&#125;&#125;</p>
+<p>Process finished with exit code 0<br></code></pre><br> <h3>分组查询</h3><br> <pre><code class="language-java">import com.lun.elasticsearch.hello.ConnectElasticsearch;<br>import com.lun.elasticsearch.hello.ElasticsearchTask;<br>import org.elasticsearch.action.search.SearchRequest;<br>import org.elasticsearch.action.search.SearchResponse;<br>import org.elasticsearch.client.RequestOptions;<br>import org.elasticsearch.common.unit.Fuzziness;<br>import org.elasticsearch.index.query.BoolQueryBuilder;<br>import org.elasticsearch.index.query.QueryBuilders;<br>import org.elasticsearch.index.query.RangeQueryBuilder;<br>import org.elasticsearch.index.query.TermsQueryBuilder;<br>import org.elasticsearch.search.SearchHit;<br>import org.elasticsearch.search.SearchHits;<br>import org.elasticsearch.search.aggregations.AggregationBuilders;<br>import org.elasticsearch.search.builder.SearchSourceBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;<br>import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;<br>import org.elasticsearch.search.sort.SortOrder;</p>
+<p>import java.util.Map;</p>
+<p>public class QueryDoc &#123;</p>
+<pre><code>public static final ElasticsearchTask SEARCH_WITH_GROUP = client -&amp;gt; &#123;
+    SearchRequest request = new SearchRequest().indices(&quot;user&quot;);
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+    sourceBuilder.aggregation(AggregationBuilders.terms(&quot;age_groupby&quot;).field(&quot;age&quot;));
+    //设置请求体
+    request.source(sourceBuilder);
+    //3.客户端发送请求，获取响应对象
+    SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+    //4.打印响应结果
+    SearchHits hits = response.getHits();
+    System.out.println(response);
+&#125;;
+
+public static void main(String[] args) &#123;
+    ConnectElasticsearch.connect(SEARCH_WITH_GROUP);
+&#125;
+</code></pre>
+<p>}<br></code></pre><br> 后台打印<br> <pre><code class="language-java">&#123;"took":10,"timed_out":false,"_shards":&#123;"total":1,"successful":1,"skipped":0,"failed":0&#125;,"hits":&#123;"total":&#123;"value":6,"relation":"eq"&#125;,"max_score":1.0,"hits":[&#123;"_index":"user","_type":"_doc","_id":"1001","_score":1.0,"_source":&#123;"name":"zhangsan","age":"10","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1002","_score":1.0,"_source":&#123;"name":"lisi","age":"30","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1003","_score":1.0,"_source":&#123;"name":"wangwu1","age":"40","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1004","_score":1.0,"_source":&#123;"name":"wangwu2","age":"20","sex":"女"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1005","_score":1.0,"_source":&#123;"name":"wangwu3","age":"50","sex":"男"&#125;&#125;,&#123;"_index":"user","_type":"_doc","_id":"1006","_score":1.0,"_source":&#123;"name":"wangwu4","age":"20","sex":"男"&#125;&#125;]&#125;,"aggregations":&#123;"lterms#age_groupby":&#123;"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[&#123;"key":20,"doc_count":2&#125;,&#123;"key":10,"doc_count":1&#125;,&#123;"key":30,"doc_count":1&#125;,&#123;"key":40,"doc_count":1&#125;,&#123;"key":50,"doc_count":1&#125;]&#125;&#125;&#125;</p>
+<p>Process finished with exit code 0<br></code></pre> 
+   </p>
+<p> </p>
+<p> </p>
+<p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Elasticsearch%E4%B9%8BJAVA%20API%E6%93%8D%E4%BD%9C/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8BRequest%20Body%E6%9F%A5%E8%AF%A2/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Elasticsearch之Request Body查询
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8Banalysis/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Elasticsearch之analysis</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

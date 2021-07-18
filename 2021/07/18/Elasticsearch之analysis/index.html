@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Elasticsearch之analysis |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Elasticsearch之analysis"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Elasticsearch之analysis
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8Banalysis/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.442Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">995</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">4 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticsearch之analysis<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、简介</p>
+<blockquote>
+<p> analysis(只是一个概念)，文本分析是将全文本转换为一系列单词的过程，也叫分词。analysis是通 过analyzer(分词器)来实现的，可以使用Elasticsearch内置的分词器，也可以自己去定制一些分词 器。 除了在数据写入的时候进行分词处理，那么在查询的时候也可以使用分析器对查询语句进行分词。<br> anaylzer是由三部分组成，例如有：Hello a World, the world is beautiful </p>
+</blockquote>
+<ol>
+<li>Character Filter: 将文本中html标签剔除掉。 </li>
+<li>Tokenizer: 按照规则进行分词，在英文中按照空格分词。 </li>
+<li>Token Filter: 去掉stop world(停顿词，a, an, the, is, are等)，然后转换小写 <img alt="" height="201" src="https://img-blog.csdnimg.cn/20210701230820389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="739"> </li>
+</ol>
+<h3 id="2、内置分词器"><a href="#2、内置分词器" class="headerlink" title="2、内置分词器"></a>2、内置分词器</h3><blockquote>
+ <img alt="" height="296" src="https://img-blog.csdnimg.cn/20210701230857488.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="740"> 
+ 内置分词器示例： 
+ <img alt="" height="545" src="https://img-blog.csdnimg.cn/20210701231016915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="779"> 
+ <img alt="" height="557" src="https://img-blog.csdnimg.cn/20210701231031310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="796"> 
+</blockquote>
+<h3 id="3、ik分词器"><a href="#3、ik分词器" class="headerlink" title="3、ik分词器"></a>3、ik分词器</h3><blockquote>
+<p> IK分词器在任何操作系统下安装步骤均⼀样: 在ES的家⽬录下的 plugins ⽬录下创建名为 ik 的 ⽂件夹，然后将下载后的 zip 包拷⻉到 ik 解压即可<br> IK分词器提供了两种分词⽅式：<br> <img alt="" height="271" src="https://img-blog.csdnimg.cn/20210704114331635.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="991"><br> 验证：<br> <img alt="" height="280" src="https://img-blog.csdnimg.cn/20210704114423155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1007"><br> <img alt="" height="76" src="https://img-blog.csdnimg.cn/20210704114551497.png" width="483"><img alt="" height="205" src="https://img-blog.csdnimg.cn/20210704114605160.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="992"> </p>
+</blockquote>
+<h3 id="4、⾃定义词库"><a href="#4、⾃定义词库" class="headerlink" title="4、⾃定义词库"></a>4、⾃定义词库</h3><blockquote>
+<p> 在很多的时候，业务上的⼀些词库极有可能不在IK分词器的词库中，需要去定制属于我们⾃⼰的词 库。例如下⾯的例⼦中， 正井猫 、 up主 被切分为⼀个个的字，我们希望这两个词语是不被拆 分；另外 的 作为中⽂的停顿词，也不希望出现在分词中，所以我们需要⾃定义词库和停顿词词 库。<br> <img alt="" height="166" src="https://img-blog.csdnimg.cn/20210704115725621.png" width="988"><img alt="" height="798" src="https://img-blog.csdnimg.cn/20210704115746521.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 进⼊到 $ES_HOME/plugins/ik/config ⽬录下，创建 custom ⽬录，在⽬录下创建 mydic.dic 、 ext_stopword.dic ⽂件，<br> 在 mydic.dic ⽂件中添加两⾏内容：<br> <img alt="" height="101" src="https://img-blog.csdnimg.cn/20210704121115600.png" width="620"> 在 ext_stopword.dic 中添加⼀⾏内容:<br> <img alt="" height="61" src="https://img-blog.csdnimg.cn/20210704121136941.png" width="485"><br> 最后修改 $ES_HOME/plugins/ik/config/IKAnalyzer.cfg.xml ⽂件，内容如下：<br> <img alt="" height="501" src="https://img-blog.csdnimg.cn/2021070412115725.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1102"><br> 重启重启elasticsearch elasticsearch ， 重新执⾏如上的命令，结果如下：<br> <img alt="" height="579" src="https://img-blog.csdnimg.cn/20210704121221247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="5、IK分词器在工作中的实际案例"><a href="#5、IK分词器在工作中的实际案例" class="headerlink" title="5、IK分词器在工作中的实际案例"></a>5、IK分词器在工作中的实际案例</h3><blockquote>
+<p> 5.1、首先创建new索引的mapping<br> <pre><code class="language-javascript">PUT news<br>&#123;<br>  "mappings": &#123;<br>    "properties": &#123;<br>      "title":&#123;<br>        "type": "text",<br>        "analyzer": "ik_max_word",<br>        "search_analyzer": "ik_smart"<br>      &#125;,<br>      "content":&#123;<br>        "type": "text",<br>        "analyzer": "ik_max_word",<br>        "search_analyzer": "ik_smart"<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 注意：analyzer和search_analyzer的区别如下：<br>       analyzer：表示数据在进入news这个索引中的时候，我们尽量让它多的对我们数据进行分词，后面才能够达到精准的匹配。<br>       search_analyzer：对我们的数据进行搜索的时候不要进行过多的分词处理，提高效率。<br> 5.2、查看创建的索引结构<br>      GET news/_mapping<br>      <img alt="" height="402" src="https://img-blog.csdnimg.cn/20210704123038178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="520"><br> 5.3、创建数据进入索引<br> <img alt="" height="438" src="https://img-blog.csdnimg.cn/20210704123835184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="854"><br> 5.4、通过语句查询<br> <img alt="" height="234" src="https://img-blog.csdnimg.cn/20210704124000129.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="659"><br> <img alt="" height="758" src="https://img-blog.csdnimg.cn/20210704124016440.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1157"><br> 下面我们再新增两条数据测试<br> <img alt="" height="212" src="https://img-blog.csdnimg.cn/2021070412571235.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="638"><br> 查询一下柳岩：<br> <img alt="" height="181" src="https://img-blog.csdnimg.cn/20210704125756473.png" width="660"><br> <img alt="" height="766" src="https://img-blog.csdnimg.cn/20210704125822468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1160"><br> 可以发现我们其实仅仅只是查询柳岩，但是两条数据都查询出来了，那么我们首先配置一下mydic.dic扩展词典：<br> <img alt="" height="212" src="https://img-blog.csdnimg.cn/20210704130118770.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="422"><br> 重新启动elasticsearch:<br> 因为我们之前的数据已经分过词了，所以我们需要重新分词相关数据：<br> 先重新索引柳岩：<br> <pre><code class="language-html">POST news/_update_by_query<br>&#123;<br>  "query": &#123;<br>    "bool": &#123;<br>      "should": [<br>        &#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "岩"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;,&#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "岩"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 先重新索引柳真：<br> <pre><code class="language-html">POST news/_update_by_query<br>&#123;<br>  "query": &#123;<br>    "bool": &#123;<br>      "should": [<br>        &#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "title": &#123;<br>                    "value": "真"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;,&#123;<br>          "bool": &#123;<br>            "must": [<br>              &#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "柳"<br>                  &#125;<br>                &#125;<br>              &#125;,&#123;<br>                "term": &#123;<br>                  "content": &#123;<br>                    "value": "真"<br>                  &#125;<br>                &#125;<br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> 再次查询：<br> <img alt="" height="200" src="https://img-blog.csdnimg.cn/20210704134645260.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="579"><br> <img alt="" height="625" src="https://img-blog.csdnimg.cn/20210704134700972.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1179"> </p>
+</blockquote>
+<h3 id="6、pinyin分词器的安装"><a href="#6、pinyin分词器的安装" class="headerlink" title="6、pinyin分词器的安装"></a>6、pinyin分词器的安装</h3><blockquote>
+<p> pinyin 分词器在任何操作系统下安装步骤均⼀样: 在ES的家⽬录下的 plugins ⽬录下创建名为 pinyin 的⽂件夹，然后将下载后的 zip 包拷⻉到 pinyin 解压即可<br> <img alt="" height="219" src="https://img-blog.csdnimg.cn/202107041449420.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="827"><br> 重启es<br> 测试pingyin插件<br> <img alt="" height="154" src="https://img-blog.csdnimg.cn/20210704145316140.png" width="653"><br> 效果：<br> <img alt="" height="539" src="https://img-blog.csdnimg.cn/2021070414533563.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="484"> </p>
+</blockquote>
+<h3 id="6、Elasticsearch之⾃定义分词器以及应⽤"><a href="#6、Elasticsearch之⾃定义分词器以及应⽤" class="headerlink" title="6、Elasticsearch之⾃定义分词器以及应⽤"></a>6、Elasticsearch之⾃定义分词器以及应⽤</h3><blockquote>
+<p> 6.1、案例需求：<br> <img alt="" height="58" src="https://img-blog.csdnimg.cn/20210704154206109.png" width="796"><img alt="" height="783" src="https://img-blog.csdnimg.cn/20210704154226316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="463"><br> 6.2、设置分词器<br> <img alt="" height="621" src="https://img-blog.csdnimg.cn/20210704154308863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="699"><br> 6.3、验证分词器效果<br> <img alt="" height="135" src="https://img-blog.csdnimg.cn/20210704154525604.png" width="800"><br> <img alt="" height="588" src="https://img-blog.csdnimg.cn/20210704154546577.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="982"><br> 6.4、为属性添加分词器<br> <img alt="" height="373" src="https://img-blog.csdnimg.cn/20210704154634587.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="996"><br> 6.5、结果验证<br>    执⾏如下命令添加数据<br>    <img alt="" height="234" src="https://img-blog.csdnimg.cn/20210704154704254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="452">    <img alt="" height="728" src="https://img-blog.csdnimg.cn/20210704154744408.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="462" src="https://img-blog.csdnimg.cn/20210704154800679.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> <img alt="" height="566" src="https://img-blog.csdnimg.cn/20210704154826224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Elasticsearch%E4%B9%8Banalysis/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8BJAVA%20API%E6%93%8D%E4%BD%9C/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Elasticsearch之JAVA API操作
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Elasticsearch%E4%BC%98%E5%8C%96/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Elasticsearch优化</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>

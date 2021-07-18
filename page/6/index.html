@@ -160,7 +160,7 @@
     
     
     <article
-  id="post-clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】"
+  id="post-CSS学习之小米的侧边栏"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -171,8 +171,8 @@
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/"
-    >clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%B0%8F%E7%B1%B3%E7%9A%84%E4%BE%A7%E8%BE%B9%E6%A0%8F/"
+    >CSS学习之小米的侧边栏</a> 
 </h2>
  
 
@@ -180,94 +180,136 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BJSON%E7%B3%BB%E5%88%97%E3%80%90JSON%E3%80%81JSONCompact%E5%92%8CJSONEachRow%E3%80%91/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.304Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%B0%8F%E7%B1%B3%E7%9A%84%E4%BE%A7%E8%BE%B9%E6%A0%8F/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.212Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse输入输出格式之JSON系列【JSON、JSONCompact和JSONEachRow】<br>categories:</p>
+  <p>title: CSS学习之小米的侧边栏<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—# JSON</p>
-<h2 id="JSON格式的输入输出"><a href="#JSON格式的输入输出" class="headerlink" title="JSON格式的输入输出"></a>JSON格式的输入输出</h2><p>JSON格式只支持数据的输出，不支持数据的解析（数据导入）。</p>
-<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2><h3 id="建表插数据"><a href="#建表插数据" class="headerlink" title="建表插数据"></a>建表插数据</h3><blockquote>
- <pre><code class="language-sql">create table t_json_demo(id UInt8, prov String) ENGINE=TinyLog;
-insert into t_json_demo values(1, 'jiangsu'),
-(1, 'jiangsu'),
-(2, 'anhui'),
-(2, 'anihu'),
-(3, 'beijing');
+<p>—title: CSS学习之小米的侧边栏<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—<li>代码 <pre><code class="language-html">&lt;!DOCTYPE html&gt;<br>&lt;html lang="en"&gt;<br>&lt;head&gt;<br>    &lt;meta charset="UTF-8"&gt;<br>    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>    &lt;title&gt;小米侧边栏&lt;/title&gt;<br>    &lt;style&gt;<br>        a &#123;<br>            /* 将行级元素变为块级元素 <em>/<br>            display: block;<br>            background-color: rgb(83, 87, 88);<br>            width: 278px;<br>            height: 45px;<br>            /</em> 首行缩进两格 <em>/<br>            text-indent: 2em;<br>            font-size: 14px;<br>            color: #fff;<br>            /</em> 链接的底部下划线去掉 <em>/<br>            text-decoration: none;<br>            /</em> 设置文字垂直居中 <em>/<br>            line-height: 45px;<br>        &#125;<br>        /</em> 将鼠标浮上去的时候背景颜色 */<br>        a:hover &#123;<br>           background-color: rgb(254, 103, 0);<br>        &#125;<br>    &lt;/style&gt;<br>&lt;/head&gt;<br>&lt;body&gt;<br>    &lt;a href="#"&gt;手机 电话卡&lt;/a&gt;<br>    &lt;a href="#"&gt;电视 盒子&lt;/a&gt;<br>    &lt;a href="#"&gt;笔记本 平板&lt;/a&gt;<br>    &lt;a href="#"&gt;出行 穿戴&lt;/a&gt;<br>    &lt;a href="#"&gt;智能 路由器&lt;/a&gt;<br>    &lt;a href="#"&gt;健康 儿童&lt;/a&gt;<br>    &lt;a href="#"&gt;耳机 音响&lt;/a&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;</code></pre>   </li>1. 效果<img alt="" height="344" src="https://img-blog.csdnimg.cn/20210201221154919.png" width="284">1. 单行文字垂直居中的原理<img alt="" height="326" src="https://img-blog.csdnimg.cn/20210201221258269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="686"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-css选择器的使用"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/"
+    >css选择器的使用</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.209Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: css选择器的使用<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.CSS选择器作用</p>
+<blockquote>
+<p> 找到指定的HTML页面元素，选择标签。 </p>
+</blockquote>
+<p>2.标签选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>标签选择器（元素选择器）是指用HTML标签名称作为选择器，按标签名称分类，为页面中某一类标签指定统一的CSS样式。 -  作用：可以把某一类标签全部选择出来。 -  优点：快速为网页中同类型的标签统一样式 -  缺点：不能设计差异化样式。 <pre>`标签名{属性1:属性值1; 属性2:属性值2; 属性3:属性值3; } `</pre> </li>
+</ul>
+<p>3.类选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>类选择器使用”.”(英文点号)进行标识，后面紧跟类名。 -  语法：类名选择器 <pre><code>.类名  &#123;   
+    属性1:属性值1; 
+    属性2:属性值2; 
+    属性3:属性值3;     
+&#125;
 </code></pre> 
-</blockquote>
-<h3 id="查询演示"><a href="#查询演示" class="headerlink" title="查询演示"></a>查询演示</h3><p><strong>以JSON格式查询</strong></p>
-<blockquote>
-<p> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="854" src="https://img-blog.csdnimg.cn/20210411144340734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="532"> </p>
-</blockquote>
-<h3 id="取出value的双引号"><a href="#取出value的双引号" class="headerlink" title="取出value的双引号"></a>取出value的双引号</h3><blockquote>
-<p> 默认情况下， Int64和UInit64的整型使用双引号包裹， 如果要移除双引号，设置配置参数output_format_json_quote_64bit_integers为0。<br> 命令：set output_format_json_quote_64bit_integers=0;<br> 再进行同样的查询<br> 命令：select id,count() as cnt from t_json_demo group by id format JSON;<br> <img alt="" height="843" src="https://img-blog.csdnimg.cn/20210411144556516.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="528"> </p>
-</blockquote>
-<h3 id="查询时出现rows-before-limit-at-least"><a href="#查询时出现rows-before-limit-at-least" class="headerlink" title="查询时出现rows_before_limit_at_least"></a>查询时出现rows_before_limit_at_least</h3><blockquote>
-<p> 只有查询包含LIMIT时才输出， 只有在包含group by的语句中才有意义。当查询没有LIMIT时， 执行结果的最小行数。 </p>
-</blockquote>
-<h3 id="设置显示极值的参数extremes-1（默认为0）"><a href="#设置显示极值的参数extremes-1（默认为0）" class="headerlink" title="设置显示极值的参数extremes=1（默认为0）"></a>设置显示极值的参数extremes=1（默认为0）</h3><blockquote>
-<p> set extremes=1;<br> 在进行查询<code>select id,count() as cnt from t_json_demo group by id format JSON;</code><br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318151530860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
-</blockquote>
-<p> </p>
-<h1 id="JSONCompact"><a href="#JSONCompact" class="headerlink" title="JSONCompact"></a>JSONCompact</h1><h2 id="JSONCompact的输入输出"><a href="#JSONCompact的输入输出" class="headerlink" title="JSONCompact的输入输出"></a>JSONCompact的输入输出</h2><blockquote>
-</blockquote>
-<ul>
-<li>JSON格式的数据以对象的方式输出， 而JSONCompact以数组的方式输出。- JSONCompact只支持数据的查看， 不支持数据的导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONCompact;` 
-<img alt="" height="729" src="https://img-blog.csdnimg.cn/20210411145009619.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="521"> </li>
-</ul>
-<h1 id="JSONEachRow"><a href="#JSONEachRow" class="headerlink" title="JSONEachRow"></a>JSONEachRow</h1><h2 id="JSONEachRow数据输入输出"><a href="#JSONEachRow数据输入输出" class="headerlink" title="JSONEachRow数据输入输出"></a>JSONEachRow数据输入输出</h2><blockquote>
-</blockquote>
-<ul>
-<li>每行数据以换行符分隔的JSON对象。- 支持数据的输出和数据导入。<h2>案例演示</h2> 
-`select id,count() as cnt from t_json_demo group by id format JSONEachRow;` 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318152711341.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
-</ul>
-<h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
-</blockquote>
-<ul>
-<li>对象中键值对的顺序可任意排列。- 缺失某些字段。<h3>建表插入数据</h3> 
-<pre><code class="language-sql">#建表
-create table UserActivity (PageViews UInt8, UserID String, Duration UInt64, Sign Int8) ENGINE TinyLog;
-#插入数据
-INSERT INTO UserActivity FORMAT JSONEachRow &#123;"PageViews":5, "UserID":"4324182021466249494", "Duration":146,"Sign":-1&#125; &#123;"UserID":"4324182021466249494","PageViews":6,"Duration":185,"Sign":1&#125;
+<pre><code class="language-html">&lt;p class='类名'&gt;&lt;/p&gt;
 </code></pre> 
-<h2>缺失值处理演示</h2> 
-<pre><code class="language-sql">CREATE TABLE IF NOT EXISTS example_table
-(
- x UInt32,
- a DEFAULT x + 2
-) ENGINE = Memory;
-# 第二条数据第二个值没有设置
-insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":4&#125;;
+<ul>-  `优点`：可以为元素对象定义单独或相同的样式。可以选择一个或者多个标签。 <li> `注意`：类选择器使用“.”（英文点号）进行标识，后面紧跟类名(自定义，我们自己命名的) </li>
+<li> 长名称或词组可以使用中横线来为选择器命名。 -  不要纯数字、中文等命名， 尽量使用英文字母来表示。 -  多类名选择器：各个类名中间用空格隔开。 </li></ul></li>
+</ul>
+<p>4.<strong>id选择器」</strong>id选择器使用<code>#</code>进行标识，后面紧跟id名</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>元素的id值是唯一的，只能对应于文档中某一个具体的元素。 <pre><code>#id名 &#123;属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
 </code></pre> 
-<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154207105.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </li>
+<pre>`&lt;p id="id名"&gt;&lt;/p&gt;`</pre> </li>
 </ul>
-<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><blockquote>
-<p> 参数：input_format_defaults_for_omitted_fields 如果为0， 则x和a的默认值等于0（即UInt32数据类型的默认值）。 如果为1， 则x的默认值等于0， 但a的默认值等于x+2。 input_format_defaults_for_omitted_fields=1 </p>
-</blockquote>
-<h3 id="嵌套数据结构"><a href="#嵌套数据结构" class="headerlink" title="嵌套数据结构"></a>嵌套数据结构</h3><p><strong>案例演示</strong></p>
-<p><strong>建表插入数据</strong></p>
+<p>5.通配符选择器</p>
 <blockquote>
-<p> #建表 CREATE TABLE json_each_row_nested (n Nested (s String, i Int32) ) ENGINE = Memory; # 插入数据 INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n.s”: [“abc”, “def”], “n.i”: [1, 23]}; # 查看数据 select * from json_each_row_nested;<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20210318154828387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5cTcyNjk=,size_16,color_FFFFFF,t_70"> </p>
+<p> 通配符选择器用<code>*</code>号表示，<code>*</code> 就是选择所有的标签。它是所有选择器中作用范围最广的，能匹配页面中所有的元素。 </p>
 </blockquote>
-<h3 id="要将数据作为分层JSON对象插入"><a href="#要将数据作为分层JSON对象插入" class="headerlink" title="要将数据作为分层JSON对象插入"></a>要将数据作为分层JSON对象插入</h3><blockquote>
-<p> 需要设置input_format_import_nested_json=1。（默认为0） </p>
+<ul>
+<li><code>注意</code>：会匹配页面所有的元素，降低页面响应速度，不建议随便使用 <pre><code>* &#123; 属性1:属性值1; 属性2:属性值2; 属性3:属性值3; &#125;
+</code></pre> 
+例如下面代码，使用通配符选择器定义CSS样式，清除所有HTML标记的默认边距。 <pre><code class="language-css">* &#123;
+  margin: 0;                    /* 定义外边距*/
+  padding: 0;                   /* 定义内边距*/
+&#125;</code></pre> </li>
+</ul>
+<p>6.基础选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|缺点|使用情况|用法
 </blockquote>
-<h3 id="当参数设置为零时"><a href="#当参数设置为零时" class="headerlink" title="当参数设置为零时"></a>当参数设置为零时</h3><blockquote>
-<p> 当需要设置input_format_import_nested_json=0时： INSERT INTO json_each_row_nested FORMAT JSONEachRow {“n”: {“s”: [“abc”, “def”], “i”: [1, 23]}}<br> Exception on client: Code: 117. DB::Exception: Unknown field found while parsing JSONEachRow format: n<br> Connecting to 192.168.0.200:9000 as user default. Connected to ClickHouse server version 20.1.4 revision 54431. </p>
-</blockquote>
+</thead><tbody>|标签选择器|可以选出所有相同的标签，比如p|不能差异化选择|较多|p { color：red;}
+|类选择器|可以选出1个或者多个标签|可以根据需求选择|非常多|.nav { color: red; }
+|id选择器|一次只能选择器1个标签|只能使用一次|不推荐使用|#nav {color: red;}
+|通配符选择器|选择所有的标签|选择的太多，有部分不需要|不推荐使用|* {color: red;}
+</tbody></table>
+
  
       <!-- reward -->
       
@@ -288,7 +330,7 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
 
     
     <article
-  id="post-clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】"
+  id="post-css相关属性"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -299,8 +341,8 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/"
-    >clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】</a> 
+  <a class="article-title" href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/"
+    >css相关属性</a> 
 </h2>
  
 
@@ -308,45 +350,27 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F%E4%B9%8BCSV%E7%B3%BB%E5%88%97%E3%80%90CSV%E3%80%81CSVWithNames%E3%80%91/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.296Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/css%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.207Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse输入输出格式之CSV系列【CSV、CSVWithNames】<br>categories:</p>
+  <p>title: css相关属性<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—# CSV</p>
+<p>—title: css相关属性<br>categories:</p>
 <ul>
-<li>CSV默认的分隔符为逗号，format_csv_delimiter设置自定义的分隔符。- CSV中的双引号使用两个双引号转义。- 支持数据的查询和数据导入的。<h2 id="案例演示"><a href="#案例演示" class="headerlink" title="案例演示"></a>案例演示</h2></li>
+<li>css</li>
 </ul>
-<h3 id="clickhouse中建表"><a href="#clickhouse中建表" class="headerlink" title="clickhouse中建表"></a>clickhouse中建表</h3><blockquote>
-<p> create table csv_demo(create_date Date, update_time DateTime, desc String) ENGINE=TinyLog; </p>
-</blockquote>
-<h3 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h3><blockquote>
-</blockquote>
-<h1 id="创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy"><a href="#创建csv-demo-csv文件-vim-csv-demo-csv-填入以下数据-2014-03-23-2014-03-23-14-10-14-Apache-Spark-achieves-high-performance-2014-03-23-2014-03-23-15-10-30-Spark-offers-over-80-high-level-operators-1395990600-1395904200-Learning-Apache-“Spark”-is-easy" class="headerlink" title="创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy"></a>创建csv_demo.csv文件 vim csv_demo.csv # 填入以下数据 2014-03-23|2014-03-23 14:10:14|Apache Spark achieves high performance 2014-03-23|2014-03-23 15:10:30|Spark offers over 80 high-level operators 1395990600|1395904200|Learning Apache “Spark” is easy</h1><h3 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h3><blockquote>
-<p> clickhouse-client –format_csv_delimiter=”|” –query=”INSERT INTO tutorial.csv_demo FORMAT CSV” &lt; csv_dmeo.csv </p>
-</blockquote>
-<h3 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h3><blockquote>
-<p> select * from csv_demo FORMAT CSV; </p>
-</blockquote>
-<img alt="" height="314" src="https://img-blog.csdnimg.cn/20210411124429818.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="826">
-
-<h1 id="CSVWithNames"><a href="#CSVWithNames" class="headerlink" title="CSVWithNames"></a>CSVWithNames</h1><ul>
-<li>CSVWithNames会打印表头的信息。- 支持数据的导入和数据的查看。<h2 id="查询数据演示"><a href="#查询数据演示" class="headerlink" title="查询数据演示"></a>查询数据演示</h2></li>
-</ul>
-<blockquote>
-<p> select * from csv_demo FORMAT CSVWithNames; </p>
-</blockquote>
-<img alt="" height="327" src="https://img-blog.csdnimg.cn/20210411124532485.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="871">
+<p>—1. css3中opacity属性   指定透明度的属性是opacity,属性值从 0.0 到 1.0。值越小，越透明。   从 0.0 （完全透明）到 1.0（完全不透明）。<li>transition属性   过渡transition是一个复合属性，包括transition-property、transition-duration、transition-timing-function、   transition-delay这四个子  属性。通过这四个子属性的配合来完成一个完整的过渡效果。    transition: opacity 3s  —&gt;过渡：不透明度3s <pre><code class="language-html hljs">transition-property: 过渡属性(默认值为all)<br>transition-duration: 过渡持续时间(默认值为0s)<br>transiton-timing-function: 过渡函数(默认值为ease函数)<br>transition-delay: 过渡延迟时间(默认值为0s)</code></pre> </li>1.  CSS3 @keyframes 规则  a：简介        @keyframes 规则是创建动画。        @keyframes 规则内指定一个 CSS 样式和动画将逐步从目前的样式更改为新的样式   1.  transform属性   Transform属性应用于元素的2D或3D转换。这个属性允许你将元素旋转，缩放，移动，倾斜等。 1.  scale,  <img alt="" class="has" height="297" src="https://img-blog.csdnimg.cn/20191214095833437.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">  <img alt="" class="has" height="462" src="https://img-blog.csdnimg.cn/20191214095851711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="586">  <img alt="" class="has" height="428" src="https://img-blog.csdnimg.cn/2019121409591750.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="670">  <img alt="" class="has" height="409" src="https://img-blog.csdnimg.cn/20191214095937591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="607">  <img alt="" class="has" height="504" src="https://img-blog.csdnimg.cn/20191214100042785.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="590"> 1.  CSS3 Animation,CSS3 Animation 是由三部分组成    a：关键帧(keyframes) - 定义动画在不同阶段的状态           关键帧主要分为3个阶段，0%、50%、100%   b：动画属性(properties) - 决定动画的播放时长，播放次数，以及用何种函数式去播放动画等。（可以类比音视频播放器）   c：css属性 - 就是css元素不同关键帧下的状态。 1.  border-top 属性  CSS属性 <strong>border-top</strong>是属性 border-top-width, border-top-style, and border-top-color的三者的缩写  例如：border-top: 10px solid #409EFF;  <img alt="" class="has" height="152" src="https://img-blog.csdnimg.cn/20191214145118918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="640"> 
+ </p>
  
       <!-- reward -->
       
@@ -367,7 +391,7 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
 
     
     <article
-  id="post-clickhouse基础语法简介"
+  id="post-CSS外观属性"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -378,8 +402,8 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/"
-    >clickhouse基础语法简介</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/"
+    >CSS外观属性</a> 
 </h2>
  
 
@@ -387,261 +411,97 @@ insert into example_table FORMAT JSONEachRow &#123;"x":3, "a":5&#125; &#123;"x":
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.290Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E5%A4%96%E8%A7%82%E5%B1%9E%E6%80%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.205Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse基础语法简介<br>categories:</p>
+  <p>title: CSS外观属性<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—## 1.常用SQL语法</p>
+<p>—1.color</p>
 <blockquote>
- <pre><code class="language-sql">-- 列出数据库列表
-show databases;
-</blockquote>
-<p>– 列出数据库中表列表<br>show tables;</p>
-<p>– 创建数据库<br>create database test;</p>
-<p>–选中数据库<br>use test;</p>
-<p>– 删除一个表<br>drop table if exists test.t1;</p>
-<p>– 创建第一个表<br>create /<em>temporary</em>/ table /<em>if not exists</em>/ test.m1 (<br> id UInt16<br>,name String<br>) ENGINE = Memory<br>;<br>– 插入测试数据<br>insert into test.m1 (id, name) values (1, ‘abc’), (2, ‘bbbb’);</p>
-<p>– 查询<br>select * from test.m1;</p>
-<p></code></pre> 
-   </p>
-<h2 id="2-默认值"><a href="#2-默认值" class="headerlink" title="2.默认值"></a>2.默认值</h2><blockquote>
-<p> 默认值 的处理方面， ClickHouse 中，默认值总是有的，如果没有显示式指定的话，会按字段类型处理： </p>
+<p> color属性用于定义文本的颜色 其取值方式有以下3种： </p>
 </blockquote>
 <ul>
-<li>数字类型， 0- 字符串，空字符串- 数组，空数组- 日期， 0000-00-00- 时间， 0000-00-00 00:00:00- 注：NULLs 是不支持的</li>
+<li>实际工作中，用16进制的写法是最多的，且我们更喜欢简写方式比如#f0代表红色。 <table><thead>|表示表示|属性值
+</thead><tbody>|预定义的颜色值|red，green，blue，pink
+|十六进制|#FF0000，#FF6600，#29D794
+|RGB代码|rgb(255,0,0)或rgb(100%,0%,0%)
+</tbody></table></li>
 </ul>
-<h3 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3.数据类型"></a>3.数据类型</h3><blockquote>
- <ul>- 整型：UInt8,UInt16,UInt32,UInt64,Int8,Int16,Int32,Int64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184612320.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x1eGlhbmd5MTMxNA==,size_16,color_FFFFFF,t_70">- 枚举类型：Enum8,Enum16 存储为Int8或Int16的一组枚举字符串值。例： Enum8（'hello'= 1，'world'= 2）， 这个数据类型有两个值  'hello'和'world'。 该数值必须在-128..127为Enum8和-32768..32767为Enum16。枚举的每个成员也必须有不同的数字。空字符串是一个有效的值。数字不需要是连续的，可以以任何顺序。是顺序无关的。 在内存中，数据的存储方式与数字类型Int8和Int16相同。以文本格式读取时，读取字符串并查找相应的数值。如果找不到，则会抛出异常。当以文本格式写入时，查找存储的数字并写出相应的字符串。 如果数字不对应已知的值，则会抛出异常。以二进制格式，信息以与Int8和Int16相同的方式保存。Enum的隐式默认值是具有最小数值的值 -  字符串(String、FixedString 和 UUID) 1)String         String 不限制长度，相当于Varchar、Text、Clob 和 Blob 等字符类型 2)FixedString(N)        FixedString(N)相当于Char，长度固定，数据长度不够时，添加空字节（null）；长度过长返回错误消息 3)UUID        32位，格式8-4-4-4-12，如果未被赋值，则用0填充 -  日期时间类型 1)Date: 2020-02-02 精确到天 2)DateTime: 2020-02-02 20:20:20 精确到秒 3)DateTime64: 2020-02-02 20:20:20.335 精确到亚秒，可以设置精度均支持字符串写入 -  数组类型 Array(T) T 类型的数组。T型可以是任何类型，包括数组。我们不推荐使用多维数组，因为它们不被很好的支持（例如，除了内存表之外，你不能在多维数组中存储多维数组） -  元组：Tuple 由多个元素组成，允许不同类型 创建数据：(T1, T2, …)，Tuple(T1, T2, …) <li> 嵌套（Nested(Name1 Type1, Name2 Type2, ...)） 嵌套数据结构类似于嵌套表。嵌套数据结构的参数（列名和类型）与 CREATE 查询类似。每个表可以包含任意多行嵌套数据结构。 只支持一级嵌套。嵌套结构的列中，若列的类型是数组类型，那么该列其实和多维数组是相同的，所以目前嵌套层级的支持很局限（MergeTree 引擎中不支持存储这样的列） 大多数情况下，处理嵌套数据结构时，会指定一个单独的列。为了这样实现，列的名称会与点号连接起来。这些列构成了一组匹配类型。在同一条嵌套数据中，所有的列都具有相同的长度。 不能对整个嵌套数据结构执行 SELECT。只能明确列出属于它一部分列。 <pre><code class="language-sql">CREATE TABLE test.visits
-(
-    CounterID UInt32,
-    StartDate Date,
-    Sign Int8,
-    IsNew UInt8,
-    VisitID UInt64,
-    UserID UInt64,
-    ...
-    Goals Nested
-    (
-        ID UInt32,
-        Serial UInt32,
-        EventTime DateTime,
-        Price Int64,
-        OrderID String,
-        CurrencyID UInt32
-    ),
-    ...
-) ENGINE = CollapsingMergeTree(StartDate, intHash32(UserID), (CounterID, StartDate, intHash32(UserID), VisitID), 8192, Sign)</code></pre>  作者：盗梦者_56f2 链接：https://www.jianshu.com/p/39e675ccbf3b 来源：简书 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 </li>-  浮点数 Float32 和 Float64<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127184649655.png"> float精度是：7~8位有效数字 double精度是：16~17位有效数字 -  定点数 Decimal32、Decimal64 和Decimal128 Decimal(P, S)：P代表精度，决定总位数（整数部分+小数部分），取值范围是1~38; S代表规模，决定小数位数，取值范围是0～P。<img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201127185044682.png#pic_center"> <li> 缺失值（Nullable(TypeName)） 允许用特殊标记NULL表示"缺失值"，可以与 `TypeName` 的正常值存放一起。例如，`Nullable(Int8)` 类型的列可以存储 `Int8` 类型值，而没有值的行将存储 `NULL`。 对于 `TypeName`，不能使用复合数据类型 Array和 Tuple。复合数据类型可以包含 `Nullable` 类型值，例如`Array(Nullable(Int8))`。`Nullable` 类型字段不能包含在表索引中。 除非在 ClickHouse 服务器配置中另有说明，否则 `NULL` 是任何 `Nullable` 类型的默认值。 使用 Nullable 几乎总是对性能产生负面影响。 <pre><code class="language-sql"> CREATE TABLE t_null(x Int8, y Nullable(Int8)) ENGINE TinyLog
-#
-INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
-</blockquote>
-<h3 id="4-物化列"><a href="#4-物化列" class="headerlink" title="4.物化列"></a>4.物化列</h3><blockquote>
-<p> 指定 MATERIALIZED 表达式，即将一个列作为<code>物化列</code>处理了，这意味着这个列的值不能从<code>insert</code> 语句获取，只能是自己计算出来的。同时，物化列也不会出现在 <code>select *</code> 的结果中：<br> <pre><code class="language-sql">drop table if exists test.m2;<br>create table test.m2 (<br> a MATERIALIZED (b+1)<br>,b UInt16<br>) ENGINE = Memory;<br>insert into test.m2 (b) values (1);<br>select * from test.m2;<br>select a, b from test.m2; --这个可以查出来</code></pre> 
-   </p>
-</blockquote>
-<h3 id="5-表达式列"><a href="#5-表达式列" class="headerlink" title="5.表达式列"></a>5.表达式列</h3><blockquote>
-<p> ALIAS 表达式列某方面跟物化列相同，就是它的值不能从 insert 语句获取。不同的是， 物化列 是会真正保存数据（这样查询时不需要再计算），<br> 而表达式列不会保存数据（这样查询时总是需要计算），只是在查询时返回表达式的结果。<br> <pre><code class="language-sql">create table test.m3 (a ALIAS (b+1), b UInt16) ENGINE = Memory;<br>insert into test.m3(b) values (1);<br>select * from test.m3;<br>select a, b from test.m3;</code></pre> 
-   </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickHouse基本介绍"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"
-    >clickHouse基本介绍</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickHouse%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.283Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickHouse基本介绍<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—## 1.简介</p>
+<p>2.text-align</p>
 <blockquote>
-<p>       ClickHouse是俄罗斯的Yandex于2016年开源的一个用于联机分析(OLAP:Online Analytical Processing)的列式数据库管理系统(DBMS:Database Management System)，简称CK , 主要用于在线分析处理查询（OLAP），能够使用SQL查询实时生成分析数据报告。<br>       ClickHouse是一个完全的列式数据库管理系统，允许在运行时创建表和数据库，加载数据和运行查询，而无需重新配置和重新启动服务器，支持线性扩展，简单方便，高可靠性，容错。它在大数据领域没有走 Hadoop 生态，而是采用 Local attached storage 作为存储，这样整个 IO 可能就没有 Hadoop 那一套的局限。它的系统在生产环境中可以应用到比较大的规模，因为它的线性扩展能力和可靠性保障能够原生支持 shard + replication 这种解决方案。它还提供了一些 SQL 直接接口，有比较丰富的原生 client。另外就是它比较快。 </p>
-</blockquote>
-<h2 id="2-ClickHouse的特点"><a href="#2-ClickHouse的特点" class="headerlink" title="2.ClickHouse的特点"></a>2.<strong><strong>ClickHouse的特点</strong></strong></h2><blockquote>
+<p> text-align属性用于设置文本内容的水平对齐方式，相当于html中的align对齐属性。 </p>
 </blockquote>
 <ul>
-<li>开源的列存储数据库管理系统，支持线性扩展，简单方便，高可靠性，- 容错跑分快：比Vertica快5倍，比Hive快279倍，比MySQL快800倍,其可处理的数据级别已达到10亿级别- 功能多：支持数据统计分析各种场景，支持类SQL查询，异地复制部署</li>
+<li>注意：是让盒子里面的文本内容水平居中， 而不是让盒子居中对齐<br>其可用属性值如下： <table><thead>|属性|解释
+</thead><tbody>|left|左对齐（默认值）
+|right|右对齐
+|center|居中对齐
+</tbody></table></li>
 </ul>
-<h2 id="3-clickHouse的性能"><a href="#3-clickHouse的性能" class="headerlink" title="3.clickHouse的性能"></a><strong><strong>3.clickHouse的性能</strong></strong></h2><blockquote>
+<p>3.text-decoration</p>
+<blockquote>
+<p> text-decoration,通常我们用于给链接修改装饰效果<br> <table><thead>|值|描述</p>
 </blockquote>
-<ul>
-<li>低延迟：对于数据量（几千行，列不是很多）不是很大的短查询，如果数据已经被载入缓存，且使用主码，延迟在50MS左右。- 并发量：虽然 ClickHouse 是一种在线分析型数据库，也可支持一定的并发。当单个查询比较短时，官方建议 100 Queries / second- 写入速度：在使用 MergeTree 引擎的情况下，写入速度大概是 50 - 200 M / s，如果按照 1 K 一条记录来算，大约每秒可写入 50000 ~ 200000 条记录每秒。如果每条记录比较小的话写入速度会更快</li>
-</ul>
-<h2 id="4-clickhouse的优缺点介绍"><a href="#4-clickhouse的优缺点介绍" class="headerlink" title="4.clickhouse的优缺点介绍"></a><strong><strong>4.</strong></strong>clickhouse的优缺点介绍</h2><blockquote>
-<p> 优点： </p>
-</blockquote>
-<ul>
-<li>快，超乎想象的快（单表），clickhouse目前测试和使用中来看，单表的查询性能无人能敌。- 压缩率高，目前clickhouse的数据压缩能够达到30%～40%之前，这对于一个 精打细算的公司来说是一件很划算的事情（省磁盘） 总结起来就是吃的是草，挤的是奶（手动滑稽）<br>缺点： </li>
-<li>就是对于并发支持不够友好。在高并发查询，大概同时的查询数量在上千级别的话，就很容易出问题，因 此，用来做面向用户的查询的存储肯定就不是一个正确的选择- 相对于查询来说，他的写入速度没有那么优秀，目前测试 来看，单台机器的写入速度只能达到大概30W/s～60W/s- 相比较他自己单表查询性能来说，join的性能就不是很优秀了，但是相 比较传统的hive和spark来说，性能还是很很不错的</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-ClickHouse函数整理（详细）"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/"
-    >ClickHouse函数整理（详细）</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/ClickHouse%E5%87%BD%E6%95%B0%E6%95%B4%E7%90%86%EF%BC%88%E8%AF%A6%E7%BB%86%EF%BC%89/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.276Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: ClickHouse函数整理（详细）<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—<strong>1、日期类函数</strong></p>
-<p>1.1 时间或日期截取函数（to）—— 返回非日期</p>
-<img alt="" height="712" src="https://img-blog.csdnimg.cn/20210428220216155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="1-2-时间或日期截取函数（toStartOf）——-返回日期"><a href="#1-2-时间或日期截取函数（toStartOf）——-返回日期" class="headerlink" title="1.2 时间或日期截取函数（toStartOf）—— 返回日期"></a>1.2 时间或日期截取函数（toStartOf）—— 返回日期</h3><img alt="" height="819" src="https://img-blog.csdnimg.cn/2021042822051175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="1-3-日期或时间日期生成函数"><a href="#1-3-日期或时间日期生成函数" class="headerlink" title="1.3 日期或时间日期生成函数"></a>1.3 日期或时间日期生成函数</h3><img alt="" height="215" src="https://img-blog.csdnimg.cn/20210428220633454.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h2 id="2、类型转化类函数"><a href="#2、类型转化类函数" class="headerlink" title="2、类型转化类函数"></a><strong>2、类型转化类函数</strong></h2><p>2.1 精度保留（非四舍五入）</p>
-<img alt="" height="303" src="https://img-blog.csdnimg.cn/20210428220711501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="2-2-字符串转化为整数（非整数的字符串返回0）"><a href="#2-2-字符串转化为整数（非整数的字符串返回0）" class="headerlink" title="2.2 字符串转化为整数（非整数的字符串返回0）"></a>2.2 字符串转化为整数（非整数的字符串返回0）</h3><img alt="" height="424" src="https://img-blog.csdnimg.cn/20210428221013726.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="2-3-日期与时间日期转化"><a href="#2-3-日期与时间日期转化" class="headerlink" title="2.3 日期与时间日期转化"></a>2.3 日期与时间日期转化</h3><img alt="" height="168" src="https://img-blog.csdnimg.cn/20210428221149986.png" width="1200">
-
-<h3 id="2-4-转化为字符型"><a href="#2-4-转化为字符型" class="headerlink" title="2.4 转化为字符型"></a>2.4 转化为字符型</h3><img alt="" height="110" src="https://img-blog.csdnimg.cn/2021042822121547.png" width="1200">
-
-<h3 id="2-5-查看数据类型"><a href="#2-5-查看数据类型" class="headerlink" title="2.5 查看数据类型"></a>2.5 查看数据类型</h3><img alt="" height="122" src="https://img-blog.csdnimg.cn/2021042822123799.png" width="1200">
-
-<h2 id="3、字符串操作"><a href="#3、字符串操作" class="headerlink" title="3、字符串操作"></a><strong>3、字符串操作</strong></h2><h3 id="3-1-基本字符串操作"><a href="#3-1-基本字符串操作" class="headerlink" title="3.1 基本字符串操作"></a>3.1 基本字符串操作</h3><img alt="" height="512" src="https://img-blog.csdnimg.cn/20210428221303145.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="3-2-字符串查找"><a href="#3-2-字符串查找" class="headerlink" title="3.2 字符串查找"></a>3.2 字符串查找</h3><img alt="" height="323" src="https://img-blog.csdnimg.cn/20210428221405249.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="3-3-字符串替换"><a href="#3-3-字符串替换" class="headerlink" title="3.3 字符串替换"></a>3.3 字符串替换</h3><img alt="" height="390" src="https://img-blog.csdnimg.cn/20210428221552835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="3-4-字符串分割"><a href="#3-4-字符串分割" class="headerlink" title="3.4 字符串分割"></a>3.4 字符串分割</h3><img alt="" height="223" src="https://img-blog.csdnimg.cn/20210428221802201.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="3-5-字符串拼接"><a href="#3-5-字符串拼接" class="headerlink" title="3.5 字符串拼接"></a>3.5 字符串拼接</h3><img alt="" height="117" src="https://img-blog.csdnimg.cn/20210428221914613.png" width="1200">
-
-<h2 id="4、条件语句"><a href="#4、条件语句" class="headerlink" title="4、条件语句"></a><strong>4、条件语句</strong></h2><img alt="" height="168" src="https://img-blog.csdnimg.cn/2021042822200846.png" width="1200">
-
-<h2 id="5、数学函数"><a href="#5、数学函数" class="headerlink" title="5、数学函数"></a><strong>5、数学函数</strong></h2><img alt="" height="642" src="https://img-blog.csdnimg.cn/20210428222026911.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h2 id="6、舍入函数"><a href="#6、舍入函数" class="headerlink" title="6、舍入函数"></a><strong>6、舍入函数</strong></h2><img alt="" height="222" src="https://img-blog.csdnimg.cn/20210428222128986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
-
-<h3 id="7、URL操作函数"><a href="#7、URL操作函数" class="headerlink" title="7、URL操作函数"></a><strong>7、URL操作函数</strong></h3><blockquote>
- <table align="left" cellspacing="0" style="width:448pt;"><tbody><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**函数**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**用途**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**举例**</td><td style="border-color:#dddddd;text-align:center;vertical-align:middle;width:112pt;">**结果**</td>
-</blockquote>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">protocol()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的协议类型</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">protocol(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 http</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 www.baidu.com.cn</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domainWithoutWWW()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL不带www的域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">domainWithoutWWW(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu.com.cn</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">topLevelDomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回顶级域名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">topLevelDomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 cn</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">firstSignificantSubdomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">Returns the “first significant subdomain”.</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">firstSignificantSubdomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutToFirstSignificantSubdomain()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">Returns the part of the domain that includes top-level subdomains up to the “first significant subdomain” (see the explanation above).</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutToFirstSignificantSubdomain(‘http://www.baidu.com.cn’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 baidu.com.cn</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">path()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的路径</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">path(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 /s</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">pathFull()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的完整路径</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">pathFull(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 /s?wd=SQL%E4%B8%AD%E7%9A%84split</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">queryString()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL的参数（查询字符串）</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">queryString(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 wd=SQL%E4%B8%AD%E7%9A%84split</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameters()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">以列表的形式返回URL的参数</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameters(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 [‘wd=SQL%E4%B8%AD%E7%9A%84split’,‘ur=qwguq’]</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameterNames()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">以列表的形式返回URL的参数名</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">extractURLParameterNames(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 [‘wd’,‘ur’]</td>
-<td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutQueryString()</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回URL？（参数）前面的内容</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">cutQueryString(‘https://www.baidu.com/s?wd=SQL%E4%B8%AD%E7%9A%84split&amp;ur=qwguq’)</td><td style="border-color:#dddddd;vertical-align:middle;width:112pt;">返回 https://www.baidu.com/s</td>
+</thead><tbody>|none|默认。定义标准的文本。取消下划线（最常用）
+|underline|定义文本下的一条线。下划线 也是我们链接自带的（常用）
+|overline|定义文本上的一条线。（不用）
+|line-through|定义穿过文本下的一条线。（不常用）
 </tbody></table>
 
 
-<h3 id="8、IP操作函数"><a href="#8、IP操作函数" class="headerlink" title="8、IP操作函数"></a><strong>8、IP操作函数</strong></h3><img alt="" height="304" src="https://img-blog.csdnimg.cn/20210428222623141.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+<p>4.text-indent</p>
+<blockquote>
+<p> text-indent属性用于设置首行文本的缩进 </p>
+</blockquote>
+<ul>
+<li>其属性值可为不同单位的数值、em字符宽度的倍数、或相对于浏览器窗口宽度的百分比%，允许使用负值。 -  建议使用em作为设置单位。 -  1em 就是一个字的宽度。如果是汉字的段落，1em 就是一个汉字的宽度 <pre><code class="language-css">p &#123;
+      /*行间距*/
+      line-height: 25px;
+      /*首行缩进2个字  em  1个em 就是1个字的大小*/
+      text-indent: 2em;  
+ &#125;</code></pre> </li>
+</ul>
+<p>5.line-height</p>
+<blockquote>
+<p> line-height属性用于设置行间距，就是行与行之间的距离，即字符的垂直间距，一般称为行高。 </p>
+</blockquote>
+<ul>
+<li>line-height常用的属性值单位有三种，分别为像素px，相对值em和百分比%，实际工作中使用最多的是像素px <pre><code>一般情况下，行距比字号大7--8像素左右就可以了。
+line-height: 24px;
+</code></pre> 
+行高测量<br>行高测量方法：<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/8031634f470e114b1bae4f21548e4354.png"><br><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/3a214e8842ac7786729909abd1b5d5d2.png"><code>行高测量方法</code>行高我们利用最多的一个地方是：可以让单行文本在盒子中垂直居中对齐。 <blockquote> </li>
+</ul>
+<p>  <strong>文字的行高等于盒子的高度。</strong>行高   =  上距离 +  内容高度  + 下距离 上距离和下距离总是相等的，因此文字看上去是垂直居中的。 </p>
+<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/4cd41b5c8794db770924ea51b88bb32f.png">
 
-<h2 id="9、表操作"><a href="#9、表操作" class="headerlink" title="9、表操作"></a><strong>9、表操作</strong></h2><h3 id="9-1-表连接操作"><a href="#9-1-表连接操作" class="headerlink" title="9.1 表连接操作"></a>9.1 表连接操作</h3><img alt="" height="251" src="https://img-blog.csdnimg.cn/20210428222707498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+<p>行高与高度的三种关系</p>
+<ul>
+<li> 如果 行高 等 高度  文字会 垂直居中 -  如果行高 大于 高度   文字会 偏下 -  如果行高小于高度   文字会  偏上 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  /*line-height 要设置在font属性下面，否则无效，例如：*/</span><br><span class="line">  height: 80px;</span><br><span class="line">  text-align: center;</span><br><span class="line">  font: normal bold 30px &quot;宋体&quot;;</span><br><span class="line">  line-height: 80px;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>可以使用display:flex;布局方式让文字水平垂直居中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  display: flex;</span><br><span class="line">  align-items: center;     /* 侧轴对齐方式*/</span><br><span class="line">  justify-content: center; /* 主轴对齐方式 */</span><br></pre></td></tr></table></figure>
 
-<h3 id="9-2-LIMIT操作"><a href="#9-2-LIMIT操作" class="headerlink" title="9.2 LIMIT操作"></a>9.2 LIMIT操作</h3><img alt="" height="233" src="https://img-blog.csdnimg.cn/20210428222743597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
+<p>6.CSS外观属性总结</p>
+<blockquote>
+ <table><thead>|属性|表示|注意点
+</blockquote>
+</thead><tbody>|color|颜色|我们通常用  十六进制   比如 而且是简写形式 #fff
+|line-height|行高|控制行与行之间的距离
+|text-align|水平对齐|可以设定文字水平的对齐方式
+|text-indent|首行缩进|通常我们用于段落首行缩进2个字的距离   text-indent: 2em;
+|text-decoration|文本修饰|记住 添加 下划线  underline  取消下划线  none
+</tbody></table>
+
  
       <!-- reward -->
       
@@ -662,7 +522,7 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
 
     
     <article
-  id="post-clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例"
+  id="post-CSS三大特性：继承性,层叠性,优先级"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -673,8 +533,8 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/"
-    >clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/"
+    >CSS三大特性：继承性,层叠性,优先级</a> 
 </h2>
  
 
@@ -682,104 +542,79 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81,%E5%88%86%E5%B8%83%E5%BC%8F%E8%A1%A8%E4%B8%8E%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE,%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E4%B8%8E%E5%A4%8D%E5%88%B6%E8%A1%A8,ZooKeeper%E6%95%B4%E5%90%88,%E5%88%9B%E5%BB%BA%E5%A4%8D%E5%88%B6%E8%A1%A8,%E5%89%AF%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6,%E6%95%B0%E6%8D%AE%E5%8E%9F%E5%AD%90%E5%86%99%E5%85%A5%E4%B8%8E%E5%8E%BB%E9%87%8D,%E8%B4%9F%E8%BD%BD%E5%B9%B3%E8%A1%A1%E7%AD%96%E7%95%A5,%E6%A1%88%E4%BE%8B/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.268Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7%EF%BC%9A%E7%BB%A7%E6%89%BF%E6%80%A7,%E5%B1%82%E5%8F%A0%E6%80%A7,%E4%BC%98%E5%85%88%E7%BA%A7/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.203Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse副本同步与高可用功能验证,分布式表与集群配置,数据副本与复制表,ZooKeeper整合,创建复制表,副本同步机制,数据原子写入与去重,负载平衡策略,案例<br>categories:</p>
+  <p>title: CSS三大特性：继承性,层叠性,优先级<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—### 1.分布式表与集群配置</p>
+<p>—1.CSS 层叠性</p>
 <blockquote>
+ <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/b344df10be0a874a08eb3facfe676d9f.png"> 
+ -`概念`： 
 </blockquote>
 <ul>
-<li>分布式表基于Distributed引擎创建，在多个分片上运行分布式查询。- 读取是自动并行化的，可使用远程服务器上的索引（如果有）。- 数据在请求的本地服务器上尽可能地被部分处理。例如，对于GROUP BY查询，数据将在远程服务器 上聚合，聚合函数的中间状态将发送到请求服务器，然后数据将进一步聚合。<br>创建分布式表： <pre><code class="language-sql">ENGINE = Distributed(cluster_name, db_name, table_name[, sharding_key[, policy_name]])
+<li> 所谓层叠性是指多种CSS样式的叠加 -  是浏览器处理冲突的一个能力,如果一个属性通过两个相同选择器设置到同一个元素上，那么这个时候一个属性就会将另一个属性层叠掉 </li>
+<li><code>原则</code>： </li>
+<li> 样式冲突，遵循的原则是就近原则。 那个样式离着结构近，就执行那个样式。 -  样式不冲突，不会层叠。 </li>
+</ul>
+<p>2.CSS 继承性</p>
+<blockquote>
+ <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/9d2cc036b8878879f807166ec03fb36f.png"> 
+ -`概念`： 
+</blockquote>
+<ul>
+<li> 子标签会继承父标签的某些样式，如文本颜色和字号。 -  想要设置一个可继承的属性，只需将它应用于父元素即可。 </li>
+<li><code>注意</code>： </li>
+<li>恰当地使用继承可以简化代码，降低CSS样式的复杂性。比如有很多子级孩子都需要某个样式，可以给父级指定一个，这些孩子继承过来就好了。 -  子元素可以继承父元素的样式（<strong>text-，font-，line-这些元素开头的可以继承，以及color属性</strong>）<br>行高的继承： <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+ &lt;meta charset="UTF-8"&gt;
+ &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+ &lt;title&gt;CSS行高的继承&lt;/title&gt;
+&lt;style&gt;
+body&#123;
+color:cyan;
+font:12px/1.5 bold;
+&#125;</li>
+</ul>
+<p>div&#123;<br>  font-size:40px;//有指定文字大小，则为40x1.5px;<br>&#125;</p>
+<p>  &lt;/style&gt;<br>&lt;/head&gt;</p>
+<p>&lt;body&gt;<br>  &lt;div&gt;zzf1&lt;/div&gt;<br>  &lt;p&gt;我没有指定文字大小&lt;/p&gt;//没有指定文字大小，则为12px;<br>&lt;/body&gt;<br>&lt;/html&gt;</p>
+<p></code></pre><br>  <img alt="在这里插入图片描述" height="337" src="https://img-blog.csdnimg.cn/20200815161259653.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzQ2NzQ0NjM1,size_16,color_FFFFFF,t_70#pic_center" width="885"> 
+   </p>
+<p>3.优先级</p>
+<blockquote>
+<p>        <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/58c1cbcf6ab954ad9b8d66e766f1c7d1.png"><br> -<code>概念</code>：定义CSS样式时，经常出现两个或更多规则应用在同一元素上，此时， </p>
+</blockquote>
+<ul>
+<li> 选择器相同，则执行层叠性 -  选择器不同，就会出现优先级的问题。 </li>
+<li><code>权重计算公式</code>： <table><thead>|标签选择器|计算权重公式
+</thead><tbody>|继承或者 *|0,0,0,0
+|每个元素（标签选择器）|0,0,0,1
+|每个类，伪类|0,0,1,0
+|每个ID|0,1,0,0
+|每个行内样式 style=""|1,0,0,0
+|每个!important  最重要的|∞ 无穷大
+</tbody></table></li>
+<li> 值从左到右，左面的最大，一级大于一级，数位之间没有进制，级别之间不可超越。 -  关于CSS权重，我们需要一套计算公式来去计算，这个就是 CSS Specificity（特殊性） -  div { color: pink !important; } </li>
+<li><code>权重叠加</code>： <pre><code class="language-css"> div ul  li   ------&gt;      0,0,0,3
+ .nav ul li   ------&gt;      0,0,1,2
+ a:hover      -----—&gt;      0,0,1,1
+ .nav a       ------&gt;      0,0,1,1
 </code></pre> </li>
+<li><code>继承的权重是0</code>： </li>
+<li> 我们修改样式，一定要看该标签有没有被选中 -  如果选中了，那么以上面的公式来计权重。谁大听谁的。 -  如果没有选中，那么权重是0，因为继承的权重为0. </li>
 </ul>
-<p> <strong>参数：</strong> </p>
-<ul>
-<li><strong>cluster_name:集群名称。</strong>- <strong>db_name:数据库名称，可使用常量表达式：currentDatabase()。</strong>- <strong>table_name: 各分片上的表名称。</strong>- <strong>sharding_key: (可选)分片的key，可设置为rand()。</strong>- <strong>policy_name: (可选）策略名称，用于存储异步发送的临时文件。</strong><br>例如下面的/etc/metrika.xml的一部分内容： <pre><code class="language-XML">&lt;remote_servers&gt;
- &lt;logs&gt;
-     &lt;shard&gt;
-         &lt;weight&gt;1&lt;/weight&gt;
-         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
-         &lt;replica&gt;
-             &lt;host&gt;example01-01-1&lt;/host&gt;
-             &lt;port&gt;9000&lt;/port&gt;
-         &lt;/replica&gt;
-         &lt;replica&gt;
-             &lt;host&gt;example01-01-2&lt;/host&gt;
-             &lt;port&gt;9000&lt;/port&gt;
-         &lt;/replica&gt;
-     &lt;/shard&gt;
-     &lt;shard&gt;
-         &lt;weight&gt;2&lt;/weight&gt;
-         &lt;internal_replication&gt;false&lt;/internal_replication&gt;
-         &lt;replica&gt;
-             &lt;host&gt;example01-02-1&lt;/host&gt;
-             &lt;port&gt;9000&lt;/port&gt;
-         &lt;/replica&gt;
-         &lt;replica&gt;
-             &lt;host&gt;example01-02-2&lt;/host&gt;
-             &lt;secure&gt;1&lt;/secure&gt;
-             &lt;port&gt;9000&lt;/port&gt;
-         &lt;/replica&gt;
-     &lt;/shard&gt;
- &lt;/logs&gt;
-&lt;/remote_servers&gt;
-</code></pre> 
-这里定义了一个名为logs的集群名称，它有两个分片（shard）组成，每个分片包含两个副本（replica）。<br>分片是包含数据的不同服务器（要读取所有数据，必须访问所有分片）。<br>副本是存储复制数据的服务器（要读取所有数据，访问该分片上的任意一个副本上的数据即可）。 </li>
-</ul>
-<p> 1.weight : 可选，写入数据时分片的权重，建议忽略该配置。 2.internal_repliacation : 可选，同一时刻是否只将数据写入其中一个副本。默认值：false（将数据写入所有副本），建议设置为true。写一个即可。避免重复写。 3.副本配置：配置每个Server的信息，必须参数:host和port，可选参数：user、password、secure和compression。 （1）、host ： 远程服务器地址。支持IPv4和IPv6。也可指定域名，更改域名解析需 重启服务。 （2）、port ： 消息传递的TCP端口。配置文件的tcp_port指定的端口，通常设置为 9000。 （3）、user ： 用于连接到服务的用户名称。默认值：true。在users.xml文件中配置 了访问权限。 （4）、password：用于连接到远程服务的密码。默认值：空字符串。 （5）、secure ： 使用ssl进行连接，通常还应该定义port=9440。 （6）、compression ： 使用数据压缩。默认值：true。 </p>
-<h3 id="2-数据副本与复制表"><a href="#2-数据副本与复制表" class="headerlink" title="2.数据副本与复制表"></a>2.数据副本与复制表</h3><blockquote>
-</blockquote>
-<ul>
-<li>只有MergeTree系列引擎支持数据副本，支持副本的引擎是在MergeTree引擎名称的前面加上前缀 Replicated。- 副本是表级别的而不是整个服务器级别的，因此服务器可以同时存储复制表和非复制表。- 副本不依赖于分片，每个分片都有自己独立的副本。</li>
-</ul>
-<p> <strong>副本表如：</strong> </p>
-<ul>
-<li><strong>ReplicatedMergeTree</strong>- <strong>ReplicatedSummingMergeTree</strong>- <strong>ReplicatedReplacingMergeTree</strong>- <strong>ReplicatedAggregatingMergeTree</strong>- <strong>ReplicatedCollapsingMergeTree</strong>- <strong>ReplicatedVersionedCollapsingMergeTree</strong>- <strong>ReplicatedGraphiteMergeTree</strong></li>
-</ul>
-<h3 id="3-ZooKeeper整合"><a href="#3-ZooKeeper整合" class="headerlink" title="3.ZooKeeper整合"></a>3.ZooKeeper整合</h3><blockquote>
-<p> ClickHouse使用Apache ZooKeeper来存储副本元信息, 在配置文件设置 zookeeper相关的参数。 ClickHouse在创建复制表的时候指定Zookeeper的目录，指定的目录会在建 表时自动创建。 如果ClickHouse的配置文件未配置ZooKeeper， 则无法创建复制表， 并且 任何存量的复制表都将是只读的。 对本地复制表的查询，不会使用ZooKeeper， 其查询速度和非复制表一样快。<br> 本地复制表的数据插入，针对每个数据块（一个块最多有 max_insert_block_size = 1048576条记录），会通过几个事务将大约十个条目添加到Zookeeper。因此，与非复制表相比， 复制表的INSERT操作等 待时间稍长。<br> <pre><code class="language-XML">&lt;zookeeper&gt;<br>    &lt;node index="1"&gt;<br>        &lt;host&gt;example1&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="2"&gt;<br>        &lt;host&gt;example2&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>    &lt;node index="3"&gt;<br>        &lt;host&gt;example3&lt;/host&gt;<br>        &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>&lt;/zookeeper&gt;<br></code></pre> 
-   </p>
-</blockquote>
-<h3 id="4-创建复制表"><a href="#4-创建复制表" class="headerlink" title="4.创建复制表"></a>4.创建复制表</h3><blockquote>
-<p> 复制表的引擎要以Replicated为前缀，例如：ReplicatedMergeTree。<br> <pre><code class="language-sql">CREATE TABLE table_name<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_name', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> 引擎参数包含了变量，这些变量是在配置文件的”macros”部分配置的，例如：<br> <pre><code class="language-XML">&lt;macros&gt;<br>    &lt;layer&gt;05&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;clickhouse1&lt;/replica&gt;<br>&lt;/macros&gt;<br></code></pre><br> <strong>Replicated*MergeTree引擎参数：</strong> zoo_path : ZooKeeper中表的路径。 replica_name : ZooKeeper中的副本名称。<br> 1.第一个参数ZooKeeper路径组成： （1）、通用前缀：/clickhouse/tables/,建议复制表都使用类似这样的前缀。 （2）、分片标识符：{layer}-{shard},在本示例中，分片标识符有两部分组成，只要保证分片标识符能唯一标识一个分片即可。 （3）、ZooKeeper节点名称：table_name。节点名称最好与表名相同，节点名称在定义后不会更改，即使执行表的重命名操作。<strong>2.第二个参数是副本名称，用于标识同一个分片的不同副本。副本名称只需要在每个shard中唯一即可。</strong><br> 上面的示例中，复制引擎的参数使用了变量替换。ClickHouse也支持使用显示的参数。在这种情况下，不能使用分布式的DDL查询（ON CLUSTER）。建议使用变量替换的方式传入参数，<br> 降低出错概率。<br> 在每个副本服务器上运行CREATE TABLE语句，如果该分片的表在其他节点已经创建且有数据，则该新副本自动同步其他副本的数据。 </p>
-</blockquote>
-<h3 id="5-副本同步机制"><a href="#5-副本同步机制" class="headerlink" title="5.副本同步机制"></a>5.副本同步机制</h3><blockquote>
-</blockquote>
-<ul>
-<li>复制是多主异步的。- INSERT语句（以及ALTER）可在任意可用的服务器上执行。数据首先插入到本地的服务器 （即运行查询的服务器），然后数据被复制到其他服务器。- 由于复制是异步的，所以最近插入的数据出现在其他副本上会有一定的延迟。- 如果部分副本不可用，则在它们可用时写入数据。- 如果副本可用， 则等待的时间是通过网络传输压缩数据块所耗费的时间。- 默认情况下， INSERT操作只需等待一个副本写入成功后返回。如果仅将数据成功写入一个 副本，并且该副本的服务器不再存在， 则存储的数据将丢失。要启动来自多个副本的写入确 认机制，使用insert_quorum选项。</li>
-</ul>
-<h3 id="6-数据原子写入与去重"><a href="#6-数据原子写入与去重" class="headerlink" title="6.数据原子写入与去重"></a>6.数据原子写入与去重</h3><blockquote>
-</blockquote>
-<ul>
-<li>INSERT查询按照数据块插入数据，每个数据块最多max_insert_block_size(默认 max_insert_block_size = 1048576)条记录。换言之， 如果INSERT插入少于1048576条记 录，则插入操作是原子的。单个数据块的写入是原子的。- 数据块是去重的。 对于同一数据块的多次写入（相同大小的的数据块，包含相同的行以及相 同的顺序），该块仅写入一次。在出现网口故障等异常情况下， 客户端应用程序不知道数据 是否已将数据成功写入数据库，因此可以简单地重复执行INSERT查询。相同的数据发送到哪 个副本进行插入并不重要，INSERT是幂等的。数据去重可通过参数 insert_deduplicate控 制，默认为0(开启去重)。- 在复制过程中， 只有插入的源数据通过网络传输。进一步的数据转换（合并）会在所有副本 上以相同的方式进行处理。 这样可以最大限度减少网络带宽占用，这意味着当副本位于不同 的数据中心时，复制的效果也很好。- ClickHouse内部监控副本的数据同步，并能够在发生故障后恢复。故障转义是自动的（对于数据的微小差异）或半自动的（当数据的差异太大时，这可能表示配置错误）。- ClickHouse内部监控副本上的数据同步，并能够在发生故障后恢复。故障转移是自动的（对于数据的微小差异）或半自动的（当数据差异太大时，这可能表示配置错误）。</li>
-</ul>
-<h3 id="7-负载平衡策略"><a href="#7-负载平衡策略" class="headerlink" title="7.负载平衡策略"></a>7.负载平衡策略</h3><blockquote>
-<p> 执行分布式查询时，首先计算分片的每个副本的错误数，然后将查询发送至最少错误的副本。如果没有错误或者错误数相同，则按如下的策略查询数据： 1.random(默认) ： 将查询发送至任意一个副本。 2.nearest_hostname : 将查询发送至主机名最相似的副本。 3.in_order : 将查询按配置文件中的配置顺序发送至副本。 4.first_or_random : 选择第一个副本，如果第一个副本不可用，随机选择一个可用的副本。<br> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/202012162320232.png#pic_center"><br> <strong>设置策略的方式：</strong><br> <pre><code class="language-sql">set load_balancing = 'first_or_random';<br></code></pre> 
-   </p>
-</blockquote>
-<h3 id="8-案例"><a href="#8-案例" class="headerlink" title="8.案例"></a>8.案例</h3><blockquote>
-<p> <strong>1.在所有节点执行如下语句：</strong><br> **     **创建本地复制表：<br> <pre><code class="language-sql">CREATE TABLE table_local on cluster mycluster<br>(<br>    EventDate DateTime,<br>    CounterID UInt32,<br>    UserID UInt32<br>) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID);<br></code></pre><br> <strong>执行效果图： 在docker01-node节点执行的效果图如下：</strong><br> <img alt="" height="669" src="https://img-blog.csdnimg.cn/20210424154112568.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1074"> <br> <strong>在docker02-node上执行后的效果如下（提示已经存在了）：</strong><br> <pre><code class="language-sql">docker02-node :) CREATE TABLE table_local on cluster mycluster<br>:-] (<br>:-]     EventDate DateTime,<br>:-]     CounterID UInt32,<br>:-]     UserID UInt32<br>:-] ) ENGINE = ReplicatedMergeTree('/clickhouse/tables/&#123;layer&#125;-&#123;shard&#125;/table_local', '&#123;replica&#125;')<br>:-] PARTITION BY toYYYYMM(EventDate)<br>:-] ORDER BY (CounterID, EventDate, intHash32(UserID))<br>:-] SAMPLE BY intHash32(UserID);</p>
-</blockquote>
-<p>CREATE TABLE table_local ON CLUSTER mycluster<br>(<br>    <code>EventDate</code> DateTime,<br>    <code>CounterID</code> UInt32,<br>    <code>UserID</code> UInt32<br>)<br>ENGINE = ReplicatedMergeTree(‘/clickhouse/tables/{layer}-{shard}/table_local’, ‘{replica}’)<br>PARTITION BY toYYYYMM(EventDate)<br>ORDER BY (CounterID, EventDate, intHash32(UserID))<br>SAMPLE BY intHash32(UserID)</p>
-<p>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.13 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   3 │                1 │<br>│ 192.168.56.11 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   2 │                1 │<br>│ 192.168.56.10 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   1 │                1 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>┌─host──────────┬─port─┬─status─┬─error─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┬─num_hosts_remaining─┬─num_hosts_active─┐<br>│ 192.168.56.12 │ 9000 │     57 │ Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)) │                   0 │                0 │<br>└───────────────┴──────┴────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────┴──────────────────┘<br>↓ Progress: 0.00 rows, 0.00 B (0.00 rows/s., 0.00 B/s.)                                                                                                                                0%Received exception from server (version 20.1.4):<br>Code: 57. DB::Exception: Received from 192.168.56.11:9000. DB::Exception: There was an error on [192.168.56.13:9000]: Code: 57, e.displayText() = DB::Exception: Table default.table_local already exists. (version 20.1.4.14 (official build)).</p>
-<p>4 rows in set. Elapsed: 0.617 sec.</p>
-<p>docker02-node :)</code></pre><br> 通过上面的案例可以知道，只要在一个节点上创建了副本表之后，在其它节点上也已经存在了。<br> <strong>创建分布式表(每个节点都要创建)：</strong><br> <pre><code class="language-sql">CREATE TABLE table_distributed as table_local ENGINE = Distributed(mycluster, default, table_local, rand());<br></code></pre><br> <strong>2.验证副本的复制****在clickhouse1上，对本地表操作。</strong><br> <img alt="" height="505" src="https://img-blog.csdnimg.cn/20210424154842225.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="903"><br> <strong>在docker02-node上（docker02-node的分片副本节点）上，验证数据是否同步：</strong><br> <img alt="" height="335" src="https://img-blog.csdnimg.cn/20210424154940833.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="961"><br> <strong>在docker03-node和docker04-node上执行（即shard2上）。发现查询不到结果，效果如下：</strong><br> <img alt="" height="218" src="https://img-blog.csdnimg.cn/20210424155132498.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="558"><br> <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210424155146647.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="557"><br> 3.<strong>验证集群的功能</strong><br> 在任意节点查看分布式表的数据（都将出现下面的效果）。<br> <img alt="" height="277" src="https://img-blog.csdnimg.cn/20210424155259421.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="738"><br> 在任意一个节点往分布式表里面插入5条数据：<br> <pre><code class="language-sql">insert into table_distributed values('2020-03-11 12:12:31', 21, 1);    docker04-node上执行<br>insert into table_distributed values('2020-03-12 12:12:32', 22, 2);    docker04-node上执行<br>insert into table_distributed values('2020-03-13 12:12:33', 23, 3);    docker03-node上执行<br>insert into table_distributed values('2020-03-14 12:12:34', 24, 4);    docker03-node上执行<br>insert into table_distributed values('2020-03-15 12:12:35', 25, 5);    docker02-node上执行<br></code></pre><br> 然后在任意一台机器上执行：<br> <pre><code class="language-sql">select * from table_distributed;<br></code></pre><br> 都可以看到：<br> <pre><code class="language-sql">docker02-node :) select * from table_distributed;</p>
-<p>SELECT *<br>FROM table_distributed</p>
-<p>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:33 │        22 │     37 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-12 12:12:32 │        22 │      2 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-11 12:12:31 │        21 │      1 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-14 12:12:34 │        24 │      4 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-13 12:12:33 │        23 │      3 │<br>└─────────────────────┴───────────┴────────┘<br>┌───────────EventDate─┬─CounterID─┬─UserID─┐<br>│ 2020-03-15 12:12:35 │        25 │      5 │<br>└─────────────────────┴───────────┴────────┘</p>
-<p>6 rows in set. Elapsed: 0.007 sec.</p>
-<p>docker02-node :)</code></pre><br> 然后，分别在两个分片的主机上查询本地表：<strong>在docker01-node上（shard1）发现的效果是：</strong><br> <img alt="" height="445" src="https://img-blog.csdnimg.cn/2021042416000130.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="555"><br> <strong>在docker03-node上（shard2）发现的效果是：</strong><br> <img alt="" height="340" src="https://img-blog.csdnimg.cn/20210424160051386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="564"><br> 可以看到，使用分布式表插入数据，数据分散到不同分片（shard）的本地表。 </p>
  
       <!-- reward -->
       
@@ -800,7 +635,7 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
 
     
     <article
-  id="post-clickhouse分布式集群部署"
+  id="post-css简介以及引入规范"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -811,8 +646,8 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/"
-    >clickhouse分布式集群部署</a> 
+  <a class="article-title" href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/"
+    >css简介以及引入规范</a> 
 </h2>
  
 
@@ -820,54 +655,171 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse%E5%88%86%E5%B8%83%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.261Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/css%E7%AE%80%E4%BB%8B%E4%BB%A5%E5%8F%8A%E5%BC%95%E5%85%A5%E8%A7%84%E8%8C%83/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.201Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse分布式集群部署<br>categories:</p>
+  <p>title: css简介以及引入规范<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—### 1.节点规划</p>
+<p>—## CSS构造块</p>
+<p><strong>「1. HTML的局限性」</strong></p>
+<ul>
+<li> HTML满足不了设计者的需求，可以将网页结构与样式相分离，这样就可以在不更改网页结构的前提下，更换网站的样式。 -  操作html属性不方便 -  HTML里面添加样式带来的是无尽的臃肿和繁琐 </li>
+</ul>
+<p><strong>「2. CSS网页的美容师」</strong></p>
+<ul>
+<li> 让我们的网页更加丰富多彩，布局更加灵活自如。 -  CSS最大的贡献：让HTML从样式中脱离，实现了HTML专注去做结构呈现，样式交给CSS </li>
+</ul>
+<p><strong>「3. CSS」</strong>CSS(Cascading Style Sheets)通常称为CSS样式表或层叠样式表(级联样式表)。</p>
+<li> **作用** 
+  <ul>-  主要用于设置HTML页面中的文本内容(字体、大小、对齐方式等)\图片的外形(宽高、边框样式、边距等)以及版面的布局和外观显示样式。 -  CSS以HTML为基础，提供了丰富的功能，如字体、样式、背景的控制及整体排版等，而且可以针对不同的浏览器设置不同的样式。 
+**「4. CSS注释」**
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/* 这是注释 */</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="引入CSS样式表"><a href="#引入CSS样式表" class="headerlink" title="引入CSS样式表"></a>引入CSS样式表</h3><p><strong>「1.行内式(内联样式)」</strong></p>
+<p>通过标签的style属性来设置元素的样式</p>
+<ul>
+<li> style其实就是标签的属性 -  样式属性和值中间是: -  多组属性值直接用;隔开 -  只能控制当前的标签和以及嵌套在其中的字标签，造成代码冗余。 -  **缺点:**没有实现样式和结构相分离。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;标签名 style=&quot;属性1:属性值1; 属性2:属性值2; 属性3:属性值3;&quot;&amp;gt; 内容 &amp;lt;/标签名&amp;gt;</span><br><span class="line">例如：</span><br><span class="line">&amp;lt;div style=&quot;color: red; font-size: 12px;&quot;&amp;gt;青春不常在，抓紧谈恋爱&amp;lt;/div&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「2.内部样式表(内嵌样式表)」</strong></p>
+<p>也称为内嵌式，将CSS代码集中写在HTML文档的head头部标签中，并且用style标签定义。</p>
+<ul>
+<li> style标签一般位于head标签中，当然理论上他可以放在HTML文档的任何地方。 -  type=”text/css”  在html5中可以省略。 -  只能控制当前的页面 -  **缺点:**没有彻底分离结构与样式 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;head&amp;gt;</span><br><span class="line">&amp;lt;style type=&quot;text/CSS&quot;&amp;gt;</span><br><span class="line">    选择器（选择的标签） &#123; </span><br><span class="line">      属性1: 属性值1;</span><br><span class="line">      属性2: 属性值2; </span><br><span class="line">      属性3: 属性值3;</span><br><span class="line">    &#125;</span><br><span class="line">&amp;lt;/style&amp;gt;</span><br><span class="line">&amp;lt;/head&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「3.外部样式表(外链式)」</strong></p>
+<p>也称链入式，是将所有的样式放在一个或多个以.css为扩展名的外部样式表文件中，通过link标签将外部样式表文件链接到HTML文档中。</p>
+<ul>
+<li> <code>rel</code>:定义当前文档与被链接文档之间的关系，在这里需要指定为“stylesheet”，表示被链接的文档是一个样式表文件。 -  <code>href</code>:定义所链接外部样式表文件的URL，可以是相对路径，也可以是绝对路径。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;index.css&quot;&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>「4.团队约定-代码风格」</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/*1.紧凑格式 (Compact)*/</span><br><span class="line">h3 &#123; color: deeppink;font-size: 20px;&#125;</span><br><span class="line">// 2.一种是展开格式（推荐）</span><br><span class="line">h3 &#123;</span><br><span class="line"> color: deeppink;</span><br><span class="line">    font-size: 20px;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 团队约定-代码大小写*/</span><br><span class="line">/* 样式选择器，属性名，属性值关键字全部使用小写字母书写，属性字符串允许使用大小写。*/</span><br><span class="line">/* 推荐 */</span><br><span class="line">h3&#123;</span><br><span class="line"> color: pink;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">/* 不推荐 */</span><br><span class="line">H3&#123;</span><br><span class="line"> COLOR: PINK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-CSS复合选择器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/"
+    >CSS复合选择器</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/CSS%E5%A4%8D%E5%90%88%E9%80%89%E6%8B%A9%E5%99%A8/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.199Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Css/">Css</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: CSS复合选择器<br>categories:</p>
+<ul>
+<li>css</li>
+</ul>
+<p>—1.简介</p>
 <blockquote>
- <table align="left" border="1" cellpadding="1" cellspacing="1"><thead><th style="width:268px;text-align:center;vertical-align:middle;">主机名</th><th style="width:265px;text-align:center;vertical-align:middle;">IP地址</th><th style="width:250px;text-align:center;vertical-align:middle;">分片</th><th style="width:213px;text-align:center;vertical-align:middle;">副本</th>
+<p> 复合选择器是由两个或多个基础选择器，通过不同的方式组合而成的 </p>
 </blockquote>
-</thead><tbody><td style="width:268px;">docker01-node</td><td style="width:265px;">192.168.56.10</td><td style="width:250px;">shard1</td><td style="width:213px;">副本1</td>
-<td style="width:268px;">docker02-node</td><td style="width:265px;">192.168.56.11</td><td style="width:250px;">shard1</td><td style="width:213px;">副本2</td>
-<td style="width:268px;">docker03-node</td><td style="width:265px;">192.168.56.12</td><td style="width:250px;">shard2</td><td style="width:213px;">副本1</td>
-<td style="width:268px;">docker04-node</td><td style="width:265px;">192.168.56.13</td><td style="width:250px;">shard2</td><td style="width:213px;"> 副本2 </td>
+<p>2.后代选择器<strong>，</strong>又称为包含选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>用来选择元素或元素组的子孙后代 -  其写法就是把外层标签写在前面，内层标签写在后面，中间用<strong>「空格」</strong>分隔，先写父亲爷爷，再写儿子孙子。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内 的标签。 <pre><code class="language-css">父级 子级&#123;属性:属性值;属性:属性值;&#125;</li>
+</ul>
+<p>.class h3 &#123;color:red;font-size:16px;&#125;</code></pre><br>  <img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"><img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/7e6e06c06f873c73d1ed952c23adbad4.png"> </p>
+<ul>
+<li> 当标签发生嵌套时，内层标签就成为外层标签的后代。 -  子孙后代都可以这么选择。或者说，它能选择任何包含在内的标签。 </li>
+</ul>
+<p>3.子元素选择器</p>
+<blockquote>
+</blockquote>
+<ul>
+<li>子元素选择器只能选择作为某元素子元素(亲儿子)的元素。 -  其写法就是把父级标签写在前面，子级标签写在后面，中间跟一个 <code>&amp;gt;</code> 进行连接 -  这里的子,指的是亲儿子。不包含孙子 重孙子之类。 <pre>`.class&gt;h3 {color:red;font-size:14px;}`</pre> </li>
+</ul>
+<p>4.并集选择器</p>
+<blockquote>
+<p> 如果某些选择器定义的相同样式，就可以利用并集选择器，可以让代码更简洁。并集选择器（CSS选择器分组）是各个选择器通过<code>,</code>连接而成的，通常用于集体声明。 </p>
+</blockquote>
+<ul>
+<li>任何形式的选择器（包括标签选择器、class类选择器 id选择器等），都可以作为并集选择器的一部分。 -  并集选择器通常用于集体声明  ，逗号隔开的，所有选择器都会执行后面样式，逗号可以理解为和的意思。 <pre><code class="language-css">比如  
+.one, 
+p , 
+#test &#123;color: #F00;&#125;  
+表示   .one 和 p  和 #test 这三个选择器都会执行颜色为红色。 
+通常用于集体声明。  </code></pre> </li>
+</ul>
+<p>5.链接伪类选择器</p>
+<blockquote>
+<p> 用于向某些选择器添加特殊的效果。写的时候，他们的顺序尽量不要颠倒,按照lvha的顺序。否则可能引起错误。<br> 链接伪类，是利用交集选择器. </p>
+</blockquote>
+<ul>
+<li><code>a:link</code>  未访问的链接 -  <code>a:visited</code>  已访问的链接 -  <code>a:hover</code>  鼠标移动到链接上 -  <code>a:active</code>  选定的链接<br>实际工作中，很少写全四个状态，一般写法如下： <pre><code class="language-css">a &#123;   /* a是标签选择器  所有的链接 */
+   font-weight: 700;
+   font-size: 16px;
+   color: gray;
+      text-decoration: none; /* 清除链接默认的下划线*/
+&#125;
+a:hover &#123;   /* :hover 是链接伪类选择器 鼠标经过 */
+   color: red; /*  鼠标经过的时候，由原来的 灰色 变成了红色 */
+&#125;</code></pre> </li>
+</ul>
+<p>6.focus伪类选择器</p>
+<blockquote>
+<p>  :focus 伪类选择器用于选取获得焦点的表单元素。<br> 焦点就是光标，一般情况下是&lt;input&gt;类表单元素才能获取，因此这个选择器也主要针对于表单元素来使用<br> <strong>W3C定义：接收键盘事件或其他用户输入的元素都允许 :focus 选择器。</strong><br> 简单来说就是支持input标签。可以在CSS中采用input:focus{}进行操作。<br> 如下是简单例子<br> &lt;div class=”outer”&gt;&lt;input type=”text” name=”” id=”” value=”” /&gt;&lt;/div&gt;<br> &lt;style&gt;    .outer{<!-- -->     width: 200px;     height: 200px;     background-color: red;    }    input:focus{<!-- -->     background-color: green;    } &lt;/style&gt;<br> <img alt="" src="https://img-blog.csdn.net/20180705113102315?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><img alt="" src="https://img-blog.csdn.net/2018070511311843?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0Fub2RkZ3V5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"><br>                 点击前                                    选中后 </p>
+</blockquote>
+<p>7.复合选择器总结</p>
+<blockquote>
+ <table><thead>|选择器|作用|特征|使用情况|隔开符号及用法
+</blockquote>
+</thead><tbody>|后代选择器|用来选择元素后代|是选择所有的子孙后代|较多|符号是`空格` .nav a
+|子代选择器|选择 最近一级元素|只选亲儿子|较少|符号是`&gt;`   .nav&gt;p
+|交集选择器|选择两个标签交集的部分|既是 又是|较少|`没有符号`  p.one
+|并集选择器|选择某些相同样式的选择器|可以用于集体声明|较多|符号是`逗号` .nav, .header
+|链接伪类选择器|给链接更改状态| |较多|重点记住 a{} 和 a:hover  实际开发的写法
 </tbody></table>
 
-
-<p>规划4个节点， 2个分片， 每个分片2个副本。 分片1的副本在主机clickhouse1和clickhouse2上， 2分片的副本在主机clickhouse3和clickhouse4上。 </p>
-<h3 id="2-操作系统准备工作"><a href="#2-操作系统准备工作" class="headerlink" title="2.操作系统准备工作"></a>2.<strong>操作系统准备工作</strong></h3><blockquote>
-<p> 1）<strong>修改主机名</strong><br> **      <strong>hostname按照上面主机名进行修改。<br> 2）</strong>关闭防火墙、selinux等。**<br> <pre><code class="language-bash">关闭防火墙：<br>systemctl stop firewalld.service<br>systemctl disable firewalld.service<br>systemctl is-enabled firewalld.service</p>
-</blockquote>
-<p>selinux的配置：<br>vim /etc/sysconfig/selinux<br>SELINUX=enforcing 改为 SELINUX=disabled</p>
-<p>检查SELinux的状态<br>[root@localhost etc]# getenforce<br>Disabled<br>[root@localhost etc]#<br></code></pre><br> 3）<strong>配置/etc/hosts</strong><br> **        **必须在/etc/hosts配置主机名和ip地址映射关系， 否则副本之间的数据不能同步。<br> <img alt="" height="183" src="https://img-blog.csdnimg.cn/20210424113605739.png" width="925"> </p>
-<h3 id="3-安装配置zookeeper"><a href="#3-安装配置zookeeper" class="headerlink" title="3.安装配置zookeeper"></a><strong>3.安装配置zookeeper</strong></h3><blockquote>
-<p> 下载zookeeper,zookeeper版本要求3.4.5以上。<br> 1)将下载的安装包上传到Linux上<br>       <img alt="" height="158" src="https://img-blog.csdnimg.cn/20210424122424231.png" width="872"><br> 2)将conf目录下的zoo_sample.cfg复制一份，命名为：zoo.cfg<br>       <img alt="" height="203" src="https://img-blog.csdnimg.cn/20210424122632832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="735"><br>       在zoo.cfg增加配置：<br>       <img alt="" height="146" src="https://img-blog.csdnimg.cn/20210424123230341.png" width="696"><br>     上面配置目录需要手工创建。<br> 3)<strong>环境配置：</strong><br> <pre><code class="language-bash">export ZOOKEEPER_HOME=/opt/zk/apache-zookeeper-3.6.2-bin/<br>export PATH=$PATH:$ZOOKEEPER_HOME/bin<br></code></pre><br> **4)**然后启动zookeeper即可。<br>      启动命令： ./bin/zkServer.sh start<br>      <img alt="" height="646" src="https://img-blog.csdnimg.cn/20210424124150418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="868"> </p>
-</blockquote>
-<h3 id="4-在所有的主机安装clickhouse-参考之前的安装即可"><a href="#4-在所有的主机安装clickhouse-参考之前的安装即可" class="headerlink" title="4.在所有的主机安装clickhouse,参考之前的安装即可"></a><strong>4.在所有的主机安装clickhouse,参考之前的安装即可</strong></h3><h3 id="5-修改clickhouse的网络相关配置"><a href="#5-修改clickhouse的网络相关配置" class="headerlink" title="5.修改clickhouse的网络相关配置"></a><strong>5.修改clickhouse的网络相关配置</strong></h3><blockquote>
-<p> 修改配置文件：/etc/clickhouse-server/config.xml<br> 打开以下注释，并做相关修改：<br> <img alt="" height="116" src="https://img-blog.csdnimg.cn/20210424130017519.png" width="731"><br> <strong>clickhouse1上的修改如下：</strong><br> <img alt="" height="104" src="https://img-blog.csdnimg.cn/20210424130128454.png" width="552"><br> <strong>Clickhouse2上的修改如下：</strong><br> <img alt="" height="75" src="https://img-blog.csdnimg.cn/20210424130246450.png" width="553"><br> <strong>Clickhouse3上的修改如下：</strong><br> <img alt="" height="91" src="https://img-blog.csdnimg.cn/20210424130315221.png" width="507"><br> <strong>Clickhouse4上的修改如下：</strong><br> <img alt="" height="115" src="https://img-blog.csdnimg.cn/20210424130406733.png" width="538"> </p>
-</blockquote>
-<h3 id="6-增加配置文件：-etc-metrika-xml"><a href="#6-增加配置文件：-etc-metrika-xml" class="headerlink" title="6.增加配置文件：/etc/metrika.xml"></a><strong>6.增加配置文件：/etc/metrika.xml</strong></h3><blockquote>
-<p> docker01-node的配置如下：<br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;</p>
-</blockquote>
-<p>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index=”1”&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.10&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker02-node的配置如下：<br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;</p>
-<p>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index=”1”&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.11&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker03-node<strong>的配置如下：</strong><br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;<br>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index="1"&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.12&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> docker04-node<strong>的配置如下：</strong><br> <pre><code class="language-XML">&lt;?xml version="1.0" encoding="utf-8"?&gt;<br>&lt;yandex&gt;<br>  &lt;clickhouse_remote_servers&gt;<br>    &lt;mycluster&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.10&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.11&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>      &lt;shard&gt;<br>        &lt;internal_replication&gt;true&lt;/internal_replication&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.12&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>        &lt;replica&gt;<br>          &lt;host&gt;192.168.56.13&lt;/host&gt;<br>          &lt;port&gt;9000&lt;/port&gt;<br>        &lt;/replica&gt;<br>      &lt;/shard&gt;<br>    &lt;/mycluster&gt;<br>  &lt;/clickhouse_remote_servers&gt;<br>  &lt;zookeeper-servers&gt;<br>    &lt;node index="1"&gt;<br>      &lt;host&gt;192.168.56.10&lt;/host&gt;<br>      &lt;port&gt;2181&lt;/port&gt;<br>    &lt;/node&gt;<br>  &lt;/zookeeper-servers&gt;<br>  &lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;02&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.13&lt;/replica&gt;<br>  &lt;/macros&gt;<br>&lt;/yandex&gt;<br></code></pre><br> 其中如下这段配置在每个节点是不相同的：<br> <pre><code class="language-XML">&lt;macros&gt;<br>    &lt;layer&gt;01&lt;/layer&gt;<br>    &lt;shard&gt;01&lt;/shard&gt;<br>    &lt;replica&gt;192.168.56.10&lt;/replica&gt;<br>&lt;/macros&gt;<br></code></pre><br> layer表示分层， shard表示分片的编号， 按照配置顺序从1开始。这里的01表示第一个分片。 replica配置副本的标识， 这里配置为本机的主机名。 使用这三个参数可以唯一表示一个副本分片。 这里表示layer为01的分片1的副本，副本标识：192.168.106.103。<br> 配置完成后， 在每个节点启动ClickHouse服务。 systemctl start clickhouse-server<br> 查看状态：systemctl status clickhouse-server<br> <img alt="" height="868" src="https://img-blog.csdnimg.cn/20210424133344316.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-<h3 id="7-进入docker01-node查看系统表"><a href="#7-进入docker01-node查看系统表" class="headerlink" title="7.进入docker01-node查看系统表"></a><strong>7.进入</strong>docker01-node查看系统表</h3><p>命令：clickhouse-client -h 服务器ip地址</p>
-<img alt="" height="169" src="https://img-blog.csdnimg.cn/20210424133428164.png" width="707">
-
-<p>查看系统表命令：select * from system.clusters where cluster=’mycluster’;</p>
-<img alt="" height="359" src="https://img-blog.csdnimg.cn/20210424133513204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">
  
       <!-- reward -->
       
@@ -888,7 +840,7 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
 
     
     <article
-  id="post-clickhouse20.1.4.14-2单机版安装"
+  id="post-CSS背景(background)"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -899,8 +851,8 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/"
-    >clickhouse20.1.4.14-2单机版安装</a> 
+  <a class="article-title" href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/"
+    >CSS背景(background)</a> 
 </h2>
  
 
@@ -908,251 +860,95 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/clickhouse20.1.4.14-2%E5%8D%95%E6%9C%BA%E7%89%88%E5%AE%89%E8%A3%85/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.254Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS%E8%83%8C%E6%99%AF(background)/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.197Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: clickhouse20.1.4.14-2单机版安装<br>categories:</p>
+  <p>title: CSS背景(background)<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—## 1.安装文件清单</p>
+<p>—1.背景颜色</p>
 <blockquote>
- <img alt="" height="126" src="https://img-blog.csdnimg.cn/20210405111422953.png" width="481"> 
+<p> background-color: 颜色值;   默认的值是 **transparent  **透明的 </p>
 </blockquote>
-<h2 id="2-安装方式"><a href="#2-安装方式" class="headerlink" title="2.安装方式"></a>2.安装方式</h2><blockquote>
-</blockquote>
-<ul>
-<li>rpm方式，这种方式适用于环境的依赖都很全，不需要安装其他的环境依赖包  命令：rpm -ivh ./*.rpm- yum方式，这种方式依赖于yum，但是不需要安装其他的环境依赖包，缺少的话会自动帮你安装  命令：yum install *.rpm</li>
-</ul>
-<h3 id="3-使用rpm方式安装"><a href="#3-使用rpm方式安装" class="headerlink" title="3.使用rpm方式安装"></a>3.使用rpm方式安装</h3><p>   1)在/opt/clickhouse目录下        <img alt="" height="250" src="https://img-blog.csdnimg.cn/20210405112658964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1004"></p>
-<p>   2）安装           <img alt="" height="295" src="https://img-blog.csdnimg.cn/20210405112853346.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200">        </p>
-<h3 id="4-启动clickhouse命令"><a href="#4-启动clickhouse命令" class="headerlink" title="4.启动clickhouse命令"></a>4.启动clickhouse命令</h3><blockquote>
-<p> systemctl start clickhouse-server </p>
-</blockquote>
-<h3 id="5-查看状态命令"><a href="#5-查看状态命令" class="headerlink" title="5.查看状态命令"></a>5.查看状态命令</h3><blockquote>
-<p> systemctl status clickhouse-server<br> <img alt="" height="297" src="https://img-blog.csdnimg.cn/20210405113223195.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
-</blockquote>
-<h3 id="6-重启命令"><a href="#6-重启命令" class="headerlink" title="6.重启命令"></a>6.重启命令</h3><blockquote>
-<p> systemctl restart clickhouse-server </p>
-</blockquote>
-<h3 id="7-使用客户端命令进入"><a href="#7-使用客户端命令进入" class="headerlink" title="7.使用客户端命令进入"></a>7.使用客户端命令进入</h3><blockquote>
-<p> 命令：clickhouse-client -m<br> <img alt="" height="373" src="https://img-blog.csdnimg.cn/20210405113420792.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="814"> </p>
-</blockquote>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-    
-</article>
-
-    
-    <article
-  id="post-clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/"
-    >clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等</a> 
-</h2>
- 
-
-      
-    </header>
-     
-    <div class="article-meta">
-      <a href="/2021/07/18/clickhouse,%E7%A1%AC%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B8%8E%E4%BC%98%E5%8C%96(cpu,%E5%86%85%E5%AD%98,%E7%BD%91%E7%BB%9C,%E5%AD%98%E5%82%A8,%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%85%8D%E7%BD%AE),profile%E7%AE%A1%E7%90%86%EF%BC%8CQuotas%E8%AE%BE%E7%BD%AE%EF%BC%8C%E7%BA%A6%E6%9D%9F%E7%AE%A1%E7%90%86%EF%BC%8C%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90%EF%BC%8C%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E9%85%8D%E7%BD%AE%E7%AD%89/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.246Z" itemprop="datePublished">2021-07-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>title: clickhouse,硬件管理与优化(cpu,内存,网络,存储,操作系统配置),profile管理，Quotas设置，约束管理，查询权限，用户管理配置等<br>categories:</p>
-<ul>
-<li>clickhouse</li>
-</ul>
-<p>—### 1.运维管理与优化</p>
+<p>2.背景图片(image)</p>
 <blockquote>
-<p> <strong>1.1)硬件管理与优化</strong><br>       1.1.1)CPU<br>                ClickHouse的并行数据处理机制，使得其能利用所有可用的硬件资源。在选择CPU处理器时，应选择更多核心数而不是更高频率的处理器。<br>                例如：频率为2600MHz的16核心处理器比3600MHz的8核心的处理器的效率更高。                           建议使用Turbo Boost和超线程技术，在高工作负载情况下能显著提高性能。<br>       1.1.2)内存<br>                ClickHouse的服务本身需要的RAM很少，但是ClickHouse需要内存来处理查询，建议至少使用4GB内存。                RAM的容量取决于：<br>                 a.查询的复杂性。<br>                 b.查询处理的数据量。<br>                 c.根据GROUP BY、DISTINCT、JOIN和其他操作产生的临时数据大小估算所需的RAM容量。<br>                对于少量数据，例如压缩后在200GB以下，使用数据量一样多的内存。                对于大量数据，以及交互式查询，热数据集缓存在操作系统的cache中，建议配置尽可能大的内存，例如128GB的内存性能明显比64GB高很多。<br>                如果内存不足， ClickHouse支持使用外部存储器处理数据，如外部聚合和外部排序等，当数据超过设置的阈值时使用外部存储器处理数据。<br>       1.1.3)网络<br>                推荐使用10GB或更高带宽的网络。<br>                ClickHouse在数据处理过程（数据导入、中间数据存储等）中会充分利用网络带宽。网络带宽对于处理具有大量中间数据的分布式查询至关重要。<br>                网络带宽会影响复制的过程。<br>       1.1.4)存储综合考虑安全性、性能和预算。                  如果使用RAID0，则需考虑使用副本机制。                  预算足够，使用SSD，然后HDD。                  RAID10的性能最佳，兼顾了安全性和性能，但是成本高，50%的磁盘利用率。                 主机的磁盘超过4块，可以考虑使用RAID6、RAID50、RAID5等。<br>                 优先使用具有多个本地磁盘的服务器，而不是具有附加磁盘架的服务器。<br>                 考虑压缩率、副本、磁盘存储容量、未来的数据增长估算存储资源。                 数据量：对数据进行采样，计算每行的平均大小，根据总行数估算数据量。                数据压缩系数：ClickHouse的数据通常被压缩5倍左右，根据原始数据大小和ClickHouse存储的表的数据目录占用空间进行比较。                副本：每份副本存储完整的数据。<br> <strong>1.2)操作系统的配置</strong><br>        1.2.1)CPU频率调整策略<br>              建议将CPU的电源管理策略调整为performance，即将CPU频率固定工作在其支持的最高运行频率上， 不动态调节，可以获取到最大的性能。              查看系统支持的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors<br>performance powersave<br></code></pre><br>              查看生效的策略：<br> <pre><code># cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor<br>powersave<br></code></pre><br>               设置：<br> <pre><code>echo 'performance' | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor<br></code></pre><br>  <br>        1.2.2) 关闭透明大页                开启透明大页，操作系统的内存分配活动需要各种内存锁，直接影响程序的内存访问性能，对于ClickHouse而言，透明大页会严重干扰内存分配器的工作，从而导致性能显著下降。<br> <pre><code class="language-bash">echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag<br>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</p>
+<p> 语法： background-image : none | url (url) ; 例如: background-image: url(images/1.png); </p>
 </blockquote>
-<p>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag’&gt;&gt; /etc/rc.local<br>echo ‘echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled’&gt;&gt; /etc/rc.local<br></code></pre><br>        1.2.3)禁用swap文件<br>              避免将数据调度到swap上，影响性能。<br> <pre><code class="language-bash">dd if=/dev/zero of=/home/swap bs=1024 count=1048576<br>swapon /dev/dm-1</p>
-<h1 id="swapon"><a href="#swapon" class="headerlink" title="swapon"></a>swapon</h1><p>NAME TYPE SIZE USED PRIO<br>/dev/dm-1 partition 16G 0B -3</p>
-<p>swapoff   /dev/dm-1<br></code></pre><br>        1.2.4)内核分配策略<br>             overcommit_memory是一个内核对内存分配的一种策略。具体可见/proc/sys/vm/overcommit_memory下的值。             overcommit_memory取值有三种分别为0,1,2<br>             overcommit_memory=0，表示内核将检查是否有足够的可用内存供应用进程使用；如果有足够的可用内存，内存申请允许；否则，内存申请失败，并把错误返回给应用进程。             overcommit_memory=1，表示内核允许分配所有的物理内存，而不管当前的内存状态如何。             overcommit_memory=2，表示内核允许分配超过所有物理内存和交换空间总和的内存。<br>        1.2.5)彻底理解ClickHouse的配置文件<br>             ClickHouse支持多文件的配置管理，主配置文件为/etc/clickhouse-server/config.xml，其他的配置文件必须位于/etc/clickhouse-server/config.d目录中。<br>             所有配置文件必须为XML格式，每个文件具有相同的根元素，通常为.<br>            配置替换                  配置的元素可以指定incl属性，这个属性指定了一个”substitutions (替换)”。默认情况下，这个”替换”来自配置文件/etc/metrika.xml的元素，可以通过服务器的配置选项include_from修改”替换”文              件的路径。当指定了”替换”，将使用替换文件中相应元素的内容作为值。“替换”的值是引用”替换”文件的根节点（yarndex）下的子元素。如果incl中指定的”替换”不存在，则在服务器中记录日志，           如果不想记录日志，则为元素指定optional=”true”属性即可。            例如，”替换”文件/etc/metrika.xml中的部分内容：<br> <pre><code class="language-XML">&lt;yandex&gt;<br>...<br>&lt;zookeeper-servers&gt;<br>    &lt;host&gt;192.168.9.100&lt;/host&gt;<br>    &lt;port&gt;2181&lt;/port&gt;<br>&lt;/zookeeper-servers&gt;<br>...<br>&lt;/yandex&gt;<br></code></pre><br> ClickHouse的config.xml配置文件默认引用了这个文件的”替换”：zookeeper-servers，它是/etc/metrika.xml中根节点yandex下的子元素。如下： <br> <pre><code class="language-XML">&lt;zookeeper incl="zookeeper-servers" optional="true" /&gt;<br></code></pre><br> <strong>1.3)用户设置</strong><br>          在config.xml文件默认指定了一个单独的用户管理相关的配置文件，用于管理用户的权限、profiles、quotas等。这个配置文件由users_config元素指定文件路径，默认为users.xml。如果省略users_config元素，则直接在config.xml中指定用户管理相关的配置。<br> <pre><code class="language-XML">&lt;users_config&gt;users.xml&lt;/users_config&gt;<br></code></pre><br>      可以将用户配置拆分为多个配置文件，类似config.xml和config.d。用户配置的目录默认为users.d，目录名称的规则为：user_config设置的文件名去掉.xml后缀，并拼接上.d后缀。例如，如果user_config设置为abc.xml，则用户配置目录为：abc.d。 如下示例，为用户创建了一个单独的配置文件：<br> <pre><code class="language-XML">$ cat /etc/clickhouse-server/users.d/alice.xml<br>&lt;yandex&gt;<br>    &lt;users&gt;<br>      &lt;alice&gt;<br>          &lt;profile&gt;default&lt;/profile&gt;<br>          &lt;networks&gt;<br>              &lt;ip&gt;::/0&lt;/ip&gt;<br>          &lt;/networks&gt;<br>          &lt;password&gt;123&lt;/password&gt;<br>          &lt;quota&gt;default&lt;/quota&gt;<br>      &lt;/alice&gt;<br>    &lt;/users&gt;<br>&lt;/yandex&gt;<br></code></pre><br> <strong>1.4)重复设置项的处理</strong><br> **     **主配置文件的有些设置会被其他配置文件中的设置覆盖。      可以为这些配置文件的元素指定replace和remove属性。      如果replace和remove属性都不指定， ClickHouse将以递归的方式合并元素的内容，替换掉重复子元素的值。      如果指定了replace属性， 则使用当前的元素配置替换从其他配置文件引用的元素内容。      如果指定了remove属性， 则表示删除该元素。      例如下面的配置，它会替换networks元素（由incl指定）的整个配置，而保留当前定义的设置：<br> <pre><code class="language-XML">&lt;networks incl="networks" replace="replace"&gt;<br>    &lt;ip&gt;::/0&lt;/ip&gt;<br>&lt;/networks&gt;<br></code></pre><br>  <br> 1.5)预处理文件<br>      ClickHouse服务在启动时，会生成每类配置文件的预处理文件，这些文件包含了所有已完成的替换和重写，是ClickHouse最终应用的配置。<br>      ClickHouse会跟踪配置文件的更改，能动态加载变更的用户和集群设置。这意味着用户可以在线动态修改集群、用户等相关配置，而无需重新启动服务。<br>       预处理文件路径为/var/lib/clickhouse/preprocessed_configs，使用/etc/clickhouse-server/preprocessed软链接指向这个目录。<br> <pre><code class="language-bash"># ll /etc/clickhouse-server/preprocessed<br>lrwxrwxrwx 1 root root 41 3月   4 09:44 /etc/clickhouse-server/preprocessed -&gt; /var/lib/clickhouse//preprocessed_configs</p>
-<h1 id="ls-etc-clickhouse-server-preprocessed"><a href="#ls-etc-clickhouse-server-preprocessed" class="headerlink" title="ls /etc/clickhouse-server/preprocessed/"></a>ls /etc/clickhouse-server/preprocessed/</h1><p>abc_dictionary.xml  config.xml  users.xml<br></code></pre> 
-   </p>
-<h3 id="2-ZooKeeper的关键优化点"><a href="#2-ZooKeeper的关键优化点" class="headerlink" title="2.ZooKeeper的关键优化点"></a>2.ZooKeeper的关键优化点</h3><blockquote>
- <ol>- **ZooKeeper节点数3个以上，奇数台。**- **与ClickHouse集群独立部署  **ZooKeeper对延迟非常敏感，ClickHouse可能会利用所有可用的系统资源。<li>**配置snapshot文件清理策略** <pre><code class="language-bash">autopurge.purgeInterval=1
+<p>3.背景平铺（repeat）</p>
+<blockquote>
+ <pre><code class="language-css">background-repeat : repeat | no-repeat | repeat-x | repeat-y 
+</code></pre> 
+ <table><thead>|参数|作用
 </blockquote>
-<p>autopurge.snapRetainCount=10<br></code></pre> autopurge.purgeInterval：开启清理事务日志和快照文件的功能，单位是小时。默认是0，表示不开启自动清理功能。 autopurge.snapRetainCount ： 指定了需要保留的文件数目。默认是保留3个。</li>- <strong>限制snapshot数量</strong> snapCount=3000000 每snapCount次事务日志输出后，触发一次快照(snapshot)。 ZooKeeper会生成一个snapshot文件和事务日志文件。 默认是100000。- <strong>log和data数据分磁盘存储</strong> dataDir：存储快照文件snapshot的目录。默认情况下，事务日志也会存储在这里。 dataLogDir：事务日志输出目录。尽量给事务日志的输出配置单独的磁盘或是挂载点，这将极大的提升ZK性能。- <strong>ZooKeeper的磁盘建议使用SSD</strong> 如果数据在TB级别以上，且复制表的数量比较多，超过100个，建议使用SSD磁盘。提升ZooKeeper的响应速度，避免ClickHouse副本间数据同步的延迟。<li>**调整JVM大小  *<em>ZooKeeper的JVM内存默认是根据操作系统本身内存大小的一个百分比预先分配的，所以这不是我们所需要的。 在./bin/zkEnv.sh文件中，有如下配置项： <pre><code class="language-bash">if [ -f "$ZOOCFGDIR/java.env" ]<br>then<br>    . "$ZOOCFGDIR/java.env"<br>fi<br></code></pre> 我们在./conf/java.env文件中配置JVM的内存，增加如下配置： <pre><code class="language-bash">export JAVA_HOME=/usr/local/java/jdk1.8.0_151<br>export JVMFLAGS="-Xms1024m -Xmx2048m $JVMFLAGS"<br></code></pre> 修改完成使用jmap -heap $pid来验证内存修改情况。 </li><li><strong>其它配置</strong> <strong>tickTime=2000</strong> ZK中的一个时间单元。ZK中所有时间都是以这个时间单元为基础，进行整数倍配置的。例如，session的最小超时时间是2</em>tickTime。 默认值2000，单位毫秒。 <strong>initLimit=10</strong> Follower在启动过程中，会从Leader同步所有最新数据，然后确定自己能够对外服务的起始状态。Leader允许F在 initLimit 时间内完成这个工作。通常情况下，我们不用太在意这个参数的设置。如果ZK集群的数据量确实很大了，F在启动的时候，从Leader上同步数据的时间也会相应变长，因此在这种情况下，有必要适当调大这个参数了。 initLimit=30000 <strong>syncLimit=5</strong> 在运行过程中，Leader负责与ZK集群中所有机器进行通信，例如通过一些心跳检测机制，来检测机器的存活状态。如果L发出心跳包在syncLimit之后，还没有从F那里收到响应，那么就认为这个F已经不在线了。注意：不要把这个参数设置得过大，否则可能会掩盖一些问题。 建议设置为10。 <strong>maxClientCnxns ：</strong> 单个客户端与单台服务器之间的连接数的限制，是ip级别的，默认是60，如果设置为0，那么表明不作任何限制。请注意这个限制的使用范围，仅仅是单台客户端机器与单台ZK服务器之间的连接数限制，不是针对指定客户端IP，也不是ZK集群的连接数限制，也不是单台ZK对所有客户端的连接数限制。 建议设置为2000 <strong>maxSessionTimeout=60000000</strong> Session超时时间限制，如果客户端设置的超时时间不在这个范围，那么会被强制设置为最大或最小时间。默认的Session超时时间是在2 * tickTime ~ 20 * tickTime 这个范围 <strong>preAllocSize=131072</strong> 预先开辟磁盘空间，用于后续写入事务日志。默认是64M，每个事务日志大小就是64M。如果ZK的快照频率较大的话，建议适当减小这个参数。单位kb。 <strong>配置：</strong> <pre><code class="language-bash">tickTime=2000</p>
-<p>initLimit=30000<br>syncLimit=10</p>
-<p>maxClientCnxns=2000<br>maxSessionTimeout=60000000</p>
-<p>dataDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/data<br>dataLogDir=/opt/zookeeper/&#123;<!-- -->&#123; cluster[‘name’] &#125;&#125;/logs</p>
-<p>autopurge.purgeInterval=1<br>autopurge.snapRetainCount=10</p>
-<p>snapCount=3000000</p>
-<p>preAllocSize=131072<br></code></pre>   </li>- <strong>建ClickHouse表配置元数据压缩</strong> 建表的时候设置use_minimalistic_part_header_in_zookeeper=1， 则ZooKeeper中会存储较少的数据，支持副本的表使用单个znode紧凑地存储数据片段的头信息。如果表包含很多列， 则此存储方法将大大减少Zookeeper中存储的数据量。</ol></p>
-<h3 id="3-服务监控"><a href="#3-服务监控" class="headerlink" title="3.服务监控"></a>3.服务监控</h3><blockquote>
-<p> ClickHouse内置了自我状态检测的功能， 可根据系统表、查询日志等监控服务器计算资源的不同度量以及查询处理的通用统计信息。<br> <ol><li> 系统表  ClickHouse提供了system.metrics、system.events和system.asynchronous_metrics表收集服务器的不同的运行度量。  1.1)system.metrics           这张表的数据实时更新， 用于查看正在运行的查询或当前副本的延迟信息等。           包含的列有：               •metric(String) ： 度量名称。               •value(Int64) ：指标值。               •description (String) ：度量描述。           <strong>示例:</strong> <pre><code class="language-sql">select * from system.metrics;</p>
-</blockquote>
-<p>┌─metric───────────────────────────────────────┬────value─┬─description─────────────────────────────────────────────┐<br>│ Query                                        │        1 │ Number of executing queries                             │<br>│ Merge                                        │        0 │ Number of executing background merges                   │<br>│ PartMutation                                 │        0 │ Number of mutations (ALTER DELETE/UPDATE)               │<br>│ GlobalThread                                 │       65 │ Number of threads in global thread pool.                │<br>│ GlobalThreadActive                           │       51 │ Number of threads in global thread pool running a task. │<br>└──────────────────────────────────────────────┴──────────┴─────────────────────────────────────────────────────────┘<br></code></pre>   1.2)<strong>system.events         用于收集系统中发生的事件数的信息。例如，可以查询自ClickHouse服务启动以来已处理的SELECT 查询数。         列信息如下：             •event (String) ： 事件名称。             •value (UInt64) ： 发生的事件数。             •description (String) ： 事件描述。         示例：</strong> <pre><code class="language-sql">clickhouse1 :) select * from system.events LIMIT 5;</p>
-<p>SELECT *<br>FROM system.events<br>LIMIT 5</p>
-<p>┌─event───────────────────────┬───value─┬─description────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ Query                       │       7 │ Number of queries to be interpreted and potentially executed. Does not include queries that failed to parse or were rejected due to AST size limits, quota limits or limits on the number of simultaneously running queries. May include internal queries initiated by ClickHouse itself. Does not count subqueries. │<br>│ SelectQuery                 │       7 │ Same as Query, but only for SELECT queries.                                                                                                                                                                                                                │<br>│ QueryTimeMicroseconds       │  140616 │ Total time of all queries.                                                                                                                                                                                                                                 │<br>│ SelectQueryTimeMicroseconds │  140616 │ Total time of SELECT queries.                                                                                                                                                                                                                              │<br>│ FileOpen                    │ 3645730 │ Number of files opened.                                                                                                                                                                                                                                    │<br>└─────────────────────────────┴─────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
-<p>5 rows in set. Elapsed: 0.002 sec. </p>
-<p>clickhouse1 :)<br></code></pre>   1.3)<strong>system.asynchronous_metrics        <strong>用于实时监控后台定期计算的指标。例如，正在使用的RAM大小        列信息如下：</strong>             •metric (String)</strong> ： 事件名称。**             •value (Float64)** ：指标值。        **例如：        ** <pre><code class="language-sql">clickhouse1 :) SELECT * FROM system.asynchronous_metrics;</p>
-<p>SELECT *<br>FROM system.asynchronous_metrics</p>
-<p>┌─metric───────────────────────────────────┬──────value─┐<br>│ CPUFrequencyMHz_0                        │   2591.504 │<br>│ jemalloc.arenas.all.pmuzzy               │          0 │<br>│ jemalloc.arenas.all.pdirty               │       1311 │<br>│ jemalloc.background_thread.run_intervals │          0 │<br>│ jemalloc.background_thread.num_runs      │          0 │<br>│ jemalloc.retained                        │  894418944 │<br>│ jemalloc.mapped                          │  136331264 │<br>│ jemalloc.metadata                        │   13635904 │<br>│ jemalloc.resident                        │  126943232 │<br>│ jemalloc.allocated                       │  102341072 │<br>│ jemalloc.epoch                           │       1298 │<br>│ NumberOfTables                           │         73 │<br>│ jemalloc.active                          │  109989888 │<br>│ NumberOfDatabases                        │          3 │<br>│ MaxPartCountForPartition                 │          7 │<br>│ jemalloc.background_thread.num_threads   │          0 │<br>│ ReplicasSumQueueSize                     │          0 │<br>│ ReplicasMaxMergesInQueue                 │          0 │<br>│ MemoryShared                             │ 4238995456 │<br>│ MemoryCode                               │  432128000 │<br>│ ReplicasMaxAbsoluteDelay                 │          0 │<br>│ ReplicasMaxQueueSize                     │          0 │<br>│ jemalloc.arenas.all.muzzy_purged         │          0 │<br>│ MemoryVirtual                            │ 6097547264 │<br>│ MarkCacheBytes                           │          0 │<br>│ Uptime                                   │      77887 │<br>│ jemalloc.arenas.all.dirty_purged         │  379880169 │<br>│ ReplicasMaxRelativeDelay                 │          0 │<br>│ MemoryResident                           │ 4455157760 │<br>│ ReplicasMaxInsertsInQueue                │          0 │<br>│ jemalloc.metadata_thp                    │          0 │<br>│ UncompressedCacheCells                   │          0 │<br>│ CompiledExpressionCacheCount             │          0 │<br>│ ReplicasSumMergesInQueue                 │          0 │<br>│ UncompressedCacheBytes                   │          0 │<br>│ ReplicasSumInsertsInQueue                │          0 │<br>│ MarkCacheFiles                           │          0 │<br>│ MemoryDataAndStack                       │ 1824006144 │<br>│ jemalloc.arenas.all.pactive              │      26853 │<br>└──────────────────────────────────────────┴────────────┘</p>
-<p>39 rows in set. Elapsed: 0.049 sec. </p>
-<p>clickhouse1 :)<br></code></pre>   </li><li> 查询日志<strong>query_log</strong> 记录所有查询语句的开始时间、耗时、用户、资源占用等信息，包括SELECT、SET、ALTER等语句。 在ClickHouse的主配置文件config.xml配置了query_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;!-- Query log. Used only for queries with setting log_queries = 1. --&gt;<br>    &lt;query_log&gt;<br>        &lt;!-- What table to insert data. If table is not exist, it will be created.<br>             When query log structure is changed after system update,<br>              then old table will be renamed and new table will be created automatically.<br>        --&gt;<br>        &lt;database&gt;system&lt;/database&gt;<br>        &lt;table&gt;query_log&lt;/table&gt;<br>        &lt;!--<br>            PARTITION BY expr <a target="_blank" rel="noopener" href="https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/">https://clickhouse.yandex/docs/en/table_engines/custom_partitioning_key/</a><br>            Example:<br>                event_date<br>                toMonday(event_date)<br>                toYYYYMM(event_date)<br>                toStartOfHour(event_time)<br>        --&gt;<br>        &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;</p>
-<pre><code>    &amp;lt;!-- Instead of partition_by, you can provide full engine expression (starting with ENGINE = ) with parameters,
-         Example: &amp;lt;engine&amp;gt;ENGINE = MergeTree PARTITION BY toYYYYMM(event_date) ORDER BY (event_date, event_time) SETTINGS index_granularity = 1024&amp;lt;/engine&amp;gt;
-      --&amp;gt;
+</thead><tbody>|repeat|背景图像在纵向和横向上平铺（默认的）
+|no-repeat|背景图像不平铺
+|repeat-x|背景图像在横向上平铺
+|repeat-y| 背景图像在纵向平铺   
+</tbody></table> 什么是repeat？
+          
+ <img alt="" height="380" src="https://img-blog.csdnimg.cn/20210202210607583.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="582">
+  什么是repeat-x？
+          
+ <img alt="" height="248" src="https://img-blog.csdnimg.cn/20210202210750597.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="483">
+  什么是repeat-y？
+          
+ <img alt="" height="369" src="https://img-blog.csdnimg.cn/20210202210842685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="451">
 
-    &amp;lt;!-- Interval of flushing data. --&amp;gt;
-    &amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
-&amp;lt;/query_log&amp;gt;
-</code></pre>
-<p></code></pre> ClickHouse默认不会收集查询的日志， 可通过设置log_queries = 1开启查询日志的功能,下面开启的命令要在服务器的黑窗口执行。 <pre><code class="language-bash">set log_queries = 1;<br>show tables;</p>
-<p>SELECT * from <code>system</code>.query_log ql limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003637697.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>trace_log</strong> 存储query profilers收集的堆栈跟踪日志。 堆栈日志根据计时器类型分为REAL和CPU，分别表示实际时钟计时器和CPU时钟计时器。 计时器相关的两个设置： <pre><code class="language-sql">query_profiler_real_time_period_ns：设置query profilers的实际计时器的周期，单位为纳秒，默认为1000000000（1秒）<br>query_profiler_cpu_time_period_ns：设置query profilers的CPU计时器的周期，单位为纳秒，默认为1000000000（1秒）。<br></code></pre> 在ClickHouse的主配置文件config.xml配置了trace_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;trace_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;trace_log&lt;/table&gt;</p>
-<pre><code>&amp;lt;partition_by&amp;gt;toYYYYMM(event_date)&amp;lt;/partition_by&amp;gt;
-&amp;lt;flush_interval_milliseconds&amp;gt;7500&amp;lt;/flush_interval_milliseconds&amp;gt;
-</code></pre>
-<p>&lt;/trace_log&gt;<br></code></pre> <strong>示例：</strong> <pre><code class="language-sql">SELECT * FROM system.trace_log ORDER BY event_date ASC LIMIT 2;<br></code></pre> <strong>query_thread_log</strong> 查询线程日志， 记录查询执行的所有线程的信息。 在ClickHouse的主配置文件config.xml配置了query_thread_log日志的表、分区、数据刷新间隔等信息。 <pre><code class="language-XML">&lt;query_thread_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;query_thread_log&lt;/table&gt;<br>    &lt;partition_by&gt;toYYYYMM(event_date)&lt;/partition_by&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/query_thread_log&gt;<br></code></pre> ClickHouse默认不会收集查询线程的日志， 可通过设置log_query_threads= 1开启查询日志的功能。 <pre><code class="language-sql">set log_query_threads = 1;</p>
-<p>select * from system.query_thread_log limit 1;<br></code></pre> <img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/20201217003929835.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3RvdG8xMjk3NDg4NTA0,size_16,color_FFFFFF,t_70#pic_center"><strong>part_log</strong> 用户监控MergeTree引擎表中针对数据片段所有操作（创建、删除、合并、下载等）的信息。 part_log默认是关闭， 在ClickHouse的主配置文件使用如下配置开启数据片段日志 <pre><code class="language-XML">&lt;part_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;part_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/part_log&gt;<br></code></pre> <strong>text_log</strong> text_log用于记录服务器的常规日志，但是以结构化和高效的方式存储在表中。 text_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。 <pre><code class="language-XML">&lt;text_log&gt;<br>    &lt;database&gt;system&lt;/database&gt;<br>    &lt;table&gt;text_log&lt;/table&gt;<br>    &lt;flush_interval_milliseconds&gt;7500&lt;/flush_interval_milliseconds&gt;<br>&lt;/text_log&gt;<br></code></pre> <strong>metric_log</strong> 用于存储来自表system.metrics和system.events指标值的历史记录。collect_interval_milliseconds用于设置采集的时间间隔。metric_log默认是关闭的， 在ClickHouse的主配置文件使用如下配置开启日志。</li></ol></p>
-<h3 id="4-用户管理"><a href="#4-用户管理" class="headerlink" title="4.用户管理"></a>4.用户管理</h3><blockquote>
- <ol><li> profile管理 profile是一组设置的集合，类似于角色的概念，每个用户都有一个profile。 可以有两种方式使用profile： 在会话中应用profile的所有设置，例如：SET profile = ‘web’ 。 在users.xml的users部分为某个用户指定profile。**profiles在users.xml配置文件的profiles标签下配置：** <pre><code class="language-XML">&lt;!-- Settings profiles --&gt;
-&lt;profiles&gt;
-    &lt;!-- Default settings --&gt;
-    &lt;default&gt;
-        &lt;!-- The maximum number of threads when running a single query. --&gt;
-        &lt;max_threads&gt;8&lt;/max_threads&gt;
-    &lt;/default&gt;
-​
-    &lt;!-- Settings for quries from the user interface --&gt;
-    &lt;web&gt;
-        &lt;max_rows_to_read&gt;1000000000&lt;/max_rows_to_read&gt;
-        &lt;max_bytes_to_read&gt;100000000000&lt;/max_bytes_to_read&gt;
-​
-        &lt;max_rows_to_group_by&gt;1000000&lt;/max_rows_to_group_by&gt;
-        &lt;group_by_overflow_mode&gt;any&lt;/group_by_overflow_mode&gt;
-​
-        &lt;max_rows_to_sort&gt;1000000&lt;/max_rows_to_sort&gt;
-        &lt;max_bytes_to_sort&gt;1000000000&lt;/max_bytes_to_sort&gt;
-​
-        &lt;max_result_rows&gt;100000&lt;/max_result_rows&gt;
-        &lt;max_result_bytes&gt;100000000&lt;/max_result_bytes&gt;
-        &lt;result_overflow_mode&gt;break&lt;/result_overflow_mode&gt;
-​
-        &lt;max_execution_time&gt;600&lt;/max_execution_time&gt;
-        &lt;min_execution_speed&gt;1000000&lt;/min_execution_speed&gt;
-        &lt;timeout_before_checking_execution_speed&gt;15&lt;/timeout_before_checking_execution_speed&gt;
-​
-        &lt;max_columns_to_read&gt;25&lt;/max_columns_to_read&gt;
-        &lt;max_temporary_columns&gt;100&lt;/max_temporary_columns&gt;
-        &lt;max_temporary_non_const_columns&gt;50&lt;/max_temporary_non_const_columns&gt;
-​
-        &lt;max_subquery_depth&gt;2&lt;/max_subquery_depth&gt;
-        &lt;max_pipeline_depth&gt;25&lt;/max_pipeline_depth&gt;
-        &lt;max_ast_depth&gt;50&lt;/max_ast_depth&gt;
-        &lt;max_ast_elements&gt;100&lt;/max_ast_elements&gt;
-​
-        &lt;readonly&gt;1&lt;/readonly&gt;
-    &lt;/web&gt;
-&lt;/profiles&gt;
-</code></pre> 上面的配置指定了两个profile：default和web。默认的default不能省略，它包含默认的设置，在服务器启动时应用。web是常规的profile，可以使用SET语句或HTTP查询中的URL参数进行设置。 profile设置可相互继承。如果使用继承，在配置文件中列出的其他设置之前， 先指定一个或多个profile。如果一个设置在不同的profile都定义了，则使用最新的设置。 </li><li> Quotas设置 Quotas用于在一段时间内跟踪资源的使用情况或限制资源的使用。quotas在user.xml配置文件的quotas标签下配置，在users标签下分配给用户。 注意：quota用于限制一组查询，并且将所有远程服务器上的分布式查询处理的资源纳入限制范围，而不是限制单个查询。**quotas的配置示例1:** <pre><code class="language-XML">&lt;!-- Quotas --&gt;
-&lt;quotas&gt;
-    &lt;!-- Quota name. --&gt;
-    &lt;default&gt;
-        &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
-        &lt;interval&gt;
-            &lt;!-- Length of the interval. --&gt;
-            &lt;duration&gt;3600&lt;/duration&gt;
-​
-            &lt;!-- Unlimited. Just collect data for the specified time interval. --&gt;
-            &lt;queries&gt;0&lt;/queries&gt;
-            &lt;errors&gt;0&lt;/errors&gt;
-            &lt;result_rows&gt;0&lt;/result_rows&gt;
-            &lt;read_rows&gt;0&lt;/read_rows&gt;
-            &lt;execution_time&gt;0&lt;/execution_time&gt;
-        &lt;/interval&gt;
-    &lt;/default&gt;
-&lt;/quotas&gt;
-</code></pre> 默认情况下，quota只跟踪一个小时内的资源使用情况，并不会限制资源的使用。每个时间间隔内的资源消耗在每次请求之后输出到服务器日志。**Quota配置示例2：** <pre><code class="language-XML">&lt;statbox&gt;
-    &lt;!-- Restrictions for a time period. You can set many intervals with different restrictions. --&gt;
-    &lt;interval&gt;
-        &lt;!-- Length of the interval. --&gt;
-        &lt;duration&gt;3600&lt;/duration&gt;
-​
-        &lt;queries&gt;1000&lt;/queries&gt;
-        &lt;errors&gt;100&lt;/errors&gt;
-        &lt;result_rows&gt;1000000000&lt;/result_rows&gt;
-        &lt;read_rows&gt;100000000000&lt;/read_rows&gt;
-        &lt;execution_time&gt;900&lt;/execution_time&gt;
-    &lt;/interval&gt;
+
+<p>4.背景位置(position)</p>
+<blockquote>
+ <pre><code class="language-css">background-position : length || length
+background-position : position || position 
+</code></pre> 
+ <table><thead>|参数|值
 </blockquote>
-<pre><code>&amp;lt;interval&amp;gt;
-    &amp;lt;duration&amp;gt;86400&amp;lt;/duration&amp;gt;
-</code></pre>
-<p>​<br>        &lt;queries&gt;10000&lt;/queries&gt;<br>        &lt;errors&gt;1000&lt;/errors&gt;<br>        &lt;result_rows&gt;5000000000&lt;/result_rows&gt;<br>        &lt;read_rows&gt;500000000000&lt;/read_rows&gt;<br>        &lt;execution_time&gt;7200&lt;/execution_time&gt;<br>    &lt;/interval&gt;<br>&lt;/statbox&gt;<br></code></pre> 上面配置了一个名称为statbox的quota，在每小时（3600秒）和每24小时（86400秒）设置了对资源的限制。间隔结束时，将清除所有收集的值，在接下来的下一个时间区间，quota将重新开始计算。 可用于quota限制的资源如下： queries ： 请求总数。 errors ： 抛出异常的总数。 result_rows : 作为结果给出的总行数。 read_rows : 在所有远程服务器上，从表中读取用于运行查询的源总行数。 execution_time : 查询执行的总耗时，单位为秒。如果在至少一个时间间隔内超过了限制，则会引发异常，异常信息包括限制的类型、时间间隔以及新时间间隔的开始时间。 对于分布式查询处理， 资源的累积量存储在请求服务器上，因此，如果用户转到另一个服务器，则这个服务器的quota将重新开始累积。重启服务器后，quota将重置。 </li><li> 约束管理 在users.xml配置文件的profiles部分定义对设置的约束，可以禁止用户使用SET语句更改某些设置。 约束的定义模板如下： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;profile_name&gt;<br>    &lt;constraints&gt;<br>      &lt;setting_name_1&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>      &lt;/setting_name_1&gt;<br>      &lt;setting_name_2&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_2&gt;<br>      &lt;setting_name_3&gt;<br>        &lt;min&gt;lower_boundary&lt;/min&gt;<br>        &lt;max&gt;upper_boundary&lt;/max&gt;<br>      &lt;/setting_name_3&gt;<br>      &lt;setting_name_4&gt;<br>        &lt;readonly/&gt;<br>      &lt;/setting_name_4&gt;<br>    &lt;/constraints&gt;<br>  &lt;/profile_name&gt;<br>&lt;/profiles&gt;<br></code></pre> 如果用户尝试违法冲突，则会引发异常。 支持三种类型的约束：max、min和readonly。 max和min约束使用数值指定约束的上限和下限，这两个约束可以组合使用。 readonly约束指定了用户无法更改相应的设置。 使用示例： <pre><code class="language-XML">&lt;profiles&gt;<br>  &lt;default&gt;<br>    &lt;max_memory_usage&gt;10000000000&lt;/max_memory_usage&gt;<br>    &lt;force_index_by_date&gt;0&lt;/force_index_by_date&gt;<br>    ...<br>    &lt;constraints&gt;<br>      &lt;max_memory_usage&gt;<br>        &lt;min&gt;5000000000&lt;/min&gt;<br>        &lt;max&gt;20000000000&lt;/max&gt;<br>      &lt;/max_memory_usage&gt;<br>      &lt;force_index_by_date&gt;<br>        &lt;readonly/&gt;<br>      &lt;/force_index_by_date&gt;<br>    &lt;/constraints&gt;<br>  &lt;/default&gt;<br>&lt;/profiles&gt;<br></code></pre> 上面的约束配置限制了max_memory_usage的范围在20000000000和5000000000之间，force_index_by_date设置为只读。 使用下面的语句修改配置将引发异常： <pre><code class="language-sql">SET max_memory_usage=20000000001;<br>SET max_memory_usage=4999999999;<br>SET force_index_by_date=1;<br></code></pre> <strong>异常信息如下：</strong> <pre><code class="language-sql">Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be greater than 20000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting max_memory_usage should not be less than 5000000000.<br>Code: 452, e.displayText() = DB::Exception: Setting force_index_by_date should not be changed.<br></code></pre> Note：在default的profile中定义的约束为默认的约束，这些约束会限制所有的用户，除非用户在自己的profile中显式覆盖这些设置。 force_index_by_date，如果表的主键包含日期列，则查询条件必须包含该该列。如果表的主键不包含日期列，则无需包含日期列。 仅适用于MergeTree引擎。 </li><li> 查询权限 ClickHouse中的查询可分为如下几种类型：<strong>读取数据查询</strong>：SELECT、SHOW、DESCRIBE、EXISTS。<strong>写数据查询</strong>：INSERT、OPTIMIZE。<strong>更改设置查询</strong>：SET、USE。<strong>DDL查询</strong>：CREATE、ALTER、RENAME、ATTACH、DETACH、 DROP、TRUNCATE。 KILL QUERY 下面的设置可用户配置用户的查询权限：<strong>readonly <strong>：限制读取、写入和更改三类查询的权限。</strong>allow_ddl</strong>：限制DDL查询的权限。<strong>KILL QUERY</strong>不受任何设置的限制。 <pre><code>1. readonly<br>用于限制读取、写入和更改三类查询的权限，默认值为0。<br>readonly的取值如下：<br>0 ： 允许执行所有查询。<br>1 ： 仅允许读取数据的查询。<br>2 ： 允许读取数据和更改设置。<br>在设置readonly=1后，用户将无法在当前会话中更改readonly和allow_ddl的设置。<br>在HTTP请求中使用GET方法时将自动设置readonly=1。如果在http请求中修改数据，则必须使用POST方法。</p>
-<p>设置readonly=1将禁止用户更改所有的设置。如果要禁止用户修改某些特定的设置，可以在users.xml配置文件中配置profiles的约束。</p>
-<ol start="2">
-<li>allow_ddl<br>用于配置是否允许DDL操作的权限，默认值为1。<br>可设置的值如下：<br>0 ： 不允许DDL查询。<br>1 ： 允许DDL查询。<br>如果当前会话的allow_ddl=0，则无法执行： SET allow_ddl=0。</code></pre>   </li><li> 用户管理配置 xml文件的users标签的结构如下： <pre><code class="language-XML">&lt;users&gt;<br> &lt;!-- If user name was not specified, 'default' user is used. --&gt;<br> &lt;user_name&gt;<pre><code> &amp;lt;password&amp;gt;&amp;lt;/password&amp;gt;
- &amp;lt;!-- Or --&amp;gt;
- &amp;lt;password_sha256_hex&amp;gt;&amp;lt;/password_sha256_hex&amp;gt;
-</code></pre>
-​<pre><code> &amp;lt;networks incl=&quot;networks&quot; replace=&quot;replace&quot;&amp;gt;
- &amp;lt;/networks&amp;gt;
-</code></pre>
-​<pre><code> &amp;lt;profile&amp;gt;profile_name&amp;lt;/profile&amp;gt;
-</code></pre>
-​<pre><code> &amp;lt;quota&amp;gt;default&amp;lt;/quota&amp;gt;
-</code></pre>
-​<pre><code> &amp;lt;databases&amp;gt;
-     &amp;lt;database_name&amp;gt;
-         &amp;lt;table_name&amp;gt;
-             &amp;lt;filter&amp;gt;expression&amp;lt;/filter&amp;gt;
-         &amp;lt;table_name&amp;gt;
-     &amp;lt;/database_name&amp;gt;
- &amp;lt;/databases&amp;gt;
-</code></pre>
-​<pre><code>&amp;lt;allow_databases&amp;gt;
-    &amp;lt;database&amp;gt;test&amp;lt;/database&amp;gt;
- &amp;lt;/allow_databases&amp;gt;
- &amp;lt;allow_dictionaries&amp;gt;
-    &amp;lt;dictionary&amp;gt;test&amp;lt;/dictionary&amp;gt;
- &amp;lt;/allow_dictionaries&amp;gt;
-</code></pre>
- &lt;/user_name&gt;<br> &lt;!– Other users settings –&gt;</li>
-</ol>
-<p>&lt;/users&gt;<br></code></pre> 在上面的配置中，定义了一个user_name的用户，该用户的所有其他配置都通过该标签的子标签配置。下面详细介绍每个具体子标签的配置信息。 1）**user_name/password       **密码可以使用明文、SHA256或SHA1指定。       明文形式的密码通过password标签指定。       <strong>例如:</strong> <pre><code class="language-XML">&lt;password&gt;qwerty&lt;/password&gt;<br></code></pre>    密码可以为空。    SHA256散列密码通过password_sha256_hex标签指定。    示例： <pre><code class="language-XML">&lt;password_sha256_hex&gt;65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5&lt;/password_sha256_hex&gt;<br></code></pre> **   <strong>可通过如下shell命令生成SHA256散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha256sum | tr -d '-'<br></code></pre> **  <strong>命令的输出如下： <pre><code class="language-bash">pmpjaK2V<br>21c4185b8155e532ca5a1eb0d4ca74ecde83eddee4ca55af393007f7c29f7eb7<br></code></pre> 第一行是明文的密码，第二行对应的SHA256加密散列。 SHA1散列密码通过password_double_sha1_hex标签指定。 SHA1密码是为了兼容MySQL客户端。 使用示例： <pre><code class="language-XML">&lt;password_double_sha1_hex&gt;08b4a0f1de6ad37da17359e592c8d74788a83eb0&lt;/password_double_sha1_hex&gt;<br></code></pre> 可通过如下shell命令生成SHA1散列： <pre><code class="language-bash">PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo "$PASSWORD"; echo -n "$PASSWORD" | sha1sum | tr -d '-' | xxd -r -p | sha1sum | tr -d '-'<br></code></pre> 命令的输出如下： <pre><code class="language-bash">KCXM95It<br>de4bbcb9bbb35e3e497fcbebafc0f04b3dcef383<br></code></pre> 第一行是明文的密码，第二行对应的SHA1加密散列。</strong>2）user_name/networks      <strong>networks用于配置网络列表，只有网络列表范围内的用户可以连接到ClickHouse。     列表中的元素可以使用如下形式定义：     ： IP地址或带掩码的IP地址。     例如： <pre><code class="language-bash">213.180.204.3, 10.0.0.1/8, 10.0.0.1/255.255.255.0, 2a02:6b8::3, 2a02:6b8::3/64, 2a02:6b8::3/ffff:ffff:ffff:ffff::<br></code></pre> ： 主机名。 例如： <pre><code class="language-bash">example01.host.ru<br></code></pre> &lt;host_regexp&gt; ： 主机名的正则表达式。</strong>例如：</strong> <pre><code class="language-bash">^example\d\d-\d\d-\d.host.ru$<br></code></pre> 使用这种方式指定网络列表，强烈建议regexp以$结尾。 示例1：用户可以从任意网络访问，指定： <pre><code class="language-XML">&lt;ip&gt;::/0&lt;/ip&gt;<br></code></pre> <strong>示例2：仅限本地网络访问，指定：</strong>   <pre><code class="language-XML">&lt;ip&gt;::1&lt;/ip&gt;<br>&lt;ip&gt;127.0.0.1&lt;/ip&gt;<br></code></pre> **3）user_name/profile        <strong>profile用于给用户分配一个配置好的profile，这个profile是在users.xml配置文件的profiles标签下配置的。</strong>4）user_name/quota      <strong>用于给用户分配quota，这里quota是在users.xml配置文件的quotas标签下配置的。quota用于在一定时间内跟踪或限制资源的使用。</strong>5）user_name/databases      <strong>用于限制当前用户的SELECT查询返回的行，可实现基本的行级安全性。     <strong>示例：</strong>      以下的配置将限制用户user1只能查询table1表中id=1000的行，其他记录对用户不可见，就好像表中不存在其他行一样。 <pre><code class="language-XML">&lt;user1&gt;<br>    &lt;databases&gt;<br>        &lt;database_name&gt;<br>            &lt;table1&gt;<br>                &lt;filter&gt;id = 1000&lt;/filter&gt;<br>            &lt;/table1&gt;<br>        &lt;/database_name&gt;<br>    &lt;/databases&gt;<br>&lt;/user1&gt;<br></code></pre> 使用这种方式需要注意WHERE子句的查询谓词不会下推，即禁用了WHERE移动到PREWHERE的优化。</strong>6）user_name/allow_databases      **用于指定用户可以访问的数据库列表。默认情况下，用户可以访问所有数据库。      Note： 用户对system数据库的访问始终是有权限的，因为用户需要根据此数据库处理查询。      配置示例，配置用户可访问test1和test2数据库： <pre><code class="language-XML">&lt;allow_databases&gt;<br>  &lt;database&gt;test1&lt;/database&gt;<br>  &lt;database&gt;test2&lt;/database&gt;<br>&lt;/allow_databases&gt;<br></code></pre> **7）user_name/allow_dictionaries       **配置可以访问的字典列表。默认情况下，用户可访问所有字典。      示例， 配置用户可访问test1和test2字典： <pre><code class="language-XML">&lt;allow_dictionaries&gt;<br>  &lt;dictionary&gt;test1&lt;/dictionary&gt;<br>  &lt;dictionary&gt;test2&lt;/dictionary&gt;<br>&lt;/allow_dictionaries&gt;<br></code></pre>   </li></ol></p>
+</thead><tbody>|length|百分数 | 由浮点数字和单位标识符组成的长度值
+|position|top | center | bottom | left | center | right   方位名词
+</tbody></table>
+ 注意： 
+ -  必须先指定background-image属性 -  position 后面是x坐标和y坐标。可以使用方位名词或者 精确单位。 -  如果指定两个值，两个值都是方位名字，则两个值前后顺序无关，比如left  top和top  left效果一致 -  如果只指定了一个方位名词，另一个值默认居中对齐。 -  如果position 后面是精确坐标， 那么第一个，肯定是 x 第二个一定是y -  如果只指定一个数值,那该数值一定是x坐标，另一个默认垂直居中 -  如果指定的两个值是 精确单位和方位名字混合使用，则第一个值是x坐标，第二个值是y坐标 
+ 背景简写： 
+ -  background：属性的值的书写顺序官方没有强制的标准。为了可读性，建议如下写： -  background: 背景颜色 背景图片地址 背景平铺 背景滚动 背景位置; 
+ <pre><code>/* 有背景图片背景颜色可以不用写*/
+background: transparent url(image.jpg) repeat-y  scroll center top ;</code></pre> 
+
+
+<p>5.背景图像固定background-attachment</p>
+<blockquote>
+<p> 背景是否跟着滚动而滚动<br> <img alt="" height="456" src="https://img-blog.csdnimg.cn/20210202214748899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1105"> </p>
+</blockquote>
+<p>6.背景半透明(CSS3)</p>
+<blockquote>
+ <pre><code class="language-css">background: rgba(0, 0, 0, 0.3);
+background: rgba(0, 0, 0, .3);
+</code></pre> 
+</blockquote>
+<ul>
+<li>等同于background-color: rgba(0, 0, 0, .3) -  最后一个参数是alpha 透明度  取值范围 0~1之间 -  我们习惯把0.3 的 0 省略掉  这样写 background: rgba(0, 0, 0, .3); -  注意：背景半透明是指盒子背景半透明，盒子里面的内容不受影响 -  低于IE 9的版本不支持<br>盒子半透明 opacity </li>
+<li>设置opacity元素的所有后代元素会随着一起具有透明性，一般用于调整图片或者模块的整体不透明度 <pre>`opacity: .2;`</pre> </li>
+</ul>
+<p>7.背景总结</p>
+<blockquote>
+ <table><thead>|属性|作用|值
+</blockquote>
+</thead><tbody>|background-color|背景颜色|预定义的颜色值/十六进制/RGB代码
+|background-image|背景图片|url(图片路径)
+|background-repeat|是否平铺|repeat/no-repeat/repeat-x/repeat-y
+|background-position|背景位置|length/position    分别是x  和 y坐标， 切记 如果有 精确数值单位，则必须按照先X 后Y 的写法
+|background-attachment|背景固定还是滚动|scroll/fixed
+|背景简写|更简单|背景颜色 背景图片地址 背景平铺 背景滚动 背景位置;  他们没有顺序
+|背景透明|让盒子半透明|background: rgba(0,0,0,0.3);   后面必须是 4个值
+</tbody></table>
+
  
       <!-- reward -->
       
@@ -1173,7 +969,7 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
 
     
     <article
-  id="post-Clickhouse 字典表使用场景"
+  id="post-CSS3 新增圆角以及盒子阴影"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -1184,8 +980,8 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     <header class="article-header">
        
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/"
-    >Clickhouse 字典表使用场景</a> 
+  <a class="article-title" href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/"
+    >CSS3 新增圆角以及盒子阴影</a> 
 </h2>
  
 
@@ -1193,54 +989,206 @@ INSERT INTO t_null VALUES (1, NULL)</code></pre>   </li></ul>
     </header>
      
     <div class="article-meta">
-      <a href="/2021/07/18/Clickhouse%20%E5%AD%97%E5%85%B8%E8%A1%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF/" class="article-date">
-  <time datetime="2021-07-18T14:12:50.240Z" itemprop="datePublished">2021-07-18</time>
+      <a href="/2021/07/18/CSS3%20%E6%96%B0%E5%A2%9E%E5%9C%86%E8%A7%92%E4%BB%A5%E5%8F%8A%E7%9B%92%E5%AD%90%E9%98%B4%E5%BD%B1/" class="article-date">
+  <time datetime="2021-07-18T14:19:55.195Z" itemprop="datePublished">2021-07-18</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+    <a class="article-category-link" href="/categories/Css/">Css</a>
   </div>
    
     </div>
       
     <div class="article-entry" itemprop="articleBody">
        
-  <p>title: Clickhouse 字典表使用场景<br>categories:</p>
+  <p>title: CSS3 新增圆角以及盒子阴影<br>categories:</p>
 <ul>
-<li>clickhouse</li>
+<li>css</li>
 </ul>
-<p>—# 一.字典创建和查询</p>
-<h2 id="1-创建表和数据："><a href="#1-创建表和数据：" class="headerlink" title="1.创建表和数据："></a>1.创建表和数据：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">drop table t_region;</span><br><span class="line">create table t_region(region_id UInt64, parent_region UInt64, region_name String) ENGINE=TinyLog;</span><br><span class="line">insert into t_region values</span><br><span class="line">(1, 0, &#x27;jiangsu&#x27;),(2, 1, &#x27;suzhou&#x27;),(3, 2, &#x27;huqiu&#x27;),(4, 0, &#x27;anhui&#x27;),(5, 4, &#x27;hefei&#x27;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典， 指定HIERARCHICAL字段：</span><br><span class="line">DROP DICTIONARY t_dict_region;</span><br><span class="line">CREATE DICTIONARY t_dict_region (</span><br><span class="line">    region_id UInt64,</span><br><span class="line">    parent_region UInt64  HIERARCHICAL,</span><br><span class="line">    region_name String </span><br><span class="line">)</span><br><span class="line">PRIMARY KEY region_id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_region&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(HASHED())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>—1.圆角边框</p>
+<blockquote>
+ <pre><code class="language-css">border-radius:length;
+</blockquote>
+<p>border-top-left-radius   定义了左上角的弧度<br>border-top-right-radius   定义了右上角的弧度<br>border-bottom-right-radius   定义了右下角的弧度<br>border-bottom-left-radius   定义了左下角的弧度<br></code></pre> </p>
+<ul>
+<li>其中每一个值可以为 数值或百分比的形式。 -  技巧：让一个正方形 变成圆圈 <pre><code class="language-css">border-radius: 50%;
+</code></pre> 
+<img alt="图片" src="https://img-blog.csdnimg.cn/img_convert/cd90d25bf757638154c28d92250dac7c.png">如果要在四个角上一一指定，可以使用以下规则👇👇： <pre><code class="language-css">border-radius: 左上角 右上角  右下角  左下角;
+</code></pre> </li>
+<li> 四个值: 第一个值为左上角，第二个值为右上角，第三个值为右下角，第四个值为左下角。 -  三个值: 第一个值为左上角, 第二个值为右上角和左下角，第三个值为右下角 -  两个值: 第一个值为左上角与右下角，第二个值为右上角与左下角 -  一个值：四个圆角值相同 </li>
+</ul>
+<p>2.盒子阴影(box-shadow)</p>
+<blockquote>
+ <pre><code class="language-css">box-shadow: offset-x offset-y [blur [spread]] [color] [inset]
+</code></pre> 
+ <table><thead>|值|描述
+</blockquote>
+</thead><tbody>|offset-x|阴影的水平偏移量。正数向右偏移，负数向左偏移。
+|offset-y|阴影的垂直偏移量。正数向下偏移，负数向上偏移。
+|blur|可选。阴影模糊距离，不能取负数。
+|spread|可选。阴影大小
+|color|可选。阴影的颜色
+|inset|可选。表示添加内阴影，默认为外阴影
+</tbody></table>
+ <pre><code class="language-css">div &#123;
+   width: 200px;
+   height: 200px;
+   border: 10px solid red;
+   /* box-shadow: 5px 5px 3px 4px rgba(0, 0, 0, .4);  */
+   /* box-shadow:水平位置 垂直位置 模糊距离 阴影尺寸（影子大小） 阴影颜色  内/外阴影； */
+   box-shadow: 0 15px 30px  rgba(0, 0, 0, .4);   
+&#125;</code></pre> 
 
-<h2 id="2-字典的查询"><a href="#2-字典的查询" class="headerlink" title="2.字典的查询"></a>2.字典的查询</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SELECT dictGetString(&#x27;default.t_dict_region&#x27;, &#x27;region_name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br><span class="line">┌─regionName─┐</span><br><span class="line">│ suzhou     │</span><br><span class="line">└────────────┘</span><br><span class="line">SELECT dictGetHierarchy(&#x27;default.t_dict_region&#x27;, toUInt64(3));</span><br><span class="line"></span><br><span class="line">┌─dictGetHierarchy(&#x27;default.t_dict_region&#x27;, toUInt64(3))─┐</span><br><span class="line">│ [3,2,1]                                                │</span><br><span class="line">└────────────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-字典数据源之mysql表"><a href="#3-字典数据源之mysql表" class="headerlink" title="3.字典数据源之mysql表"></a>3.字典数据源之mysql表</h2><li>在mysql数据库创建表并插入数据： <pre><code class="language-sql">drop table test.test_dc;
-create table test.test_dc(
-  id bigint,
-  name varchar(100),
-  age int,
-  PRIMARY KEY (id)
-);
-
-<p>insert into test.test_dc values(1, ‘flink’, 4);<br>insert into test.test_dc values(2, ‘spark’, 6);<br>insert into test.test_dc values(3, ‘clickhouse’, 5);</p>
-<p>查看MySQL数据：<br>mysql&gt; select * from test.test_dc;<br>+—-+————+——+<br>| id | name       | age  |<br>+—-+————+——+<br>|  1 | flink      |    4 |<br>|  2 | spark      |    6 |<br>|  3 | clickhouse |    5 |<br>+—-+————+——+</p>
-<p></code></pre>   </li></p>
-<h3 id="4-字典的数据源之文件数据源"><a href="#4-字典的数据源之文件数据源" class="headerlink" title="4.字典的数据源之文件数据源"></a>4.字典的数据源之文件数据源</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">TabSeparated格式</span><br><span class="line">文件示例：</span><br><span class="line"></span><br><span class="line">准备测试数据</span><br><span class="line">文件命名为person.tsv，存放在目录：/var/lib/clickhouse/user_files，字段之间使用制表符分隔，即格式为TabSeparated。数据如下：</span><br><span class="line">1	&#x27;id001&#x27;	&#x27;xiaohe&#x27;	23</span><br><span class="line">2	&#x27;id002&#x27;	&#x27;xiaoxue&#x27;	25</span><br><span class="line">3	&#x27;id003&#x27;	&#x27;xiaoyu&#x27;	26</span><br><span class="line">4	&#x27;id004&#x27;	&#x27;xiaoxi&#x27;	27</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(FILE(path &#x27;/var/lib/clickhouse/user_files/person.tsv&#x27; format &#x27;TabSeparated&#x27;))</span><br><span class="line">LAYOUT(FLAT())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SELECT dictGetString(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>当然,字典类型的数据也可以通过配置实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;yandex&amp;gt; </span><br><span class="line">  &amp;lt;dictionary&amp;gt; </span><br><span class="line">    &amp;lt;name&amp;gt;t_dict_executable&amp;lt;/name&amp;gt;  </span><br><span class="line"></span><br><span class="line">    &amp;lt;structure&amp;gt; </span><br><span class="line">      &amp;lt;id&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;id&amp;lt;/name&amp;gt; </span><br><span class="line">      &amp;lt;/id&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;code&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;String&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;name&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;String&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt;  </span><br><span class="line">      &amp;lt;attribute&amp;gt; </span><br><span class="line">        &amp;lt;name&amp;gt;age&amp;lt;/name&amp;gt;  </span><br><span class="line">        &amp;lt;type&amp;gt;UInt8&amp;lt;/type&amp;gt;  </span><br><span class="line">        &amp;lt;null_value/&amp;gt; </span><br><span class="line">      &amp;lt;/attribute&amp;gt; </span><br><span class="line">    &amp;lt;/structure&amp;gt;  </span><br><span class="line">    &amp;lt;source&amp;gt; </span><br><span class="line">      &amp;lt;executable&amp;gt;</span><br><span class="line">        &amp;lt;command&amp;gt;cat /var/lib/clickhouse/user_files/person.tsv&amp;lt;/command&amp;gt;</span><br><span class="line">        &amp;lt;format&amp;gt;TabSeparated&amp;lt;/format&amp;gt;</span><br><span class="line">      &amp;lt;/executable&amp;gt;</span><br><span class="line">    &amp;lt;/source&amp;gt;  </span><br><span class="line">    &amp;lt;layout&amp;gt; </span><br><span class="line">      &amp;lt;hashed/&amp;gt; </span><br><span class="line">    &amp;lt;/layout&amp;gt;  </span><br><span class="line">    &amp;lt;lifetime&amp;gt;10&amp;lt;/lifetime&amp;gt; </span><br><span class="line">  &amp;lt;/dictionary&amp;gt; </span><br><span class="line">&amp;lt;/yandex&amp;gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="二-字典的存储方式"><a href="#二-字典的存储方式" class="headerlink" title="二.字典的存储方式"></a>二.字典的存储方式</h1><p>以下测试均在default数据库。</p>
-<h2 id="1-flat-hash-sparse-hash-cache"><a href="#1-flat-hash-sparse-hash-cache" class="headerlink" title="1. flat/hash/sparse_hash/cache"></a>1. flat/hash/sparse_hash/cache</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_dic_ch&#x27;</span><br><span class="line">    where &#x27;id&amp;gt;0&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(CACHE(SIZE_IN_CELLS 10000))</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">SELECT dictGetString(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, toUInt64(2)) AS regionName;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>FLAT()、HASHED()、SPARSE_HASHED()、CACHE(SIZE_IN_CELLS 10000)</strong></p>
-<h2 id="2-complex-key-hashed-complex-key-cache"><a href="#2-complex-key-hashed-complex-key-cache" class="headerlink" title="2. complex_key_hashed/complex_key_cache"></a>2. complex_key_hashed/complex_key_cache</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">DROP DICTIONARY t_dict_person_ddl;</span><br><span class="line">CREATE DICTIONARY t_dict_person_ddl</span><br><span class="line">(</span><br><span class="line">    id UInt64,</span><br><span class="line">    code String,</span><br><span class="line">    name String,</span><br><span class="line">    age UInt8</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id,code</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_dic_ch&#x27;</span><br><span class="line">    where &#x27;id&amp;gt;0&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(COMPLEX_KEY_HASHED())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">SELECT dictGet(&#x27;default.t_dict_person_ddl&#x27;, &#x27;name&#x27;, tuple(toUInt64(2), &#x27;id002&#x27;)) AS name;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>COMPLEX_KEY_HASHED()、COMPLEX_KEY_CACHE(SIZE_IN_CELLS 10000)</strong></p>
-<h2 id="3-range-hashed"><a href="#3-range-hashed" class="headerlink" title="3. range_hashed"></a>3. range_hashed</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">drop table t_hash_range;</span><br><span class="line">create table t_hash_range(id UInt64, start Date, end Date, amount Float32) ENGINE=TinyLog;</span><br><span class="line">insert into t_hash_range values</span><br><span class="line">(123, &#x27;2020-03-20&#x27;, &#x27;2020-03-22&#x27;, 0.15)</span><br><span class="line">(123, &#x27;2020-03-23&#x27;, &#x27;2020-03-27&#x27;, 0.25)</span><br><span class="line">(456, &#x27;2020-04-20&#x27;, &#x27;2020-04-30&#x27;, 0.35)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">查看数据：</span><br><span class="line">SELECT * FROM t_hash_range;</span><br><span class="line"></span><br><span class="line">┌──id─┬──────start─┬────────end─┬─amount─┐</span><br><span class="line">│ 123 │ 2020-03-20 │ 2020-03-22 │   0.15 │</span><br><span class="line">│ 123 │ 2020-03-23 │ 2020-03-27 │   0.25 │</span><br><span class="line">│ 456 │ 2020-04-20 │ 2020-04-30 │   0.35 │</span><br><span class="line">└─────┴────────────┴────────────┴────────┘</span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_hash_range;</span><br><span class="line">CREATE DICTIONARY t_dict_hash_range (</span><br><span class="line">    id UInt64,</span><br><span class="line">    start Date,</span><br><span class="line">    end Date,</span><br><span class="line">    amount Float32</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY id</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_hash_range&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(RANGE_HASHED())</span><br><span class="line">RANGE(MIN start MAX end)</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">查看id为123的记录，在日期2020-03-21日的amount：</span><br><span class="line">select dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-21&#x27;)) as amount;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">查看id为123的记录，在日期2020-03-25日的amount：</span><br><span class="line">select dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-25&#x27;)) as amount;</span><br><span class="line"></span><br><span class="line">日期之外的记录：</span><br><span class="line">SELECT dictGetFloat32(&#x27;default.t_dict_hash_range&#x27;, &#x27;amount&#x27;, toUInt64(123), toDate(&#x27;2020-03-29&#x27;)) AS amount;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="4-ip-tire"><a href="#4-ip-tire" class="headerlink" title="4. ip_tire"></a>4. ip_tire</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">创建表和测试数据：</span><br><span class="line">drop table t_ip_tire;</span><br><span class="line">create table t_ip_tire(prefix String, asn UInt32, ccode String) ENGINE=TinyLog;</span><br><span class="line">insert into t_ip_tire values</span><br><span class="line">(&#x27;202.79.32.0/20&#x27;, 17501, &#x27;NP&#x27;)</span><br><span class="line">(&#x27;2620:0:870::/48&#x27;, 3856, &#x27;US&#x27;)</span><br><span class="line">(&#x27;2a02:6b8:1::/48&#x27;, 13238, &#x27;RU&#x27;)</span><br><span class="line">(&#x27;2001:db8::/32&#x27;, 65536, &#x27;ZZ&#x27;)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">查看数据：</span><br><span class="line">SELECT * FROM t_ip_tire;</span><br><span class="line"></span><br><span class="line">┌─prefix──────────┬───asn─┬─ccode─┐</span><br><span class="line">│ 202.79.32.0/20  │ 17501 │ NP    │</span><br><span class="line">│ 2620:0:870::/48 │  3856 │ US    │</span><br><span class="line">│ 2a02:6b8:1::/48 │ 13238 │ RU    │</span><br><span class="line">│ 2001:db8::/32   │ 65536 │ ZZ    │</span><br><span class="line">└─────────────────┴───────┴───────┘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">创建字典：</span><br><span class="line">DROP DICTIONARY t_dict_ip_tire;</span><br><span class="line">CREATE DICTIONARY t_dict_ip_tire (</span><br><span class="line">    prefix String,</span><br><span class="line">    asn UInt32,</span><br><span class="line">    ccode String</span><br><span class="line">)</span><br><span class="line">PRIMARY KEY prefix</span><br><span class="line">SOURCE(CLICKHOUSE(</span><br><span class="line">    host &#x27;localhost&#x27;</span><br><span class="line">    port 9001</span><br><span class="line">    user &#x27;default&#x27;</span><br><span class="line">    db &#x27;default&#x27;</span><br><span class="line">    password &#x27;&#x27;</span><br><span class="line">    table &#x27;t_ip_tire&#x27;</span><br><span class="line">))</span><br><span class="line">LAYOUT(IP_TRIE())</span><br><span class="line">LIFETIME(30);</span><br><span class="line"></span><br><span class="line">检索数据：</span><br><span class="line">select</span><br><span class="line">dictGetUInt32(&#x27;default.t_dict_ip_tire&#x27;, &#x27;asn&#x27;, tuple(IPv4StringToNum(&#x27;202.79.32.22&#x27;))) as asn,</span><br><span class="line">dictGetString(&#x27;default.t_dict_ip_tire&#x27;, &#x27;ccode&#x27;, tuple(IPv4StringToNum(&#x27;202.79.32.22&#x27;))) as ccode</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p> </p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
+  id="post-clickhouse之表和列的TTL规则与实践"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/"
+    >clickhouse之表和列的TTL规则与实践</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/clickhouse%E4%B9%8B%E8%A1%A8%E5%92%8C%E5%88%97%E7%9A%84TTL%E8%A7%84%E5%88%99%E4%B8%8E%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time datetime="2021-07-18T14:12:50.359Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Clickhouse/">Clickhouse</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: clickhouse之表和列的TTL规则与实践<br>categories:</p>
+<ul>
+<li>clickhouse</li>
+</ul>
+<p>—### 1.表和列的TTL</p>
+<blockquote>
+<p> 定义值的生命周期<br> 可以为整个表设置，也可以为每个单独的列设置。<br> 表级的TTL也可以指定在磁盘和卷之间自动移动数据的逻辑。<br> 设置TTL的表，必须包含Date或DateTime类型的字段。<br> 定义数据的生命周期，需要在这个日期字段使用操作符：<br> <pre><code>TTL time_column<br>TTL time_column + interval<br></code></pre><br> 示例：<br> <pre><code>TTL date_time + INTERVAL 1 MONTH</p>
+</blockquote>
+<p>TTL date_time + INTERVAL 15 HOUR</code></pre> </p>
+<h3 id="2-列级TTL"><a href="#2-列级TTL" class="headerlink" title="2.列级TTL"></a>2.列级TTL</h3><blockquote>
+<p> 当列中的值过期时，ClickHouse将它们替换为该列对应数据类型的默认值。<br> 如果数据片段中所有列值都过期，则删除该数据片段下的该列的文件。<br> TTL子句不能用于key列。<br> 示例： </p>
+</blockquote>
+<ul>
+<li>创建TTL表- TTL过期验证- 给列增加TTL- 修改列的TTL</li>
+</ul>
+<h3 id="3-表级TTL"><a href="#3-表级TTL" class="headerlink" title="3.表级TTL"></a>3.表级TTL</h3><blockquote>
+ <ol>- 表级的TTL定义了过期行的删除、磁盘和卷之间自动移动数据的逻辑。- 一张表可以定义一个过期行移除的表达式和多个磁盘和卷之间自动移动数据的逻辑的表达式。 TTL expr [DELETE|TO DISK 'aaa'|TO VOLUME 'bbb'], ...- 当表中的数据过期时，ClickHouse删除所有对应的行。- TTL规则的类型跟在每个TTL表达式后面，它表示表达式满足后（达到当前时间）要执行的操作。**DELETE - 删除过期的行（默认操作）； TO DISK ‘aaa’ - 将片段移至磁盘aaa； TO VOLUME ‘bbb’ - 将片段移动至磁盘bbb；**<li>创建表示例： <pre><code class="language-sql">CREATE TABLE example_table
+(
+    d DateTime, 
+    a Int 
+)ENGINE = MergeTree 
+PARTITION BY toYYYYMM(d) 
+ORDER BY d 
+TTL d + INTERVAL 1 MONTH [DELETE], 
+    d + INTERVAL 1 WEEK TO VOLUME 'aaa',
+    d + INTERVAL 2 WEEK TO DISK 'bbb'
+SETTINGS storage_policy = 'moving_from_ssd_to_hdd';
+</code></pre> 注意：当TTL表达式指定了磁盘和卷之间移动数据的逻辑，那么ClickHouse的表必须指定存储策略，且该存储策略中要包含相应的磁盘和卷。 </li>- **使用案例：TTL过期后执行数据删除案例。** 1).当ClickHouse合并数据片段时， 将删除TTL过期的数据。 2).当ClickHouse发现数据过期时， 它将执行一个计划外的合并。 要控制这类合并的频率， 可设置参数 merge_with_ttl_timeout。如果该值设置的过低， 它将导致执行许多的计划外合并，这可能会消耗大量资源。 3).如果在合并的时候执行SELECT查询， 则可能会得到过期的数据。 为了避免这种情况， 可以在SELECT 之前使用OPTIMIZE查询。</ol>
+</blockquote>
+<h3 id="4-列级TTL示例"><a href="#4-列级TTL示例" class="headerlink" title="4.列级TTL示例"></a>4.列级TTL示例</h3><blockquote>
+ <ol><li>**创建带TTL的表** <pre><code class="language-sql">DROP TABLE example_table;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int TTL d + INTERVAL 1 MINUTE,
+    b String TTL d + INTERVAL 1 MINUTE,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d;
+xxxxx :) show create table example_table;
+</blockquote>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre> </li><li><strong>插入数据</strong> <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');<br>insert into example_table values(now(), 2, 'value2', 'ccc2');<br></code></pre> 等待1分钟之后，执行： <pre><code class="language-sql">xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:16 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘<br>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 14:53:15 │ 1 │ value1 │ ccc1 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.009 sec. </p>
+<p>xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b─┬─c────┐<br>│ 2020-11-26 14:53:15 │ 0 │   │ ccc1 │<br>│ 2020-11-26 14:53:16 │ 0 │   │ ccc2 │<br>└─────────────────────┴───┴───┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.007 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li><li><strong>给表的列添加TTL：</strong> <pre><code class="language-sql">ALTER TABLE example_table<br>MODIFY COLUMN<br>c String TTL d + INTERVAL 1 DAY;<br>xxxxx :) ALTER TABLE example_table<br>:-] MODIFY COLUMN<br>:-] c String TTL d + INTERVAL 1 DAY;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalDay(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.018 sec. </p>
+<p>xxxxx :)<br></code></pre> 修改列的TTL： <pre><code class="language-sql">ALTER TABLE example_table<br>    MODIFY COLUMN<br>    c String TTL d + INTERVAL 1 MONTH;<br>xxxxx :) ALTER TABLE example_table<br>:-]     MODIFY COLUMN<br>:-]     c String TTL d + INTERVAL 1 MONTH;</p>
+<p>ALTER TABLE example_table<br>    MODIFY COLUMN <code>c</code> String TTL d + toIntervalMonth(1)</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.015 sec. </p>
+<p>xxxxx :) show create table example_table;</p>
+<p>SHOW CREATE TABLE example_table</p>
+<p>┌─statement────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐<br>│ CREATE TABLE default.example_table<br>(<br>    <code>d</code> DateTime,<br>    <code>a</code> Int32 TTL d + toIntervalMinute(1),<br>    <code>b</code> String TTL d + toIntervalMinute(1),<br>    <code>c</code> String TTL d + toIntervalMonth(1)<br>)<br>ENGINE = MergeTree<br>ORDER BY d<br>SETTINGS index_granularity = 8192 │<br>└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘</p>
+<p>1 rows in set. Elapsed: 0.004 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
+<h3 id="5-表级TTL示例"><a href="#5-表级TTL示例" class="headerlink" title="5.表级TTL示例"></a>5.表级TTL示例</h3><blockquote>
+ <ol><li>**创建表** <pre><code class="language-sql">drop table example_table ;
+CREATE TABLE example_table 
+(
+    d DateTime,
+    a Int,
+    b String,
+    c String
+)
+ENGINE = MergeTree
+ORDER BY d
+TTL d + INTERVAL 1 MINUTE DELETE;
+</code></pre> </li><li>**插入数据** <pre><code class="language-sql">insert into example_table values (now(), 1, 'value1', 'ccc1');
+insert into example_table values(now(), 2, 'value2', 'ccc2');
+</code></pre> 然后查询结果： <pre><code class="language-sql">xxxxx :) select * from example_table;
+</blockquote>
+<p>SELECT *<br>FROM example_table</p>
+<p>┌───────────────────d─┬─a─┬─b──────┬─c────┐<br>│ 2020-11-26 15:24:53 │ 1 │ value1 │ ccc1 │<br>│ 2020-11-26 15:24:54 │ 2 │ value2 │ ccc2 │<br>└─────────────────────┴───┴────────┴──────┘</p>
+<p>2 rows in set. Elapsed: 0.008 sec. </p>
+<p>xxxxx :)<br></code></pre> 等待1分钟后， 执行optimize操作。 <pre><code class="language-sql">xxxxx :) optimize table example_table;</p>
+<p>OPTIMIZE TABLE example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.006 sec. </p>
+<p>xxxxx :) select * from example_table;</p>
+<p>SELECT *<br>FROM example_table</p>
+<p>Ok.</p>
+<p>0 rows in set. Elapsed: 0.003 sec. </p>
+<p>xxxxx :)<br></code></pre>   </li></ol></p>
  
       <!-- reward -->
       
@@ -1266,7 +1214,7 @@ create table test.test_dc(
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/5/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/5/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/7/">下一页</a>
   </nav>
   
 </section>

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>Elasticsearch之新闻案例实战 |  爱上口袋的天空</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/image1.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <!-- mermaid -->
+      
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-Elasticsearch之新闻案例实战"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Elasticsearch之新闻案例实战
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8B%E6%96%B0%E9%97%BB%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/" class="article-date">
+  <time datetime="2021-07-18T14:21:56.449Z" itemprop="datePublished">2021-07-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Elasticsearch/">Elasticsearch</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">7 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>title: Elasticsearch之新闻案例实战<br>categories:</p>
+<ul>
+<li>elasticsearch</li>
+</ul>
+<p>—### 1、创建数据库表且预置数据</p>
+<blockquote>
+<p> 1.1、表结构如下<br> <pre><code class="language-sql">DROP TABLE IF EXISTS <code>news</code>;<br>CREATE TABLE <code>news</code> (<br>    <code>id</code> int(11) NOT NULL AUTO_INCREMENT,<br>    <code>title</code> varchar(255) NOT NULL comment '主题',<br>    <code>url</code> varchar(255) DEFAULT NULL comment '连接',<br>    <code>content</code> text comment '内容',<br>    <code>tags</code> varchar(1000) DEFAULT NULL comment '搜索的关键字',<br>    PRIMARY KEY (<code>id</code>) USING BTREE<br>) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;</code></pre><br> 1.2、数据如下<br> <img alt="" height="629" src="https://img-blog.csdnimg.cn/20210704215709241.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="2、定义分词器以及属性类型"><a href="#2、定义分词器以及属性类型" class="headerlink" title="2、定义分词器以及属性类型"></a>2、定义分词器以及属性类型</h3><blockquote>
+ <pre><code class="language-javascript">PUT news
+&#123;
+  "settings": &#123;
+    "analysis": &#123;
+      "analyzer": &#123;
+        "news_tags_analyzer": &#123;
+          "char_filter": ["html_strip"],
+          "tokenizer": "keyword",
+          "filter": "news_tags_filter"
+        &#125;
+      &#125;,
+      "filter": &#123;
+        "news_tags_filter": &#123;
+          "type": "pinyin",
+          "keep_full_pinyin": true,
+          "keep_joined_full_pinyin": true,
+          "keep_original": true
+        &#125;
+      &#125;
+    &#125;
+  &#125;,
+  "mappings": &#123;
+    "properties": &#123;
+      "id": &#123;
+        "type": "long"
+      &#125;,
+      "title": &#123;
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart"
+      &#125;,
+      "content": &#123;
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart"
+      &#125;,
+      "url": &#123;
+        "type": "keyword"
+      &#125;,
+      "tags": &#123;
+        "type": "completion",
+        "analyzer": "news_tags_analyzer",
+        "search_analyzer": "keyword"
+      &#125;
+    &#125;
+  &#125;
+&#125;</code></pre> 
+<p>  <img alt="" height="590" src="https://img-blog.csdnimg.cn/20210704221658848.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1185"> </p>
+</blockquote>
+<h3 id="3、将mysql数据导入es"><a href="#3、将mysql数据导入es" class="headerlink" title="3、将mysql数据导入es"></a>3、将mysql数据导入es</h3><blockquote>
+<p> 2.1、创建logstash-mysql-news.conf文件<br> <pre><code class="language-html">#input表示将数据读取到logstash中<br>input &#123;<br>  jdbc &#123;<br>    jdbc_driver_library =&gt; "/opt/es781/mysql/mysql-connector-java-5.1.49.jar"<br>    jdbc_driver_class =&gt; "com.mysql.jdbc.Driver"<br>    jdbc_connection_string =&gt; "jdbc:mysql://192.168.1.13:3306/oss?userUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimeZone=UTC"<br>    jdbc_user =&gt; "root"<br>    jdbc_password =&gt; "897570"<br>    #表示是否分页<br>    jdbc_paging_enabled =&gt; "true"<br>    #表示每页的数量<br>    jdbc_page_size =&gt; "20"<br>    #查询语句<br>    statement =&gt; "SELECT * FROM news where tags is not null"<br>  &#125;<br>&#125;<br>#这个filter表示对数据进行过滤<br>filter &#123;<br>  mutate &#123;<br>    #根据逗号切割关键字<br>    split =&gt; &#123; "tags" =&gt; ","&#125;<br>  &#125;<br>  #将下面两个字段过滤掉，logstash会自动帮我们加这两个属性，我们不需要，直接去掉<br>  mutate &#123;<br>    remove_field =&gt; ["@timestamp","@version"]<br>  &#125;<br>&#125;<br>#将logstash中的数据输出到es中<br>output &#123;<br>  elasticsearch &#123;<br>    document_id =&gt; "%&#123;id&#125;"<br>    document_type =&gt; "_doc"<br>    index =&gt; "news"<br>    hosts =&gt; ["<a href="http://192.168.56.20:9200&quot;]">http://192.168.56.20:9200&quot;]</a><br>  &#125;<br>  stdout&#123;<br>    codec =&gt; rubydebug<br>  &#125;<br>&#125;<br></code></pre><br> 2.2、将上面需要的mysql jar包上传到Linux服务器上<br> <img alt="" height="223" src="https://img-blog.csdnimg.cn/20210704220031533.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="804"><br> 2.3、将logstash-mysql-news.conf文件上传到/opt/es781/logstash-7.8.1/目录下<br> <img alt="" height="589" src="https://img-blog.csdnimg.cn/20210704220333418.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="776"><br> 2.4、在/opt/es781/logstash-7.8.1/目录下执行下面的命令将数据从mysql中导入es,<br>      命令：bin/logstash -f /opt/es781/logstash-7.8.1/logstash-mysql-news.conf      <img alt="" height="903" src="https://img-blog.csdnimg.cn/20210704220730172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1089"><br> 2.5、在kibana上查询news索引是否成功导入数据<br> <img alt="" height="936" src="https://img-blog.csdnimg.cn/20210704220858401.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="4、根据需求编写kibana脚本"><a href="#4、根据需求编写kibana脚本" class="headerlink" title="4、根据需求编写kibana脚本"></a>4、根据需求编写kibana脚本</h3><blockquote>
+<p> 4.1、自动补全语句<br> <pre><code class="language-javascript">GET news/_search<br>&#123;<br>  "_source": false,<br>  "suggest": &#123;<br>    "news_tags_suggest": &#123;<br>      "prefix": "zh",<br>      "completion":&#123;<br>        "field":"tags",<br>        "size": 10,<br>        "skip_duplicates": true<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> <img alt="" height="464" src="https://img-blog.csdnimg.cn/20210704222803907.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"><br> 4.2、内容搜索<br> <pre><code class="language-javascript">GET news/_search<br>&#123;<br>  "_source": false,<br>  "query": &#123;<br>    "multi_match": &#123;<br>      "query": "中国",<br>      "fields": ["title","content"]<br>    &#125;<br>  &#125;,<br>  "highlight": &#123;<br>    "pre_tags": "&lt;span class='highLight'&gt;",<br>    "post_tags": "&lt;/span&gt;",<br>    "fields": &#123;<br>      "title": &#123;&#125;,<br>      "content": &#123;&#125;<br>    &#125;<br>  &#125;<br>&#125;</code></pre><br> <img alt="" height="766" src="https://img-blog.csdnimg.cn/20210704222727872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+<h3 id="5、在java中使用代码实现上面两个搜索"><a href="#5、在java中使用代码实现上面两个搜索" class="headerlink" title="5、在java中使用代码实现上面两个搜索"></a>5、在java中使用代码实现上面两个搜索</h3><blockquote>
+<p> 5.1、创建news实体类<br> <pre><code class="language-java">package com.kgf.es.model;</p>
+</blockquote>
+<p>import lombok.AllArgsConstructor;<br>import lombok.Data;<br>import lombok.NoArgsConstructor;</p>
+<p>@Data<br>@AllArgsConstructor<br>@NoArgsConstructor<br>public class News &#123;<br>    private Integer id;<br>    private String title;<br>    private String content;<br>    private String url;<br>&#125;<br></code></pre><br> 5.2、创建NewsController<br> <pre><code class="language-java">package com.kgf.es.controller;</p>
+<p>import com.alibaba.fastjson.JSONArray;<br>import com.alibaba.fastjson.JSONObject;<br>import com.kgf.es.model.News;<br>import org.apache.http.util.EntityUtils;<br>import org.elasticsearch.client.Request;<br>import org.elasticsearch.client.Response;<br>import org.elasticsearch.client.RestHighLevelClient;<br>import org.springframework.web.bind.annotation.GetMapping;<br>import org.springframework.web.bind.annotation.RequestMapping;<br>import org.springframework.web.bind.annotation.RestController;</p>
+<p>import javax.annotation.Resource;<br>import java.io.IOException;<br>import java.util.ArrayList;<br>import java.util.List;</p>
+<p>@RestController<br>@RequestMapping(“/news”)<br>public class NewsController &#123;</p>
+<pre><code>@Resource
+private RestHighLevelClient restHighLevelClient;
+
+
+@GetMapping(&quot;/tips&quot;)
+public Object autoComplete(String term) throws IOException &#123;
+    Request request = new Request(&quot;GET&quot;, &quot;news/_search&quot;);
+
+    request.setJsonEntity(String.format(&quot;&#123;&quot; +
+            &quot;  \&quot;_source\&quot;: false, &quot; +
+            &quot;  \&quot;suggest\&quot;: &#123;&quot; +
+            &quot;    \&quot;news_tags_suggest\&quot;: &#123;&quot; +
+            &quot;      \&quot;prefix\&quot;: \&quot;%s\&quot;,&quot; +
+            &quot;      \&quot;completion\&quot;: &#123;&quot; +
+            &quot;        \&quot;field\&quot;: \&quot;tags\&quot;,&quot; +
+            &quot;        \&quot;size\&quot;: 10,&quot; +
+            &quot;        \&quot;skip_duplicates\&quot;: true&quot; +
+            &quot;      &#125;&quot; +
+            &quot;    &#125;&quot; +
+            &quot;  &#125;&quot; +
+            &quot;&#125;&quot;, term));
+
+    Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
+
+    String jsonString = EntityUtils.toString(response.getEntity()); // &quot;&#123;\&quot;age\&quot;: 10&#125;&quot;  &#123;&quot;age&quot;: 10&#125;
+
+    JSONObject jsonObject = JSONObject.parseObject(jsonString);
+
+    JSONArray suggests = jsonObject.getJSONObject(&quot;suggest&quot;).getJSONArray(&quot;news_tags_suggest&quot;);
+
+    JSONArray options = suggests.getJSONObject(0).getJSONArray(&quot;options&quot;);
+
+    List&amp;lt;String&amp;gt; results = new ArrayList&amp;lt;&amp;gt;();
+    for(int i = 0; i &amp;lt; options.size(); i++) &#123;
+        JSONObject opt = options.getJSONObject(i);
+        results.add(opt.getString(&quot;text&quot;));
+    &#125;
+
+    return results;
+&#125;
+
+@GetMapping(&quot;/search&quot;)
+public List&amp;lt;News&amp;gt; query(String text) throws Exception&#123;
+    /**
+     * 1.对于高亮的数据，ES是抽取的一个个片段，然后将这些片段设置到一个数组中。
+     * 2.对于有些数据，可能title或者content中没有高亮的字眼，那么我们就需要取原始数据的 title 和 content.
+     */
+    Request request = new Request(&quot;GET&quot;, &quot;news/_search&quot;);
+    request.setJsonEntity(String.format(&quot;&#123;&quot; +
+            &quot;  \&quot;_source\&quot;: [\&quot;url\&quot;, \&quot;title\&quot;, \&quot;content\&quot;], &quot; +
+            &quot;  \&quot;query\&quot;: &#123;&quot; +
+            &quot;    \&quot;multi_match\&quot;: &#123;&quot; +
+            &quot;      \&quot;query\&quot;: \&quot;%s\&quot;,&quot; +
+            &quot;      \&quot;fields\&quot;: [\&quot;title\&quot;, \&quot;content\&quot;]&quot; +
+            &quot;    &#125;&quot; +
+            &quot;  &#125;,&quot; +
+            &quot;  \&quot;highlight\&quot;: &#123;&quot; +
+            &quot;    \&quot;pre_tags\&quot;: \&quot;&amp;lt;span class=&#39;highLight&#39;&amp;gt;\&quot;, &quot; +
+            &quot;    \&quot;post_tags\&quot;: \&quot;&amp;lt;/span&amp;gt;\&quot;, &quot; +
+            &quot;    \&quot;fields\&quot;: &#123;&quot; +
+            &quot;      \&quot;title\&quot;: &#123;&#125;,&quot; +
+            &quot;      \&quot;content\&quot;: &#123;&#125;&quot; +
+            &quot;    &#125;&quot; +
+            &quot;  &#125;&quot; +
+            &quot;&#125;&quot;, text));
+
+    Response response = restHighLevelClient.getLowLevelClient().performRequest(request);
+
+    JSONObject jsonObject = JSONObject.parseObject(EntityUtils.toString(response.getEntity()));
+
+    JSONArray hits = jsonObject.getJSONObject(&quot;hits&quot;).getJSONArray(&quot;hits&quot;);
+
+    List&amp;lt;News&amp;gt; results = new ArrayList&amp;lt;&amp;gt;();
+
+    for (int i = 0; i &amp;lt; hits.size(); i++) &#123;
+        News news = new News();
+        JSONObject hit = hits.getJSONObject(i);
+        JSONObject highLight = hit.getJSONObject(&quot;highlight&quot;);  //获取高亮的数据结果
+
+        JSONObject _source = hit.getJSONObject(&quot;_source&quot;); //这个是原始的数据
+        news.setUrl(_source.getString(&quot;url&quot;));  //设置url
+
+        JSONArray highLightTitle = highLight.getJSONArray(&quot;title&quot;);  //获取高亮的 title 数组
+        JSONArray highLightContent = highLight.getJSONArray(&quot;content&quot;);
+
+        if(null != highLightTitle) &#123;
+            StringBuffer highLightTitleStringBuffer = new StringBuffer();
+            for (int j = 0; j &amp;lt; highLightTitle.size(); j++) &#123;
+                String titleSegment = highLightTitle.getString(j);
+                highLightTitleStringBuffer.append(titleSegment);
+            &#125;
+            news.setTitle(highLightTitleStringBuffer.toString());
+        &#125;else &#123;  // 如果不存在高亮的数据，那么就取原始数据
+            news.setTitle(_source.getString(&quot;title&quot;));
+        &#125;
+
+        if(null != highLightContent) &#123;
+            StringBuffer highLightContentStringBuffer = new StringBuffer();
+            for (int j = 0; j &amp;lt; highLightContent.size(); j++) &#123;
+                String contentSegment = highLightContent.getString(j);
+                highLightContentStringBuffer.append(contentSegment);
+            &#125;
+            news.setContent(highLightContentStringBuffer.toString());
+        &#125;else &#123;  // 如果不存在高亮的数据，那么就取原始数据
+            news.setContent(_source.getString(&quot;content&quot;));
+        &#125;
+
+        results.add(news);
+    &#125;
+    return results;
+&#125;
+</code></pre>
+<p>}<br></code></pre> </p>
+<h3 id="6、测试"><a href="#6、测试" class="headerlink" title="6、测试"></a>6、测试</h3><blockquote>
+<p> 6.1、测试tips,完成对tags的关键字检索<br> <img alt="" height="726" src="https://img-blog.csdnimg.cn/20210704230043938.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="757"><br> 6.2、测试内容检索<br> <img alt="" height="918" src="https://img-blog.csdnimg.cn/20210704230215251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0tfNTIwX1c=,size_16,color_FFFFFF,t_70" width="1200"> </p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/07/18/Elasticsearch%E4%B9%8B%E6%96%B0%E9%97%BB%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8B%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%88%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Elasticsearch之自动补全案例实战
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/07/18/Elasticsearch%E4%B9%8BRequest%20Body%E6%9F%A5%E8%AF%A2/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Elasticsearch之Request Body查询</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2021
+        <i class="ri-heart-fill heart_icon"></i> kgf
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        
+        由 <a href="https://hexo.io" target="_blank">Hexo</a> 强力驱动
+        <span class="division">|</span>
+        主题 - <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/image1.ico" alt="爱上口袋的天空"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+  </div>
+</body>
+
+</html>
